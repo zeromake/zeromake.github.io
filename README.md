@@ -1,2 +1,2 @@
 # zeromake.github.io
-blog test
+blog
