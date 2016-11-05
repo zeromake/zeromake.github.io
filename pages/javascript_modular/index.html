@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+<head>
+	
+	 
+    <meta charset="utf-8">
+    <title>zeromake static blog</title>
+	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
+	<style>
+		body{
+			padding: 0;
+		}
+		.base_header{
+			margin-left: 1em;
+		}
+		.zero_content {
+		  padding: 1em;
+		  border: 1px solid #ddd;
+		  margin: 16px auto;
+		}
+
+		/* author social links */
+		.author-info {
+		    margin-top: 10px;
+		}
+		.author-info a {
+		    color: #FFF;
+		    text-decoration: none;
+		    padding: 4px 7px;
+		    font-size: 14px;
+		    white-space: nowrap;
+		    margin-right: 10px;
+		}
+		.author-info a:hover {
+		    color: #FFF;
+		    text-decoration: none;
+		    filter: alpha(opacity=70);
+		    opacity: 0.7;
+		}
+		.author-info .author-info-github {
+		    background-color: #4A4A4A;
+		}
+		.author-info .author-info-sf {
+		    background-color: #5CB85C;
+		}
+	</style>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Language" content="zh">
+	<meta name="viewport" content="width=device-width">
+    
+	<link rel="stylesheet" href="/static/css/pygments.css" type="text/css">
+
+</head>
+
+<body>
+	<header class="base_header">
+		<h1><a href="/">zeromake blog</a></h1>
+		<div class="author-info">
+	    	<a class="author-info-github" href="https://github.com/zeromake">GitHub</a>
+	    	<a class="author-info-sf" href="https://segmentfault.com/u/zerobuild">SegmentFault</a>
+	    </div>
+    </header>
+    <div class="zero_content">
+		<div class="markdown-content">
+		    
+	<h2>javascript的模块化</h2>
+	<div class="markdown-body">
+		
+	<div>创建时间: 2016-08-12 12:18:25</div>
+	<div>最后更新: 2016-08-12 14:09:50</div>
+	<div>博客原文:<a href="http://blog.zeromake.com/pages/javascript_modular/">地址</a></div>
+	<hr>
+	<div class="toc">
+<ul>
+<li><a href="#_1">一、为何而生</a></li>
+<li><a href="#_2">二、模块加载规范</a><ul>
+<li><a href="#1commonjs">1.CommonJS</a></li>
+<li><a href="#2amdasynchronous-module-definition">2.AMD(Asynchronous Module Definition)规范</a></li>
+<li><a href="#3cmdcommon-module-definition">3.CMD(Common Module Definition)规范</a></li>
+<li><a href="#4es6">4.ES6模块</a></li>
+<li><a href="#5umd">5.UMD规范</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>一、为何而生</h2>
+<hr />
+<p>这个些模块加载都是为了更好的管理js文件，以及引用其他文件更加方便，并且使每一个模块的全局域不再互相污染。模块化后可以使用<code>npm</code>进行管理以便分享。</p>
+<h2 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>二、模块加载规范</h2>
+<hr />
+<h3 id="1commonjs"><a name="user-content-1commonjs" href="#1commonjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.CommonJS</h3>
+<p>官网: <a href="http://www.commonjs.org"><a href="http://www.commonjs.org"><a href="http://www.commonjs.org">http://www.commonjs.org</a></a></a><br />
+现常用于<code>nodejs</code>,每一个文件都是一个模块,使用<code>require</code>方法引入文件它会把引入的文件执行并最后将文件中的exports对象返回.这样好处就是不再污染全局域.但是有一点它是同步的就是你引入了就会加载文件.<br />
+官方说明可以使用在浏览器环境上，当然并没有人用.</p>
+<h3 id="2amdasynchronous-module-definition"><a name="user-content-2amdasynchronous-module-definition" href="#2amdasynchronous-module-definition" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.AMD(Asynchronous Module Definition)规范</h3>
+<p>规范文档: <a href="https://github.com/amdjs/amdjs-api/wiki/AMD"><a href="https://github.com/amdjs/amdjs-api/wiki/AMD"><a href="https://github.com/amdjs/amdjs-api/wiki/AMD">https://github.com/amdjs/amdjs-api/wiki/AMD</a></a></a><br />
+因为上面的CommonJS不合适使用在浏览器环境中所以有了amd。它采用异步方式加载模块<br />
+amd定义也使用<code>require</code>加载模块<br />
+<div class="codehilite"><pre><span></span><span class="nx">require</span><span class="p">([</span><span class="nx">module</span><span class="p">],</span> <span class="nx">callback</span><span class="p">([</span><span class="nx">module</span><span class="p">]));</span>
+</pre></div>
+<br />
+定义模块module-name可选module依赖的模块,加载后的callback执行并将module依赖作为参数传入<br />
+<div class="codehilite"><pre><span></span>define(module-name, [module], callback([module]));
+</pre></div>
+<br />
+一个示例只有require加载完成模块后才会调用回调.<br />
+<div class="codehilite"><pre><span></span>require([&#39;math&#39;], function (math) {
+   math.add(2, 3);
+});
+</pre></div>
+<br />
+实现了AMD规范的js库: 最火的是require.js</p>
+<blockquote>
+<ul>
+<li>require.js: <a href="http://requirejs.org"><a href="http://requirejs.org"><a href="http://requirejs.org">http://requirejs.org</a></a></a></li>
+</ul>
+</blockquote>
+<h3 id="3cmdcommon-module-definition"><a name="user-content-3cmdcommon-module-definition" href="#3cmdcommon-module-definition" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.CMD(Common Module Definition)规范</h3>
+<p>规范文档: <a href="https://github.com/cmdjs/specification/blob/master/draft/module.md"><a href="https://github.com/cmdjs/specification/blob/master/draft/module.md"><a href="https://github.com/cmdjs/specification/blob/master/draft/module.md">https://github.com/cmdjs/specification/blob/master/draft/module.md</a></a></a><br />
+基本和AMD差不多唯一不一样的是模块依赖设置不再直接使用require设置参数<br />
+<div class="codehilite"><pre><span></span><span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">){</span>
+    <span class="c1">//使用require</span>
+    <span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;jquery&quot;</span><span class="p">);</span>
+    <span class="c1">//给exports设置属性</span>
+    <span class="nx">exports</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){}</span>
+    <span class="c1">//或者使用module.export返回模块对象</span>
+    <span class="nx">module</span><span class="p">.</span><span class="kr">export</span><span class="o">=</span><span class="p">{</span>
+        <span class="c1">//```</span>
+    <span class="p">}</span>
+
+<span class="p">});</span>
+</pre></div>
+<br />
+这样的好处不用在参数中声明.<br />
+实现库:</p>
+<blockquote>
+<ul>
+<li>sea.js:<a href="http://seajs.org"><a href="http://seajs.org"><a href="http://seajs.org">http://seajs.org</a></a></a></li>
+</ul>
+</blockquote>
+<h3 id="4es6"><a name="user-content-4es6" href="#4es6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.ES6模块</h3>
+<p>和CommonJS类似使用import导入兼容CommonJS.查找模块方式和CommonJS一样<br />
+<div class="codehilite"><pre><span></span><span class="kr">import</span> <span class="nx">jquery</span> <span class="nx">from</span> <span class="s1">&#39;jquery&#39;</span><span class="p">;</span>
+</pre></div>
+<br />
+export在es6模块导入时使用是一个关键字可以多次使用</p>
+<div class="codehilite"><pre><span></span>export function test(){}
+export class Demo{
+}
+</pre></div>
+
+
+<h3 id="5umd"><a name="user-content-5umd" href="#5umd" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>5.UMD规范</h3>
+<p>规范文档: <a href="https://github.com/umdjs/umd"><a href="https://github.com/umdjs/umd"><a href="https://github.com/umdjs/umd">https://github.com/umdjs/umd</a></a></a><br />
+UMD支持通用三种模块CommonJS,AMD,window(全局变量挂载)<br />
+<div class="codehilite"><pre><span></span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">factory</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//模块名</span>
+    <span class="kd">var</span> <span class="nx">module_name</span> <span class="o">=</span> <span class="s2">&quot;xxx&quot;</span><span class="p">;</span>
+    <span class="c1">//判断是否为CommonJS</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">require</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">factory</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;xxx&#39;</span><span class="p">),...);</span>
+    <span class="c1">//判断是否为amd</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">define</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">define</span><span class="p">.</span><span class="nx">amd</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">define</span><span class="p">([</span><span class="nx">module</span><span class="p">],</span><span class="nx">factory</span><span class="p">);</span>
+    <span class="c1">//判断是否为全局变量挂载</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">root</span><span class="p">[</span><span class="nx">module_name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">factory</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">xxx</span><span class="p">,...);</span>
+    <span class="p">}</span>
+<span class="p">})(</span><span class="k">this</span><span class="p">,</span> <span class="kd">function</span> <span class="p">([</span><span class="nx">module</span><span class="p">])</span> <span class="p">{</span>
+    <span class="c1">//module ...</span>
+    <span class="k">return</span> <span class="p">{};</span>
+<span class="p">});</span>
+</pre></div>
+</p>
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="9338f64b11159981f2b784e6a6adac9d" data-title="javascript的模块化" data-url="http://blog.zeromake.com/pages/javascript_modular/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+		var duoshuoQuery = {short_name:"fly-zero"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+	</script>
+	</div>
+
+	    </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+<head>
+	
+	 
+    <meta charset="utf-8">
+    <title>zeromake static blog</title>
+	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
+	<style>
+		body{
+			padding: 0;
+		}
+		.base_header{
+			margin-left: 1em;
+		}
+		.zero_content {
+		  padding: 1em;
+		  border: 1px solid #ddd;
+		  margin: 16px auto;
+		}
+
+		/* author social links */
+		.author-info {
+		    margin-top: 10px;
+		}
+		.author-info a {
+		    color: #FFF;
+		    text-decoration: none;
+		    padding: 4px 7px;
+		    font-size: 14px;
+		    white-space: nowrap;
+		    margin-right: 10px;
+		}
+		.author-info a:hover {
+		    color: #FFF;
+		    text-decoration: none;
+		    filter: alpha(opacity=70);
+		    opacity: 0.7;
+		}
+		.author-info .author-info-github {
+		    background-color: #4A4A4A;
+		}
+		.author-info .author-info-sf {
+		    background-color: #5CB85C;
+		}
+	</style>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Language" content="zh">
+	<meta name="viewport" content="width=device-width">
+    
+	<link rel="stylesheet" href="/static/css/pygments.css" type="text/css">
+
+</head>
+
+<body>
+	<header class="base_header">
+		<h1><a href="/">zeromake blog</a></h1>
+		<div class="author-info">
+	    	<a class="author-info-github" href="https://github.com/zeromake">GitHub</a>
+	    	<a class="author-info-sf" href="https://segmentfault.com/u/zerobuild">SegmentFault</a>
+	    </div>
+    </header>
+    <div class="zero_content">
+		<div class="markdown-content">
+		    
+	<h2>补间动画</h2>
+	<div class="markdown-body">
+		
+	<div>创建时间: 2015-11-10 09:14:53</div>
+	<div>最后更新: </div>
+	<div>博客原文:<a href="http://blog.zeromake.com/pages/补间动画/">地址</a></div>
+	<hr>
+	<h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>补间动画代码版</h2>
+<ul>
+<li>1.可以用View对象的startAnimation(Animation a)设置补间动画。</li>
+<li>2.先定义一个View的对象。<br />
+<div class="codehilite"><pre><span></span><span class="kd">private</span> <span class="n">View</span> <span class="n">view</span><span class="o">;</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">iv</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></div>
+<br />
+<!--more--></li>
+<li>3.透明动画<br />
+<div class="codehilite"><pre><span></span><span class="c1">//定义一个透明动画对象设置开始的透明度和结束的透明度。</span>
+<span class="n">AlphaAnimation</span>  <span class="n">aa</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AlphaAnimation</span><span class="o">(</span><span class="mf">0.0f</span><span class="o">,</span> <span class="mf">1.0f</span><span class="o">);</span>
+<span class="c1">//设置持续时间单位毫秒</span>
+<span class="n">aa</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+<span class="c1">//设置动画次数设置0是1次</span>
+<span class="n">aa</span><span class="o">.</span><span class="na">setRepeatCount</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+<span class="c1">//设置动画结束时的模式REVERSE:倒叙，RESTART重新开始</span>
+<span class="n">aa</span><span class="o">.</span><span class="na">setRepeatMode</span><span class="o">(</span><span class="n">Animation</span><span class="o">.</span><span class="na">REVERSE</span><span class="o">);</span>
+<span class="c1">//结束时是否保存当前状态。</span>
+<span class="n">aa</span><span class="o">.</span><span class="na">setFillAfter</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+<span class="c1">//设置并开始动画。</span>
+<span class="n">view</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">aa</span><span class="o">);</span>
+</pre></div>
+</li>
+<li>4.位移动画<br />
+<div class="codehilite"><pre><span></span><span class="n">TranslateAnimation</span> <span class="n">ta</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TranslateAnimation</span><span class="o">(</span>
+    <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="o">-</span><span class="mf">0.5f</span><span class="o">,</span> <span class="c1">//以父元素，起始x轴位置</span>
+    <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">,</span> <span class="c1">//以父元素，结束x轴位置</span>
+    <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="mf">0.0f</span><span class="o">,</span> <span class="c1">//以父元素，起始y轴位置</span>
+    <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="mf">0.0f</span><span class="o">);</span><span class="c1">//以父元素，结束y轴位置</span>
+<span class="c1">//下面相同的不再注释</span>
+<span class="n">ta</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+<span class="n">ta</span><span class="o">.</span><span class="na">setRepeatCount</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+<span class="n">ta</span><span class="o">.</span><span class="na">setRepeatMode</span><span class="o">(</span><span class="n">Animation</span><span class="o">.</span><span class="na">REVERSE</span><span class="o">);</span>
+<span class="n">iv</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">ta</span><span class="o">);</span>
+</pre></div>
+</li>
+<li>5.缩放动画<br />
+<div class="codehilite"><pre><span></span><span class="n">ScaleAnimation</span> <span class="n">sa</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ScaleAnimation</span><span class="o">(</span>
+<span class="mf">0.1f</span><span class="o">,</span> <span class="mf">2.0f</span><span class="o">,</span><span class="c1">//x轴的起始缩放比例和结束缩放比。</span>
+<span class="mf">0.1f</span><span class="o">,</span> <span class="mf">2.0f</span><span class="o">,</span><span class="c1">//y轴的起始缩放比例和结束缩放比。</span>
+<span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_SELF</span><span class="o">,</span><span class="mf">0.5f</span><span class="o">,</span><span class="c1">//x轴以自身的中心(Animation.RELATIVE_TO_SELF,0.5f就是以自己为中心)</span>
+<span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_SELF</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">);</span><span class="c1">//y轴以自身的中心</span>
+<span class="n">sa</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+<span class="n">sa</span><span class="o">.</span><span class="na">setRepeatCount</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+<span class="n">sa</span><span class="o">.</span><span class="na">setRepeatMode</span><span class="o">(</span><span class="n">Animation</span><span class="o">.</span><span class="na">REVERSE</span><span class="o">);</span>
+<span class="n">iv</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">sa</span><span class="o">);</span>
+</pre></div>
+</li>
+<li>6.旋转动画<br />
+<div class="codehilite"><pre><span></span><span class="n">RotateAnimation</span> <span class="n">ra</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RotateAnimation</span><span class="o">(</span>
+<span class="mi">0</span><span class="o">,</span> <span class="mi">360</span><span class="o">,</span><span class="c1">//起始角度，结束角度。</span>
+<span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_SELF</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">,</span> <span class="c1">//x轴以自身的中心</span>
+<span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_SELF</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">);</span><span class="c1">//y轴以自身的中心</span>
+<span class="n">ra</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+<span class="n">ra</span><span class="o">.</span><span class="na">setRepeatCount</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+<span class="n">ra</span><span class="o">.</span><span class="na">setRepeatMode</span><span class="o">(</span><span class="n">Animation</span><span class="o">.</span><span class="na">REVERSE</span><span class="o">);</span>
+<span class="n">iv</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">ra</span><span class="o">);</span>
+</pre></div>
+</li>
+<li>7.组合动画<br />
+<div class="codehilite"><pre><span></span><span class="n">AnimationSet</span> <span class="n">set</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AnimationSet</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span><span class="c1">//建立一个Animation集合</span>
+<span class="n">TranslateAnimation</span> <span class="n">ta</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TranslateAnimation</span><span class="o">(</span><span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="o">-</span><span class="mf">0.5f</span><span class="o">,</span> 
+        <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">,</span> 
+        <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="o">-</span><span class="mf">0.5f</span><span class="o">,</span> 
+        <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">);</span>
+<span class="n">ta</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+<span class="n">ta</span><span class="o">.</span><span class="na">setRepeatCount</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+<span class="n">ta</span><span class="o">.</span><span class="na">setRepeatMode</span><span class="o">(</span><span class="n">Animation</span><span class="o">.</span><span class="na">REVERSE</span><span class="o">);</span>
+<span class="n">ScaleAnimation</span> <span class="n">sa</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ScaleAnimation</span><span class="o">(</span><span class="mf">0.1f</span><span class="o">,</span> <span class="mf">2.0f</span><span class="o">,</span> <span class="mf">0.1f</span><span class="o">,</span> <span class="mf">2.0f</span><span class="o">,</span> <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_SELF</span><span class="o">,</span> 
+        <span class="mf">0.5f</span><span class="o">,</span> <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_SELF</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">);</span>
+<span class="n">sa</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+<span class="n">sa</span><span class="o">.</span><span class="na">setRepeatCount</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+<span class="n">sa</span><span class="o">.</span><span class="na">setRepeatMode</span><span class="o">(</span><span class="n">Animation</span><span class="o">.</span><span class="na">REVERSE</span><span class="o">);</span>
+<span class="n">RotateAnimation</span> <span class="n">ra</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RotateAnimation</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">360</span><span class="o">,</span> <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_SELF</span><span class="o">,</span>
+        <span class="mf">0.0f</span><span class="o">,</span> <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_SELF</span><span class="o">,</span> <span class="mf">0.0f</span><span class="o">);</span>
+<span class="n">ra</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+<span class="n">ra</span><span class="o">.</span><span class="na">setRepeatCount</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+<span class="n">ra</span><span class="o">.</span><span class="na">setRepeatMode</span><span class="o">(</span><span class="n">Animation</span><span class="o">.</span><span class="na">REVERSE</span><span class="o">);</span>
+<span class="c1">//把多个动画加入到Animation集和中。</span>
+<span class="n">set</span><span class="o">.</span><span class="na">addAnimation</span><span class="o">(</span><span class="n">ra</span><span class="o">);</span>
+<span class="n">set</span><span class="o">.</span><span class="na">addAnimation</span><span class="o">(</span><span class="n">ta</span><span class="o">);</span>
+<span class="n">set</span><span class="o">.</span><span class="na">addAnimation</span><span class="o">(</span><span class="n">sa</span><span class="o">);</span>
+<span class="c1">//设置动画并播放。</span>
+<span class="n">iv</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">set</span><span class="o">);</span>
+</pre></div>
+</li>
+</ul>
+<h2 id="xml"><a name="user-content-xml" href="#xml" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>补间动画xml版</h2>
+<ul>
+<li>1.在res创建anim文件夹然后右键新建xml文件会自动选择补间动画模版的xml。</li>
+<li>2.透明动画<br />
+<div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;alpha</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+    <span class="na">android:fromAlpha=</span><span class="s">&quot;0.0&quot;</span> 
+    <span class="na">android:toAlpha=</span><span class="s">&quot;1.0&quot;</span>
+    <span class="na">android:duration=</span><span class="s">&quot;2000&quot;</span>
+    <span class="na">android:repeatCount=</span><span class="s">&quot;1&quot;</span>
+    <span class="na">android:repeatMode=</span><span class="s">&quot;reverse&quot;</span>
+    <span class="na">android:fillAfter=</span><span class="s">&quot;true&quot;</span>
+    <span class="nt">&gt;</span>
+<span class="nt">&lt;/alpha&gt;</span>
+</pre></div>
+<br />
+使用方法<br />
+<div class="codehilite"><pre><span></span><span class="n">Animation</span> <span class="n">aa</span> <span class="o">=</span> <span class="n">AnimationUtils</span><span class="o">.</span><span class="na">loadAnimation</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">anim</span><span class="o">.</span><span class="na">alpha</span><span class="o">);</span>
+<span class="n">view</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">aa</span><span class="o">);</span>
+</pre></div>
+</li>
+<li>3.位移动画<br />
+<div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;translate</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+    <span class="na">android:fromXDelta=</span><span class="s">&quot;-50%p&quot;</span>
+    <span class="na">android:toXDelta=</span><span class="s">&quot;50%p&quot;</span>
+    <span class="na">android:fromYDelta=</span><span class="s">&quot;0&quot;</span>
+    <span class="na">android:toYDelta=</span><span class="s">&quot;0&quot;</span>
+    <span class="na">android:duration=</span><span class="s">&quot;2000&quot;</span>
+    <span class="na">android:repeatCount=</span><span class="s">&quot;1&quot;</span>
+    <span class="na">android:repeatMode=</span><span class="s">&quot;reverse&quot;</span>
+     <span class="nt">&gt;</span>
+<span class="nt">&lt;/translate&gt;</span>
+</pre></div>
+</li>
+<li>4.缩放动画<br />
+<div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;scale</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+    <span class="na">android:fromXScale=</span><span class="s">&quot;0.1&quot;</span>
+    <span class="na">android:toXScale=</span><span class="s">&quot;2.0&quot;</span>
+    <span class="na">android:fromYScale=</span><span class="s">&quot;0.1&quot;</span>
+    <span class="na">android:toYScale=</span><span class="s">&quot;2.0&quot;</span>
+    <span class="na">android:duration=</span><span class="s">&quot;2000&quot;</span>
+    <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
+    <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
+    <span class="na">android:repeatCount=</span><span class="s">&quot;1&quot;</span>
+    <span class="na">android:repeatMode=</span><span class="s">&quot;reverse&quot;</span> <span class="nt">&gt;</span>
+<span class="nt">&lt;/scale&gt;</span>
+</pre></div>
+</li>
+<li>5.旋转动画<br />
+<div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;rotate</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+    <span class="na">android:fromDegrees=</span><span class="s">&quot;0&quot;</span>
+    <span class="na">android:toDegrees=</span><span class="s">&quot;360&quot;</span>
+    <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
+    <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
+    <span class="na">android:duration=</span><span class="s">&quot;2000&quot;</span>
+    <span class="na">android:repeatCount=</span><span class="s">&quot;1&quot;</span>
+    <span class="na">android:repeatMode=</span><span class="s">&quot;reverse&quot;</span> <span class="nt">&gt;</span>
+<span class="nt">&lt;/rotate&gt;</span>
+</pre></div>
+</li>
+<li>6.组合动画<br />
+<div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;set&gt;</span>
+    <span class="nt">&lt;alpha</span>
+        <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+        <span class="na">android:duration=</span><span class="s">&quot;2000&quot;</span>
+        <span class="na">android:fillAfter=</span><span class="s">&quot;true&quot;</span>
+        <span class="na">android:fromAlpha=</span><span class="s">&quot;0.0&quot;</span>
+        <span class="na">android:repeatCount=</span><span class="s">&quot;1&quot;</span>
+        <span class="na">android:repeatMode=</span><span class="s">&quot;reverse&quot;</span>
+        <span class="na">android:toAlpha=</span><span class="s">&quot;1.0&quot;</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;/alpha&gt;</span>
+    <span class="nt">&lt;rotate</span>
+        <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+        <span class="na">android:duration=</span><span class="s">&quot;2000&quot;</span>
+        <span class="na">android:fromDegrees=</span><span class="s">&quot;0&quot;</span>
+        <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
+        <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
+        <span class="na">android:repeatCount=</span><span class="s">&quot;1&quot;</span>
+        <span class="na">android:repeatMode=</span><span class="s">&quot;reverse&quot;</span>
+        <span class="na">android:toDegrees=</span><span class="s">&quot;360&quot;</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;/rotate&gt;</span>
+    <span class="nt">&lt;scale</span>
+        <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+        <span class="na">android:duration=</span><span class="s">&quot;2000&quot;</span>
+        <span class="na">android:fromXScale=</span><span class="s">&quot;0.1&quot;</span>
+        <span class="na">android:fromYScale=</span><span class="s">&quot;0.1&quot;</span>
+        <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
+        <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
+        <span class="na">android:repeatCount=</span><span class="s">&quot;1&quot;</span>
+        <span class="na">android:repeatMode=</span><span class="s">&quot;reverse&quot;</span>
+        <span class="na">android:toXScale=</span><span class="s">&quot;2.0&quot;</span>
+        <span class="na">android:toYScale=</span><span class="s">&quot;2.0&quot;</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;/scale&gt;</span>
+    <span class="nt">&lt;translate</span>
+        <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+        <span class="na">android:duration=</span><span class="s">&quot;2000&quot;</span>
+        <span class="na">android:fromXDelta=</span><span class="s">&quot;-50%p&quot;</span>
+        <span class="na">android:fromYDelta=</span><span class="s">&quot;0&quot;</span>
+        <span class="na">android:repeatCount=</span><span class="s">&quot;1&quot;</span>
+        <span class="na">android:repeatMode=</span><span class="s">&quot;reverse&quot;</span>
+        <span class="na">android:toXDelta=</span><span class="s">&quot;50%p&quot;</span>
+        <span class="na">android:toYDelta=</span><span class="s">&quot;0&quot;</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;/translate&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
+</pre></div>
+</li>
+</ul>
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="7cfb3af9985668215b26fe078f743643" data-title="补间动画" data-url="http://blog.zeromake.com/pages/补间动画/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+		var duoshuoQuery = {short_name:"fly-zero"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+	</script>
+	</div>
+
+	    </div>
+    </div>
+</body>
+</html>

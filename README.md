@@ -1,3 +1,2 @@
-# zeromake.github.io
-blog
-测试
+## 自制版blog
+[地址](http://blog.zeromake.com)
