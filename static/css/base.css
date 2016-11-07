@@ -1,0 +1,40 @@
+body{
+  padding: 0;
+}
+.base_header{
+  margin-left: 1em;
+}
+.zero_content {
+  padding: 1em;
+  border: 1px solid #ddd;
+  margin: 16px auto;
+}
+
+/* author social links */
+.author-info {
+    margin-top: 10px;
+}
+.author-info a {
+    color: #FFF;
+    text-decoration: none;
+    padding: 4px 7px;
+    font-size: 14px;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+.author-info a:hover {
+    color: #FFF;
+    text-decoration: none;
+    filter: alpha(opacity=70);
+    opacity: 0.7;
+}
+.author-info .author-info-github {
+    background-color: #4A4A4A;
+}
+.author-info .author-info-sf {
+    background-color: #5CB85C;
+}
+.markdown-body p{
+	word-wrap:break-word;
+	word-break:break-all;
+}
