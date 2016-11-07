@@ -1,54 +1,21 @@
 <!doctype html>
-<html>
+<html lang="zh">
 <head>
 	
 	 
-    <meta charset="utf-8">
-    <title>zeromake static blog</title>
-	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
-	<style>
-		body{
-			padding: 0;
-		}
-		.base_header{
-			margin-left: 1em;
-		}
-		.zero_content {
-		  padding: 1em;
-		  border: 1px solid #ddd;
-		  margin: 16px auto;
-		}
-
-		/* author social links */
-		.author-info {
-		    margin-top: 10px;
-		}
-		.author-info a {
-		    color: #FFF;
-		    text-decoration: none;
-		    padding: 4px 7px;
-		    font-size: 14px;
-		    white-space: nowrap;
-		    margin-right: 10px;
-		}
-		.author-info a:hover {
-		    color: #FFF;
-		    text-decoration: none;
-		    filter: alpha(opacity=70);
-		    opacity: 0.7;
-		}
-		.author-info .author-info-github {
-		    background-color: #4A4A4A;
-		}
-		.author-info .author-info-sf {
-		    background-color: #5CB85C;
-		}
-	</style>
+  <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta http-equiv="Content-Language" content="zh">
 	<meta name="viewport" content="width=device-width">
-    
-	<link rel="stylesheet" href="/static/css/pygments.css" type="text/css">
+  <title>zeromake static blog</title>
+	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
+  
+	<link rel="stylesheet" href="/css/pygments.css">
+	<script type="text/javascript">
+		var duoshuoQuery = {short_name:"fly-zero"};
+	</script>
+	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
 
 </head>
 
@@ -65,12 +32,11 @@
 		    
 	<h2>Android的aidl相互通信机制</h2>
 	<div class="markdown-body">
-		
-	<div>创建时间: 2016-01-03 13:42:01</div>
-	<div>最后更新: </div>
-	<div>博客原文:<a href="http://blog.zeromake.com/pages/Android的aidl相互通信机制/">地址</a></div>
-	<hr>
-	<h2 id="serviceaidlactivity"><a name="user-content-serviceaidlactivity" href="#serviceaidlactivity" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Service使用aidl的与Activity相互交互</h2>
+		<div>创建时间: 2016-01-03 13:42:01</div>
+		<div>最后更新: </div>
+		<div>博客原文:<a href="http://blog.zeromake.com/pages/Android的aidl相互通信机制/">地址</a></div>
+		<hr>
+		<h2 id="serviceaidlactivity"><a name="user-content-serviceaidlactivity" href="#serviceaidlactivity" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Service使用aidl的与Activity相互交互</h2>
 <h4 id="aidl"><a name="user-content-aidl" href="#aidl" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>一、为什么要使用aidl</h4>
 <p>原因是当我们的Client和Service不是同一个进程时是无法直接使用的，而在android中进程间通讯的方法有Activity、Content Provider、Broadcast和Service。<br />
 其中Activity需要界面，隐式调用没有回调Broadcast的接收对象经常会重新被实例化，且以上两种都是通过intent传送。回调不能完成交互。<br />
@@ -328,21 +294,10 @@ Service：ServiceMain.java <br />
 
 <h3 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>五、例子源码</h3>
 <p><a href="http://pan.baidu.com/s/1mh1fO4S">度盘</a></p>
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="660928631e1a89dbab8707aa2394e1e5" data-title="Android的aidl相互通信机制" data-url="http://blog.zeromake.com/pages/Android的aidl相互通信机制/"></div>
+		<!-- 多说评论框 start -->
+		<div class="ds-thread" data-thread-key="660928631e1a89dbab8707aa2394e1e5" data-title="Android的aidl相互通信机制" data-url="http://blog.zeromake.com/pages/Android的aidl相互通信机制/">
+		</div>
 	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-		var duoshuoQuery = {short_name:"fly-zero"};
-		(function() {
-			var ds = document.createElement('script');
-			ds.type = 'text/javascript';ds.async = true;
-			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-			ds.charset = 'UTF-8';
-			(document.getElementsByTagName('head')[0] 
-			 || document.getElementsByTagName('body')[0]).appendChild(ds);
-		})();
-	</script>
 	</div>
 
 	    </div>

@@ -1,54 +1,21 @@
 <!doctype html>
-<html>
+<html lang="zh">
 <head>
 	
 	 
-    <meta charset="utf-8">
-    <title>zeromake static blog</title>
-	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
-	<style>
-		body{
-			padding: 0;
-		}
-		.base_header{
-			margin-left: 1em;
-		}
-		.zero_content {
-		  padding: 1em;
-		  border: 1px solid #ddd;
-		  margin: 16px auto;
-		}
-
-		/* author social links */
-		.author-info {
-		    margin-top: 10px;
-		}
-		.author-info a {
-		    color: #FFF;
-		    text-decoration: none;
-		    padding: 4px 7px;
-		    font-size: 14px;
-		    white-space: nowrap;
-		    margin-right: 10px;
-		}
-		.author-info a:hover {
-		    color: #FFF;
-		    text-decoration: none;
-		    filter: alpha(opacity=70);
-		    opacity: 0.7;
-		}
-		.author-info .author-info-github {
-		    background-color: #4A4A4A;
-		}
-		.author-info .author-info-sf {
-		    background-color: #5CB85C;
-		}
-	</style>
+  <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta http-equiv="Content-Language" content="zh">
 	<meta name="viewport" content="width=device-width">
-    
-	<link rel="stylesheet" href="/static/css/pygments.css" type="text/css">
+  <title>zeromake static blog</title>
+	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
+  
+	<link rel="stylesheet" href="/css/pygments.css">
+	<script type="text/javascript">
+		var duoshuoQuery = {short_name:"fly-zero"};
+	</script>
+	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
 
 </head>
 
@@ -65,12 +32,11 @@
 		    
 	<h2>Android6.0权限问题</h2>
 	<div class="markdown-body">
-		
-	<div>创建时间: 2015-11-09 09:06:32</div>
-	<div>最后更新: </div>
-	<div>博客原文:<a href="http://blog.zeromake.com/pages/Android6-0权限问题/">地址</a></div>
-	<hr>
-	<h2 id="60"><a name="user-content-60" href="#60" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>6.0权限问题</h2>
+		<div>创建时间: 2015-11-09 09:06:32</div>
+		<div>最后更新: </div>
+		<div>博客原文:<a href="http://blog.zeromake.com/pages/Android6-0权限问题/">地址</a></div>
+		<hr>
+		<h2 id="60"><a name="user-content-60" href="#60" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>6.0权限问题</h2>
 <ul>
 <li>1.Android6.0的权限与以往不同。<br />
     Android6.0之后引入了新的权限机制，不再是安装时就申请权限，获得后用户不可修改。6.0以后安装时不申请权限，而是运行时申请权限，而且用户可以随时到设置里撤消或允许权限。当然如果程序员不知道这回事就把需要权限的项目的targetSdkVersion的值改为23以下，这样6.0会以原来的方式对待这个软件。如果不改的话，在运行需要权限的代码时会FC，也可以手动到设置里赋予权限但是这个不合适用户使用。<br />
@@ -167,21 +133,10 @@
 <p>用v4包的这三方法，完美兼容所有版本！这个方法需要额外的参数，Context or Activity。别的就没啥特别的了。<br />
 或是用V13 的FragmentCompat.requestPermissions() FragmentCompat.shouldShowRequestPermissionRationale();<br />
 更多更详细的看<a href="http://www.jianshu.com/p/e1ab1a179fbb">Android M 新的运行时权限开发者需要知道的一切</a></p>
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="65f3f5a1e8e95fa35213a7cac253a26a" data-title="Android6.0权限问题" data-url="http://blog.zeromake.com/pages/Android6-0权限问题/"></div>
+		<!-- 多说评论框 start -->
+		<div class="ds-thread" data-thread-key="65f3f5a1e8e95fa35213a7cac253a26a" data-title="Android6.0权限问题" data-url="http://blog.zeromake.com/pages/Android6-0权限问题/">
+		</div>
 	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-		var duoshuoQuery = {short_name:"fly-zero"};
-		(function() {
-			var ds = document.createElement('script');
-			ds.type = 'text/javascript';ds.async = true;
-			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-			ds.charset = 'UTF-8';
-			(document.getElementsByTagName('head')[0] 
-			 || document.getElementsByTagName('body')[0]).appendChild(ds);
-		})();
-	</script>
 	</div>
 
 	    </div>

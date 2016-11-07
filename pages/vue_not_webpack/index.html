@@ -1,54 +1,21 @@
 <!doctype html>
-<html>
+<html lang="zh">
 <head>
 	
 	 
-    <meta charset="utf-8">
-    <title>zeromake static blog</title>
-	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
-	<style>
-		body{
-			padding: 0;
-		}
-		.base_header{
-			margin-left: 1em;
-		}
-		.zero_content {
-		  padding: 1em;
-		  border: 1px solid #ddd;
-		  margin: 16px auto;
-		}
-
-		/* author social links */
-		.author-info {
-		    margin-top: 10px;
-		}
-		.author-info a {
-		    color: #FFF;
-		    text-decoration: none;
-		    padding: 4px 7px;
-		    font-size: 14px;
-		    white-space: nowrap;
-		    margin-right: 10px;
-		}
-		.author-info a:hover {
-		    color: #FFF;
-		    text-decoration: none;
-		    filter: alpha(opacity=70);
-		    opacity: 0.7;
-		}
-		.author-info .author-info-github {
-		    background-color: #4A4A4A;
-		}
-		.author-info .author-info-sf {
-		    background-color: #5CB85C;
-		}
-	</style>
+  <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta http-equiv="Content-Language" content="zh">
 	<meta name="viewport" content="width=device-width">
-    
-	<link rel="stylesheet" href="/static/css/pygments.css" type="text/css">
+  <title>zeromake static blog</title>
+	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
+  
+	<link rel="stylesheet" href="/css/pygments.css">
+	<script type="text/javascript">
+		var duoshuoQuery = {short_name:"fly-zero"};
+	</script>
+	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
 
 </head>
 
@@ -65,12 +32,11 @@
 		    
 	<h2>Vue2(not_webpack)</h2>
 	<div class="markdown-body">
-		
-	<div>创建时间: 2016-11-04 13:10:25</div>
-	<div>最后更新: 2016-11-04 15:07:50</div>
-	<div>博客原文:<a href="http://blog.zeromake.com/pages/vue_not_webpack/">地址</a></div>
-	<hr>
-	<p>看到各种vue入门全部都是webpack的我表示没有什么问题。但是却发觉无法将这些webpack的工作流推荐给其它人。一说npm,webpack,babel什么的纷纷表示太麻烦。</p>
+		<div>创建时间: 2016-11-04 13:10:25</div>
+		<div>最后更新: 2016-11-04 15:07:50</div>
+		<div>博客原文:<a href="http://blog.zeromake.com/pages/vue_not_webpack/">地址</a></div>
+		<hr>
+		<p>看到各种vue入门全部都是webpack的我表示没有什么问题。但是却发觉无法将这些webpack的工作流推荐给其它人。一说npm,webpack,babel什么的纷纷表示太麻烦。</p>
 <p>也许他们还是更喜欢cdn引入，手写js吧。所以这个就是纯粹的vue不用webpack不用babel。直接用我们喜欢的es5的js写。等到觉得vue的好再推荐他们webpack什么的。</p>
 <p>然后模块化还是需要一个所有我选择了requirejs。</p>
 <h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>零、文章中的一些定义</h2>
@@ -252,21 +218,10 @@ el表示vue的实例挂载点，看了vue源码使用的是<code>document.queryS
 <p><img alt="hello_element" src="/static/img/vue_not_webpack/hello_element.png" /></p>
 <h3 id="_9"><a name="user-content-_9" href="#_9" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>源码：</h3>
 <p>在git仓库的hello_element标签中</p>
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="e0505ca00cdf9688c27163229fd0f2e5" data-title="Vue2(not_webpack)" data-url="http://blog.zeromake.com/pages/vue_not_webpack/"></div>
+		<!-- 多说评论框 start -->
+		<div class="ds-thread" data-thread-key="e0505ca00cdf9688c27163229fd0f2e5" data-title="Vue2(not_webpack)" data-url="http://blog.zeromake.com/pages/vue_not_webpack/">
+		</div>
 	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-		var duoshuoQuery = {short_name:"fly-zero"};
-		(function() {
-			var ds = document.createElement('script');
-			ds.type = 'text/javascript';ds.async = true;
-			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-			ds.charset = 'UTF-8';
-			(document.getElementsByTagName('head')[0] 
-			 || document.getElementsByTagName('body')[0]).appendChild(ds);
-		})();
-	</script>
 	</div>
 
 	    </div>
