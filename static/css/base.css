@@ -34,7 +34,7 @@ body{
 .author-info .author-info-sf {
     background-color: #5CB85C;
 }
-.markdown-body p{
+*{
 	word-wrap:break-word;
 	word-break:break-all;
 }
