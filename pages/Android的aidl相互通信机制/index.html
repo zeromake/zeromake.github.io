@@ -22,6 +22,7 @@
 </head>
 
 <body>
+	<div class="base-content">
 	<header class="base_header">
 		<h1><a href="/">zeromake blog</a></h1>
 		<div class="author-info">
@@ -38,23 +39,23 @@
 		<div>最后更新: </div>
 		<div>博客原文:<a href="http://blog.zeromake.com/pages/Android的aidl相互通信机制/">地址</a></div>
 		<hr>
-		<h2 id="serviceaidlactivity"><a name="user-content-serviceaidlactivity" href="#serviceaidlactivity" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Service使用aidl的与Activity相互交互</h2>
-<h4 id="aidl"><a name="user-content-aidl" href="#aidl" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>一、为什么要使用aidl</h4>
-<p>原因是当我们的Client和Service不是同一个进程时是无法直接使用的，而在android中进程间通讯的方法有Activity、Content Provider、Broadcast和Service。<br />
-其中Activity需要界面，隐式调用没有回调Broadcast的接收对象经常会重新被实例化，且以上两种都是通过intent传送。回调不能完成交互。<br />
-Content Provider则只提供数据，Service有aidl这门进程间调用函数的机制。<br />
+		<h2 id="serviceaidlactivity">Service使用aidl的与Activity相互交互</h2>
+<h4 id="aidl">一、为什么要使用aidl</h4>
+<p>原因是当我们的Client和Service不是同一个进程时是无法直接使用的，而在android中进程间通讯的方法有Activity、Content Provider、Broadcast和Service。
+其中Activity需要界面，隐式调用没有回调Broadcast的接收对象经常会重新被实例化，且以上两种都是通过intent传送。回调不能完成交互。
+Content Provider则只提供数据，Service有aidl这门进程间调用函数的机制。
 <!--more--></p>
-<h3 id="aidl_1"><a name="user-content-aidl_1" href="#aidl_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>二、普通单向aidl使用</h3>
-<p>需要一个Client和Service以及aidl接口，其中Client和Service是可以不在同一个应用中的。下面是aidl：IMyAidl.aidl<br />
+<h3 id="aidl_1">二、普通单向aidl使用</h3>
+<p>需要一个Client和Service以及aidl接口，其中Client和Service是可以不在同一个应用中的。下面是aidl：IMyAidl.aidl
 <div class="codehilite"><pre><span></span>    <span class="kn">package</span> <span class="nn">zero.aidldemo.aidl</span><span class="o">;</span>
 
     <span class="kd">interface</span> <span class="nc">IMyAidl</span> <span class="o">{</span>
         <span class="kt">void</span> <span class="nf">show</span><span class="o">(</span><span class="n">String</span> <span class="n">str</span><span class="o">);</span>
     <span class="o">}</span>
 </pre></div>
-<br />
-以上写完会在gen下同包名中生成与aidl文件相同的java文件打开后这个类中有一个抽象内部类Stub实现Binder和自身我们在Service中写一个继承这个Stub的内部类<br />
-Service：ServiceMain.java 把当前Service的class全名作为Action注册以便于其他进程调用。<br />
+
+以上写完会在gen下同包名中生成与aidl文件相同的java文件打开后这个类中有一个抽象内部类Stub实现Binder和自身我们在Service中写一个继承这个Stub的内部类
+Service：ServiceMain.java 把当前Service的class全名作为Action注册以便于其他进程调用。
 <div class="codehilite"><pre><span></span>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServiceMain</span> <span class="kd">extends</span> <span class="n">Service</span><span class="o">{</span>
         <span class="kd">public</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">SERVICE_CLASS_NAME</span> <span class="o">=</span> <span class="s">&quot;zero.musicplay.service.ServiceMain&quot;</span><span class="o">;</span>
             <span class="c1">//继承IMyAidl.Stub</span>
@@ -71,7 +72,7 @@ Service：ServiceMain.java 把当前Service的class全名作为Action注册以�
     <span class="o">}</span>
 </pre></div>
 </p>
-<p>Client用一个Activity来实现:ActivityClient.java<br />
+<p>Client用一个Activity来实现:ActivityClient.java
 <div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActivityClient</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="kd">implements</span> <span class="n">OnClickListener</span><span class="o">,</span><span class="n">ServiceConnection</span><span class="o">{</span>
     <span class="c1">//bind后的接口实现对象。</span>
     <span class="kd">private</span> <span class="n">IMyAidl</span> <span class="n">mAsInterface</span><span class="o">;</span>
@@ -122,20 +123,20 @@ Service：ServiceMain.java 把当前Service的class全名作为Action注册以�
         <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
-<br />
+
 效果就是点击按钮触发Service里的实现接口函数。</p>
-<h3 id="aidl_2"><a name="user-content-aidl_2" href="#aidl_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>三、双向aidl使用</h3>
-<p>单向的aidl接口中函数也可以有返回值，但是只适用于同步且时间较短。如果需要的函数执行的是一个异步任务就不好用了。<br />
+<h3 id="aidl_2">三、双向aidl使用</h3>
+<p>单向的aidl接口中函数也可以有返回值，但是只适用于同步且时间较短。如果需要的函数执行的是一个异步任务就不好用了。
 所以这里用双向aidl比较合适。</p>
-<p>与上面相比多了一个aidl的回调先看回调的aidl:IMyAidlCallBack.aidl<br />
+<p>与上面相比多了一个aidl的回调先看回调的aidl:IMyAidlCallBack.aidl
 <div class="codehilite"><pre><span></span>    <span class="kn">package</span> <span class="nn">zero.aidldemo.aidl</span><span class="o">;</span>
 
     <span class="kd">interface</span> <span class="nc">IMyAidlCallBack</span> <span class="o">{</span>
         <span class="kt">void</span> <span class="nf">callBackShow</span><span class="o">();</span>
     <span class="o">}</span>
 </pre></div>
-<br />
-没什么变化但是在原来的调用Service的aidl中需要加入两个方法:IMyAidl.aidl方法名不是固定的<br />
+
+没什么变化但是在原来的调用Service的aidl中需要加入两个方法:IMyAidl.aidl方法名不是固定的
 <div class="codehilite"><pre><span></span><span class="kn">package</span> <span class="nn">zero.aidldemo.aidl</span><span class="o">;</span>
 <span class="c1">//eclipse对aidl文件编辑支持比较差有时无法自动导包。</span>
 <span class="kn">import</span> <span class="nn">zero.aidldemo.aidl.IMyAidlCallBack</span><span class="o">;</span>
@@ -147,8 +148,8 @@ Service：ServiceMain.java 把当前Service的class全名作为Action注册以�
     <span class="kt">void</span> <span class="nf">unregisterCallback</span><span class="o">(</span><span class="n">IMyAidlCallBack</span> <span class="n">cb</span><span class="o">);</span>
 <span class="o">}</span>
 </pre></div>
-<br />
-Service：ServiceMain.java <br />
+
+Service：ServiceMain.java 
 <div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServiceMain</span> <span class="kd">extends</span> <span class="n">Service</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">SERVICE_CLASS_NAME</span> <span class="o">=</span> <span class="s">&quot;zero.musicplay.service.ServiceMain&quot;</span><span class="o">;</span>
     <span class="c1">// 回调列表对象</span>
@@ -195,10 +196,10 @@ Service：ServiceMain.java <br />
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
-<br />
-和上面说的一样在原有的aidl中添加两个方法用于给回调列表对象添加删除。并需要一个回调列表对象。<br />
+
+和上面说的一样在原有的aidl中添加两个方法用于给回调列表对象添加删除。并需要一个回调列表对象。
 所以我在onCreate()实例化。</p>
-<p>然后是Client:ActivityClient.java<br />
+<p>然后是Client:ActivityClient.java
 <div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActivityClient</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="kd">implements</span> <span class="n">OnClickListener</span><span class="o">,</span>
         <span class="n">ServiceConnection</span> <span class="o">{</span>
     <span class="c1">// bind后的接口实现对象。</span>
@@ -285,16 +286,16 @@ Service：ServiceMain.java <br />
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
-<br />
-好了以上就是一个交互式的aidl小例子，回调可以在Service的任意地方调用不一定要在Service的aidl被调用时调用。<br />
+
+好了以上就是一个交互式的aidl小例子，回调可以在Service的任意地方调用不一定要在Service的aidl被调用时调用。
 以及这些内部类也都可以提取出来，但是就不好访问Service和视图了。</p>
-<h3 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>四、注意</h3>
+<h3 id="_1">四、注意</h3>
 <div class="codehilite"><pre><span></span>1.回调对象的实现方法不能直接调用Service的aidl方法。可以用Handler来调用。
 2.如果发觉只用bindSrevice无法启动Service可以先startService再bindSrevice
 </pre></div>
 
 
-<h3 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>五、例子源码</h3>
+<h3 id="_2">五、例子源码</h3>
 <p><a href="http://pan.baidu.com/s/1mh1fO4S">度盘</a></p>
 		<!-- 多说评论框 start -->
 		<div class="ds-thread" data-thread-key="660928631e1a89dbab8707aa2394e1e5" data-title="Android的aidl相互通信机制" data-url="http://blog.zeromake.com/pages/Android的aidl相互通信机制/">
@@ -303,6 +304,7 @@ Service：ServiceMain.java <br />
 	</div>
 
 		</div>
+	</div>
 	</div>
 </body>
 </html>

@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="shortcut icon" href="/static/img/zeromake.ico" type="image/x-icon">
+	<link rel="icon" sizes="any" href="/static/img/zeromake.svg">
+	<meta http-equiv="Content-Language" content="zh">
+	<meta name="viewport" content="width=device-width">
+	<title>vue-ssr-zeromake static blog</title>
+	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
+	
+	<link rel="stylesheet" href="/css/pygments.css">
+	<script type="text/javascript">
+		var duoshuoQuery = {short_name:"fly-zero"};
+	</script>
+	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
+
+	
+</head>
+
+<body>
+	<div class="base-content">
+	<header class="base_header">
+		<h1><a href="/">zeromake blog</a></h1>
+		<div class="author-info">
+			<a class="author-info-github" href="https://github.com/zeromake">GitHub</a>
+			<a class="author-info-sf" href="https://segmentfault.com/u/zeromake">SegmentFault</a>
+		</div>
+	</header>
+	<div class="zero_content">
+		<div class="markdown-content">
+			
+	<h2>vue-ssr</h2>
+	<div class="markdown-body">
+		<div>创建时间: 2017-02-18 13:17:25</div>
+		<div>最后更新: 2017-02-18 13:17:25</div>
+		<div>博客原文:<a href="http://blog.zeromake.com/pages/vue-ssr/">地址</a></div>
+		<hr>
+		<div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#ssr">一.ssr的技术选择</a></li>
+<li><a href="#_2">二.初始化项目</a></li>
+<li><a href="#_3">三.项目结构</a></li>
+<li><a href="#_4">四.部分代码分析</a><ul>
+<li><a href="#1-serverjs">1. server.js(就说点重点代码)</a></li>
+<li><a href="#2-buildsetup-dev-serverjs">2. build/setup-dev-server.js</a></li>
+<li><a href="#3-buildwebpackbaseconfigjs">3. build/webpack.base.config.js</a></li>
+<li><a href="#4-buildwebpackclientconfigjs">4. build/webpack.client.config.js</a></li>
+<li><a href="#5-bulidwebpackclientconfigjs">5. bulid/webpack.client.config.js</a></li>
+<li><a href="#6-srcclient-entryjs">6. src/client-entry.js</a></li>
+<li><a href="#7-srcserver-entryjs">7. src/server-entry.js</a></li>
+<li><a href="#8-srcappjs">8. src/app.js</a></li>
+<li><a href="#9-srcstoreindexjs">9. src/store/index.js</a></li>
+<li><a href="#10-srcstoreapijs">10. src/store/api.js</a></li>
+<li><a href="#11-srcviewscreatelistviewjs">11. src/views/CreateListView.js</a></li>
+<li><a href="#12-srccomponentsitemlistvue">12. src/components/ItemList.vue</a></li>
+</ul>
+</li>
+<li><a href="#_5">五.文字流程说明</a></li>
+<li><a href="#_6">六.源码</a></li>
+</ul>
+</div>
+<h2 id="_1">前言</h2>
+<p>自从前端技术栈换到 <code>mvvm</code> 之类的以后网站的源码查看就只会有一些js了，对于用户是没什么问题但是却对 <code>seo</code> 有很大的问题。</p>
+<p>因为百度之类的爬虫不会执行js来渲染所以无法得到内容。大部分主流的<code>mvvm</code>框架都有了 <code>ssr(Server Side Rendering)</code> 意为服务端渲染。
+<del>不是手游的ssr，好像暴露了什么</del></p>
+<h2 id="ssr">一.ssr的技术选择</h2>
+<ul>
+<li><a href="https://github.com/vuejs/vue/tree/dev/packages/vue-server-renderer">vue-server-renderer</a></li>
+</ul>
+<blockquote>
+<p>vue官方的服务端渲染包</p>
+</blockquote>
+<ul>
+<li><a href="https://github.com/nuxt/nuxt.js">nuxt</a></li>
+</ul>
+<blockquote>
+<p>使用官方 <code>vue-server-renderer</code> 包装后的脚手架工具，极大的简化了 <code>ssr</code> 的搭建；</p>
+<p>但是不仅仅保含 <code>ssr</code> 包括了现有的大部分的 <code>vue</code> 栈，快速简化了 <code>vue</code> 栈项目的搭建；</p>
+<p>如果不是有特殊需求，直接使用 <code>nuxt</code> ，以便节省时间特别是不会英文的童鞋 <code>nuxt</code> 官方文档还带支持中文。</p>
+</blockquote>
+<h2 id="_2">二.初始化项目</h2>
+<div class="codehilite"><pre><span></span>yarn init
+<span class="c1"># node项目初始化</span>
+yarn add axios compression cross-env es6-promise <span class="se">\</span>
+express lru-cache serialize-javascript vue vue-router <span class="se">\</span>
+vuex vuex-router-sync
+<span class="c1"># 安装运行时包根据顺序解释</span>
+<span class="c1"># 1.axios - http 请求工具</span>
+<span class="c1"># 2.compression - express 的 gzip 中间组件</span>
+<span class="c1"># 3.cross-env - 跨平台环境变量设置工具</span>
+<span class="c1"># 4.es6-promise - ie9 的 promise 支持</span>
+<span class="c1"># 5.express - node web 框架</span>
+<span class="c1"># 6.lru-cache - js 的 lru 缓存</span>
+<span class="c1"># 7.serialize-javascript - js 对象序列化为 js 代码</span>
+<span class="c1"># 8.vue - 这个不用说了吧</span>
+<span class="c1"># 9.vue-router - vue 的前端路由通过 ssr 后有后端路由效果</span>
+<span class="c1"># 10.vuex - vue 的状态管理工具 ssr 中前后端同步</span>
+<span class="c1"># 11.vuex-router-sync - 路由同步工具</span>
+
+yarn add autoprefixer buble buble-loader css-loader <span class="se">\</span>
+url-loader html-webpack-plugin rimraf stylus <span class="se">\</span>
+stylus-loader sw-precache-webpack-plugin vue-loader <span class="se">\</span>
+vue-template-compiler webpack webpack-dev-middleware <span class="se">\</span>
+webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
+<span class="c1"># 开发&amp;&amp;打包时包</span>
+<span class="c1"># 1.autiprefixer - css 前缀自动生成</span>
+<span class="c1"># 2.buble - babel 的类似工具以后更换看看会不会有什么影响</span>
+<span class="c1"># 3.buble-loader - 同上</span>
+<span class="c1"># 4.css-loader - css 加载器</span>
+<span class="c1"># 5.url-loader - file-loader 的包装，图片可以以base64导入</span>
+<span class="c1"># 6.html-webpack-plugin - html 的资源加载生成</span>
+<span class="c1"># 7.rimraf - 跨平台的删除工具</span>
+<span class="c1"># 8.stylus - stylus 加载器类似 sass 但是个人不喜欢用 sass 所以用 stylus</span>
+<span class="c1"># 9.stylus-loader - 同上</span>
+<span class="c1"># 10.sw-precache-webpack - service-worker 支持</span>
+<span class="c1"># 11.vue-loader - vue 文件加载器</span>
+<span class="c1"># 12.vue-template-compiler - template to render</span>
+<span class="c1"># 13.webpack - 模块打包工具</span>
+<span class="c1"># 14.webpack-dev-middleware - 监听文件改动</span>
+<span class="c1"># 15.webpack-hot-middleware - 热更新</span>
+<span class="c1"># 16.extract-text-webpack-plugin - 独立生成css</span>
+</pre></div>
+
+
+<h2 id="_3">三.项目结构</h2>
+<div class="codehilite"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">│  package.json</span>
+<span class="l l-Scalar l-Scalar-Plain">│  server.js</span>                <span class="c1"># server-render</span>
+<span class="l l-Scalar l-Scalar-Plain">│  yarn.lock</span>
+<span class="l l-Scalar l-Scalar-Plain">│</span>
+<span class="l l-Scalar l-Scalar-Plain">├─build</span>
+<span class="l l-Scalar l-Scalar-Plain">│      setup-dev-server.js</span>      <span class="c1"># dev 的热生成</span>
+<span class="l l-Scalar l-Scalar-Plain">│      vue-loader.config.js</span>     <span class="c1"># 独立出 vue-loader 配置以便根据环境改变</span>
+<span class="l l-Scalar l-Scalar-Plain">│      webpack.base.config.js</span>   <span class="c1"># 基础 webpack 配置</span>
+<span class="l l-Scalar l-Scalar-Plain">│      webpack.client.config.js</span> <span class="c1"># 打包 client 的配置</span>
+<span class="l l-Scalar l-Scalar-Plain">│      webpack.server.config.js</span> <span class="c1"># 打包 server 的配置</span>
+<span class="l l-Scalar l-Scalar-Plain">│</span>
+<span class="l l-Scalar l-Scalar-Plain">├─public</span>                        <span class="c1"># 一些静态资源</span>
+<span class="l l-Scalar l-Scalar-Plain">└─src</span>
+    <span class="l l-Scalar l-Scalar-Plain">│  app.js</span>                   <span class="c1"># 整合 router,filters,vuex 的入口文件</span>
+    <span class="l l-Scalar l-Scalar-Plain">│  App.vue</span>                  <span class="c1"># 顶级 vue 组件</span>
+    <span class="l l-Scalar l-Scalar-Plain">│  client-entry.js</span>          <span class="c1"># client 的入口文件</span>
+    <span class="l l-Scalar l-Scalar-Plain">│  index.template.html</span>      <span class="c1"># html 模板</span>
+    <span class="l l-Scalar l-Scalar-Plain">│  server-entry.js</span>          <span class="c1"># server 的入口文件</span>
+    <span class="l l-Scalar l-Scalar-Plain">│</span>
+    <span class="l l-Scalar l-Scalar-Plain">├─components</span>
+    <span class="l l-Scalar l-Scalar-Plain">│      Item.vue</span>             <span class="c1"># 抽取出List中的每个项</span>
+    <span class="l l-Scalar l-Scalar-Plain">│      ItemList.vue</span>         <span class="c1"># List 的 vue 组件</span>
+    <span class="l l-Scalar l-Scalar-Plain">│      Spinner.vue</span>          <span class="c1"># 加载提示</span>
+    <span class="l l-Scalar l-Scalar-Plain">│</span>
+    <span class="l l-Scalar l-Scalar-Plain">├─filters</span>
+    <span class="l l-Scalar l-Scalar-Plain">│      index.js</span>             <span class="c1"># filters</span>
+    <span class="l l-Scalar l-Scalar-Plain">│</span>
+    <span class="l l-Scalar l-Scalar-Plain">├─router</span>
+    <span class="l l-Scalar l-Scalar-Plain">│      index.js</span>             <span class="c1"># router config</span>
+    <span class="l l-Scalar l-Scalar-Plain">│</span>
+    <span class="l l-Scalar l-Scalar-Plain">├─store</span>
+    <span class="l l-Scalar l-Scalar-Plain">│      api.js</span>               <span class="c1"># 数据请求方式</span>
+    <span class="l l-Scalar l-Scalar-Plain">│      create-api-client.js</span> <span class="c1"># client 数据请求对象的设置</span>
+    <span class="l l-Scalar l-Scalar-Plain">│      create-api-server.js</span> <span class="c1"># server 数据请求对象的设置</span>
+    <span class="l l-Scalar l-Scalar-Plain">│      index.js</span>             <span class="c1"># vuex 的各种配置</span>
+    <span class="l l-Scalar l-Scalar-Plain">│</span>
+    <span class="l l-Scalar l-Scalar-Plain">└─views</span>
+            <span class="l l-Scalar l-Scalar-Plain">CreateListView.js</span>   <span class="c1"># 包装 component 支持 preFetch</span>
+</pre></div>
+
+
+<h2 id="_4">四.部分代码分析</h2>
+<blockquote>
+<p>我将根据依赖关系来一个个说明,npm包不说明</p>
+</blockquote>
+<h3 id="1-serverjs">1. server.js(就说点重点代码)</h3>
+<blockquote>
+<p>require: ['build/setup-dev-server.js']
+<div class="codehilite"><pre><span></span><span class="c1">// [L16-L48]</span>
+<span class="kd">let</span> <span class="nx">indexHTML</span>
+<span class="kd">let</span> <span class="nx">renderer</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">isProd</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 生产环境直接读取build生成的文件</span>
+    <span class="nx">renderer</span> <span class="o">=</span> <span class="nx">createRenderer</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;./dist/server-bundle.js&#39;</span><span class="p">),</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    <span class="nx">indexHTML</span> <span class="o">=</span> <span class="nx">parseIndex</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;./dist/index.html&#39;</span><span class="p">),</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// 开发环境下使用dev-server来通过回调把生成在内存中的文件赋值</span>
+    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./build/setup-dev-server&#39;</span><span class="p">)(</span><span class="nx">app</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">bundleUpdated</span><span class="o">:</span> <span class="nx">bundle</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">renderer</span> <span class="o">=</span> <span class="nx">createRenderer</span><span class="p">(</span><span class="nx">bundle</span><span class="p">)</span>
+        <span class="p">},</span>
+        <span class="nx">indexUpdated</span><span class="o">:</span> <span class="nx">index</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">indexHTML</span> <span class="o">=</span> <span class="nx">parseIndex</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+<span class="c1">// 不论生产还是开发环境把server-bundle.js设置到vue-server-renderer获得Renderer装换器对象</span>
+<span class="kd">function</span> <span class="nx">createRenderer</span> <span class="p">(</span><span class="nx">bundle</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;vue-server-renderer&#39;</span><span class="p">).</span><span class="nx">createBundleRenderer</span><span class="p">(</span><span class="nx">bundle</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">cache</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;lru-cache&#39;</span><span class="p">)({</span>
+            <span class="nx">max</span><span class="o">:</span> <span class="mi">1000</span><span class="p">,</span>
+            <span class="nx">maxAge</span><span class="o">:</span> <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">15</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+<span class="c1">// 通过目标预设的字符串分割出头部和尾部</span>
+<span class="kd">function</span> <span class="nx">parseIndex</span> <span class="p">(</span><span class="nx">template</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">contentMarker</span> <span class="o">=</span> <span class="s1">&#39;&lt;!-- APP --&gt;&#39;</span>
+    <span class="kr">const</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">contentMarker</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">head</span><span class="o">:</span> <span class="nx">template</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">i</span><span class="p">),</span>
+        <span class="nx">tail</span><span class="o">:</span> <span class="nx">template</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="nx">contentMarker</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span><span class="c1">// [L60-L78]</span>
+<span class="c1">// 模拟api </span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/api/topstories.json&#39;</span><span class="p">,</span> <span class="nx">serve</span><span class="p">(</span><span class="s1">&#39;./public/api/topstories.json&#39;</span><span class="p">))</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/api/newstories.json&#39;</span><span class="p">,</span> <span class="nx">serve</span><span class="p">(</span><span class="s1">&#39;./public/api/newstories.json&#39;</span><span class="p">))</span>
+<span class="c1">// 模拟了/api/item/xx.json的接口</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/api/item/:id.json&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span>
+    <span class="kr">const</span> <span class="nx">time</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="mi">1487396700</span><span class="o">-</span><span class="mi">1400000000</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1400000000</span><span class="p">)</span>
+    <span class="kr">const</span> <span class="nx">item</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">by</span><span class="o">:</span> <span class="s2">&quot;zero&quot;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span>
+        <span class="nx">descendants</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="nx">id</span><span class="p">,</span>
+        <span class="nx">score</span><span class="o">:</span> <span class="nx">id</span> <span class="o">-</span> <span class="mi">13664000</span><span class="p">,</span>
+        <span class="nx">time</span><span class="o">:</span> <span class="nx">time</span><span class="p">,</span>
+        <span class="nx">title</span><span class="o">:</span> <span class="sb">`测试Item:</span><span class="si">${</span><span class="nx">id</span><span class="si">}</span><span class="sb"> - </span><span class="si">${</span><span class="nx">time</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;story&#39;</span><span class="p">,</span>
+        <span class="nx">url</span><span class="o">:</span> <span class="sb">`/api/item/</span><span class="si">${</span><span class="nx">id</span><span class="si">}</span><span class="sb">.json`</span>
+    <span class="p">}</span><span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span>
+<span class="p">})</span>
+<span class="c1">// [L81-L116]</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// 防止异步的renderer对象还未生成</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">renderer</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;waiting for compilation.. refresh in a moment.&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// set header</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="s2">&quot;Context-Type&quot;</span><span class="p">,</span> <span class="s2">&quot;text/html&quot;</span><span class="p">)</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="s2">&quot;Server&quot;</span><span class="p">,</span> <span class="nx">serverInfo</span><span class="p">)</span>
+    <span class="c1">// 记录时间</span>
+    <span class="kr">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+    <span class="kr">const</span> <span class="nx">context</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">url</span><span class="o">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">url</span> <span class="p">}</span>
+    <span class="c1">// 为renderToStream方法传入url，renderToStream会根据url寻找vue-router</span>
+    <span class="kr">const</span> <span class="nx">renderStream</span> <span class="o">=</span> <span class="nx">renderer</span><span class="p">.</span><span class="nx">renderToStream</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span>
+    <span class="c1">// 注册data之前事件把index.html的头部写入res</span>
+    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">indexHTML</span><span class="p">.</span><span class="nx">head</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="c1">// 注册data中事件直接把ssr的html写出</span>
+    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nx">chunk</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="c1">// 注册end事件把已经挂载到context的vuex的State，</span>
+    <span class="c1">// 通过`serialize-javascript`序列化成js字面量。</span>
+    <span class="c1">// 其中挂载到window.__INSTAL_STATE__</span>
+    <span class="c1">// 并且返回index.html尾部并结束这个请求</span>
+    <span class="c1">// 最后输出这次ssr的时间</span>
+    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">initialState</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span>
+                <span class="sb">`&lt;script&gt;window.__INSTAL_STATE__=</span><span class="si">${</span>
+                    <span class="nx">serialize</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">initialState</span><span class="p">)</span>
+                <span class="si">}</span><span class="sb">&lt;/script&gt;`</span>
+            <span class="p">)</span>
+        <span class="p">}</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">indexHTML</span><span class="p">.</span><span class="nx">tail</span><span class="p">)</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`whole request: </span><span class="si">${</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">s</span><span class="si">}</span><span class="sb">ms`</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="c1">// 错误事件</span>
+    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">err</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="s1">&#39;404&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">404</span><span class="p">).</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;404 | Page Not Found&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">500</span><span class="p">).</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;Internal Error 500&#39;</span><span class="p">)</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="sb">`error during render : </span><span class="si">${</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">})</span>
+<span class="p">})</span>
+</pre></div>
+</p>
+</blockquote>
+<h3 id="2-buildsetup-dev-serverjs">2. build/setup-dev-server.js</h3>
+<blockquote>
+<p>require: ['build/webpack.client.config.js','build/webpack.server.config.js']
+<div class="codehilite"><pre><span></span><span class="c1">// [L24-L37]</span>
+    <span class="c1">// 在client-webpack转换完成时获取devMiddleware的fileSystem。</span>
+    <span class="c1">// 读取生成的index.html并通过传入的opt的回调设置到server.js里</span>
+    <span class="nx">clientCompiler</span><span class="p">.</span><span class="nx">plugin</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="kr">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">devMiddleware</span><span class="p">.</span><span class="nx">fileSystem</span>
+        <span class="kr">const</span> <span class="nx">filePath</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">clientConfig</span><span class="p">.</span><span class="nx">output</span><span class="p">.</span><span class="nx">path</span><span class="p">,</span> <span class="s1">&#39;index.html&#39;</span><span class="p">)</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">filePath</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stats</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">stats</span> <span class="o">&amp;&amp;</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isFile</span><span class="p">()){</span>
+                <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">filePath</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                    <span class="nx">opts</span><span class="p">.</span><span class="nx">indexUpdated</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+                <span class="p">})</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+<span class="c1">// [L41-L52]</span>
+    <span class="c1">// 通过memory-fs创建一个内存文件系统对象</span>
+    <span class="kr">const</span> <span class="nx">mfs</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MFS</span><span class="p">()</span>
+    <span class="kr">const</span> <span class="nx">outputPath</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">serverConfig</span><span class="p">.</span><span class="nx">output</span><span class="p">.</span><span class="nx">path</span><span class="p">,</span> <span class="nx">serverConfig</span><span class="p">.</span><span class="nx">output</span><span class="p">.</span><span class="nx">filename</span><span class="p">)</span>
+    <span class="c1">// 把server-webpack生成的文件重定向到内存中</span>
+    <span class="nx">serverCompiler</span><span class="p">.</span><span class="nx">outputFileSystem</span> <span class="o">=</span> <span class="nx">mfs</span>
+    <span class="c1">// 设置文件重新编译监听并通过opt的回调设置到server.js</span>
+    <span class="nx">serverCompiler</span><span class="p">.</span><span class="nx">watch</span><span class="p">({},</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stats</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span>
+        <span class="nx">stats</span> <span class="o">=</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">toJson</span><span class="p">()</span>
+        <span class="nx">stats</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">err</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+        <span class="nx">stats</span><span class="p">.</span><span class="nx">warnings</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">err</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+        <span class="nx">mfs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">outputPath</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">opts</span><span class="p">.</span><span class="nx">bundleUpdated</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+</pre></div>
+</p>
+</blockquote>
+<h3 id="3-buildwebpackbaseconfigjs">3. build/webpack.base.config.js</h3>
+<blockquote>
+<p>require: ['build/vue-loader.config.js'] </p>
+<p>因为其它webpack配置都依赖这个所以就先说这个</p>
+<p>其中build/vue-loader.config.js并没有什么对ssr有关的内容就不说明了</p>
+<p>然后这个配置文件就是很普通的webpack2配置文件满地都是就不说了代码</p>
+<p>entry 默认是client, 对vue-loader做了css插件引入配置对ssr没什么用</p>
+</blockquote>
+<h3 id="4-buildwebpackclientconfigjs">4. build/webpack.client.config.js</h3>
+<blockquote>
+<p>require: ['build/vue-loader.config.js', 'build/webpack.base.config.js']
+webpack_require: ['src/cilent-entry.js']</p>
+<p>在resolve的alias设置好api为client的js导入</p>
+<p>设置好环境变量</p>
+<p>添加HtmlPlugin来生成index.html</p>
+<p>剩下的也和ssr无关</p>
+</blockquote>
+<h3 id="5-bulidwebpackclientconfigjs">5. bulid/webpack.client.config.js</h3>
+<blockquote>
+<p>require: ['build/webpack.base.config.js']
+webpack_require: ['src/server-entry.js']
+<div class="codehilite"><pre><span></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">base</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">// 生成后的运行环境在node</span>
+    <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;node&#39;</span><span class="p">,</span>
+    <span class="c1">// 关闭map</span>
+    <span class="nx">devtool</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="c1">// 替换到server-entry.js</span>
+    <span class="nx">entry</span><span class="o">:</span> <span class="s1">&#39;./src/server-entry.js&#39;</span><span class="p">,</span>
+    <span class="c1">// 设置输出文件名与模块导出为commonjs2</span>
+    <span class="nx">output</span><span class="o">:</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">base</span><span class="p">.</span><span class="nx">output</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">filename</span><span class="o">:</span> <span class="s1">&#39;server-bundle.js&#39;</span><span class="p">,</span>
+        <span class="nx">libraryTarget</span><span class="o">:</span> <span class="s1">&#39;commonjs2&#39;</span>
+    <span class="p">}),</span>
+    <span class="c1">// api设置到server的api上</span>
+    <span class="nx">resolve</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">alias</span><span class="o">:</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">base</span><span class="p">.</span><span class="nx">resolve</span><span class="p">.</span><span class="nx">alias</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;create-api&#39;</span><span class="o">:</span> <span class="s1">&#39;./create-api-server.js&#39;</span>
+        <span class="p">})</span>
+    <span class="p">},</span>
+    <span class="c1">// 不打包运行时依赖，后面这个文件在node中运行</span>
+    <span class="nx">externals</span><span class="o">:</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../package.json&#39;</span><span class="p">).</span><span class="nx">dependencies</span><span class="p">),</span>
+    <span class="c1">// 设置环境变量</span>
+    <span class="nx">plugins</span><span class="o">:</span> <span class="p">[</span>
+        <span class="k">new</span> <span class="nx">webpack</span><span class="p">.</span><span class="nx">DefinePlugin</span><span class="p">({</span>
+            <span class="s1">&#39;process.env.NODE_ENV&#39;</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">||</span> <span class="s1">&#39;development&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;process.env.VUE_ENV&#39;</span><span class="o">:</span> <span class="s1">&#39;&quot;server&quot;&#39;</span>
+        <span class="p">})</span>
+    <span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+</p>
+</blockquote>
+<h3 id="6-srcclient-entryjs">6. src/client-entry.js</h3>
+<blockquote>
+<p>webpack_require: ['src/app.js']
+<div class="codehilite"><pre><span></span><span class="kr">import</span> <span class="s1">&#39;es6-promise/auto&#39;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">store</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./app&#39;</span>
+<span class="c1">// 第一次进入页面时获取ssr的state替换上</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">__INSTAL_STATE__</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">store</span><span class="p">.</span><span class="nx">replaceState</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">__INSTAL_STATE__</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 把app直接与ssr的html同步</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">$mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">)</span>
+<span class="c1">// 生产环境优化使用sw缓存</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="s1">&#39;production&#39;</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;serviceWorker&#39;</span> <span class="k">in</span> <span class="nx">navigator</span><span class="p">){</span>
+    <span class="nx">navigator</span><span class="p">.</span><span class="nx">serviceWorker</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;/service-worker.js&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</p>
+</blockquote>
+<h3 id="7-srcserver-entryjs">7. src/server-entry.js</h3>
+<blockquote>
+<p>webpack-require: ['src/app.js']
+<div class="codehilite"><pre><span></span><span class="kr">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">router</span><span class="p">,</span> <span class="nx">store</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./app&#39;</span>
+<span class="kr">const</span> <span class="nx">isDev</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">!==</span> <span class="s1">&#39;prodution&#39;</span>
+<span class="c1">// server.js的renderToStream方法会调用这里</span>
+<span class="kr">export</span> <span class="k">default</span> <span class="nx">context</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">isDev</span> <span class="o">&amp;&amp;</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+    <span class="c1">// 使用前端路由切换到请求的url</span>
+    <span class="nx">router</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">url</span><span class="p">)</span>
+    <span class="c1">// 并获取该路由的所有Component</span>
+    <span class="kr">const</span> <span class="nx">matchedComponents</span> <span class="o">=</span> <span class="nx">router</span><span class="p">.</span><span class="nx">getMatchedComponents</span><span class="p">()</span>
+    <span class="c1">// 没有Component说明没有路由匹配</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">matchedComponents</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">reject</span><span class="p">({</span> <span class="nx">code</span><span class="o">:</span> <span class="s1">&#39;404&#39;</span> <span class="p">})</span>
+    <span class="p">}</span>
+    <span class="c1">// 使用Promise.all把所有的Component有异步preFetch方法执行</span>
+    <span class="k">return</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">matchedComponents</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">component</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">component</span><span class="p">.</span><span class="nx">preFetch</span><span class="p">){</span>
+            <span class="k">return</span> <span class="nx">component</span><span class="p">.</span><span class="nx">preFetch</span><span class="p">(</span><span class="nx">store</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">})).</span><span class="nx">then</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">isDev</span> <span class="o">&amp;&amp;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`data pre-fetch: </span><span class="si">${</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">s</span><span class="si">}</span><span class="sb">ms`</span><span class="p">)</span>
+        <span class="c1">// 把vuex的state设置到传入的context.initialState上</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nx">initialState</span> <span class="o">=</span> <span class="nx">store</span><span class="p">.</span><span class="nx">state</span>
+        <span class="c1">// 返回已经设置好state, router的app</span>
+        <span class="k">return</span> <span class="nx">app</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+</pre></div>
+</p>
+</blockquote>
+<h3 id="8-srcappjs">8. src/app.js</h3>
+<blockquote>
+<p>webpack-require: ['src/App.vue', 'src/store/index.js', 'src/router/index.js']
+<div class="codehilite"><pre><span></span><span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+    <span class="nx">router</span><span class="p">,</span>
+    <span class="nx">store</span><span class="p">,</span>
+    <span class="c1">// 把App.vue的所有对象属性设置到新的根vue上</span>
+    <span class="p">...</span><span class="nx">App</span>
+<span class="p">})</span>
+<span class="c1">// 导出app,router,store给ssr使用</span>
+<span class="kr">export</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">router</span><span class="p">,</span> <span class="nx">store</span> <span class="p">}</span>
+</pre></div>
+</p>
+</blockquote>
+<h3 id="9-srcstoreindexjs">9. src/store/index.js</h3>
+<blockquote>
+<p>webpack-require: ['src/store/api.js']
+没有什么有ssr有关的东西，只是api请求都在api.js</p>
+</blockquote>
+<h3 id="10-srcstoreapijs">10. src/store/api.js</h3>
+<blockquote>
+<p>webpack-require: ['src/store/create-api-(client|server).js']
+<div class="codehilite"><pre><span></span><span class="c1">// [L15-L29]</span>
+<span class="kd">function</span> <span class="nx">fetch</span> <span class="p">(</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">cache</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">cachedItems</span>
+    <span class="c1">// 优化可不做</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">cache</span> <span class="o">&amp;&amp;</span> <span class="nx">cache</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">child</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">cache</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">child</span><span class="p">))</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// 获取api数据并设置最后更新时间</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">Axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">api</span><span class="p">.</span><span class="nx">url</span> <span class="o">+</span> <span class="nx">child</span> <span class="o">+</span> <span class="s1">&#39;.json&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="kr">const</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">data</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="nx">val</span><span class="p">.</span><span class="nx">__lastUpdate</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+                <span class="nx">cache</span> <span class="o">&amp;&amp;</span> <span class="nx">cache</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span>
+                <span class="nx">resolve</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+            <span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="nx">reject</span><span class="p">)</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// [L51-L75]</span>
+<span class="kr">export</span> <span class="kd">function</span> <span class="nx">watchList</span> <span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">first</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="kd">let</span> <span class="nx">isOn</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="kd">let</span> <span class="nx">timeoutId</span> <span class="o">=</span> <span class="kc">null</span>
+    <span class="kr">const</span> <span class="nx">handler</span> <span class="o">=</span> <span class="nx">res</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 创建一个无限的定时循环来请求数据</span>
+    <span class="kd">function</span> <span class="nx">watchTimeout</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">first</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">first</span> <span class="o">=</span> <span class="kc">false</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">Axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">api</span><span class="p">.</span><span class="nx">url</span><span class="si">}${</span><span class="nx">type</span><span class="si">}</span><span class="sb">stories.json`</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">handler</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">isOn</span><span class="p">){</span>
+            <span class="nx">timeoutId</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">watchTimeout</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">watchTimeout</span><span class="p">()</span>
+    <span class="c1">// 返回一个结束无限定时循环的函数</span>
+    <span class="k">return</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">isOn</span> <span class="o">=</span> <span class="kc">false</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">timeoutId</span><span class="p">){</span>
+            <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeoutId</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</p>
+</blockquote>
+<h3 id="11-srcviewscreatelistviewjs">11. src/views/CreateListView.js</h3>
+<blockquote>
+<p>webpack-require: ['src/components/ItemList.vue']
+src/router/index.js没有什么有和ssr有关的直接来到这里
+<div class="codehilite"><pre><span></span><span class="c1">// 导出的方法通过参数来重新包装component,</span>
+<span class="c1">// preFetch则是保证ssr时component的data里数据已经完成异步获取。</span>
+<span class="c1">// 如果没有preFetch而是通过vue的生命周期来异步设置则data不会有ssr效果</span>
+<span class="kr">export</span> <span class="kd">function</span> <span class="nx">createListView</span> <span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="sb">`</span><span class="si">${</span><span class="nx">type</span><span class="si">}</span><span class="sb">-stories-view`</span><span class="p">,</span>
+        <span class="nx">preFetch</span> <span class="p">(</span><span class="nx">store</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">store</span><span class="p">.</span><span class="nx">dispatch</span><span class="p">(</span><span class="s1">&#39;FETCH_LIST_DATA&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">type</span> <span class="p">})</span>
+        <span class="p">},</span>
+        <span class="nx">render</span> <span class="p">(</span><span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">h</span><span class="p">(</span><span class="nx">ItemList</span><span class="p">,</span> <span class="p">{</span> <span class="nx">props</span><span class="o">:</span> <span class="p">{</span> <span class="nx">type</span> <span class="p">}</span> <span class="p">})</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</p>
+</blockquote>
+<h3 id="12-srccomponentsitemlistvue">12. src/components/ItemList.vue</h3>
+<div class="codehilite"><pre><span></span><span class="c1">// [L60-L30]</span>
+    <span class="c1">// 在判断root已经挂载说明是路由跳转重新调用loadItems</span>
+    <span class="nx">beforeMount</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">$root</span><span class="p">.</span><span class="nx">_isMounted</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">loadItems</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">)</span>
+        <span class="p">}</span>
+<span class="c1">// [L80-L94]</span>
+        <span class="c1">// 触发vuex设置的动作来请求数据</span>
+        <span class="nx">loadItems</span> <span class="p">(</span><span class="nx">to</span><span class="o">=</span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">,</span> <span class="nx">from</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">loading</span> <span class="o">=</span> <span class="kc">true</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">$store</span><span class="p">.</span><span class="nx">dispatch</span><span class="p">(</span><span class="s1">&#39;FETCH_LIST_DATA&#39;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="nx">type</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">type</span>
+            <span class="p">}).</span><span class="nx">then</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">page</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">page</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxPage</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">$router</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sb">`/</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="sb">/1`</span><span class="p">)</span>
+                    <span class="k">return</span>
+                <span class="p">}</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">transition</span> <span class="o">=</span> <span class="nx">from</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span> <span class="nx">to</span> <span class="o">&gt;</span> <span class="nx">from</span> <span class="o">?</span> <span class="s1">&#39;slide-left&#39;</span> <span class="o">:</span> <span class="s1">&#39;slide-right&#39;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">displayedPage</span> <span class="o">=</span> <span class="nx">to</span> 
+                <span class="k">this</span><span class="p">.</span><span class="nx">displayedItems</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">$store</span><span class="p">.</span><span class="nx">getters</span><span class="p">.</span><span class="nx">activeItems</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">loading</span> <span class="o">=</span> <span class="kc">false</span>
+            <span class="p">})</span>
+        <span class="p">},</span>
+</pre></div>
+
+
+<h2 id="_5">五.文字流程说明</h2>
+<ul>
+<li>node server.js : 设置路由所有请求通过ssr生成器</li>
+<li>server.js -&gt; setup-dev-server.js : dev时生成index.html和server-bundle.js</li>
+<li>setup-dev-server.js -&gt; (server|client)-entry.js : 通过webpack对入口文件生成</li>
+<li>client-entry.js : 挂载ssr的vuex的state</li>
+<li>server-entry.js : 通过url来preFetch设置vuex的state</li>
+<li>component: 需要有preFetch来获取异步数据</li>
+</ul>
+<h2 id="_6">六.源码</h2>
+<p><a href="https://github.com/zeromake/my-vue-hackernews/tree/ssr-demo">源码这里</a></p>
+		<!-- 多说评论框 start -->
+		<div class="ds-thread" data-thread-key="3573bf61ee35a7f3e5120527569ec3e5" data-title="vue-ssr" data-url="http://blog.zeromake.com/pages/vue-ssr/">
+		</div>
+	<!-- 多说评论框 end -->
+	</div>
+
+		</div>
+	</div>
+	</div>
+</body>
+</html>

@@ -1,6 +1,10 @@
 body{
   padding: 0;
 }
+.base-content {
+  padding: 0 150px;
+  width: 100%;
+}
 .base_header{
   margin-left: 1em;
 }
@@ -34,7 +38,21 @@ body{
 .author-info .author-info-sf {
     background-color: #5CB85C;
 }
-*{
-	word-wrap:break-word;
-	word-break:break-all;
+
+
+@media screen and (max-width: 1000px){
+  .base-content {
+    padding: 0 100px;
+  }
+}
+
+@media screen and (max-width: 800px){
+  .base-content {
+    padding: 0 20px;
+  }
+}
+@media screen and (max-width: 600px){
+  .base-content {
+    padding: 0 0;
+  }
 }
