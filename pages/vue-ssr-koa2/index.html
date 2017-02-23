@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="shortcut icon" href="/static/img/zeromake.ico" type="image/x-icon">
+	<link rel="icon" sizes="any" href="/static/img/zeromake.svg">
+	<meta http-equiv="Content-Language" content="zh">
+	<meta name="viewport" content="width=device-width">
+	<title>vue-ssr-koa2-zeromake static blog</title>
+	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
+	
+	<link rel="stylesheet" href="/css/pygments.css">
+	<script type="text/javascript">
+		var duoshuoQuery = {short_name:"fly-zero"};
+	</script>
+	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
+
+	
+</head>
+
+<body>
+	<div class="base-content">
+	<header class="base_header">
+		<h1><a href="/">zeromake blog</a></h1>
+		<div class="author-info">
+			<a class="author-info-github" href="https://github.com/zeromake">GitHub</a>
+			<a class="author-info-sf" href="https://segmentfault.com/u/zeromake">SegmentFault</a>
+		</div>
+	</header>
+	<div class="zero_content">
+		<div class="markdown-content">
+			
+	<h2>vue-ssr-koa2</h2>
+	<div class="markdown-body">
+		<div>创建时间: 2017-02-19 18:36:25</div>
+		<div>最后更新: 2017-02-19 18:17:25</div>
+		<div>博客原文:<a href="http://blog.zeromake.com/pages/vue-ssr-koa2/">地址</a></div>
+		<hr>
+		<div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#_2">一.更换依赖包</a></li>
+<li><a href="#serverjs">二.修改 server.js</a></li>
+<li><a href="#koa2-buildservejs">三.手写一个用于koa2静态文件中间组件 build/serve.js</a></li>
+<li><a href="#npmbuildsetup-dev-serverjs">四.使用现成的npm包来修改build/setup-dev-server.js</a></li>
+<li><a href="#_3">五.下篇博文预告</a></li>
+<li><a href="#_4">六.源码</a></li>
+</ul>
+</div>
+<h2 id="_1">前言</h2>
+<ul>
+<li>在之前的<a href="http://blog.zeromake.com/pages/vue-ssr">vue-ssr</a>中我是使用express来做ssr服务器+api服务器。</li>
+<li>但是有些时候可能我希望换一个web框架。</li>
+<li>所以就有了这篇闲的慌系类。</li>
+<li>vue-ssr中使用koa2来替代express</li>
+</ul>
+<h2 id="_2">一.更换依赖包</h2>
+<ol>
+<li>删掉 express 及它的中间组件 ['compression', 'express', 'serve-favicon']</li>
+<li>添加 koa2 及它的一些中间组件 ['koa2', '<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#107;&#111;&#97;&#45;&#114;&#111;&#117;&#116;&#101;&#114;&#64;&#55;&#46;&#120;">&#107;&#111;&#97;&#45;&#114;&#111;&#117;&#116;&#101;&#114;&#64;&#55;&#46;&#120;</a>', 'koa-send']</li>
+</ol>
+<h2 id="serverjs">二.修改 server.js</h2>
+<ul>
+<li><a href="https://github.com/zeromake/my-vue-hackernews/commit/30a6ae819daee46e0fbddafdb61f7b246a11da50">git修改日志</a></li>
+<li><a href="https://github.com/zeromake/my-vue-hackernews/blob/ssr-demo-koa2/server.js">git地址</a></li>
+<li>require: ['./build/serve']</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="c1">// [L3-L5] 替换引入的包</span>
+<span class="kr">const</span> <span class="nx">Koa</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;koa2&#39;</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">KoaRuoter</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;koa-router&#39;</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">KoaServe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./build/serve&#39;</span><span class="p">)</span>
+<span class="c1">// /build/serve.js 这个是我手写的一个静态文件挂载中间组件</span>
+
+<span class="c1">// [L14-L17] 声明创建app和路由对象</span>
+<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Koa</span><span class="p">()</span>
+<span class="kr">const</span> <span class="nx">router</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">KoaRuoter</span><span class="p">()</span>
+<span class="c1">// dev下因为使用原express中间组件，</span>
+<span class="c1">// 一定要在设置setup-dev-server之前设置api路由。</span>
+<span class="c1">// 包括普通的静态json文件</span>
+<span class="kr">const</span> <span class="nx">api_router</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">KoaRuoter</span><span class="p">()</span>
+
+<span class="c1">// [L20-L44] 更改 serve 函数以便支持koa2，替换原有serve使用的地方</span>
+<span class="kr">const</span> <span class="nx">serve</span> <span class="o">=</span> <span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">cache</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">KoaServe</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">root</span><span class="o">:</span> <span class="nx">resolve</span><span class="p">(</span><span class="nx">path</span><span class="p">),</span>
+    <span class="nx">maxAge</span><span class="o">:</span> <span class="nx">cache</span> <span class="o">&amp;&amp;</span> <span class="nx">isProd</span> <span class="o">?</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">30</span> <span class="o">:</span> <span class="mi">0</span>
+<span class="p">})</span>
+
+<span class="c1">// 模拟api</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">serve</span><span class="p">(</span><span class="s1">&#39;/api/topstories.json&#39;</span><span class="p">,</span> <span class="s1">&#39;./public/api/topstories.json&#39;</span><span class="p">))</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">serve</span><span class="p">(</span><span class="s1">&#39;/api/newstories.json&#39;</span><span class="p">,</span> <span class="s1">&#39;./public/api/newstories.json&#39;</span><span class="p">))</span>
+<span class="c1">// 修改为koa支持</span>
+<span class="nx">api_router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/api/item/:id.json&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span>
+    <span class="kr">const</span> <span class="nx">time</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="mi">1487396700</span><span class="o">-</span><span class="mi">1400000000</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1400000000</span><span class="p">)</span>
+    <span class="kr">const</span> <span class="nx">item</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">by</span><span class="o">:</span> <span class="s2">&quot;zero&quot;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span>
+        <span class="nx">descendants</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="nx">id</span><span class="p">,</span>
+        <span class="nx">score</span><span class="o">:</span> <span class="nx">id</span> <span class="o">-</span> <span class="mi">13664000</span><span class="p">,</span>
+        <span class="nx">time</span><span class="o">:</span> <span class="nx">time</span><span class="p">,</span>
+        <span class="nx">title</span><span class="o">:</span> <span class="sb">`测试Item:</span><span class="si">${</span><span class="nx">id</span><span class="si">}</span><span class="sb"> - </span><span class="si">${</span><span class="nx">time</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;story&#39;</span><span class="p">,</span>
+        <span class="nx">url</span><span class="o">:</span> <span class="sb">`/api/item/</span><span class="si">${</span><span class="nx">id</span><span class="si">}</span><span class="sb">.json`</span>
+
+    <span class="p">}</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">item</span>
+<span class="p">})</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">api_router</span><span class="p">.</span><span class="nx">routes</span><span class="p">()).</span><span class="nx">use</span><span class="p">(</span><span class="nx">api_router</span><span class="p">.</span><span class="nx">allowedMethods</span><span class="p">())</span>
+
+<span class="c1">// [L89-L132]  ssr的处理转换换为koa2</span>
+<span class="c1">// 原express 调用res.end会通知express结束,</span>
+<span class="c1">// koa2则需要使用返回一个Promise来达到异步</span>
+<span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">renderer</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span><span class="s1">&#39;waiting for compilation.. refresh in a moment.&#39;</span>
+    <span class="p">}</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;Context-Type&quot;</span><span class="p">,</span> <span class="s2">&quot;text/html&quot;</span><span class="p">)</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;Server&quot;</span><span class="p">,</span> <span class="nx">serverInfo</span><span class="p">)</span>
+    <span class="kr">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+    <span class="kr">const</span> <span class="nx">context</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">url</span><span class="o">:</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">url</span> <span class="p">}</span>
+    <span class="kr">const</span> <span class="nx">renderStream</span> <span class="o">=</span> <span class="nx">renderer</span><span class="p">.</span><span class="nx">renderToStream</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span>
+    <span class="kr">const</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">res</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resolve</span><span class="p">){</span>
+        <span class="nx">renderStream</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="c1">// 不设置这个会默认404</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">=</span> <span class="mi">200</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">indexHTML</span><span class="p">.</span><span class="nx">head</span><span class="p">)</span>
+        <span class="p">})</span>
+        <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nx">chunk</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span>
+        <span class="p">})</span>
+        <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">initialState</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span>
+                    <span class="sb">`&lt;script&gt;window.__INSTAL_STATE__=</span><span class="si">${</span>
+                        <span class="nx">serialize</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">initialState</span><span class="p">)</span>
+                    <span class="si">}</span><span class="sb">&lt;/script&gt;`</span>
+                <span class="p">)</span>
+            <span class="p">}</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">indexHTML</span><span class="p">.</span><span class="nx">tail</span><span class="p">)</span>
+            <span class="nx">resolve</span><span class="p">()</span> <span class="c1">// 通知koa2异步操作已经结束</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`whole request: </span><span class="si">${</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">s</span><span class="si">}</span><span class="sb">ms`</span><span class="p">)</span>
+        <span class="p">})</span>
+        <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">err</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="s1">&#39;404&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">=</span> <span class="mi">404</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;404 | Page Not Found&#39;</span><span class="p">)</span>
+                <span class="nx">resolve</span><span class="p">()</span> <span class="c1">// 通知koa2异步操作已经结束</span>
+                <span class="k">return</span>
+            <span class="p">}</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">=</span> <span class="mi">500</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;Internal Error 500&#39;</span><span class="p">)</span>
+            <span class="nx">resolve</span><span class="p">()</span> <span class="c1">// 通知koa2异步操作已经结束</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="sb">`error during render : </span><span class="si">${</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">url</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+        <span class="p">})</span>
+<span class="c1">// [L134] 注册路由</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">router</span><span class="p">.</span><span class="nx">routes</span><span class="p">()).</span><span class="nx">use</span><span class="p">(</span><span class="nx">router</span><span class="p">.</span><span class="nx">allowedMethods</span><span class="p">())</span>
+</pre></div>
+
+
+<h2 id="koa2-buildservejs">三.手写一个用于koa2静态文件中间组件 build/serve.js</h2>
+<ul>
+<li><a href="https://github.com/zeromake/my-vue-hackernews/blob/ssr-demo-koa2/build/serve.js">git地址</a></li>
+<li>代码不多就都解释下</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="s2">&quot;use strict&quot;</span>
+<span class="c1">// 使用 koa-send 模块来发送文件</span>
+<span class="kr">const</span> <span class="nx">send</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;koa-send&quot;</span><span class="p">);</span>
+<span class="c1">// 导出一个参数为url-path + koa-send-opt的函数</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">serve</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">opt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 设置了参数后返回一个标准koa2中间组件方法</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kr">const</span> <span class="nx">pathUrl</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">path</span>
+        <span class="c1">// 只有匹配了path且请求方法为 get,head 才进行发送文件</span>
+        <span class="k">if</span> <span class="p">((</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">method</span> <span class="o">==</span> <span class="s2">&quot;HEAD&quot;</span> <span class="o">||</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">pathUrl</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="nx">path</span><span class="p">))</span> <span class="p">{</span>
+            <span class="kd">let</span> <span class="nx">newOpt</span> <span class="o">=</span> <span class="kc">null</span>
+            <span class="kd">let</span> <span class="nx">newPath</span> <span class="o">=</span> <span class="kc">null</span>
+            <span class="c1">// 处理 path = pathUrl 且结尾不为/的特殊情况</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">pathUrl</span> <span class="o">===</span> <span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">path</span><span class="p">.</span><span class="nx">endsWith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="c1">// 去除root路径中的path文件</span>
+                    <span class="c1">// 但为未处理url的文件名与真实文件名不同</span>
+                    <span class="kr">const</span> <span class="nx">newRoot</span> <span class="o">=</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">root</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span><span class="p">))</span>
+                    <span class="nx">newOpt</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">opt</span><span class="p">,</span> <span class="p">{</span> <span class="nx">root</span><span class="o">:</span> <span class="nx">newRoot</span> <span class="p">})</span>
+                    <span class="nx">newPath</span> <span class="o">=</span> <span class="nx">pathUrl</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="c1">// 去除多余的url</span>
+                <span class="nx">newPath</span> <span class="o">=</span> <span class="nx">pathUrl</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="c1">// 通过 koa-send 发送</span>
+            <span class="k">return</span> <span class="nx">send</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">newPath</span> <span class="o">||</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="nx">newOpt</span> <span class="o">||</span> <span class="nx">opt</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">next</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+
+
+<h2 id="npmbuildsetup-dev-serverjs">四.使用现成的npm包来修改build/setup-dev-server.js</h2>
+<ul>
+<li><a href="https://github.com/zeromake/my-vue-hackernews/blob/ssr-demo-koa2/build/setup-dev-server.js">git地址</a></li>
+<li>安装<code>npm i koa2-webpack-middleware-zm -D</code>
+<div class="codehilite"><pre><span></span><span class="c1">// [L6]</span>
+<span class="kr">const</span> <span class="p">{</span> <span class="nx">koaDevMiddleware</span><span class="p">,</span> <span class="nx">koaHotMiddleware</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;koa2-webpack-middleware-zm&#39;</span><span class="p">)</span>
+<span class="c1">// [L25]</span>
+    <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">koaDevMiddleware</span><span class="p">(</span><span class="nx">devMiddleware</span><span class="p">))</span>
+<span class="c1">// [L39-L40]</span>
+    <span class="kr">const</span> <span class="nx">expressHotMiddleware</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;webpack-hot-middleware&#39;</span><span class="p">)(</span><span class="nx">clientCompiler</span><span class="p">)</span>
+    <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">koaHotMiddleware</span><span class="p">(</span><span class="nx">expressHotMiddleware</span><span class="p">))</span>
+</pre></div>
+</li>
+<li>是不是发觉特别简单好吧其实这个npm包是我自己写的</li>
+<li>在下一篇博文再介绍吧，这篇博文代码还是太多</li>
+</ul>
+<h2 id="_3">五.下篇博文预告</h2>
+<ol>
+<li>修改博文书写方式，尽量放片段代码加图片文字来说明</li>
+<li>代码量多的部分使用github的url来引用</li>
+<li>下篇博文应该是npm包制作及github集成测试。还有koa的中间组件</li>
+</ol>
+<h2 id="_4">六.源码</h2>
+<p><a href="https://github.com/zeromake/my-vue-hackernews/tree/ssr-demo-koa2">源码在这里</a></p>
+		<!-- 多说评论框 start -->
+		<div class="ds-thread" data-thread-key="bc13ce45ce6981cd27b98ff77dc1e582" data-title="vue-ssr-koa2" data-url="http://blog.zeromake.com/pages/vue-ssr-koa2/">
+		</div>
+	<!-- 多说评论框 end -->
+	</div>
+
+		</div>
+	</div>
+	</div>
+</body>
+</html>
