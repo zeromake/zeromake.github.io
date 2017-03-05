@@ -42,9 +42,9 @@
 		<div class="toc">
 <ul>
 <li><a href="#_1">前言</a></li>
-<li><a href="#koaexpress">一. koa与express的普通中间组件区别。</a></li>
-<li><a href="#_2">二. 异步中间组件的区别</a></li>
-<li><a href="#expresskoa">三. 修改一个express中间组件到koa</a></li>
+<li><a href="#koaexpress">一. koa与express的普通中间件区别。</a></li>
+<li><a href="#_2">二. 异步中间件的区别</a></li>
+<li><a href="#expresskoa">三. 修改一个express中间件到koa</a></li>
 <li><a href="#express">四. 修改express注意事项</a></li>
 <li><a href="#webpack-dev-middleware">五. 改造webpack-dev-middleware的例子</a></li>
 <li><a href="#webpack-hot-middleware">六. 改造webpack-hot-middleware的例子</a></li>
@@ -62,11 +62,11 @@
 </ul>
 <blockquote>
 <ul>
-<li>koa 中间组件的编写。</li>
-<li>把<code>webpack-dev-middleware</code>这种<code>express</code>中间组件改造为一个<code>koa</code>中间组件。</li>
+<li>koa 中间件的编写。</li>
+<li>把<code>webpack-dev-middleware</code>这种<code>express</code>中间件改造为一个<code>koa</code>中间件。</li>
 </ul>
 </blockquote>
-<h2 id="koaexpress">一. koa与express的普通中间组件区别。</h2>
+<h2 id="koaexpress">一. koa与express的普通中间件区别。</h2>
 <ul>
 <li>npm 包安装
 <div class="codehilite"><pre><span></span>npm i koa express -D
@@ -107,34 +107,34 @@ express:
 </p>
 </li>
 <li>
-<p>express 中间组件运行逻辑</p>
+<p>express 中间件运行逻辑</p>
 </li>
 </ul>
 <blockquote>
 <ol>
-<li>中间组件为一个方法接受 req,res,next 三个参数。</li>
+<li>中间件为一个方法接受 req,res,next 三个参数。</li>
 <li>中间可以执行任何方法包括异步方法。</li>
-<li>最后一定要通过<code>res.end</code>或者<code>next</code>来通知结束这个中间组件方法。</li>
+<li>最后一定要通过<code>res.end</code>或者<code>next</code>来通知结束这个中间件方法。</li>
 <li>如果没有执行<code>res.end</code>或者<code>next</code>访问会一直卡着不动直到超时。</li>
-<li>并且在这之后的中间组件也会没法执行到。</li>
+<li>并且在这之后的中间件也会没法执行到。</li>
 </ol>
 </blockquote>
 <ul>
-<li>koa 的中间组件运行逻辑</li>
+<li>koa 的中间件运行逻辑</li>
 </ul>
 <blockquote>
 <ol>
-<li>中间组件为一个方法或者其它，这里就讲方法的，接受<code>ctx,next</code>两个参数。</li>
+<li>中间件为一个方法或者其它，这里就讲方法的，接受<code>ctx,next</code>两个参数。</li>
 <li>方法中可以执行任何同步方法。可以使用返回一个<code>Promise</code>来做异步。</li>
-<li>中间组件通过方法结束时的返回来判断是否进入下一个中间组件。</li>
-<li>返回一个<code>Promise</code>对象koa会等待异步通知完成。then中可以返回next()来跳转到下一个中间组件。</li>
+<li>中间件通过方法结束时的返回来判断是否进入下一个中间件。</li>
+<li>返回一个<code>Promise</code>对象koa会等待异步通知完成。then中可以返回next()来跳转到下一个中间件。</li>
 <li>相同如果<code>Promise</code>没有异步通知也会卡住。</li>
 </ol>
 </blockquote>
-<h2 id="_2">二. 异步中间组件的区别</h2>
+<h2 id="_2">二. 异步中间件的区别</h2>
 <ul>
 <li>
-<p>express 异步中间组件
+<p>express 异步中间件
 <div class="codehilite"><pre><span></span><span class="nx">ExpressApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">){</span>
     <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
         <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;测试&#39;</span><span class="p">)</span>
@@ -145,7 +145,7 @@ express:
 express 的异步就是最普通的回调</p>
 </li>
 <li>
-<p>koa 异步中间组件
+<p>koa 异步中间件
 <div class="codehilite"><pre><span></span><span class="nx">KoaApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">next</span><span class="p">){</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">path</span> <span class="o">===</span> <span class="s1">&#39;/&#39;</span><span class="p">){</span>
@@ -158,11 +158,11 @@ express 的异步就是最普通的回调</p>
 <span class="p">})</span>
 </pre></div>
 
-koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代表<code>resolve</code>不切换到下一个中间组件。
-<code>catch</code>直接绑定<code>next</code>，用<code>reject</code>来通知跳转到下一个中间组件。</p>
+koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代表<code>resolve</code>不切换到下一个中间件。
+<code>catch</code>直接绑定<code>next</code>，用<code>reject</code>来通知跳转到下一个中间件。</p>
 </li>
 </ul>
-<h2 id="expresskoa">三. 修改一个express中间组件到koa</h2>
+<h2 id="expresskoa">三. 修改一个express中间件到koa</h2>
 <ul>
 <li>hello-test.js
 <div class="codehilite"><pre><span></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">){</span>
@@ -207,13 +207,13 @@ koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代
 <span class="nx">KoaApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span> <span class="o">*</span><span class="p">(</span><span class="nx">next</span><span class="p">){</span>
     <span class="kr">const</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">res</span>
     <span class="kr">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">req</span>
-    <span class="c1">// 这种写法会导致后面注册的中间组件都失效。</span>
+    <span class="c1">// 这种写法会导致后面注册的中间件都失效。</span>
     <span class="k">yield</span> <span class="nx">test</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span>
 <span class="p">})</span>
 <span class="nx">KoaApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">async</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">next</span><span class="p">){</span>
     <span class="kr">const</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">res</span>
     <span class="kr">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">req</span>
-    <span class="c1">// 这种写法会导致后面注册的中间组件都失效。</span>
+    <span class="c1">// 这种写法会导致后面注册的中间件都失效。</span>
     <span class="nx">await</span> <span class="nx">test</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span>
 <span class="p">})</span>
 </pre></div>
