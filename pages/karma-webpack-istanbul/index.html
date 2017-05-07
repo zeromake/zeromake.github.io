@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="shortcut icon" href="/static/img/zeromake.ico" type="image/x-icon">
+	<link rel="icon" sizes="any" href="/static/img/zeromake.svg">
+	<meta http-equiv="Content-Language" content="zh">
+	<meta name="viewport" content="width=device-width">
+	<title>karma使用webpack的代码覆盖率测试-zeromake static blog</title>
+	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
+	
+	<link rel="stylesheet" href="/css/pygments.css">
+	<script type="text/javascript">
+		var duoshuoQuery = {short_name:"fly-zero"};
+	</script>
+	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
+
+	
+</head>
+
+<body>
+	<div class="base-content">
+	<header class="base_header">
+		<h1><a href="/">zeromake blog</a></h1>
+		<div class="author-info">
+			<a class="author-info-github" href="https://github.com/zeromake">GitHub</a>
+			<a class="author-info-sf" href="https://segmentfault.com/u/zeromake">SegmentFault</a>
+		</div>
+	</header>
+	<div class="zero_content">
+		<div class="markdown-content">
+			
+	<h1>karma使用webpack的代码覆盖率测试</h1>
+	<div class="markdown-body">
+		<div>创建时间: 2017-05-07 14:21:46</div>
+		<div>最后更新: 2017-05-07 23:23:37</div>
+		<div>博客原文:<a href="http://blog.zeromake.com/pages/karma-webpack-istanbul/">地址</a></div>
+		<hr>
+		<div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#karma">一、karma的使用</a></li>
+<li><a href="#karma-webpack">二、karma + webpack 的使用</a><ul>
+<li><a href="#karma-webpack_1">配置karma + webpack</a></li>
+<li><a href="#karma-webapck">运行karma + webapck测试</a></li>
+</ul>
+</li>
+<li><a href="#karma-webpack_2">三、karma + webpack 的代码覆盖率测试</a><ul>
+<li><a href="#karma-webpack_3">配置 karma + webpack 的代码覆盖率测试</a></li>
+</ul>
+</li>
+<li><a href="#nodejs-browser">四、nodejs, browser测试使用同一套测试用例</a></li>
+<li><a href="#_2">五、总结</a></li>
+</ul>
+</div>
+<h2 id="_1">前言</h2>
+<ul>
+<li>距离上一次博客有2个月了，倒不是没有可写东西就是提不起劲写。</li>
+<li>不说这些了这次写下我使用 <code>karma + webpack</code> 中遇到的代码覆盖率问题。</li>
+</ul>
+<h2 id="karma">一、karma的使用</h2>
+<p>自个去搜吧，感觉讲这个的真的多。我就说一些建议。
+- karma的测试框架改用mocha这样对于一个需要nodejs, browser测试的测试用例可以共用。具体的可以看我的 <a href="https://github.com/zeromake/marked-zm">marked-zm</a></p>
+<h2 id="karma-webpack">二、karma + webpack 的使用</h2>
+<p>依旧是很多人写过了，但是还是写下吧。</p>
+<h3 id="karma-webpack_1">配置karma + webpack</h3>
+<ul>
+<li>
+<p>需要的 npm 包
+<div class="codehilite"><pre><span></span>npm i karma karma-mocha karma-phantomjs-launcher karma-sinon-chai /
+karma-spec-reporter karma-webpack mocha sinon sinon-chai -D
+</pre></div>
+</p>
+</li>
+<li>
+<p>package.json</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;karma-run&quot;</span><span class="p">:</span> <span class="s2">&quot;karma run&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;karma-start&quot;</span><span class="p">:</span> <span class="s2">&quot;karma start test/unit/karma.conf.js&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;karma-single&quot;</span><span class="p">:</span> <span class="s2">&quot;karma start test/unit/karma.conf.js --single-run&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<ul>
+<li>test/unit/karma.conf.js</li>
+</ul>
+<p><div class="codehilite"><pre><span></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span>
+        <span class="nx">webpack</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">devtool</span><span class="o">:</span> <span class="s1">&#39;inline-source-map&#39;</span><span class="p">,</span> <span class="c1">// 推荐使用inline-source-map</span>
+            <span class="nx">module</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">rules</span><span class="o">:</span> <span class="p">[</span><span class="cm">/* loaders */</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">frameworks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;mocha&#39;</span><span class="p">,</span> <span class="s1">&#39;sinon-chai&#39;</span><span class="p">],</span> <span class="c1">// 测试框架随便一定要要和我一样</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span>
+            <span class="s1">&#39;./index.js&#39;</span> <span class="c1">// 推荐使用一个入口来导入所有的测试。</span>
+        <span class="p">],</span>
+        <span class="nx">preprocessors</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s1">&#39;./index.js&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;webpack&#39;</span><span class="p">]</span> <span class="c1">// 使用什么配置</span>
+        <span class="p">},</span>
+        <span class="nx">reporters</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">],</span> <span class="c1">// spec显示插件</span>
+        <span class="nx">port</span><span class="o">:</span> <span class="mi">9876</span><span class="p">,</span> <span class="c1">// 端口</span>
+        <span class="nx">colors</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">logLevel</span><span class="o">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">LOG_INFO</span><span class="p">,</span>
+        <span class="nx">autoWatch</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;PhantomJS&#39;</span><span class="p">],</span>
+        <span class="nx">singleRun</span><span class="o">:</span> <span class="kc">false</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+</pre></div>
+
+- test/unit/index.js
+<div class="codehilite"><pre><span></span> <span class="c1">// 动态加载所有测试文件</span>
+<span class="kr">const</span> <span class="nx">testsContext</span> <span class="o">=</span> <span class="nx">require</span><span class="p">.</span><span class="nx">context</span><span class="p">(</span><span class="s1">&#39;./specs&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="sr">/\.spec$/</span><span class="p">)</span>
+<span class="nx">testsContext</span><span class="p">.</span><span class="nx">keys</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">testsContext</span><span class="p">)</span>
+</pre></div>
+</p>
+<ul>
+<li>test/unit/specs/test.spec.js
+<div class="codehilite"><pre><span></span><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;test 1+1&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="p">})</span>
+<span class="p">})</span>
+</pre></div>
+</li>
+</ul>
+<h3 id="karma-webapck">运行karma + webapck测试</h3>
+<p><div class="codehilite"><pre><span></span><span class="c1"># 开启 karma 动态构建</span>
+npm run karma-start
+<span class="c1"># new shell，运行一次测试</span>
+npm run karma-run
+</pre></div>
+
+或者直接单次构建并测试
+<div class="codehilite"><pre><span></span>npm run karma-single
+</pre></div>
+</p>
+<h2 id="karma-webpack_2">三、karma + webpack 的代码覆盖率测试</h2>
+<p>这里如果直接用 <code>karma-coverage</code> 会出现直接对 <code>karma</code> 配置中入口文件生成的 <code>webpack</code> 代码的代码覆盖率测试。会出现很多 <code>webpack</code> 生成的额外代码。</p>
+<p>而且也不是源代码的代码覆盖率测试。</p>
+<p>这里有两个方案:</p>
+<ol>
+<li><a href="https://github.com/karma-runner/karma-coverage">karma-coverage</a> + <a href="https://github.com/deepsweet/isparta-loader">isparta-loader</a><br />
+来自 <a href="https://github.com/ElemeFE/element">element-ui</a> 然后去看 <code>isparta-loader</code> 发觉作者已经废弃推荐换到 <code>istanbul-instrumenter-loader</code> 所以这个我也不用了，直接看另一个方案吧。</li>
+<li><a href="https://github.com/mattlewis92/karma-coverage-istanbul-reporter">karma-coverage-istanbul-reporter</a> + <a href="https://github.com/webpack-contrib/istanbul-instrumenter-loader">istanbul-instrumenter-loader</a><br />
+这两个包除了 <code>README</code> 的说明没有找到更多的资料，只好自己试着用，下面直接看如何使用吧。</li>
+</ol>
+<h3 id="karma-webpack_3">配置 karma + webpack 的代码覆盖率测试</h3>
+<ul>
+<li>需要的其它 npm 包
+<div class="codehilite"><pre><span></span>npm i karma-coverage-istanbul-reporter istanbul-instrumenter-loader -D
+</pre></div>
+</li>
+<li>test/unit/karma.conf.js</li>
+</ul>
+<p><div class="codehilite"><pre><span></span><span class="kr">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">srcPath</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">&#39;../../src&#39;</span><span class="p">)</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span>
+        <span class="nx">webpack</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">devtool</span><span class="o">:</span> <span class="s1">&#39;inline-source-map&#39;</span><span class="p">,</span> <span class="c1">// 推荐使用inline-source-map</span>
+            <span class="nx">module</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">rules</span><span class="o">:</span> <span class="p">[</span>
+                    <span class="c1">// 像eslint-loader一样使用,并限定在源码上。</span>
+                    <span class="p">{</span>
+                        <span class="nx">test</span><span class="o">:</span> <span class="sr">/\.js$/</span><span class="p">,</span>
+                        <span class="nx">enforce</span><span class="o">:</span> <span class="s1">&#39;pre&#39;</span><span class="p">,</span>
+                        <span class="nx">use</span><span class="o">:</span> <span class="s1">&#39;istanbul-instrumenter-loader&#39;</span><span class="p">,</span>
+                        <span class="nx">inclues</span><span class="o">:</span> <span class="p">[</span><span class="nx">srcPath</span><span class="p">]</span>
+                    <span class="p">}</span>
+                    <span class="cm">/* loaders */</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">frameworks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;mocha&#39;</span><span class="p">,</span> <span class="s1">&#39;sinon-chai&#39;</span><span class="p">],</span> <span class="c1">// 测试框架随便一定要要和我一样</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span>
+            <span class="s1">&#39;./index.js&#39;</span> <span class="c1">// 推荐使用一个入口来导入所有的测试。</span>
+        <span class="p">],</span>
+        <span class="nx">preprocessors</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s1">&#39;./index.js&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;webpack&#39;</span><span class="p">]</span> <span class="c1">// 使用什么配置</span>
+        <span class="p">},</span>
+        <span class="c1">// 增加代码覆盖率输出插件</span>
+        <span class="nx">reporters</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="err">，</span><span class="s1">&#39;coverage-istanbul&#39;</span><span class="p">],</span> 
+        <span class="nx">port</span><span class="o">:</span> <span class="mi">9876</span><span class="p">,</span> <span class="c1">// 端口</span>
+        <span class="nx">colors</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">logLevel</span><span class="o">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">LOG_INFO</span><span class="p">,</span>
+        <span class="nx">autoWatch</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;PhantomJS&#39;</span><span class="p">],</span>
+        <span class="nx">singleRun</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="c1">// 配置代码覆盖率插件</span>
+        <span class="nx">coverageIstanbulReporter</span><span class="o">:</span> <span class="p">{</span>
+            <span class="c1">// 以什么格式, 这里设置了输出 html文件 ,info文件 ,及控制台</span>
+            <span class="nx">reports</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;lcovonly&#39;</span><span class="p">,</span> <span class="s1">&#39;text-summary&#39;</span><span class="p">],</span>
+            <span class="c1">// 将文件输出路径定位</span>
+            <span class="nx">dir</span><span class="o">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">&#39;coverage&#39;</span><span class="p">),</span>
+            <span class="c1">// 修正 weback 路径（翻译了是这个意思）</span>
+            <span class="nx">fixWebpackSourcePaths</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="c1">// 将生成的html放到./coverage/html/下</span>
+            <span class="s1">&#39;report-config&#39;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">html</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">subdir</span><span class="o">:</span> <span class="s1">&#39;html&#39;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+</pre></div>
+
+- 代码参考 <a href="https://github.com/zeromake/vue-dragging/tree/test">vue-dragging</a> or <a href="https://github.com/zeromake/marked-zm">marked-zm</a></p>
+<h2 id="nodejs-browser">四、nodejs, browser测试使用同一套测试用例</h2>
+<ul>
+<li>package.json</li>
+</ul>
+<p><div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;node-test&quot;</span><span class="p">:</span> <span class="s2">&quot;mocha --reporter spec --require\</span>
+<span class="s2">         test/unit/common test/unit/specs/*.spec.js&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+- test/unit/common.js
+<div class="codehilite"><pre><span></span><span class="nx">global</span><span class="p">.</span><span class="nx">chai</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;chai&quot;</span><span class="p">)</span>
+<span class="nx">global</span><span class="p">.</span><span class="nx">should</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;chai&quot;</span><span class="p">).</span><span class="nx">should</span><span class="p">()</span>
+<span class="nx">global</span><span class="p">.</span><span class="nx">expect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;chai&quot;</span><span class="p">).</span><span class="nx">expect</span>
+<span class="nx">global</span><span class="p">.</span><span class="nx">AssertionError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;chai&quot;</span><span class="p">).</span><span class="nx">AssertionError</span>
+<span class="kr">const</span> <span class="nx">sinonChai</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;sinon-chai&quot;</span><span class="p">)</span>
+
+<span class="nx">chai</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">sinonChai</span><span class="p">)</span>
+</pre></div>
+
+无需修改其它代码见 <a href="https://github.com/zeromake/marked-zm">marked-zm</a></p>
+<h2 id="_2">五、总结</h2>
+<ol>
+<li>下篇看看要不探讨 <code>ci</code> 集成，或者 <code>vue</code> 的面板组件直接加载组件并且切换不会丢失状态。</li>
+<li>原来想写 <code>npm</code> 包发布后来发觉满地都是，就算了。</li>
+<li></li>
+</ol>
+		<!-- 多说评论框 start -->
+		<div class="ds-thread" data-thread-key="28e0324ea96709c9af1fd8bdcd1f4d77" data-title="karma使用webpack的代码覆盖率测试" data-url="http://blog.zeromake.com/pages/karma-webpack-istanbul/">
+		</div>
+	<!-- 多说评论框 end -->
+	</div>
+
+		</div>
+	</div>
+	</div>
+</body>
+</html>
