@@ -12,11 +12,11 @@
 	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
 	
-	<link rel="stylesheet" href="/css/pygments.css">
-	<script type="text/javascript">
-		var duoshuoQuery = {short_name:"fly-zero"};
-	</script>
-	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/css/pygments.css">
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"fly-zero"};
+    </script>
+    <script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
 
 	
 </head>
@@ -33,13 +33,13 @@
 	<div class="zero_content">
 		<div class="markdown-content">
 			
-	<h1>vue-ssr</h1>
-	<div class="markdown-body">
-		<div>创建时间: 2017-02-18 13:17:25</div>
-		<div>最后更新: 2017-02-19 18:17:25</div>
-		<div>博客原文:<a href="http://blog.zeromake.com/pages/vue-ssr/">地址</a></div>
-		<hr>
-		<div class="toc">
+    <h1>vue-ssr</h1>
+    <div class="markdown-body">
+        <div>创建时间: 2017-02-18 13:17:25</div>
+        <div>最后更新: 2017-02-19 18:17:25</div>
+        <div>博客原文:<a href="http://blog.zeromake.com/pages/vue-ssr/">地址</a></div>
+        <hr>
+        <div class="toc">
 <ul>
 <li><a href="#_1">前言</a></li>
 <li><a href="#ssr">一.ssr的技术选择</a></li>
@@ -64,11 +64,11 @@
 <li><a href="#_6">六.源码</a></li>
 </ul>
 </div>
-<h2 id="_1">前言</h2>
+<h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>前言</h2>
 <p>自从前端技术栈换到 <code>mvvm</code> 之类的以后网站的源码查看就只会有一些js了，对于用户是没什么问题但是却对 <code>seo</code> 有很大的问题。</p>
-<p>因为百度之类的爬虫不会执行js来渲染所以无法得到内容。大部分主流的<code>mvvm</code>框架都有了 <code>ssr(Server Side Rendering)</code> 意为服务端渲染。
+<p>因为百度之类的爬虫不会执行js来渲染所以无法得到内容。大部分主流的<code>mvvm</code>框架都有了 <code>ssr(Server Side Rendering)</code> 意为服务端渲染。<br />
 <del>不是手游的ssr，好像暴露了什么</del></p>
-<h2 id="ssr">一.ssr的技术选择</h2>
+<h2 id="ssr"><a name="user-content-ssr" href="#ssr" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>一.ssr的技术选择</h2>
 <ul>
 <li><a href="https://github.com/vuejs/vue/tree/dev/packages/vue-server-renderer">vue-server-renderer</a></li>
 </ul>
@@ -83,7 +83,7 @@
 <p>但是不仅仅保含 <code>ssr</code> 包括了现有的大部分的 <code>vue</code> 栈，快速简化了 <code>vue</code> 栈项目的搭建；</p>
 <p>如果不是有特殊需求，直接使用 <code>nuxt</code> ，以便节省时间特别是不会英文的童鞋 <code>nuxt</code> 官方文档还带支持中文。</p>
 </blockquote>
-<h2 id="_2">二.初始化项目</h2>
+<h2 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>二.初始化项目</h2>
 <div class="codehilite"><pre><span></span>yarn init
 <span class="c1"># node项目初始化</span>
 yarn add axios compression cross-env es6-promise <span class="se">\</span>
@@ -127,7 +127,7 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
 </pre></div>
 
 
-<h2 id="_3">三.项目结构</h2>
+<h2 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>三.项目结构</h2>
 <div class="codehilite"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">│  package.json</span>
 <span class="l l-Scalar l-Scalar-Plain">│  server.js</span>                <span class="c1"># server-render</span>
 <span class="l l-Scalar l-Scalar-Plain">│  yarn.lock</span>
@@ -169,13 +169,13 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
 </pre></div>
 
 
-<h2 id="_4">四.部分代码分析</h2>
+<h2 id="_4"><a name="user-content-_4" href="#_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>四.部分代码分析</h2>
 <blockquote>
 <p>我将根据依赖关系来一个个说明,npm包不说明</p>
 </blockquote>
-<h3 id="1-serverjs">1. server.js(就说点重点代码)</h3>
+<h3 id="1-serverjs"><a name="user-content-1-serverjs" href="#1-serverjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. server.js(就说点重点代码)</h3>
 <blockquote>
-<p>require: ['build/setup-dev-server.js']
+<p>require: ['build/setup-dev-server.js']<br />
 <div class="codehilite"><pre><span></span><span class="c1">// [L16-L48]</span>
 <span class="kd">let</span> <span class="nx">indexHTML</span>
 <span class="kd">let</span> <span class="nx">renderer</span>
@@ -186,10 +186,10 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="c1">// 开发环境下使用dev-server来通过回调把生成在内存中的文件赋值</span>
     <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./build/setup-dev-server&#39;</span><span class="p">)(</span><span class="nx">app</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">bundleUpdated</span><span class="o">:</span> <span class="nx">bundle</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">bundleUpdated</span><span class="o">:</span> <span class="nx">bundle</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="nx">renderer</span> <span class="o">=</span> <span class="nx">createRenderer</span><span class="p">(</span><span class="nx">bundle</span><span class="p">)</span>
         <span class="p">},</span>
-        <span class="nx">indexUpdated</span><span class="o">:</span> <span class="nx">index</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">indexUpdated</span><span class="o">:</span> <span class="nx">index</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="nx">indexHTML</span> <span class="o">=</span> <span class="nx">parseIndex</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span>
         <span class="p">}</span>
     <span class="p">})</span>
@@ -216,7 +216,7 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
 <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/api/topstories.json&#39;</span><span class="p">,</span> <span class="nx">serve</span><span class="p">(</span><span class="s1">&#39;./public/api/topstories.json&#39;</span><span class="p">))</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/api/newstories.json&#39;</span><span class="p">,</span> <span class="nx">serve</span><span class="p">(</span><span class="s1">&#39;./public/api/newstories.json&#39;</span><span class="p">))</span>
 <span class="c1">// 模拟了/api/item/xx.json的接口</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/api/item/:id.json&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/api/item/:id.json&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kr">const</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span>
     <span class="kr">const</span> <span class="nx">time</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="mi">1487396700</span><span class="o">-</span><span class="mi">1400000000</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1400000000</span><span class="p">)</span>
     <span class="kr">const</span> <span class="nx">item</span> <span class="o">=</span> <span class="p">{</span>
@@ -231,7 +231,7 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
     <span class="p">}</span><span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span>
 <span class="p">})</span>
 <span class="c1">// [L81-L116]</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="c1">// 防止异步的renderer对象还未生成</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">renderer</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;waiting for compilation.. refresh in a moment.&#39;</span><span class="p">)</span>
@@ -245,11 +245,11 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
     <span class="c1">// 为renderToStream方法传入url，renderToStream会根据url寻找vue-router</span>
     <span class="kr">const</span> <span class="nx">renderStream</span> <span class="o">=</span> <span class="nx">renderer</span><span class="p">.</span><span class="nx">renderToStream</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span>
     <span class="c1">// 注册data之前事件把index.html的头部写入res</span>
-    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">indexHTML</span><span class="p">.</span><span class="nx">head</span><span class="p">)</span>
     <span class="p">})</span>
     <span class="c1">// 注册data中事件直接把ssr的html写出</span>
-    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nx">chunk</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nx">chunk</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span>
     <span class="p">})</span>
     <span class="c1">// 注册end事件把已经挂载到context的vuex的State，</span>
@@ -257,7 +257,7 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
     <span class="c1">// 其中挂载到window.__INSTAL_STATE__</span>
     <span class="c1">// 并且返回index.html尾部并结束这个请求</span>
     <span class="c1">// 最后输出这次ssr的时间</span>
-    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">initialState</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span>
                 <span class="sb">`&lt;script&gt;window.__INSTAL_STATE__=</span><span class="si">${</span>
@@ -269,7 +269,7 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`whole request: </span><span class="si">${</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">s</span><span class="si">}</span><span class="sb">ms`</span><span class="p">)</span>
     <span class="p">})</span>
     <span class="c1">// 错误事件</span>
-    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">renderStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">err</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">err</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="s1">&#39;404&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">404</span><span class="p">).</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;404 | Page Not Found&#39;</span><span class="p">)</span>
             <span class="k">return</span>
@@ -282,18 +282,18 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
 </pre></div>
 </p>
 </blockquote>
-<h3 id="2-buildsetup-dev-serverjs">2. build/setup-dev-server.js</h3>
+<h3 id="2-buildsetup-dev-serverjs"><a name="user-content-2-buildsetup-dev-serverjs" href="#2-buildsetup-dev-serverjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. build/setup-dev-server.js</h3>
 <blockquote>
-<p>require: ['build/webpack.client.config.js','build/webpack.server.config.js']
+<p>require: ['build/webpack.client.config.js','build/webpack.server.config.js']<br />
 <div class="codehilite"><pre><span></span><span class="c1">// [L24-L37]</span>
     <span class="c1">// 在client-webpack转换完成时获取devMiddleware的fileSystem。</span>
     <span class="c1">// 读取生成的index.html并通过传入的opt的回调设置到server.js里</span>
-    <span class="nx">clientCompiler</span><span class="p">.</span><span class="nx">plugin</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">clientCompiler</span><span class="p">.</span><span class="nx">plugin</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="kr">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">devMiddleware</span><span class="p">.</span><span class="nx">fileSystem</span>
         <span class="kr">const</span> <span class="nx">filePath</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">clientConfig</span><span class="p">.</span><span class="nx">output</span><span class="p">.</span><span class="nx">path</span><span class="p">,</span> <span class="s1">&#39;index.html&#39;</span><span class="p">)</span>
-        <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">filePath</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stats</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">filePath</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stats</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">stats</span> <span class="o">&amp;&amp;</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isFile</span><span class="p">()){</span>
-                <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">filePath</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">filePath</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
                     <span class="nx">opts</span><span class="p">.</span><span class="nx">indexUpdated</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
                 <span class="p">})</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -308,19 +308,19 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
     <span class="c1">// 把server-webpack生成的文件重定向到内存中</span>
     <span class="nx">serverCompiler</span><span class="p">.</span><span class="nx">outputFileSystem</span> <span class="o">=</span> <span class="nx">mfs</span>
     <span class="c1">// 设置文件重新编译监听并通过opt的回调设置到server.js</span>
-    <span class="nx">serverCompiler</span><span class="p">.</span><span class="nx">watch</span><span class="p">({},</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stats</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">serverCompiler</span><span class="p">.</span><span class="nx">watch</span><span class="p">({},</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stats</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span>
         <span class="nx">stats</span> <span class="o">=</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">toJson</span><span class="p">()</span>
-        <span class="nx">stats</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">err</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
-        <span class="nx">stats</span><span class="p">.</span><span class="nx">warnings</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">err</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
-        <span class="nx">mfs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">outputPath</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">stats</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+        <span class="nx">stats</span><span class="p">.</span><span class="nx">warnings</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+        <span class="nx">mfs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">outputPath</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="nx">opts</span><span class="p">.</span><span class="nx">bundleUpdated</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
         <span class="p">})</span>
     <span class="p">})</span>
 </pre></div>
 </p>
 </blockquote>
-<h3 id="3-buildwebpackbaseconfigjs">3. build/webpack.base.config.js</h3>
+<h3 id="3-buildwebpackbaseconfigjs"><a name="user-content-3-buildwebpackbaseconfigjs" href="#3-buildwebpackbaseconfigjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. build/webpack.base.config.js</h3>
 <blockquote>
 <p>require: ['build/vue-loader.config.js'] </p>
 <p>因为其它webpack配置都依赖这个所以就先说这个</p>
@@ -328,19 +328,19 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
 <p>然后这个配置文件就是很普通的webpack2配置文件满地都是就不说了代码</p>
 <p>entry 默认是client, 对vue-loader做了css插件引入配置对ssr没什么用</p>
 </blockquote>
-<h3 id="4-buildwebpackclientconfigjs">4. build/webpack.client.config.js</h3>
+<h3 id="4-buildwebpackclientconfigjs"><a name="user-content-4-buildwebpackclientconfigjs" href="#4-buildwebpackclientconfigjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. build/webpack.client.config.js</h3>
 <blockquote>
-<p>require: ['build/vue-loader.config.js', 'build/webpack.base.config.js']
+<p>require: ['build/vue-loader.config.js', 'build/webpack.base.config.js']<br />
 webpack_require: ['src/cilent-entry.js']</p>
 <p>在resolve的alias设置好api为client的js导入</p>
 <p>设置好环境变量</p>
 <p>添加HtmlPlugin来生成index.html</p>
 <p>剩下的也和ssr无关</p>
 </blockquote>
-<h3 id="5-bulidwebpackclientconfigjs">5. bulid/webpack.client.config.js</h3>
+<h3 id="5-bulidwebpackclientconfigjs"><a name="user-content-5-bulidwebpackclientconfigjs" href="#5-bulidwebpackclientconfigjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>5. bulid/webpack.client.config.js</h3>
 <blockquote>
-<p>require: ['build/webpack.base.config.js']
-webpack_require: ['src/server-entry.js']
+<p>require: ['build/webpack.base.config.js']<br />
+webpack_require: ['src/server-entry.js']<br />
 <div class="codehilite"><pre><span></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">base</span><span class="p">,</span> <span class="p">{</span>
     <span class="c1">// 生成后的运行环境在node</span>
     <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;node&#39;</span><span class="p">,</span>
@@ -372,9 +372,9 @@ webpack_require: ['src/server-entry.js']
 </pre></div>
 </p>
 </blockquote>
-<h3 id="6-srcclient-entryjs">6. src/client-entry.js</h3>
+<h3 id="6-srcclient-entryjs"><a name="user-content-6-srcclient-entryjs" href="#6-srcclient-entryjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>6. src/client-entry.js</h3>
 <blockquote>
-<p>webpack_require: ['src/app.js']
+<p>webpack_require: ['src/app.js']<br />
 <div class="codehilite"><pre><span></span><span class="kr">import</span> <span class="s1">&#39;es6-promise/auto&#39;</span>
 <span class="kr">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">store</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./app&#39;</span>
 <span class="c1">// 第一次进入页面时获取ssr的state替换上</span>
@@ -390,13 +390,13 @@ webpack_require: ['src/server-entry.js']
 </pre></div>
 </p>
 </blockquote>
-<h3 id="7-srcserver-entryjs">7. src/server-entry.js</h3>
+<h3 id="7-srcserver-entryjs"><a name="user-content-7-srcserver-entryjs" href="#7-srcserver-entryjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>7. src/server-entry.js</h3>
 <blockquote>
-<p>webpack-require: ['src/app.js']
+<p>webpack-require: ['src/app.js']<br />
 <div class="codehilite"><pre><span></span><span class="kr">import</span> <span class="p">{</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">router</span><span class="p">,</span> <span class="nx">store</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./app&#39;</span>
 <span class="kr">const</span> <span class="nx">isDev</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">!==</span> <span class="s1">&#39;prodution&#39;</span>
 <span class="c1">// server.js的renderToStream方法会调用这里</span>
-<span class="kr">export</span> <span class="k">default</span> <span class="nx">context</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="kr">export</span> <span class="k">default</span> <span class="nx">context</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kr">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">isDev</span> <span class="o">&amp;&amp;</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
     <span class="c1">// 使用前端路由切换到请求的url</span>
     <span class="nx">router</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">url</span><span class="p">)</span>
@@ -407,11 +407,11 @@ webpack_require: ['src/server-entry.js']
         <span class="k">return</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">reject</span><span class="p">({</span> <span class="nx">code</span><span class="o">:</span> <span class="s1">&#39;404&#39;</span> <span class="p">})</span>
     <span class="p">}</span>
     <span class="c1">// 使用Promise.all把所有的Component有异步preFetch方法执行</span>
-    <span class="k">return</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">matchedComponents</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">component</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">matchedComponents</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">component</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">component</span><span class="p">.</span><span class="nx">preFetch</span><span class="p">){</span>
             <span class="k">return</span> <span class="nx">component</span><span class="p">.</span><span class="nx">preFetch</span><span class="p">(</span><span class="nx">store</span><span class="p">)</span>
         <span class="p">}</span>
-    <span class="p">})).</span><span class="nx">then</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="p">})).</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="nx">isDev</span> <span class="o">&amp;&amp;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`data pre-fetch: </span><span class="si">${</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">s</span><span class="si">}</span><span class="sb">ms`</span><span class="p">)</span>
         <span class="c1">// 把vuex的state设置到传入的context.initialState上</span>
         <span class="nx">context</span><span class="p">.</span><span class="nx">initialState</span> <span class="o">=</span> <span class="nx">store</span><span class="p">.</span><span class="nx">state</span>
@@ -422,9 +422,9 @@ webpack_require: ['src/server-entry.js']
 </pre></div>
 </p>
 </blockquote>
-<h3 id="8-srcappjs">8. src/app.js</h3>
+<h3 id="8-srcappjs"><a name="user-content-8-srcappjs" href="#8-srcappjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>8. src/app.js</h3>
 <blockquote>
-<p>webpack-require: ['src/App.vue', 'src/store/index.js', 'src/router/index.js']
+<p>webpack-require: ['src/App.vue', 'src/store/index.js', 'src/router/index.js']<br />
 <div class="codehilite"><pre><span></span><span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
     <span class="nx">router</span><span class="p">,</span>
     <span class="nx">store</span><span class="p">,</span>
@@ -436,14 +436,14 @@ webpack_require: ['src/server-entry.js']
 </pre></div>
 </p>
 </blockquote>
-<h3 id="9-srcstoreindexjs">9. src/store/index.js</h3>
+<h3 id="9-srcstoreindexjs"><a name="user-content-9-srcstoreindexjs" href="#9-srcstoreindexjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>9. src/store/index.js</h3>
 <blockquote>
-<p>webpack-require: ['src/store/api.js']
+<p>webpack-require: ['src/store/api.js']<br />
 没有什么有ssr有关的东西，只是api请求都在api.js</p>
 </blockquote>
-<h3 id="10-srcstoreapijs">10. src/store/api.js</h3>
+<h3 id="10-srcstoreapijs"><a name="user-content-10-srcstoreapijs" href="#10-srcstoreapijs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>10. src/store/api.js</h3>
 <blockquote>
-<p>webpack-require: ['src/store/create-api-(client|server).js']
+<p>webpack-require: ['src/store/create-api-(client|server).js']<br />
 <div class="codehilite"><pre><span></span><span class="c1">// [L15-L29]</span>
 <span class="kd">function</span> <span class="nx">fetch</span> <span class="p">(</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
     <span class="kr">const</span> <span class="nx">cache</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">cachedItems</span>
@@ -452,8 +452,8 @@ webpack_require: ['src/server-entry.js']
         <span class="k">return</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">cache</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">child</span><span class="p">))</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="c1">// 获取api数据并设置最后更新时间</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-            <span class="nx">Axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">api</span><span class="p">.</span><span class="nx">url</span> <span class="o">+</span> <span class="nx">child</span> <span class="o">+</span> <span class="s1">&#39;.json&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">Axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">api</span><span class="p">.</span><span class="nx">url</span> <span class="o">+</span> <span class="nx">child</span> <span class="o">+</span> <span class="s1">&#39;.json&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
                 <span class="kr">const</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">data</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="nx">val</span><span class="p">.</span><span class="nx">__lastUpdate</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
                 <span class="nx">cache</span> <span class="o">&amp;&amp;</span> <span class="nx">cache</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span>
@@ -467,7 +467,7 @@ webpack_require: ['src/server-entry.js']
     <span class="kd">let</span> <span class="nx">first</span> <span class="o">=</span> <span class="kc">true</span>
     <span class="kd">let</span> <span class="nx">isOn</span> <span class="o">=</span> <span class="kc">true</span>
     <span class="kd">let</span> <span class="nx">timeoutId</span> <span class="o">=</span> <span class="kc">null</span>
-    <span class="kr">const</span> <span class="nx">handler</span> <span class="o">=</span> <span class="nx">res</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">handler</span> <span class="o">=</span> <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="nx">cb</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
     <span class="p">}</span>
     <span class="c1">// 创建一个无限的定时循环来请求数据</span>
@@ -483,7 +483,7 @@ webpack_require: ['src/server-entry.js']
     <span class="p">}</span>
     <span class="nx">watchTimeout</span><span class="p">()</span>
     <span class="c1">// 返回一个结束无限定时循环的函数</span>
-    <span class="k">return</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="nx">isOn</span> <span class="o">=</span> <span class="kc">false</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">timeoutId</span><span class="p">){</span>
             <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeoutId</span><span class="p">)</span>
@@ -493,28 +493,28 @@ webpack_require: ['src/server-entry.js']
 </pre></div>
 </p>
 </blockquote>
-<h3 id="11-srcviewscreatelistviewjs">11. src/views/CreateListView.js</h3>
+<h3 id="11-srcviewscreatelistviewjs"><a name="user-content-11-srcviewscreatelistviewjs" href="#11-srcviewscreatelistviewjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>11. src/views/CreateListView.js</h3>
 <blockquote>
-<p>webpack-require: ['src/components/ItemList.vue']
-src/router/index.js没有什么有和ssr有关的直接来到这里
-<div class="codehilite"><pre><span></span><span class="c1">// 导出的方法通过参数来重新包装component,</span>
-<span class="c1">// preFetch则是保证ssr时component的data里数据已经完成异步获取。</span>
-<span class="c1">// 如果没有preFetch而是通过vue的生命周期来异步设置则data不会有ssr效果</span>
-<span class="kr">export</span> <span class="kd">function</span> <span class="nx">createListView</span> <span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="sb">`</span><span class="si">${</span><span class="nx">type</span><span class="si">}</span><span class="sb">-stories-view`</span><span class="p">,</span>
-        <span class="nx">preFetch</span> <span class="p">(</span><span class="nx">store</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">store</span><span class="p">.</span><span class="nx">dispatch</span><span class="p">(</span><span class="s1">&#39;FETCH_LIST_DATA&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">type</span> <span class="p">})</span>
-        <span class="p">},</span>
-        <span class="nx">render</span> <span class="p">(</span><span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">h</span><span class="p">(</span><span class="nx">ItemList</span><span class="p">,</span> <span class="p">{</span> <span class="nx">props</span><span class="o">:</span> <span class="p">{</span> <span class="nx">type</span> <span class="p">}</span> <span class="p">})</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<p>webpack-require: ['src/components/ItemList.vue']<br />
+src/router/index.js没有什么有和ssr有关的直接来到这里<br />
+<div class="codehilite"><pre><span></span>// 导出的方法通过参数来重新包装component,
+// preFetch则是保证ssr时component的data里数据已经完成异步获取。
+// 如果没有preFetch而是通过vue的生命周期来异步设置则data不会有ssr效果
+export function createListView (type) {
+    return {
+        name: `<span class="cp">${</span><span class="nb">type</span><span class="cp">}</span>-stories-view`,
+        preFetch (store) {
+            return store.dispatch(&#39;FETCH_LIST_DATA&#39;, { type })
+        },
+        render (h) {
+            return h(ItemList, { props: { type } })
+        }
+    }
+}
 </pre></div>
 </p>
 </blockquote>
-<h3 id="12-srccomponentsitemlistvue">12. src/components/ItemList.vue</h3>
+<h3 id="12-srccomponentsitemlistvue"><a name="user-content-12-srccomponentsitemlistvue" href="#12-srccomponentsitemlistvue" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>12. src/components/ItemList.vue</h3>
 <div class="codehilite"><pre><span></span><span class="c1">// [L60-L30]</span>
     <span class="c1">// 在判断root已经挂载说明是路由跳转重新调用loadItems</span>
     <span class="nx">beforeMount</span> <span class="p">()</span> <span class="p">{</span>
@@ -527,7 +527,7 @@ src/router/index.js没有什么有和ssr有关的直接来到这里
             <span class="k">this</span><span class="p">.</span><span class="nx">loading</span> <span class="o">=</span> <span class="kc">true</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">$store</span><span class="p">.</span><span class="nx">dispatch</span><span class="p">(</span><span class="s1">&#39;FETCH_LIST_DATA&#39;</span><span class="p">,</span> <span class="p">{</span>
                 <span class="nx">type</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">type</span>
-            <span class="p">}).</span><span class="nx">then</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="p">}).</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">page</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">page</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxPage</span><span class="p">)</span> <span class="p">{</span>
                     <span class="k">this</span><span class="p">.</span><span class="nx">$router</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sb">`/</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="sb">/1`</span><span class="p">)</span>
                     <span class="k">return</span>
@@ -541,7 +541,7 @@ src/router/index.js没有什么有和ssr有关的直接来到这里
 </pre></div>
 
 
-<h2 id="_5">五.文字流程说明</h2>
+<h2 id="_5"><a name="user-content-_5" href="#_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>五.文字流程说明</h2>
 <ul>
 <li>node server.js : 设置路由所有请求通过ssr生成器</li>
 <li>server.js -&gt; setup-dev-server.js : dev时生成index.html和server-bundle.js</li>
@@ -550,13 +550,23 @@ src/router/index.js没有什么有和ssr有关的直接来到这里
 <li>server-entry.js : 通过url来preFetch设置vuex的state</li>
 <li>component: 需要有preFetch来获取异步数据</li>
 </ul>
-<h2 id="_6">六.源码</h2>
+<h2 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>六.源码</h2>
 <p><a href="https://github.com/zeromake/my-vue-hackernews/tree/ssr-demo">源码这里</a></p>
-		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="3573bf61ee35a7f3e5120527569ec3e5" data-title="vue-ssr" data-url="http://blog.zeromake.com/pages/vue-ssr/">
-		</div>
-	<!-- 多说评论框 end -->
-	</div>
+        <!-- 评论框 start -->
+        <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+        <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+        <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "3573bf61ee35a7f3e5120527569ec3e5",
+          productKey: "fdbc29879a2f440a948852bd87a7068b",
+          target: "cloud-tie-wrapper"
+        };
+        var yunManualLoad = true;
+        Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+        </script>
+        <!-- 评论框 end -->
+    </div>
 
 		</div>
 	</div>

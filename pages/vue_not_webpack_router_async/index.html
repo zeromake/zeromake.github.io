@@ -12,11 +12,11 @@
 	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
 	
-	<link rel="stylesheet" href="/css/pygments.css">
-	<script type="text/javascript">
-		var duoshuoQuery = {short_name:"fly-zero"};
-	</script>
-	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/css/pygments.css">
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"fly-zero"};
+    </script>
+    <script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
 
 	
 </head>
@@ -33,24 +33,24 @@
 	<div class="zero_content">
 		<div class="markdown-content">
 			
-	<h1>vue_not_webpack_router_async</h1>
-	<div class="markdown-body">
-		<div>创建时间: 2016-11-07 17:13:25</div>
-		<div>最后更新: 2016-11-07 18:00:20</div>
-		<div>博客原文:<a href="http://blog.zeromake.com/pages/vue_not_webpack_router_async/">地址</a></div>
-		<hr>
-		<h1 id="vuewebpackvue_router">vue不使用webpack,vue_router怎么异步</h1>
-<p>公司项目都是后台管理项，肯定是导航加主显示区的方式切换，然后就想着用vue_router看看。
-然后发现vue_router的component是同步加载的。。要是后台功能多js就很大了，这个就是所谓的单页应用。
-但是单页应用不用webpack打包手动把js写一个也太蛋疼了。然后发现了webpack用chunk可以异步会把每个路由的js单独打包。
+    <h1>vue_not_webpack_router_async</h1>
+    <div class="markdown-body">
+        <div>创建时间: 2016-11-07 17:13:25</div>
+        <div>最后更新: 2016-11-07 18:00:20</div>
+        <div>博客原文:<a href="http://blog.zeromake.com/pages/vue_not_webpack_router_async/">地址</a></div>
+        <hr>
+        <h1 id="vuewebpackvue_router"><a name="user-content-vuewebpackvue_router" href="#vuewebpackvue_router" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>vue不使用webpack,vue_router怎么异步</h1>
+<p>公司项目都是后台管理项，肯定是导航加主显示区的方式切换，然后就想着用vue_router看看。<br />
+然后发现vue_router的component是同步加载的。。要是后台功能多js就很大了，这个就是所谓的单页应用。<br />
+但是单页应用不用webpack打包手动把js写一个也太蛋疼了。然后发现了webpack用chunk可以异步会把每个路由的js单独打包。<br />
 具体的原理下面也会讲解。</p>
-<h2 id="_1">零、一些注意事项</h2>
+<h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>零、一些注意事项</h2>
 <ol>
 <li>源码在<a href="https://github.com/zeromake/vue_demo">这里</a></li>
 </ol>
-<h2 id="vue_router_demo">一、vue_router_demo</h2>
+<h2 id="vue_router_demo"><a name="user-content-vue_router_demo" href="#vue_router_demo" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>一、vue_router_demo</h2>
 <p>先来个vue_router的demo用requirejs加载其它js。</p>
-<h3 id="vue_router_demohtml">vue_router_demo.html</h3>
+<h3 id="vue_router_demohtml"><a name="user-content-vue_router_demohtml" href="#vue_router_demohtml" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>vue_router_demo.html</h3>
 <div class="codehilite"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;zh&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -69,7 +69,7 @@
 </pre></div>
 
 
-<h3 id="jsmainjs">js/main.js</h3>
+<h3 id="jsmainjs"><a name="user-content-jsmainjs" href="#jsmainjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/main.js</h3>
 <div class="codehilite"><pre><span></span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">define</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
         <span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
@@ -114,7 +114,7 @@
 </pre></div>
 
 
-<h3 id="jscomponent1js">js/component1.js</h3>
+<h3 id="jscomponent1js"><a name="user-content-jscomponent1js" href="#jscomponent1js" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/component1.js</h3>
 <p><div class="codehilite"><pre><span></span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">define</span><span class="p">){</span>
     <span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">){</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -123,9 +123,9 @@
     <span class="p">});</span>
 <span class="p">})(</span><span class="nx">define</span><span class="p">);</span>
 </pre></div>
-
+<br />
 我看了webpack的.vue编译完后导出的对象也不过是有特定属性的对象，必须有<code>template</code>或者<code>render</code>其中一个。</p>
-<h3 id="jscomponent2js">js/component2.js</h3>
+<h3 id="jscomponent2js"><a name="user-content-jscomponent2js" href="#jscomponent2js" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/component2.js</h3>
 <p><div class="codehilite"><pre><span></span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">define</span><span class="p">){</span>
     <span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">){</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -134,20 +134,20 @@
     <span class="p">});</span>
 <span class="p">})(</span><span class="nx">define</span><span class="p">);</span>
 </pre></div>
-
+<br />
 再来一个不一样的。</p>
-<h3 id="_2">示例效果图</h3>
+<h3 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>示例效果图</h3>
 <p><img alt="vue_router_demo" src="/static/img/vue_not_webpack_router-async/vue_router_demo.gif" /></p>
-<h3 id="_3">源码</h3>
+<h3 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>源码</h3>
 <p>在git仓库的vue_router_demo分支。</p>
-<h3 id="_4">总结</h3>
-<p>看了图我想你已经发现了问题明明<code>component</code>用的require但是怎么回事第一次刷新首页都引入了。
-实际上因为requirejs的require会收集所有使用require的地方并一同加载甚至定义一个方法里就require一个模块，也会预先加载js。
+<h3 id="_4"><a name="user-content-_4" href="#_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>总结</h3>
+<p>看了图我想你已经发现了问题明明<code>component</code>用的require但是怎么回事第一次刷新首页都引入了。<br />
+实际上因为requirejs的require会收集所有使用require的地方并一同加载甚至定义一个方法里就require一个模块，也会预先加载js。<br />
 这个结果照成我们的异步变成了多文件SPA在一开始就会把所有模块导入。如果想做这样的SPA不要使用这样的方法，请使用webpack打包成一个文件减少请求。</p>
-<h2 id="vue_router_async_demo">二、vue_router_async_demo</h2>
+<h2 id="vue_router_async_demo"><a name="user-content-vue_router_async_demo" href="#vue_router_async_demo" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>二、vue_router_async_demo</h2>
 <p>现在我们就来一步步分析怎么做到。</p>
-<h3 id="_5">查找资料</h3>
-<p>通过搜索引擎的查找翻到了一篇博文<a href="http://www.cnblogs.com/Kummy/p/5254754.html">分享（Angular 和 Vue）按需加载的项目实践优化方案</a>
+<h3 id="_5"><a name="user-content-_5" href="#_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>查找资料</h3>
+<p>通过搜索引擎的查找翻到了一篇博文<a href="http://www.cnblogs.com/Kummy/p/5254754.html">分享（Angular 和 Vue）按需加载的项目实践优化方案</a><br />
 里面给了他的参考资料：</p>
 <blockquote>
 <ol>
@@ -155,8 +155,8 @@
 <li><a href="http://webpack.github.io/docs/code-splitting.html">webpack</a></li>
 </ol>
 </blockquote>
-<p>然后我写了一个测试效果是我想要的异步。然后看了生成的代码异步用的js的开头<code>webpackJsonp([1,3],[...])</code>。
-而导入模块的地方使用<code>__webpack_require__([1,3], resolve)</code>还有<code>__webpack_require__</code>中有这样一段代码:
+<p>然后我写了一个测试效果是我想要的异步。然后看了生成的代码异步用的js的开头<code>webpackJsonp([1,3],[...])</code>。<br />
+而导入模块的地方使用<code>__webpack_require__([1,3], resolve)</code>还有<code>__webpack_require__</code>中有这样一段代码:<br />
 <div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">head</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">script</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
 <span class="nx">script</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span>
@@ -165,11 +165,11 @@
 <span class="nx">script</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="c1">// del;</span>
 <span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">script</span><span class="p">);</span>
 </pre></div>
-
-这下就明白了<code>__webpack_require__(chunkIds, callback)</code>调用后查找是否已有<code>chunkIds</code>的模块有的话通过<code>callback</code>调用返回。
+<br />
+这下就明白了<code>__webpack_require__(chunkIds, callback)</code>调用后查找是否已有<code>chunkIds</code>的模块有的话通过<code>callback</code>调用返回。<br />
 没有就通过<code>chunkIds</code>找到文件并在<code>head</code>中添加一个<code>script</code>加载新js然后js中调用<code>webpackJsonp</code>并通过<code>callback</code>返回模块。</p>
 <p>好了这下找到方法了我们自己写个<code>webpackJsonp</code>和<code>webpack_require</code>就好了。代码可能有点多用注释的方式来解释。</p>
-<h3 id="jswebpackjsonpjs">js/webpackjsonp.js</h3>
+<h3 id="jswebpackjsonpjs"><a name="user-content-jswebpackjsonpjs" href="#jswebpackjsonpjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/webpackjsonp.js</h3>
 <p><div class="codehilite"><pre><span></span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">define</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="c1">// 模块缓存区。</span>
@@ -223,9 +223,9 @@
     <span class="p">});</span>
 <span class="p">})(</span><span class="nx">define</span><span class="p">);</span>
 </pre></div>
-
+<br />
 好了有了这个就可以做下面的了。</p>
-<h3 id="jsmainjs_1">js/main.js</h3>
+<h3 id="jsmainjs_1"><a name="user-content-jsmainjs_1" href="#jsmainjs_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/main.js</h3>
 <p><div class="codehilite"><pre><span></span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">define</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
         <span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
@@ -270,9 +270,9 @@
     <span class="p">});</span>
 <span class="p">})(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">define</span><span class="p">);</span>
 </pre></div>
-
+<br />
 html不变把里面的component改好即可</p>
-<h3 id="jscomponent1js_1">js/component1.js</h3>
+<h3 id="jscomponent1js_1"><a name="user-content-jscomponent1js_1" href="#jscomponent1js_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/component1.js</h3>
 <p><div class="codehilite"><pre><span></span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">define</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">define</span><span class="p">(</span><span class="s1">&#39;/js/component1.js&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -281,9 +281,9 @@ html不变把里面的component改好即可</p>
     <span class="p">});</span>
 <span class="p">})(</span><span class="nx">webpackJsonpCallback</span><span class="p">);</span>
 </pre></div>
-
+<br />
 这个改动就比较大了。</p>
-<h3 id="jscomponent2js_1">js/component2.js</h3>
+<h3 id="jscomponent2js_1"><a name="user-content-jscomponent2js_1" href="#jscomponent2js_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/component2.js</h3>
 <p><div class="codehilite"><pre><span></span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">define</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">define</span><span class="p">(</span><span class="s1">&#39;/js/component2.js&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -292,17 +292,27 @@ html不变把里面的component改好即可</p>
     <span class="p">});</span>
 <span class="p">})(</span><span class="nx">webpackJsonpCallback</span><span class="p">);</span>
 </pre></div>
-
+<br />
 多了一个模块名。。这样效果不是很好希望下回能研究出不需要模块名的。</p>
-<h3 id="_6">效果图</h3>
+<h3 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>效果图</h3>
 <p><img alt="vue_router_async_demo" src="/static/img/vue_not_webpack_router-async/vue_router_async_demo.gif" /></p>
-<h3 id="_7">源码</h3>
+<h3 id="_7"><a name="user-content-_7" href="#_7" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>源码</h3>
 <p>在git仓库的vue_router_async_demo分支。</p>
-		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="d523461c74b2511d207dc406df412d74" data-title="vue_not_webpack_router_async" data-url="http://blog.zeromake.com/pages/vue_not_webpack_router_async/">
-		</div>
-	<!-- 多说评论框 end -->
-	</div>
+        <!-- 评论框 start -->
+        <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+        <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+        <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "d523461c74b2511d207dc406df412d74",
+          productKey: "fdbc29879a2f440a948852bd87a7068b",
+          target: "cloud-tie-wrapper"
+        };
+        var yunManualLoad = true;
+        Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+        </script>
+        <!-- 评论框 end -->
+    </div>
 
 		</div>
 	</div>

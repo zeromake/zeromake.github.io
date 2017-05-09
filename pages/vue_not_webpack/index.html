@@ -12,11 +12,11 @@
 	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
 	
-	<link rel="stylesheet" href="/css/pygments.css">
-	<script type="text/javascript">
-		var duoshuoQuery = {short_name:"fly-zero"};
-	</script>
-	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/css/pygments.css">
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"fly-zero"};
+    </script>
+    <script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
 
 	
 </head>
@@ -33,16 +33,16 @@
 	<div class="zero_content">
 		<div class="markdown-content">
 			
-	<h1>Vue2(not_webpack)</h1>
-	<div class="markdown-body">
-		<div>创建时间: 2016-11-04 13:10:25</div>
-		<div>最后更新: 2016-11-04 15:07:50</div>
-		<div>博客原文:<a href="http://blog.zeromake.com/pages/vue_not_webpack/">地址</a></div>
-		<hr>
-		<p>看到各种vue入门全部都是webpack的我表示没有什么问题。但是却发觉无法将这些webpack的工作流推荐给其它人。一说npm,webpack,babel什么的纷纷表示太麻烦。</p>
+    <h1>Vue2(not_webpack)</h1>
+    <div class="markdown-body">
+        <div>创建时间: 2016-11-04 13:10:25</div>
+        <div>最后更新: 2016-11-04 15:07:50</div>
+        <div>博客原文:<a href="http://blog.zeromake.com/pages/vue_not_webpack/">地址</a></div>
+        <hr>
+        <p>看到各种vue入门全部都是webpack的我表示没有什么问题。但是却发觉无法将这些webpack的工作流推荐给其它人。一说npm,webpack,babel什么的纷纷表示太麻烦。</p>
 <p>也许他们还是更喜欢cdn引入，手写js吧。所以这个就是纯粹的vue不用webpack不用babel。直接用我们喜欢的es5的js写。等到觉得vue的好再推荐他们webpack什么的。</p>
 <p>然后模块化还是需要一个所有我选择了requirejs。</p>
-<h2 id="_1">零、文章中的一些定义</h2>
+<h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>零、文章中的一些定义</h2>
 <ol>
 <li>所有的js与css库都会使用cdn。</li>
 <li>一些需要修改的库无法使用cdn的会说明。</li>
@@ -50,8 +50,8 @@
 <li>这里面说到的vue源码均为2.0.3</li>
 <li>源码下载: <a href="https://github.com/zeromake/vue_demo">地址</a></li>
 </ol>
-<h2 id="hello-world">一、Hello World</h2>
-<h3 id="hello_worldhtml">hello_world.html</h3>
+<h2 id="hello-world"><a name="user-content-hello-world" href="#hello-world" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>一、Hello World</h2>
+<h3 id="hello_worldhtml"><a name="user-content-hello_worldhtml" href="#hello_worldhtml" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>hello_world.html</h3>
 <p><div class="codehilite"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;zh&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -70,9 +70,9 @@
 <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </pre></div>
-
+<br />
 以上开头引入了vue并在body中写了一个id为<code>app</code>的div，其中vue的模板我们可以直接写在这个div中也可以写在js的vue实例的template中。然后在body中的最后引入入口js/hello_world.js。</p>
-<h3 id="jshello_worldjs">js/hello_world.js</h3>
+<h3 id="jshello_worldjs"><a name="user-content-jshello_worldjs" href="#jshello_worldjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/hello_world.js</h3>
 <p><div class="codehilite"><pre><span></span><span class="k">new</span> <span class="nx">Vue</span><span class="p">(</span>
     <span class="nx">el</span><span class="o">:</span><span class="s1">&#39;#app&#39;</span><span class="p">,</span>
     <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
@@ -81,19 +81,19 @@
     <span class="nx">template</span><span class="o">:</span> <span class="s1">&#39;&lt;span&gt;{{mes}}&lt;/span&gt;&#39;</span>
 <span class="p">);</span>
 </pre></div>
-
-el表示vue的实例挂载点，看了vue源码使用的是<code>document.querySelector</code>,(vue/src/platforms/web/util/index.js#15)。
+<br />
+el表示vue的实例挂载点，看了vue源码使用的是<code>document.querySelector</code>,(vue/src/platforms/web/util/index.js#15)。<br />
 选择失败会使用<code>document.createElement</code>,(vue/src/platforms/web/util/index.js#20)为我们生成一个div。所以<code>document.querySelector</code>能支持的vue就能支持。</p>
 <p>data表示vue实例的属性。可以被template通过{{}}表达式访问</p>
 <p>template表示模板里面的文字会被编译后转换到挂载点上</p>
-<h3 id="_2">效果图</h3>
+<h3 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>效果图</h3>
 <p><img alt="hello_world" src="/static/img/vue_not_webpack/hello_world.png" /></p>
 <p>和我说的一样，但是你会说这样的不需要框架也能做啊，当然vue的效果不止这点先说个它的数据绑定看下面的hello_world2</p>
-<h3 id="_3">源码：</h3>
+<h3 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>源码：</h3>
 <p>在git仓库的hello_world分支中</p>
-<h2 id="helloworld2">二、HelloWorld2</h2>
-<h3 id="jshello_worldjs_1">js/hello_world.js</h3>
-<p>这边不需要修改其他的仅需要js即可
+<h2 id="helloworld2"><a name="user-content-helloworld2" href="#helloworld2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>二、HelloWorld2</h2>
+<h3 id="jshello_worldjs_1"><a name="user-content-jshello_worldjs_1" href="#jshello_worldjs_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/hello_world.js</h3>
+<p>这边不需要修改其他的仅需要js即可<br />
 <div class="codehilite"><pre><span></span><span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
     <span class="nx">el</span><span class="o">:</span><span class="s1">&#39;#app&#39;</span><span class="p">,</span>
     <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
@@ -106,17 +106,17 @@ el表示vue的实例挂载点，看了vue源码使用的是<code>document.queryS
 <span class="s1">    &lt;/div&gt;&#39;</span>
 <span class="p">});</span>
 </pre></div>
-
+<br />
 这里我写了一个input并在上面写了一个vue指令v-model。这个是为input之类专用的指令可以把input的内容与vue实例里的属性绑定。input的内容修改会改变mes然后因为mes改变了span中的mes重新生成了。</p>
-<h3 id="_4">效果图</h3>
-<p>如果使用vue的devtoolt效果会更好能直接看到数据的变化。
-  <img alt="hello_world2" src="/static/img/vue_not_webpack/hello_world2.gif" /></p>
-<h3 id="_5">源码：</h3>
+<h3 id="_4"><a name="user-content-_4" href="#_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>效果图</h3>
+<p>如果使用vue的devtoolt效果会更好能直接看到数据的变化。<br />
+<img alt="hello_world2" src="/static/img/vue_not_webpack/hello_world2.gif" /></p>
+<h3 id="_5"><a name="user-content-_5" href="#_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>源码：</h3>
 <p>在git仓库的hello_world2分支中</p>
-<h2 id="requirejs">三、使用requirejs</h2>
+<h2 id="requirejs"><a name="user-content-requirejs" href="#requirejs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>三、使用requirejs</h2>
 <p>在现在很多库都已经完全支持amd规范导入，十分推荐使用requirejs。当然你使用了webpack就没有必要使用requirejs。这里不说requirejs的好处，只是不使用webpack的话缺少一个模块化工具。</p>
 <p>我们这边把上面第一个hello_world修改为requirejs的</p>
-<h3 id="hello_requirejshtml">hello_requirejs.html</h3>
+<h3 id="hello_requirejshtml"><a name="user-content-hello_requirejshtml" href="#hello_requirejshtml" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>hello_requirejs.html</h3>
 <div class="codehilite"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;zh&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -135,7 +135,7 @@ el表示vue的实例挂载点，看了vue源码使用的是<code>document.queryS
 </pre></div>
 
 
-<h3 id="jsmainjs">js/main.js</h3>
+<h3 id="jsmainjs"><a name="user-content-jsmainjs" href="#jsmainjs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/main.js</h3>
 <div class="codehilite"><pre><span></span><span class="c1">// 习惯写iife了可以不需要</span>
 <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">define</span><span class="p">){</span>
     <span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
@@ -165,14 +165,14 @@ el表示vue的实例挂载点，看了vue源码使用的是<code>document.queryS
 </pre></div>
 
 
-<h3 id="_6">效果图</h3>
+<h3 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>效果图</h3>
 <p>这个没有必要效果图了。。</p>
-<h3 id="_7">源码:</h3>
+<h3 id="_7"><a name="user-content-_7" href="#_7" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>源码:</h3>
 <p>在git仓库的hello_requirejs分支中</p>
-<h2 id="vue">四、使用其它vue库</h2>
-<p>这里我用<a href="https://github.com/ElemeFE/element">element-ui</a>来做示例
+<h2 id="vue"><a name="user-content-vue" href="#vue" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>四、使用其它vue库</h2>
+<p>这里我用<a href="https://github.com/ElemeFE/element">element-ui</a>来做示例<br />
 使用hello_requirejs修改</p>
-<h3 id="hello_requirejshtml_1">hello_requirejs.html</h3>
+<h3 id="hello_requirejshtml_1"><a name="user-content-hello_requirejshtml_1" href="#hello_requirejshtml_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>hello_requirejs.html</h3>
 <p><div class="codehilite"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;zh&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -190,9 +190,9 @@ el表示vue的实例挂载点，看了vue源码使用的是<code>document.queryS
 <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </pre></div>
-
+<br />
 增加一个element的css。也可以使用requirejs的插件来加载css</p>
-<h3 id="jsmainjs_1">js/main.js</h3>
+<h3 id="jsmainjs_1"><a name="user-content-jsmainjs_1" href="#jsmainjs_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>js/main.js</h3>
 <div class="codehilite"><pre><span></span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">define</span><span class="p">){</span>
     <span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
         <span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
@@ -217,15 +217,25 @@ el表示vue的实例挂载点，看了vue源码使用的是<code>document.queryS
 </pre></div>
 
 
-<h3 id="_8">效果图</h3>
+<h3 id="_8"><a name="user-content-_8" href="#_8" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>效果图</h3>
 <p><img alt="hello_element" src="/static/img/vue_not_webpack/hello_element.png" /></p>
-<h3 id="_9">源码：</h3>
+<h3 id="_9"><a name="user-content-_9" href="#_9" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>源码：</h3>
 <p>在git仓库的hello_element分支中</p>
-		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="e0505ca00cdf9688c27163229fd0f2e5" data-title="Vue2(not_webpack)" data-url="http://blog.zeromake.com/pages/vue_not_webpack/">
-		</div>
-	<!-- 多说评论框 end -->
-	</div>
+        <!-- 评论框 start -->
+        <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+        <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+        <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "e0505ca00cdf9688c27163229fd0f2e5",
+          productKey: "fdbc29879a2f440a948852bd87a7068b",
+          target: "cloud-tie-wrapper"
+        };
+        var yunManualLoad = true;
+        Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+        </script>
+        <!-- 评论框 end -->
+    </div>
 
 		</div>
 	</div>

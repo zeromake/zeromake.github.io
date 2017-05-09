@@ -12,11 +12,11 @@
 	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
 	
-	<link rel="stylesheet" href="/css/pygments.css">
-	<script type="text/javascript">
-		var duoshuoQuery = {short_name:"fly-zero"};
-	</script>
-	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/css/pygments.css">
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"fly-zero"};
+    </script>
+    <script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
 
 	
 </head>
@@ -33,25 +33,25 @@
 	<div class="zero_content">
 		<div class="markdown-content">
 			
-	<h1>补间动画</h1>
-	<div class="markdown-body">
-		<div>创建时间: 2015-11-10 09:14:53</div>
-		<div>最后更新: </div>
-		<div>博客原文:<a href="http://blog.zeromake.com/pages/补间动画/">地址</a></div>
-		<hr>
-		<h2 id="_1">补间动画代码版</h2>
+    <h1>补间动画</h1>
+    <div class="markdown-body">
+        <div>创建时间: 2015-11-10 09:14:53</div>
+        <div>最后更新: </div>
+        <div>博客原文:<a href="http://blog.zeromake.com/pages/补间动画/">地址</a></div>
+        <hr>
+        <h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>补间动画代码版</h2>
 <ul>
 <li>1.可以用View对象的startAnimation(Animation a)设置补间动画。</li>
-<li>2.先定义一个View的对象。
+<li>2.先定义一个View的对象。<br />
 <div class="codehilite"><pre><span></span><span class="kd">private</span> <span class="n">View</span> <span class="n">view</span><span class="o">;</span>
 <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
     <span class="n">view</span> <span class="o">=</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">iv</span><span class="o">);</span>
 <span class="o">}</span>
 </pre></div>
-
+<br />
 <!--more--></li>
-<li>3.透明动画
+<li>3.透明动画<br />
 <div class="codehilite"><pre><span></span><span class="c1">//定义一个透明动画对象设置开始的透明度和结束的透明度。</span>
 <span class="n">AlphaAnimation</span>  <span class="n">aa</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AlphaAnimation</span><span class="o">(</span><span class="mf">0.0f</span><span class="o">,</span> <span class="mf">1.0f</span><span class="o">);</span>
 <span class="c1">//设置持续时间单位毫秒</span>
@@ -66,7 +66,7 @@
 <span class="n">view</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">aa</span><span class="o">);</span>
 </pre></div>
 </li>
-<li>4.位移动画
+<li>4.位移动画<br />
 <div class="codehilite"><pre><span></span><span class="n">TranslateAnimation</span> <span class="n">ta</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TranslateAnimation</span><span class="o">(</span>
     <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="o">-</span><span class="mf">0.5f</span><span class="o">,</span> <span class="c1">//以父元素，起始x轴位置</span>
     <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">,</span> <span class="c1">//以父元素，结束x轴位置</span>
@@ -79,7 +79,7 @@
 <span class="n">iv</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">ta</span><span class="o">);</span>
 </pre></div>
 </li>
-<li>5.缩放动画
+<li>5.缩放动画<br />
 <div class="codehilite"><pre><span></span><span class="n">ScaleAnimation</span> <span class="n">sa</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ScaleAnimation</span><span class="o">(</span>
 <span class="mf">0.1f</span><span class="o">,</span> <span class="mf">2.0f</span><span class="o">,</span><span class="c1">//x轴的起始缩放比例和结束缩放比。</span>
 <span class="mf">0.1f</span><span class="o">,</span> <span class="mf">2.0f</span><span class="o">,</span><span class="c1">//y轴的起始缩放比例和结束缩放比。</span>
@@ -91,7 +91,7 @@
 <span class="n">iv</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">sa</span><span class="o">);</span>
 </pre></div>
 </li>
-<li>6.旋转动画
+<li>6.旋转动画<br />
 <div class="codehilite"><pre><span></span><span class="n">RotateAnimation</span> <span class="n">ra</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RotateAnimation</span><span class="o">(</span>
 <span class="mi">0</span><span class="o">,</span> <span class="mi">360</span><span class="o">,</span><span class="c1">//起始角度，结束角度。</span>
 <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_SELF</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">,</span> <span class="c1">//x轴以自身的中心</span>
@@ -102,7 +102,7 @@
 <span class="n">iv</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">ra</span><span class="o">);</span>
 </pre></div>
 </li>
-<li>7.组合动画
+<li>7.组合动画<br />
 <div class="codehilite"><pre><span></span><span class="n">AnimationSet</span> <span class="n">set</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AnimationSet</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span><span class="c1">//建立一个Animation集合</span>
 <span class="n">TranslateAnimation</span> <span class="n">ta</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TranslateAnimation</span><span class="o">(</span><span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="o">-</span><span class="mf">0.5f</span><span class="o">,</span> 
         <span class="n">Animation</span><span class="o">.</span><span class="na">RELATIVE_TO_PARENT</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">,</span> 
@@ -130,10 +130,10 @@
 </pre></div>
 </li>
 </ul>
-<h2 id="xml">补间动画xml版</h2>
+<h2 id="xml"><a name="user-content-xml" href="#xml" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>补间动画xml版</h2>
 <ul>
 <li>1.在res创建anim文件夹然后右键新建xml文件会自动选择补间动画模版的xml。</li>
-<li>2.透明动画
+<li>2.透明动画<br />
 <div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;alpha</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
     <span class="na">android:fromAlpha=</span><span class="s">&quot;0.0&quot;</span> 
@@ -145,13 +145,13 @@
     <span class="nt">&gt;</span>
 <span class="nt">&lt;/alpha&gt;</span>
 </pre></div>
-
-使用方法
+<br />
+使用方法<br />
 <div class="codehilite"><pre><span></span><span class="n">Animation</span> <span class="n">aa</span> <span class="o">=</span> <span class="n">AnimationUtils</span><span class="o">.</span><span class="na">loadAnimation</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">anim</span><span class="o">.</span><span class="na">alpha</span><span class="o">);</span>
 <span class="n">view</span><span class="o">.</span><span class="na">startAnimation</span><span class="o">(</span><span class="n">aa</span><span class="o">);</span>
 </pre></div>
 </li>
-<li>3.位移动画
+<li>3.位移动画<br />
 <div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;translate</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
     <span class="na">android:fromXDelta=</span><span class="s">&quot;-50%p&quot;</span>
@@ -165,7 +165,7 @@
 <span class="nt">&lt;/translate&gt;</span>
 </pre></div>
 </li>
-<li>4.缩放动画
+<li>4.缩放动画<br />
 <div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;scale</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
     <span class="na">android:fromXScale=</span><span class="s">&quot;0.1&quot;</span>
@@ -180,7 +180,7 @@
 <span class="nt">&lt;/scale&gt;</span>
 </pre></div>
 </li>
-<li>5.旋转动画
+<li>5.旋转动画<br />
 <div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;rotate</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
     <span class="na">android:fromDegrees=</span><span class="s">&quot;0&quot;</span>
@@ -193,7 +193,7 @@
 <span class="nt">&lt;/rotate&gt;</span>
 </pre></div>
 </li>
-<li>6.组合动画
+<li>6.组合动画<br />
 <div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;set&gt;</span>
     <span class="nt">&lt;alpha</span>
@@ -241,11 +241,21 @@
 </pre></div>
 </li>
 </ul>
-		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="7cfb3af9985668215b26fe078f743643" data-title="补间动画" data-url="http://blog.zeromake.com/pages/补间动画/">
-		</div>
-	<!-- 多说评论框 end -->
-	</div>
+        <!-- 评论框 start -->
+        <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+        <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+        <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "7cfb3af9985668215b26fe078f743643",
+          productKey: "fdbc29879a2f440a948852bd87a7068b",
+          target: "cloud-tie-wrapper"
+        };
+        var yunManualLoad = true;
+        Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+        </script>
+        <!-- 评论框 end -->
+    </div>
 
 		</div>
 	</div>

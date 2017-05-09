@@ -12,11 +12,11 @@
 	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
 	
-	<link rel="stylesheet" href="/css/pygments.css">
-	<script type="text/javascript">
-		var duoshuoQuery = {short_name:"fly-zero"};
-	</script>
-	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/css/pygments.css">
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"fly-zero"};
+    </script>
+    <script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
 
 	
 </head>
@@ -33,13 +33,13 @@
 	<div class="zero_content">
 		<div class="markdown-content">
 			
-	<h1>koa-webpack-middleware-zm</h1>
-	<div class="markdown-body">
-		<div>创建时间: 2017-03-01 21:33:04</div>
-		<div>最后更新: 2017-03-05 12:26:04</div>
-		<div>博客原文:<a href="http://blog.zeromake.com/pages/koa-webpack-middleware/">地址</a></div>
-		<hr>
-		<div class="toc">
+    <h1>koa-webpack-middleware-zm</h1>
+    <div class="markdown-body">
+        <div>创建时间: 2017-03-01 21:33:04</div>
+        <div>最后更新: 2017-03-05 12:26:04</div>
+        <div>博客原文:<a href="http://blog.zeromake.com/pages/koa-webpack-middleware/">地址</a></div>
+        <hr>
+        <div class="toc">
 <ul>
 <li><a href="#_1">前言</a></li>
 <li><a href="#koaexpress">一. koa与express的普通中间件区别。</a></li>
@@ -51,7 +51,7 @@
 <li><a href="#_3">七. 例子源码</a></li>
 </ul>
 </div>
-<h2 id="_1">前言</h2>
+<h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>前言</h2>
 <ul>
 <li>在前面的对<code>vue-ssr</code>改造为<code>koa</code>的<code>web</code>框架，我使用了一个第三方npm库。</li>
 <li>包名为 <del><code>koa2-webpack-middleware-zm</code></del> 已迁移到<code>koa-webpack-middleware-zm</code>。</li>
@@ -66,22 +66,22 @@
 <li>把<code>webpack-dev-middleware</code>这种<code>express</code>中间件改造为一个<code>koa</code>中间件。</li>
 </ul>
 </blockquote>
-<h2 id="koaexpress">一. koa与express的普通中间件区别。</h2>
+<h2 id="koaexpress"><a name="user-content-koaexpress" href="#koaexpress" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>一. koa与express的普通中间件区别。</h2>
 <ul>
-<li>npm 包安装
+<li>npm 包安装<br />
 <div class="codehilite"><pre><span></span>npm i koa express -D
 </pre></div>
 </li>
-<li>koa和express的基本模板。
-koa只能用new的方式创建
+<li>koa和express的基本模板。<br />
+koa只能用new的方式创建<br />
 <div class="codehilite"><pre><span></span><span class="c1">// koa</span>
 <span class="kr">const</span> <span class="nx">Koa</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;koa&#39;</span><span class="p">)</span>
 <span class="c1">// ... use code</span>
 <span class="kr">const</span> <span class="nx">KoaApp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Koa</span><span class="p">()</span>
 <span class="nx">KoaApp</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8000</span><span class="p">)</span>
 </pre></div>
-
-express可以用方法调用或new的方式创建
+<br />
+express可以用方法调用或new的方式创建<br />
 <div class="codehilite"><pre><span></span><span class="c1">// express</span>
 <span class="kr">const</span> <span class="nx">Express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">)</span>
 <span class="c1">// ... use code</span>
@@ -90,15 +90,15 @@ express可以用方法调用或new的方式创建
 </pre></div>
 </li>
 <li>
-<p>两者的hello。
-koa:
+<p>两者的hello。<br />
+koa:<br />
 <div class="codehilite"><pre><span></span><span class="c1">// use code</span>
 <span class="nx">KoaApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">next</span><span class="p">){</span>
     <span class="nx">ctx</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="s1">&#39;hello koa&#39;</span>
 <span class="p">})</span>
 </pre></div>
-
-express:
+<br />
+express:<br />
 <div class="codehilite"><pre><span></span><span class="c1">// use code</span>
 <span class="nx">ExpressApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">){</span>
     <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;hello exress&#39;</span><span class="p">)</span>
@@ -131,21 +131,21 @@ express:
 <li>相同如果<code>Promise</code>没有异步通知也会卡住。</li>
 </ol>
 </blockquote>
-<h2 id="_2">二. 异步中间件的区别</h2>
+<h2 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>二. 异步中间件的区别</h2>
 <ul>
 <li>
-<p>express 异步中间件
+<p>express 异步中间件<br />
 <div class="codehilite"><pre><span></span><span class="nx">ExpressApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">){</span>
     <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
         <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;测试&#39;</span><span class="p">)</span>
     <span class="p">},</span> <span class="mi">0</span><span class="p">)</span>
 <span class="p">})</span>
 </pre></div>
-
+<br />
 express 的异步就是最普通的回调</p>
 </li>
 <li>
-<p>koa 异步中间件
+<p>koa 异步中间件<br />
 <div class="codehilite"><pre><span></span><span class="nx">KoaApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">next</span><span class="p">){</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">path</span> <span class="o">===</span> <span class="s1">&#39;/&#39;</span><span class="p">){</span>
@@ -157,14 +157,14 @@ express 的异步就是最普通的回调</p>
     <span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="nx">next</span><span class="p">)</span>
 <span class="p">})</span>
 </pre></div>
-
-koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代表<code>resolve</code>不切换到下一个中间件。
+<br />
+koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代表<code>resolve</code>不切换到下一个中间件。<br />
 <code>catch</code>直接绑定<code>next</code>，用<code>reject</code>来通知跳转到下一个中间件。</p>
 </li>
 </ul>
-<h2 id="expresskoa">三. 修改一个express中间件到koa</h2>
+<h2 id="expresskoa"><a name="user-content-expresskoa" href="#expresskoa" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>三. 修改一个express中间件到koa</h2>
 <ul>
-<li>hello-test.js
+<li>hello-test.js<br />
 <div class="codehilite"><pre><span></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">){</span>
     <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">path</span> <span class="o">===</span> <span class="s1">&#39;/&#39;</span><span class="p">){</span>
@@ -176,12 +176,12 @@ koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代
 <span class="p">}</span>
 </pre></div>
 </li>
-<li>express 使用
+<li>express 使用<br />
 <div class="codehilite"><pre><span></span><span class="kr">const</span> <span class="nx">test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./hello-test.js&#39;</span><span class="p">)</span>
 <span class="nx">ExpressApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">test</span><span class="p">)</span>
 </pre></div>
 </li>
-<li>修改到 koa 使用
+<li>修改到 koa 使用<br />
 <div class="codehilite"><pre><span></span><span class="kr">const</span> <span class="nx">test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./hello-test.js&#39;</span><span class="p">)</span>
 <span class="nx">KoaApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">next</span><span class="p">){</span>
     <span class="kr">const</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">res</span>
@@ -196,13 +196,13 @@ koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代
     <span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="nx">next</span><span class="p">)</span>
 <span class="p">})</span>
 </pre></div>
-
-通过修改原有的<code>res.end</code>运行<code>resolve</code>通知<code>Promise</code>结束,
+<br />
+通过修改原有的<code>res.end</code>运行<code>resolve</code>通知<code>Promise</code>结束,<br />
 修改<code>next</code>用<code>reject</code>替代通知<code>Promise</code>调用<code>next</code>。</li>
 </ul>
-<h2 id="express">四. 修改express注意事项</h2>
+<h2 id="express"><a name="user-content-express" href="#express" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>四. 修改express注意事项</h2>
 <ol>
-<li>原有的<code>express</code>组件是通过回调来通知结束的。不要直接<code>await</code>或者<code>yield</code>一个组件。它们又不是返回一个<code>Promise</code>对象。
+<li>原有的<code>express</code>组件是通过回调来通知结束的。不要直接<code>await</code>或者<code>yield</code>一个组件。它们又不是返回一个<code>Promise</code>对象。<br />
 <div class="codehilite"><pre><span></span><span class="kr">const</span> <span class="nx">test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./hello-test.js&#39;</span><span class="p">)</span>
 <span class="nx">KoaApp</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span> <span class="o">*</span><span class="p">(</span><span class="nx">next</span><span class="p">){</span>
     <span class="kr">const</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">res</span>
@@ -220,23 +220,23 @@ koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代
 </li>
 <li>只有在<code>catch</code>或者是<code>then</code>中返回<code>next()</code>才能跳转到下一个组件。</li>
 </ol>
-<h2 id="webpack-dev-middleware">五. 改造webpack-dev-middleware的例子</h2>
-<p><a href="https://github.com/zeromake/koa-webpack-middleware-zm/blob/master/lib/devMiddleware.js">devMiddleware.js</a>
+<h2 id="webpack-dev-middleware"><a name="user-content-webpack-dev-middleware" href="#webpack-dev-middleware" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>五. 改造webpack-dev-middleware的例子</h2>
+<p><a href="https://github.com/zeromake/koa-webpack-middleware-zm/blob/master/lib/devMiddleware.js">devMiddleware.js</a><br />
 <div class="codehilite"><pre><span></span><span class="kd">function</span> <span class="nx">koaDevMiddleware</span><span class="p">(</span><span class="nx">expressDevMiddleware</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="kd">function</span> <span class="nx">middleware</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="nx">expressDevMiddleware</span><span class="p">(</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">req</span><span class="p">,</span> <span class="p">{</span>
-                <span class="nx">end</span><span class="o">:</span> <span class="p">(</span><span class="nx">content</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="nx">end</span><span class="o">:</span> <span class="p">(</span><span class="nx">content</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
                     <span class="nx">ctx</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">content</span><span class="p">;</span>
                     <span class="nx">resolve</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
                 <span class="p">},</span>
-                <span class="nx">setHeader</span><span class="o">:</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="nx">setHeader</span><span class="o">:</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
                     <span class="nx">ctx</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
                 <span class="p">},</span>
-            <span class="p">},</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="p">},</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
                 <span class="nx">resolve</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
             <span class="p">});</span>
-        <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">next</span><span class="p">();</span> <span class="p">}</span>
             <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
         <span class="p">});</span>
@@ -244,13 +244,13 @@ koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代
 <span class="p">}</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">koaDevMiddleware</span><span class="p">;</span>
 </pre></div>
-
+<br />
 这是昨天最新的代码当时没想着用<code>reject</code>来通知<code>next</code>后面大概要改成这样。</p>
-<h2 id="webpack-hot-middleware">六. 改造webpack-hot-middleware的例子</h2>
-<p><a href="https://github.com/zeromake/koa-webpack-middleware-zm/blob/master/lib/hotMiddleware.js">hotMiddleware.js</a>
+<h2 id="webpack-hot-middleware"><a name="user-content-webpack-hot-middleware" href="#webpack-hot-middleware" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>六. 改造webpack-hot-middleware的例子</h2>
+<p><a href="https://github.com/zeromake/koa-webpack-middleware-zm/blob/master/lib/hotMiddleware.js">hotMiddleware.js</a><br />
 <div class="codehilite"><pre><span></span><span class="kd">function</span> <span class="nx">koaHotMiddleware</span><span class="p">(</span><span class="nx">expressHotMiddleware</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="kd">function</span> <span class="nx">middleware</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="nx">expressHotMiddleware</span><span class="p">(</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">req</span><span class="p">,</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">res</span><span class="p">,</span> <span class="nx">resolve</span><span class="p">);</span>
         <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">next</span><span class="p">);</span>
     <span class="p">};</span>
@@ -258,7 +258,7 @@ koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">koaHotMiddleware</span><span class="p">;</span>
 </pre></div>
 </p>
-<h2 id="_3">七. 例子源码</h2>
+<h2 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>七. 例子源码</h2>
 <ol>
 <li><a href="https://github.com/zeromake/koa-webpack-middleware-zm">koa-webpack-middleware-zm</a></li>
 <li>欢迎star，issues，fork, pr</li>
@@ -271,11 +271,21 @@ koa 的异步通过<code>Promise</code>来做这里我<code>then</code>不写代
 <li>添加<code>travis-ci</code>自动集成测试.</li>
 </ul>
 </blockquote>
-		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="73d9fdedec4e6cb4ec3aeaf3be4db65e" data-title="koa-webpack-middleware-zm" data-url="http://blog.zeromake.com/pages/koa-webpack-middleware/">
-		</div>
-	<!-- 多说评论框 end -->
-	</div>
+        <!-- 评论框 start -->
+        <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+        <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+        <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "73d9fdedec4e6cb4ec3aeaf3be4db65e",
+          productKey: "fdbc29879a2f440a948852bd87a7068b",
+          target: "cloud-tie-wrapper"
+        };
+        var yunManualLoad = true;
+        Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+        </script>
+        <!-- 评论框 end -->
+    </div>
 
 		</div>
 	</div>

@@ -12,11 +12,11 @@
 	<link rel="stylesheet" href="/static/css/markdownpad-github.css" type="text/css">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
 	
-	<link rel="stylesheet" href="/css/pygments.css">
-	<script type="text/javascript">
-		var duoshuoQuery = {short_name:"fly-zero"};
-	</script>
-	<script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/css/pygments.css">
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"fly-zero"};
+    </script>
+    <script src="//static.duoshuo.com/embed.js" charset="utf-8"></script>
 
 	
 </head>
@@ -33,13 +33,13 @@
 	<div class="zero_content">
 		<div class="markdown-content">
 			
-	<h1>karma使用webpack的代码覆盖率测试</h1>
-	<div class="markdown-body">
-		<div>创建时间: 2017-05-07 14:21:46</div>
-		<div>最后更新: 2017-05-07 23:23:37</div>
-		<div>博客原文:<a href="http://blog.zeromake.com/pages/karma-webpack-istanbul/">地址</a></div>
-		<hr>
-		<div class="toc">
+    <h1>karma使用webpack的代码覆盖率测试</h1>
+    <div class="markdown-body">
+        <div>创建时间: 2017-05-07 14:21:46</div>
+        <div>最后更新: 2017-05-07 23:23:37</div>
+        <div>博客原文:<a href="http://blog.zeromake.com/pages/karma-webpack-istanbul/">地址</a></div>
+        <hr>
+        <div class="toc">
 <ul>
 <li><a href="#_1">前言</a></li>
 <li><a href="#karma">一、karma的使用</a></li>
@@ -56,20 +56,20 @@
 <li><a href="#_2">五、总结</a></li>
 </ul>
 </div>
-<h2 id="_1">前言</h2>
+<h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>前言</h2>
 <ul>
 <li>距离上一次博客有2个月了，倒不是没有可写东西就是提不起劲写。</li>
 <li>不说这些了这次写下我使用 <code>karma + webpack</code> 中遇到的代码覆盖率问题。</li>
 </ul>
-<h2 id="karma">一、karma的使用</h2>
-<p>自个去搜吧，感觉讲这个的真的多。我就说一些建议。
+<h2 id="karma"><a name="user-content-karma" href="#karma" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>一、karma的使用</h2>
+<p>自个去搜吧，感觉讲这个的真的多。我就说一些建议。<br />
 - karma的测试框架改用mocha这样对于一个需要nodejs, browser测试的测试用例可以共用。具体的可以看我的 <a href="https://github.com/zeromake/marked-zm">marked-zm</a></p>
-<h2 id="karma-webpack">二、karma + webpack 的使用</h2>
+<h2 id="karma-webpack"><a name="user-content-karma-webpack" href="#karma-webpack" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>二、karma + webpack 的使用</h2>
 <p>依旧是很多人写过了，但是还是写下吧。</p>
-<h3 id="karma-webpack_1">配置karma + webpack</h3>
+<h3 id="karma-webpack_1"><a name="user-content-karma-webpack_1" href="#karma-webpack_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>配置karma + webpack</h3>
 <ul>
 <li>
-<p>需要的 npm 包
+<p>需要的 npm 包<br />
 <div class="codehilite"><pre><span></span>npm i karma karma-mocha karma-phantomjs-launcher karma-sinon-chai /
 karma-spec-reporter karma-webpack mocha sinon sinon-chai -D
 </pre></div>
@@ -117,15 +117,15 @@ karma-spec-reporter karma-webpack mocha sinon sinon-chai -D
     <span class="p">})</span>
 <span class="p">}</span>
 </pre></div>
-
-- test/unit/index.js
+<br />
+- test/unit/index.js<br />
 <div class="codehilite"><pre><span></span> <span class="c1">// 动态加载所有测试文件</span>
 <span class="kr">const</span> <span class="nx">testsContext</span> <span class="o">=</span> <span class="nx">require</span><span class="p">.</span><span class="nx">context</span><span class="p">(</span><span class="s1">&#39;./specs&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="sr">/\.spec$/</span><span class="p">)</span>
 <span class="nx">testsContext</span><span class="p">.</span><span class="nx">keys</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">testsContext</span><span class="p">)</span>
 </pre></div>
 </p>
 <ul>
-<li>test/unit/specs/test.spec.js
+<li>test/unit/specs/test.spec.js<br />
 <div class="codehilite"><pre><span></span><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;test 1+1&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
         <span class="nx">expect</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -134,18 +134,18 @@ karma-spec-reporter karma-webpack mocha sinon sinon-chai -D
 </pre></div>
 </li>
 </ul>
-<h3 id="karma-webapck">运行karma + webapck测试</h3>
+<h3 id="karma-webapck"><a name="user-content-karma-webapck" href="#karma-webapck" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>运行karma + webapck测试</h3>
 <p><div class="codehilite"><pre><span></span><span class="c1"># 开启 karma 动态构建</span>
 npm run karma-start
 <span class="c1"># new shell，运行一次测试</span>
 npm run karma-run
 </pre></div>
-
-或者直接单次构建并测试
+<br />
+或者直接单次构建并测试<br />
 <div class="codehilite"><pre><span></span>npm run karma-single
 </pre></div>
 </p>
-<h2 id="karma-webpack_2">三、karma + webpack 的代码覆盖率测试</h2>
+<h2 id="karma-webpack_2"><a name="user-content-karma-webpack_2" href="#karma-webpack_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>三、karma + webpack 的代码覆盖率测试</h2>
 <p>这里如果直接用 <code>karma-coverage</code> 会出现直接对 <code>karma</code> 配置中入口文件生成的 <code>webpack</code> 代码的代码覆盖率测试。会出现很多 <code>webpack</code> 生成的额外代码。</p>
 <p>而且也不是源代码的代码覆盖率测试。</p>
 <p>这里有两个方案:</p>
@@ -155,9 +155,9 @@ npm run karma-run
 <li><a href="https://github.com/mattlewis92/karma-coverage-istanbul-reporter">karma-coverage-istanbul-reporter</a> + <a href="https://github.com/webpack-contrib/istanbul-instrumenter-loader">istanbul-instrumenter-loader</a><br />
 这两个包除了 <code>README</code> 的说明没有找到更多的资料，只好自己试着用，下面直接看如何使用吧。</li>
 </ol>
-<h3 id="karma-webpack_3">配置 karma + webpack 的代码覆盖率测试</h3>
+<h3 id="karma-webpack_3"><a name="user-content-karma-webpack_3" href="#karma-webpack_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>配置 karma + webpack 的代码覆盖率测试</h3>
 <ul>
-<li>需要的其它 npm 包
+<li>需要的其它 npm 包<br />
 <div class="codehilite"><pre><span></span>npm i karma-coverage-istanbul-reporter istanbul-instrumenter-loader -D
 </pre></div>
 </li>
@@ -215,9 +215,9 @@ npm run karma-run
     <span class="p">})</span>
 <span class="p">}</span>
 </pre></div>
-
+<br />
 - 代码参考 <a href="https://github.com/zeromake/vue-dragging/tree/test">vue-dragging</a> or <a href="https://github.com/zeromake/marked-zm">marked-zm</a></p>
-<h2 id="nodejs-browser">四、nodejs, browser测试使用同一套测试用例</h2>
+<h2 id="nodejs-browser"><a name="user-content-nodejs-browser" href="#nodejs-browser" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>四、nodejs, browser测试使用同一套测试用例</h2>
 <ul>
 <li>package.json</li>
 </ul>
@@ -228,8 +228,8 @@ npm run karma-run
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
-
-- test/unit/common.js
+<br />
+- test/unit/common.js<br />
 <div class="codehilite"><pre><span></span><span class="nx">global</span><span class="p">.</span><span class="nx">chai</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;chai&quot;</span><span class="p">)</span>
 <span class="nx">global</span><span class="p">.</span><span class="nx">should</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;chai&quot;</span><span class="p">).</span><span class="nx">should</span><span class="p">()</span>
 <span class="nx">global</span><span class="p">.</span><span class="nx">expect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;chai&quot;</span><span class="p">).</span><span class="nx">expect</span>
@@ -238,19 +238,29 @@ npm run karma-run
 
 <span class="nx">chai</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">sinonChai</span><span class="p">)</span>
 </pre></div>
-
+<br />
 无需修改其它代码见 <a href="https://github.com/zeromake/marked-zm">marked-zm</a></p>
-<h2 id="_2">五、总结</h2>
+<h2 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>五、总结</h2>
 <ol>
 <li>下篇看看要不探讨 <code>ci</code> 集成，或者 <code>vue</code> 的面板组件直接加载组件并且切换不会丢失状态。</li>
 <li>原来想写 <code>npm</code> 包发布后来发觉满地都是，就算了。</li>
 <li></li>
 </ol>
-		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="28e0324ea96709c9af1fd8bdcd1f4d77" data-title="karma使用webpack的代码覆盖率测试" data-url="http://blog.zeromake.com/pages/karma-webpack-istanbul/">
-		</div>
-	<!-- 多说评论框 end -->
-	</div>
+        <!-- 评论框 start -->
+        <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+        <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+        <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "28e0324ea96709c9af1fd8bdcd1f4d77",
+          productKey: "fdbc29879a2f440a948852bd87a7068b",
+          target: "cloud-tie-wrapper"
+        };
+        var yunManualLoad = true;
+        Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+        </script>
+        <!-- 评论框 end -->
+    </div>
 
 		</div>
 	</div>
