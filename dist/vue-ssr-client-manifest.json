@@ -7,20 +7,20 @@
     "fonts/fontawesome-webfont.af7ae50.woff2",
     "fonts/fontawesome-webfont.fee66e7.woff",
     "fonts/fontawesome-webfont.674f50d.eot",
-    "1-282706124ce37862f999.js",
+    "1-80e0dbd7027d9521c903.js",
     "vendor-add53148a386aac09f1a.js",
     "app-c37822fd4797cc6194ea.js",
-    "manifest-60099d323c9dd691fc9f.js",
+    "manifest-1f96085c3e53544c4c6f.js",
     "common.c37822fd4797cc6194ea.css"
   ],
   "initial": [
-    "manifest-60099d323c9dd691fc9f.js",
+    "manifest-1f96085c3e53544c4c6f.js",
     "vendor-add53148a386aac09f1a.js",
     "app-c37822fd4797cc6194ea.js"
   ],
   "async": [
     "0-16dd0bfe07459932f84f.js",
-    "1-282706124ce37862f999.js"
+    "1-80e0dbd7027d9521c903.js"
   ],
   "modules": {
     "26213683": [
