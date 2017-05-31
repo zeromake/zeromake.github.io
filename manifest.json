@@ -1,0 +1,17 @@
+{
+  "name": "zeromake's blog",
+  "short_name": "zm-blog",
+  "icons": [{
+      "src": "/public/logo-120.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    },{
+      "src": "/public/logo-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }],
+  "start_url": "/",
+  "background_color": "#f2f3f5",
+  "display": "standalone",
+  "theme_color": "#f60"
+}
