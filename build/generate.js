@@ -152,6 +152,7 @@ const listens = app.listen(port, '0.0.0.0', () => {
         yield fse.copy(resolve('../dist'), `${docsPath}/dist`)
         yield fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
         yield fse.copy(resolve('../public'), `${docsPath}/public`)
+        yield fse.copy(resolve('../manifest.json'), `${docsPath}/manifest.json`)
     })
     const s = Date.now()
     const closeFun = () => {

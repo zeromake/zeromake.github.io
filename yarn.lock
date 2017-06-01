@@ -3056,7 +3056,7 @@ map-obj@^1.0.0, map-obj@^1.0.1:
 
 "marked-zm@https://github.com/zeromake/marked-zm/tarball/dev":
   version "0.0.1"
-  resolved "https://github.com/zeromake/marked-zm/tarball/dev#4d6d158fdc14707c067f0e7781d1005032b91a26"
+  resolved "https://github.com/zeromake/marked-zm/tarball/dev#3a20809cff1e5d930a051083b2d31b695262e073"
 
 math-expression-evaluator@^1.2.14:
   version "1.2.17"
