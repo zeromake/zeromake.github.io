@@ -1,7 +1,7 @@
 import { createAPI } from 'create-api'
 // import Axios from 'axios'
 
-const logRequests = !!process.env.DEBUG_API
+const logRequests = process.env.NODE_ENV !== 'production'
 
 const api = createAPI({
     version: '/v0',

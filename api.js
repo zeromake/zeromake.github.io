@@ -58,7 +58,7 @@ router.get('/api/posts.json', convert(function * (ctx, next) {
     }).map(filename => readMarkdown(postDir, filename, 300).then(({ yaml }) => Promise.resolve(yaml))))
     yamls.sort((a, b) => b.date - a.date)
     ctx.body = yamls
-    yield pify(fs.readdir)(postDir)
+    // yield pify(fs.readdir)(postDir)
 }))
 router.get('/api/pages/:page.json', convert(function * (ctx, next) {
     const page = ctx.params.page

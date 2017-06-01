@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div class="side">
-            <div class="top" id="back-top"></div>
+            <div class="top" id="back-top" @click="top"></div>
             <div class="arrows" id="nav-btn"></div>
         </div>
         <header class="header">
@@ -25,11 +25,20 @@
             </section>
             <section>
                 Proudly published with
-                <a href="">vue-ssr blog</a>
+                <a href="https://github.com/zeromake/zeromake.github.io/tree/gh-pages">vue-ssr blog</a>
             </section>
         </footer>
     </div>
 </template>
+<script>
+export default {
+    methods: {
+        top () {
+            window.scroll(0, 0)
+        }
+    }
+}
+</script>
 
 <style lang="stylus">
 @import url('../node_modules/font-awesome/css/font-awesome.min.css')

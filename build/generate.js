@@ -120,7 +120,6 @@ const listens = app.listen(port, '0.0.0.0', () => {
             const url = staticUrls[i]
             const lastIndex = url.lastIndexOf('/')
             const dirPath = url.substring(0, lastIndex)
-            console.log(docsPath, dirPath)
             if (!fs.existsSync(`${docsPath}${dirPath}`)) {
                 yield fse.mkdirs(`${docsPath}${dirPath}`)
             }
@@ -140,8 +139,6 @@ const listens = app.listen(port, '0.0.0.0', () => {
         }
         for (let i = 0; i < urls.length; i++) {
             const url = urls[i]
-            console.log(url)
-            console.log(docsPath)
             if (!fs.existsSync(`${docsPath}/${url}`)) {
                 yield fse.mkdirs(`${docsPath}/${url}`)
             }
