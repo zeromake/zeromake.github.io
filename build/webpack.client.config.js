@@ -26,8 +26,15 @@ const config = merge(base, {
             name: 'vendor',
             minChunks: function (module) {
                 return (
-                    /node_modules/.test(module.context) && !/\.css$/.test(module.require)
+                    module.resource &&
+                    /\.js$/.test(module.resource) &&
+                    module.resource.indexOf(
+                        path.join(__dirname, '../node_modules')
+                    ) === 0
                 )
+                /* return (
+                    /node_modules/.test(module.context) && !/\.css$/.test(module.require)
+                ) */
             }
         }),
         new webpack.optimize.CommonsChunkPlugin({

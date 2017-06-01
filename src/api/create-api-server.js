@@ -2,6 +2,7 @@ import LRU from 'lru-cache'
 // import Axios from 'axios'
 import fetch from 'node-fetch'
 
+const isProduction = process.env.NODE_ENV === 'production'
 export function createAPI ({ config, version }) {
     let api
     if (process.__API__) {
@@ -13,7 +14,7 @@ export function createAPI ({ config, version }) {
             onServer: true,
             cachedItems: LRU({
                 max: 1000,
-                maxAge: 1000 * 60 * 15
+                maxAge: isProduction ? 1000 * 60 * 15 : 100
             }),
             cachedIds: {},
             '$get': function (url) {

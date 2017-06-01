@@ -3054,9 +3054,9 @@ map-obj@^1.0.0, map-obj@^1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/map-obj/download/map-obj-1.0.1.tgz#d933ceb9205d82bdcf4886f6742bdc2b4dea146d"
 
-"marked-zm@https://github.com/zeromake/marked-zm/tarball/dev":
-  version "0.0.1"
-  resolved "https://github.com/zeromake/marked-zm/tarball/dev#3a20809cff1e5d930a051083b2d31b695262e073"
+"marked-zm@github:zeromake/marked-zm":
+  version "0.0.2"
+  resolved "https://codeload.github.com/zeromake/marked-zm/tar.gz/b9b5c10241536fb8e0697de2fddc0619bbcba980"
 
 math-expression-evaluator@^1.2.14:
   version "1.2.17"

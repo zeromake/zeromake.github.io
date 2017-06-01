@@ -67,7 +67,7 @@ app.use(serve('/service-worker.js', './dist/servivce-worker.js'))
 // 1-second microcache.
 const microCache = LRU({
     max: 100,
-    maxAge: 10000
+    maxAge: isProd ? 10000 : 100
 })
 // 根据请求信息判断是否微缓存
 const isCacheable = ctx => useMicroCache
