@@ -1,0 +1,25 @@
+{
+  "name": "zeromake-blog",
+  "version": "0.0.1",
+  "description": "ssr-blog",
+  "main": "server.js",
+  "repository": {},
+  "author": "zeromake <a390720046@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "^2.0.0",
+    "validate-commit-msg": "^2.12.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
+    }
+  }
+}
