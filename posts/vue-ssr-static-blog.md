@@ -12,3 +12,5 @@ last_date: 2017-06-01 14:37:39
 我使用的模板来自官方[demo](https://github.com/vuejs/vue-hackernews-2.0)的[修改版](https://github.com/zeromake/my-vue-hackernews)，vue-hackernews自带很多功能，比如`pwa`。
 我的修改版只是把`express`换成了`koa`,并且添加了一个生成静态页面的功能。
 
+## 二、blog数据api化
+
