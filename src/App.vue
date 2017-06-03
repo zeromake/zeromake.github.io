@@ -25,7 +25,7 @@
             </section>
             <section>
                 Proudly published with
-                <a href="https://github.com/zeromake/zeromake.github.io/tree/gh-pages">vue-ssr blog</a>
+                <a href="https://github.com/zeromake/zeromake.github.io">vue-ssr blog</a>
             </section>
         </footer>
     </div>
