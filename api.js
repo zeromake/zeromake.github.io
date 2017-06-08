@@ -15,6 +15,13 @@ marked.setOptions({
     }
 })
 
+/**
+* 读取yaml,markdown的混合文件
+* @param {String} fileDir - 文件夹
+* @param {String} fileName - 文件名
+* @param {Number} end - 文件读取截断(可选)
+* @returns {Promise.resolve(Object{yaml, markdown})} 返回一个Promise对象
+*/
 const readMarkdown = function (fileDir, fileName, end) {
     return new Promise(function (resolve, reject) {
         let isYaml = true
