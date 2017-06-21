@@ -1,8 +1,5 @@
 
 export default {
-    activeIds (state) {
-        return []
-    },
     activeItems (state, getters) {
         return state.items
     },

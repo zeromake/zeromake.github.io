@@ -6,7 +6,7 @@ const KoaServe = require('./build/serve')
 const serialize = require('serialize-javascript')
 const { createBundleRenderer } = require('vue-server-renderer')
 const LRU = require('lru-cache')
-const router = require('./api.js')
+const router = require('./build/api.js')
 
 const resolve = file => path.resolve(__dirname, file)
 

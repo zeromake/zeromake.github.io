@@ -131,3 +131,152 @@ app.use(router.routes()).use(router.allowedMethods())
 这样就整合完毕。
 
 ## 四、src下的router, store, api修改
+
+### router修改
+暂时只有两个页面。
+- posts
+``` javascript
+{ path: '/', component: postsView }
+```
+- pages
+``` javascript
+{ path: '/pages/:page', component: () => import('../views/Page') }
+```
+- scrollBehavior
+``` javascript
+scrollBehavior: (to, from) => {
+    // 排除pages页下的锚点跳转
+    if (to.path.indexOf('/pages/') === 0) {
+        return
+    }
+    return { y: 0 }
+}
+```
+### store
+- state
+``` javascript
+{
+    activeType: null, // 当前页的类型
+    itemsPerPage: 20,
+    items: [], // posts页的list_data
+    page: {}, // page页的data
+    activePage: null // 当前page页的name
+}
+```
+- actions
+``` javascript
+import {
+    fetchPostsByType,
+    fetchPage
+} from '../api'
+export default {
+    // 获取post列表数据
+    FETCH_LIST_DATA: ({ commit, dispatch, state }, { type }) => {
+        commit('SET_ACTIVE_TYPE', { type })
+        return fetchPostsByType(type)
+            .then(items => commit('SET_ITEMS', { type, items }))
+    },
+    // 获取博文页数据
+    FETCH_PAGE_DATA: ({ commit, state }, { page }) => {
+        commit('SET_ACTIVE_PAGE', { page })
+        const now = Date.now()
+        const activePage = state.page[page]
+        if (!activePage || (now - activePage.__lastUpdated > 1000 * 180)) {
+            return fetchPage(page)
+                .then(pageData => commit('SET_PAGE', { page, pageData }))
+        }
+    }
+}
+```
+- mutations
+``` javascript
+import Vue from 'vue'
+export default {
+    // 设置当前活动list页类型
+    SET_ACTIVE_TYPE: (state, { type }) => {
+        state.activeType = type
+    },
+    // 设置list页数据
+    SET_ITEMS: (state, { items }) => {
+        state.items = items
+    },
+    // 设置博文数据
+    SET_PAGE: (state, { page, pageData }) => {
+        Vue.set(state.page, page, pageData)
+    },
+    // 设置当前活动的博文页id
+    SET_ACTIVE_PAGE: (state, { page }) => {
+        state.activePage = page
+    }
+}
+```
+- getters
+```javascript
+export default {
+    // getters 大多在缓存时使用
+    // 获取活动list页数据
+    activeItems (state, getters) {
+        return state.items
+    },
+    // 获取活动博文页数据
+    activePage (state) {
+        return state.page[state.activePage]
+    }
+}
+```
+### api 修改
+- api-server
+``` javascript
+// server的api请求工具换成node-fetch并提供统一接口api.$get,api.$post
+import fetch from 'node-fetch'
+const api = {
+    // ...
+    '$get': function (url) {
+        return fetch(url).then(res => res.json())
+    },
+    '$post': function (url, data) {
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        }).then(res => res.json())
+    }
+}
+```
+- api-client
+``` javascript
+// 提供和client一样的接口
+import Axios from 'axios'
+const api = {
+    // ....
+    '$get': function (url) {
+        return Axios.get(url).then(res => Promise.resolve(res.data))
+    },
+    '$post': function (url, data) {
+        return Axios.post(url, data).then(res => Promise.resolve(res.data))
+    }
+}
+```
+
+## 五、components 修改
+
+这个就不写详细了普通的vue路由组件而已
+记得使用vuex里的数据并且判断如果不是server渲染时
+要手动去请求数据设置到vuex上。
+``` javascript
+export default {
+    // ...
+    // server时的预获取函数支持Promise对象返回
+    asyncData({ store, route }){
+        return new Promise()
+    },
+    // 设置标题
+    title(){
+        return '标题'
+    }
+}
+```
+## 六、静态html及api生成
+

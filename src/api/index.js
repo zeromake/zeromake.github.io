@@ -29,12 +29,12 @@ function fetch (child) {
     }
 }
 
-export function fetchIdsByType (type) {
+export function fetchPostsByType (type) {
     return api.cachedIds && api.cachedIds[type]
         ? Promise.resolve(api.cachedIds[type])
-        : fetch(`${type}`)
+        : fetch(type)
 }
-export function fetchItem (id) {
+export function fetchPage (id) {
     return fetch(`pages/${id}`)
 }
 

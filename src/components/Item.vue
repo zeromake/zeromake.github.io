@@ -19,7 +19,6 @@
 </template>
 
 <script>
-
 export default {
     name: 'news-item',
     props: ['item']
