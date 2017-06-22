@@ -8,7 +8,6 @@ import 'gitment/style/default.css'
 
 const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
 document.body.appendChild(bar.$el)
-console.log(Gitment)
 Vue.prototype.$gitment = Gitment
 
 /* Vue.mixin({

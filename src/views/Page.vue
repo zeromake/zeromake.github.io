@@ -35,16 +35,6 @@ export default {
         return this.$route.params.page
     },
     mounted () {
-        const page = this.$route.params.page
-        this.gitment = new this.$gitment({
-            id: page, // 可选。默认为 location.href
-            owner: 'zeromake',
-            repo: 'zeromake.github.io',
-            oauth: {
-                'client_id': '6f4e103c0af2b0629e01',
-                'client_secret': '22f0c21510acbdda03c9067ee3aa2aee0c805c9f'
-            }
-        })
         /* window.cloudTieConfig = {
             url: document.location.href,
             sourceId: '',
@@ -85,7 +75,17 @@ export default {
             })
         },
         loadYunTie () {
-            this.gitment.render('container')
+            const page = this.$route.params.page
+            const gitment = new this.$gitment({
+                id: page, // 可选。默认为 location.href
+                owner: 'zeromake',
+                repo: 'zeromake.github.io',
+                oauth: {
+                    'client_id': '6f4e103c0af2b0629e01',
+                    'client_secret': '22f0c21510acbdda03c9067ee3aa2aee0c805c9f'
+                }
+            })
+            gitment.render('container')
             /* var head = document.getElementsByTagName('head')[0]
             var script = document.createElement('script')
             script.id = 'netease-script'
