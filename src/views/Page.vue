@@ -111,6 +111,11 @@ export default {
     padding-bottom 10px
     border-bottom 1px solid #e0e0e0
 .markdown-body
+    box-sizing border-box
+    min-width 200px
+    max-width 980px
+    margin 0 auto
+    padding 35px
     pre
         box-shadow 0 1px 3px #e3e3e3
         .hljs-comment, .xml .hljs-doctype, .html .hljs-doctype, .html .hljs-meta, .xml .hljs-meta
@@ -147,4 +152,9 @@ export default {
             line-height 15px
             height 15px
             font-weight 600
+
+@media (max-width 767px)
+    .markdown-body
+        padding 15px
+
 </style>
