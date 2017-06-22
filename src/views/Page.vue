@@ -14,7 +14,7 @@
             </span>
             </div>
             <div class="markdown-body" v-html="pageData.body"></div>
-            <div v-pre id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+            <div v-pre id="container" class="container"></div>
         </div>
     </div>
 </template>
@@ -35,12 +35,23 @@ export default {
         return this.$route.params.page
     },
     mounted () {
-        window.cloudTieConfig = {
+        const page = this.$route.params.page
+        console.log(page)
+        this.gitment = new window.Gitment({
+            id: page, // 可选。默认为 location.href
+            owner: 'zeromake',
+            repo: 'zeromake.github.io',
+            oauth: {
+                'client_id': '6f4e103c0af2b0629e01',
+                'client_secret': '22f0c21510acbdda03c9067ee3aa2aee0c805c9f'
+            }
+        })
+        /* window.cloudTieConfig = {
             url: document.location.href,
             sourceId: '',
             productKey: 'fdbc29879a2f440a948852bd87a7068b',
             target: 'cloud-tie-wrapper'
-        }
+        } */
         if (!this.$root._isMounted) {
             this.loadYunTie()
         }
@@ -75,14 +86,15 @@ export default {
             })
         },
         loadYunTie () {
-            var head = document.getElementsByTagName('head')[0]
+            this.gitment.render('container')
+            /* var head = document.getElementsByTagName('head')[0]
             var script = document.createElement('script')
             script.id = 'netease-script'
             script.type = 'text/javascript'
             script.charset = 'utf-8'
             script.async = true
             script.src = 'https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js'// del;
-            head.appendChild(script)
+            head.appendChild(script) */
         }
     }
 }

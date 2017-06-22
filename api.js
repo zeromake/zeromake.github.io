@@ -1,13 +1,14 @@
 const KoaRuoter = require('koa-router')
-const co = require('co')
 const fs = require('fs')
 const path = require('path')
-const router = new KoaRuoter()
 const pify = require('pify')
 const readline = require('readline')
 const yaml = require('js-yaml')
 const marked = require('marked-zm')
 const hljs = require('highlight.js')
+const convert = require('koa-convert')
+
+const router = new KoaRuoter()
 marked.setOptions({
     langPrefix: '',
     highlight: function (code, lang) {
@@ -52,11 +53,7 @@ const readMarkdown = function (fileDir, fileName, end) {
 
 const postDir = path.resolve(__dirname, 'posts')
 
-const convert = function (fun) {
-    return (ctx, next) => co(fun, ctx, next)
-}
-
-router.get('/api/posts.json', convert(function * (ctx, next) {
+router.get('/api/posts.json', convert(function * (next) {
     const files = yield pify(fs.readdir)(postDir)
     const yamls = yield Promise.all(files.filter(filename => {
         if (filename.indexOf('.md') > 0) {
@@ -64,19 +61,19 @@ router.get('/api/posts.json', convert(function * (ctx, next) {
         }
     }).map(filename => readMarkdown(postDir, filename, 300).then(({ yaml }) => Promise.resolve(yaml))))
     yamls.sort((a, b) => b.date - a.date)
-    ctx.body = yamls
+    this.body = yamls
     // yield pify(fs.readdir)(postDir)
 }))
-router.get('/api/pages/:page.json', convert(function * (ctx, next) {
-    const page = ctx.params.page
+router.get('/api/pages/:page.json', convert(function * (next) {
+    const page = this.params.page
     if (fs.existsSync(path.join(postDir, page + '.md'))) {
         const { yaml, markdown } = yield readMarkdown(postDir, page + '.md')
         const pageBody = markdown && marked(markdown)
         yaml['body'] = pageBody
-        ctx.body = yaml
+        this.body = yaml
     } else {
-        ctx.status = 404
-        ctx.body = '404|Not Blog Page'
+        this.status = 404
+        this.body = '404|Not Blog Page'
     }
 }))
 module.exports = router
