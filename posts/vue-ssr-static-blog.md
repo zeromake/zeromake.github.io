@@ -1,7 +1,7 @@
 title: vue-ssr-static-blog
 date: 2017-06-01 14:37:39
 tags: [vue, static, blog, ssr]
-last_date: 2017-06-01 14:37:39
+last_date: 2017-06-22 14:37:39
 
 [TOC]
 ## 前言
