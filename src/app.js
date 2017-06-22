@@ -17,7 +17,6 @@ Object.keys(filters).forEach(key => {
 export function createApp (ssrContext) {
     const store = createStore()
     const router = createRouter()
-
     sync(store, router)
     const app = new Vue({
         router,

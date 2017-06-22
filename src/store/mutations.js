@@ -11,5 +11,8 @@ export default {
     },
     SET_ACTIVE_PAGE: (state, { page }) => {
         state.activePage = page
+    },
+    SET_CODE: (state, { code }) => {
+        state.code = code
     }
 }

@@ -27,6 +27,7 @@ export default {
     },
     data () {
         return {
+            code: null,
             flag: false,
             pageData: this.$store.getters.activePage || {}
         }
@@ -42,7 +43,9 @@ export default {
             target: 'cloud-tie-wrapper'
         } */
         if (!this.$root._isMounted) {
-            this.loadYunTie()
+            this.$nextTick(() => {
+                this.loadYunTie()
+            })
         }
     },
     beforeDestroy () {

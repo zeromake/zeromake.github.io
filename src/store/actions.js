@@ -17,5 +17,8 @@ export default {
             return fetchPage(page)
                 .then(pageData => commit('SET_PAGE', { page, pageData }))
         }
+    },
+    SET_CODE: ({ commit }, { code }) => {
+        commit('SET_CODE', { code })
     }
 }

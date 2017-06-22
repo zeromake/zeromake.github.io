@@ -13,6 +13,7 @@ export function createStore () {
             itemsPerPage: 20,
             items: [],
             page: {},
+            code: null,
             activePage: null
         },
         actions,

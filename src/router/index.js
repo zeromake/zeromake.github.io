@@ -7,7 +7,7 @@ const createListView = id => () => import('../views/CreateListView').then(m => m
 // import { createListView } from '../views/CreateListView'
 
 export function createRouter () {
-    return new Router({
+    const router = new Router({
         mode: 'history',
         scrollBehavior: (to, from) => {
             if (to.path.indexOf('/pages/') === 0) {
@@ -17,7 +17,9 @@ export function createRouter () {
         },
         routes: [
             { path: '/', component: createListView('posts') },
-            { path: '/pages/:page/', component: () => import('../views/Page') }
+            { path: '/pages/:page', component: () => import('../views/Page') }
         ]
     })
+
+    return router
 }
