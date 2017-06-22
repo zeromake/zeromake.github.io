@@ -36,8 +36,7 @@ export default {
     },
     mounted () {
         const page = this.$route.params.page
-        console.log(page)
-        this.gitment = new window.Gitment({
+        this.gitment = new this.$gitment({
             id: page, // 可选。默认为 location.href
             owner: 'zeromake',
             repo: 'zeromake.github.io',

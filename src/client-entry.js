@@ -3,9 +3,13 @@ import 'es6-promise/auto'
 // import 'font-awesome/css/font-awesome.min.css'
 import { createApp } from './app'
 import ProgressBar from 'components/ProgressBar.vue'
+import Gitment from 'gitment'
+import 'gitment/style/default.css'
 
 const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
 document.body.appendChild(bar.$el)
+console.log(Gitment)
+Vue.prototype.$gitment = Gitment
 
 /* Vue.mixin({
     beforeRouteUpdate (to, from, next) {

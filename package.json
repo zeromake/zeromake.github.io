@@ -21,6 +21,7 @@
     "es6-promise": "^4.1.0",
     "font-awesome": "^4.7.0",
     "github-markdown-css": "^2.8.0",
+    "gitment": "^0.0.3",
     "koa": "^2.3.0",
     "koa-router": "7.2.1",
     "koa-send": "^4.1.0",
