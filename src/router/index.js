@@ -17,7 +17,7 @@ export function createRouter () {
         },
         routes: [
             { path: '/', component: createListView('posts') },
-            { path: '/pages/:page', component: () => import('../views/Page') }
+            { path: '/pages/:page/', component: () => import('../views/Page') }
         ]
     })
 }
