@@ -35,7 +35,7 @@ export function fetchPostsByType (type) {
         : fetch(type)
 }
 export function fetchPage (id) {
-    return fetch(`pages/${id}`)
+    return fetch(`pages/${encodeURIComponent(id)}`)
 }
 
 /**

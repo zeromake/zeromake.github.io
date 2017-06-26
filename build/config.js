@@ -13,8 +13,8 @@ module.exports = {
             .then(data => {
                 for (let i = 0, len = data.length; i < len; i++) {
                     const element = data[i]
-                    renderUrls.push('pages/' + encodeURI(element.filename)) + '.html'
-                    const file_name = '/api/pages/' + encodeURI(element.filename) + '.json'
+                    renderUrls.push('pages/' + element.filename)
+                    const file_name = '/api/pages/' + element.filename + '.json'
                     staticUrls.push(file_name)
                 }
                 return Promise.resolve({

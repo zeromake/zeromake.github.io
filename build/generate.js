@@ -100,24 +100,26 @@ const listens = app.listen(port, '0.0.0.0', () => {
         }
         for (let i = 0, len = urls.staticUrls.length; i < len; i++) {
             const url = urls.staticUrls[i]
-            const lastIndex = url.lastIndexOf('/')
-            const dirPath = url.substring(0, lastIndex)
+            const decode = decodeURIComponent(url)
+            const lastIndex = decode.lastIndexOf('/')
+            const dirPath = decode.substring(0, lastIndex)
             if (!fs.existsSync(`${docsPath}${dirPath}`)) {
                 yield fse.mkdirs(`${docsPath}${dirPath}`)
             }
             const res = yield fetch(`${config.baseUrl}${url}`).then(res => res.text())
-            console.info('generate static file: ' + url)
-            yield fileSystem.writeFile(`${docsPath}${url}`, res)
+            console.info('generate static file: ' + decode)
+            yield fileSystem.writeFile(`${docsPath}${decode}`, res)
         }
         for (let i = 0, len = urls.renderUrls.length; i < len; i++) {
             const url = urls.renderUrls[i]
-            if (!fs.existsSync(`${docsPath}/${url}`)) {
-                yield fse.mkdirs(`${docsPath}/${url}`)
+            const decode = decodeURIComponent(url)
+            if (!fs.existsSync(`${docsPath}/${decode}`)) {
+                yield fse.mkdirs(`${docsPath}/${decode}`)
             }
             const html = yield render(url)
             const minHtml = minify(html, minifyOpt)
-            console.info('generate render: /' + url)
-            yield fileSystem.writeFile(`${docsPath}/${url}/index.html`, minHtml)
+            console.info('generate render: /' + decode)
+            yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, minHtml)
         }
         yield fse.copy(resolve('../dist'), `${docsPath}/dist`)
         yield fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)

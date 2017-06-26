@@ -44,7 +44,7 @@ const readMarkdown = function (fileDir, fileName, end) {
         })
         read.on('close', () => {
             const yamlObj = yaml.safeLoad(yamlData)
-            yamlObj['filename'] = fileName.substring(0, fileName.lastIndexOf('.'))
+            yamlObj['filename'] = encodeURIComponent(fileName.substring(0, fileName.lastIndexOf('.')))
             resolve({ yaml: yamlObj, markdown: end ? null : markdownData })
         })
     })
