@@ -30,11 +30,11 @@ export default {
     },
     computed: {
     },
-    beforeMount () {
+    /* beforeMount () {
         if (this.$root._isMounted) {
             this.loadItems()
         }
-    },
+    }, */
     beforeDestroy () {
     },
     watch: {
@@ -49,10 +49,10 @@ export default {
                 this.displayedItems = this.$store.getters.activeItems
                 this.$bar.finish()
             })
-        },
-        test () {
-            this.loading = !this.loading
         }
+        /* test () {
+            this.loading = !this.loading
+        }*/
     }
 }
 </script>

@@ -8,6 +8,12 @@ import 'gitment/style/default.css'
 
 const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
 document.body.appendChild(bar.$el)
+if (Object.defineProperty) {
+    Object.defineProperty(Vue.prototype, '$gitment', {
+        
+        enumerable: false
+    })
+}
 Vue.prototype.$gitment = Gitment
 
 /* Vue.mixin({
@@ -36,29 +42,26 @@ if (window.__INITIAL_STATE__) {
     store.replaceState(window.__INITIAL_STATE__)
 }
 router.onReady(() => {
-    /* router.beforeResolve((to, from, next) => {
+    router.beforeResolve((to, from, next) => {
         const matched = router.getMatchedComponents(to)
         const prevMatched = router.getMatchedComponents(from)
         let diffed = false
         const activated = matched.filter((c, i) => {
             return diffed || (diffed = (prevMatched[i] !== c))
         })
-        if (!activated.length) {
+        const asyncDataHooks = activated.map(c => c.asyncData).filter(_ => _)
+        if (!asyncDataHooks.length) {
             return next()
         }
         bar.start()
-        Promise.all(activated.map(c => {
-            if (c.asyncData) {
-                return c.asyncData({ store, route: to })
-            }
-        })).then(() => {
+        Promise.all(asyncDataHooks.map(hook => hook({ store, route: to }))).then(() => {
             bar.finish()
             next()
         }).catch(next)
-    }) */
+    })
     app.$mount('#app')
 })
 
-if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+if (process.env.NODE_ENV === 'production' && location.protocol === 'https:' && navigator.serviceWorker) {
     navigator.serviceWorker.register('/service-worker.js')
 }

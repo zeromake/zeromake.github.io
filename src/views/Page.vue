@@ -49,18 +49,18 @@ export default {
         }
     },
     beforeDestroy () {
-        const head = document.getElementsByTagName('head')[0]
+        /* const head = document.getElementsByTagName('head')[0]
         const script = document.getElementById('netease-script')
         if (head && script) {
             head.removeChild(script)
-        }
+        } */
     },
-    beforeMount () {
+    /* beforeMount () {
         if (this.$root._isMounted) {
             this.flag = true
             this.loadPage()
         }
-    },
+    }, */
     methods: {
         loadPage () {
             const page = this.$route.params.page
@@ -79,16 +79,18 @@ export default {
         },
         loadYunTie () {
             const page = this.$route.params.page
-            const gitment = new this.$gitment({
-                id: page, // 可选。默认为 location.href
-                owner: 'zeromake',
-                repo: 'zeromake.github.io',
-                oauth: {
-                    'client_id': '6f4e103c0af2b0629e01',
-                    'client_secret': '22f0c21510acbdda03c9067ee3aa2aee0c805c9f'
-                }
-            })
-            gitment.render('container')
+            if (this.$gitment) {
+                const gitment = new this.$gitment({
+                    id: page, // 可选。默认为 location.href
+                    owner: 'zeromake',
+                    repo: 'zeromake.github.io',
+                    oauth: {
+                        'client_id': '6f4e103c0af2b0629e01',
+                        'client_secret': '22f0c21510acbdda03c9067ee3aa2aee0c805c9f'
+                    }
+                })
+                gitment.render('container')
+            }
             /* var head = document.getElementsByTagName('head')[0]
             var script = document.createElement('script')
             script.id = 'netease-script'

@@ -52,6 +52,7 @@ if (process.env.NODE_ENV === 'production'){
         new SWPrecachePlugin({
             cacheId: 'ssr-blog',
             filename: 'service-worker.js',
+            minify: true,
             stripPrefixMulti: prefixMulti,
             dontCacheBustUrlsMatching: /./,
             /* dynamicUrlToDependencies: {

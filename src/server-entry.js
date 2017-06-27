@@ -6,14 +6,20 @@ export default context => {
     return new Promise((resolve, reject) => {
         const s = isDev && Date.now()
         const { app, router, store } = createApp(context)
-        router.push(context.url)
+        const { url } = context
+        const fullPath = router.resolve(url).route.fullPath
+        if (fullPath !== url) {
+            reject({ url: fullPath })
+            return
+        }
+        router.push(url)
         router.onReady(() => {
             const matchedComponents = router.getMatchedComponents()
             if (!matchedComponents.length) {
                 return reject({ code: 404 })
             }
-            Promise.all(matchedComponents.map(component => {
-                return component.asyncData && component.asyncData({
+            Promise.all(matchedComponents.map(({ asyncData }) => {
+                return asyncData && asyncData({
                     store,
                     route: router.currentRoute
                 })

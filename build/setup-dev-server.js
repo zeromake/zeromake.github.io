@@ -51,7 +51,7 @@ module.exports = function setupDevServer (app, cb) {
             ready(bundle, { clientManifest })
         }
     })
-    const expressHotMiddleware = require('webpack-hot-middleware')(clientCompiler)
+    const expressHotMiddleware = require('webpack-hot-middleware')(clientCompiler, { heartbeat: 5000 })
     app.use(koaHotMiddleware(expressHotMiddleware))
 
     const serverCompiler = webpack(serverConfig)
