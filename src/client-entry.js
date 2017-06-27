@@ -6,15 +6,21 @@ import ProgressBar from 'components/ProgressBar.vue'
 import Gitment from 'gitment'
 import 'gitment/style/default.css'
 
-const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
+const bar = new Vue(ProgressBar).$mount()
 document.body.appendChild(bar.$el)
 if (Object.defineProperty) {
-    Object.defineProperty(Vue.prototype, '$gitment', {
-        
-        enumerable: false
+    Object.defineProperty(Vue.prototype, '$bar', {
+        value: bar,
+        enumerable: true
     })
+    Object.defineProperty(Vue.prototype, '$gitment', {
+        value: Gitment,
+        enumerable: true
+    })
+} else {
+    Vue.prototype.$gitment = Gitment
+    Vue.prototype.$bar = bar
 }
-Vue.prototype.$gitment = Gitment
 
 /* Vue.mixin({
     beforeRouteUpdate (to, from, next) {
