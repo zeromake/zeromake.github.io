@@ -36,47 +36,9 @@ export default {
         return this.$route.params.page
     },
     mounted () {
-        /* window.cloudTieConfig = {
-            url: document.location.href,
-            sourceId: '',
-            productKey: 'fdbc29879a2f440a948852bd87a7068b',
-            target: 'cloud-tie-wrapper'
-        } */
-        if (!this.$root._isMounted) {
-            this.$nextTick(() => {
-                this.loadYunTie()
-            })
-        }
+        this.loadYunTie()
     },
-    beforeDestroy () {
-        /* const head = document.getElementsByTagName('head')[0]
-        const script = document.getElementById('netease-script')
-        if (head && script) {
-            head.removeChild(script)
-        } */
-    },
-    /* beforeMount () {
-        if (this.$root._isMounted) {
-            this.flag = true
-            this.loadPage()
-        }
-    }, */
     methods: {
-        loadPage () {
-            const page = this.$route.params.page
-            this.$bar.start()
-            this.$store.dispatch('FETCH_PAGE_DATA', {
-                page: page
-            }).then(() => {
-                this.pageData = this.$store.getters.activePage
-                this.$bar.finish()
-                if (this.flag) {
-                    this.$nextTick(() => {
-                        this.loadYunTie()
-                    })
-                }
-            })
-        },
         loadYunTie () {
             const page = this.$route.params.page
             if (this.$gitment) {
@@ -91,14 +53,6 @@ export default {
                 })
                 gitment.render('container')
             }
-            /* var head = document.getElementsByTagName('head')[0]
-            var script = document.createElement('script')
-            script.id = 'netease-script'
-            script.type = 'text/javascript'
-            script.charset = 'utf-8'
-            script.async = true
-            script.src = 'https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js'// del;
-            head.appendChild(script) */
         }
     }
 }
