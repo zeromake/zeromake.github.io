@@ -9,7 +9,7 @@ export default context => {
         const { url } = context
         const fullPath = router.resolve(url).route.fullPath
         if (fullPath !== url) {
-            reject({ url: fullPath })
+            reject({ status: 302, message: `"${fullPath}" !== "${url}"`, fullPath: fullPath })
             return
         }
         router.push(url)

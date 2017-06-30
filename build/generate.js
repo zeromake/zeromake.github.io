@@ -12,6 +12,12 @@ const { minify } = require('html-minifier')
 const router = require('./api.js')
 const { generateConfig } = require('./config')
 
+// 
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error(reason, promise)
+})
+
 const fileSystem = {
     readFile: pify(fs.readFile),
     mkdir: pify(fs.mkdir),
@@ -67,8 +73,11 @@ function render (url) {
     return new Promise (function (resolve, reject) {
         const s = Date.now()
         const handleError = err => {
-            console.log(err)
-            reject()
+            if (err.status == 302) {
+                render(err.fullPath).then(resolve, reject)
+            } else {
+                reject(err)
+            }
         }
         const context = {
             title: 'zeromake\'blog',
@@ -112,13 +121,13 @@ const listens = app.listen(port, '0.0.0.0', () => {
         }
         for (let i = 0, len = urls.renderUrls.length; i < len; i++) {
             const url = urls.renderUrls[i]
-            const decode = decodeURIComponent(url)
+            const decode = url === '/' ? '' : decodeURIComponent(url)
             if (!fs.existsSync(`${docsPath}/${decode}`)) {
                 yield fse.mkdirs(`${docsPath}/${decode}`)
             }
             const html = yield render(url)
             const minHtml = minify(html, minifyOpt)
-            console.info('generate render: /' + decode)
+            console.info('generate render: ' + decode)
             yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, minHtml)
         }
         yield fse.copy(resolve('../dist'), `${docsPath}/dist`)

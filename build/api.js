@@ -2,12 +2,14 @@ const KoaRuoter = require('koa-router')
 const co = require('co')
 const fs = require('fs')
 const path = require('path')
-const router = new KoaRuoter()
 const pify = require('pify')
 const readline = require('readline')
 const yaml = require('js-yaml')
 const marked = require('marked-zm')
 const hljs = require('highlight.js')
+const { postDir } = require('./config')
+
+const router = new KoaRuoter()
 marked.setOptions({
     langPrefix: '',
     highlight: function (code, lang) {
@@ -49,8 +51,6 @@ const readMarkdown = function (fileDir, fileName, end) {
         })
     })
 }
-
-const postDir = path.resolve(__dirname, '../posts')
 
 const convert = function (fun) {
     return (ctx, next) => co(fun, ctx, next)
