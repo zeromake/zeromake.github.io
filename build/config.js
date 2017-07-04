@@ -1,6 +1,7 @@
 const fetch = require('node-fetch')
 const path = require('path')
 module.exports = {
+    port: 8089,
     postDir: path.resolve(__dirname, '../posts'),
     generateConfig: {
         baseUrl: 'http://127.0.0.1:8089',

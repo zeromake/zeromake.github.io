@@ -279,4 +279,152 @@ export default {
 }
 ```
 ## 六、静态html及api生成
+- build/generate.js
+``` javascript
+const { generateConfig, port } = require('./config')
 
+function render (url) {
+    return new Promise (function (resolve, reject) {
+        const handleError = err => {
+            // 重定向处理
+            if (err.status == 302) {
+                render(err.fullPath).then(resolve, reject)
+            } else {
+                reject(err)
+            }
+        }
+    }
+}
+// 核心代码，通过co除去回调地狱
+const generate = (config) => co(function * () {
+    let urls = {}
+    const docsPath = config.docsPath
+    if (typeof config.urls === 'function') {
+        // 执行配置里的urls函数获取该静态化的url
+        urls  = yield config.urls(config.baseUrl)
+    } else {
+        urls = config.urls
+    }
+    // http静态文件(api)生成
+    for (let i = 0, len = urls.staticUrls.length; i < len; i++) {
+        const url = urls.staticUrls[i]
+        // 处理中文
+        const decode = decodeURIComponent(url)
+        const lastIndex = decode.lastIndexOf('/')
+        const dirPath = decode.substring(0, lastIndex)
+        if (!fs.existsSync(`${docsPath}${dirPath}`)) {
+            yield fse.mkdirs(`${docsPath}${dirPath}`)
+        }
+        const res = yield fetch(`${config.baseUrl}${url}`).then(res => res.text())
+        console.info('generate static file: ' + decode)
+        yield fileSystem.writeFile(`${docsPath}${decode}`, res)
+    }
+    // ssr html 生成
+    for (let i = 0, len = urls.renderUrls.length; i < len; i++) {
+        const url = urls.renderUrls[i]
+        // 处理中文和/ url处理
+        const decode = url === '/' ? '' : decodeURIComponent(url)
+        if (!fs.existsSync(`${docsPath}/${decode}`)) {
+            yield fse.mkdirs(`${docsPath}/${decode}`)
+        }
+        const html = yield render(url)
+        const minHtml = minify(html, minifyOpt)
+        console.info('generate render: ' + decode)
+        yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, minHtml)
+    }
+    // 生成的vue代码拷贝和静态文件拷贝
+    yield fse.copy(resolve('../dist'), `${docsPath}/dist`)
+    yield fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
+    yield fse.copy(resolve('../public'), `${docsPath}/public`)
+    yield fse.copy(resolve('../manifest.json'), `${docsPath}/manifest.json`)
+})
+const listens = app.listen(port, '0.0.0.0', () => {
+    console.log(`server started at localhost:${port}`)
+    const s = Date.now()
+    const closeFun = () => {
+        console.log(`generate: ${Date.now() - s}ms`)
+        listens.close(()=> {process.exit(0)})
+    }
+    generate(generateConfig).then(closeFun)
+})
+```
+- build/config.js
+``` javascript
+const fetch = require('node-fetch')
+const path = require('path')
+module.exports = {
+    port: 8089,
+    postDir: path.resolve(__dirname, '../posts'),
+    generateConfig: {
+        baseUrl: 'http://127.0.0.1:8089',
+        docsPath: path.resolve(__dirname, '../docs'),
+        urls: function (baseUrl) {
+            const beforeUrl = '/api/posts.json'
+            const staticUrls = [beforeUrl]
+            const renderUrls = ['/']
+            return fetch(`${baseUrl}${beforeUrl}`)
+            .then(res => res.json())
+            .then(data => {
+                for (let i = 0, len = data.length; i < len; i++) {
+                    const element = data[i]
+                    renderUrls.push('/pages/' + element.filename)
+                    const file_name = '/api/pages/' + element.filename + '.json'
+                    staticUrls.push(file_name)
+                }
+                return Promise.resolve({
+                    staticUrls,
+                    renderUrls
+                })
+            })
+        }
+    }
+}
+```
+## 六、gitment评论
+- src/client-entry.js
+``` javascript
+import Gitment from 'gitment'
+import 'gitment/style/default.css'
+
+Vue.prototype.$gitment = Gitment
+```
+- src/views/Page.vue
+``` javascript
+export default {
+    mounted() {
+        const page = this.$route.params.page
+        if (this.$gitment) {
+            const gitment = new this.$gitment({
+                id: page, // 可选。默认为 location.href
+                owner: 'zeromake',
+                repo: 'zeromake.github.io',
+                oauth: {
+                    'client_id': '6f4e103c0af2b0629e01',
+                    'client_secret': '22f0c21510acbdda03c9067ee3aa2aee0c805c9f'
+                }
+            })
+            gitment.render('container')
+        }
+    }
+}
+```
+注意如果使用了`vuex-router-sync`静态化后会发生`location.search`和`location.hash`丢失。
+因为`window.__INITIAL_STATE__`里的路由信息被静态化后是固定的。
+1. 去掉`vuex-router-sync`
+2. 手动补全
+``` javascript
+if (window.__INITIAL_STATE__) {
+    let url = location.pathname
+    if (location.search) url += location.search
+    if (location.hash) url += location.hash
+    const nowRoute = router.match(url)
+    window.__INITIAL_STATE__.route.query = nowRoute.query
+    window.__INITIAL_STATE__.route.hash = nowRoute.hash
+    store.replaceState(window.__INITIAL_STATE__)
+}
+```
+## 后记
+1. 代码：[vue-ssr-blog](https://github.com/zeromake/zeromake.github.io)
+2. 拖了一个月才把这篇博文写完，感觉已经没救了。
+3. 然后说下请千万不要学我用`vue-ssr`来做静态博客，实在是意义不大。
+4. 下一篇没有想好写什么，要不写下`Promise`，`co`实现？

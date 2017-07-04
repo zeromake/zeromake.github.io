@@ -10,7 +10,7 @@ const LRU = require('lru-cache')
 const fetch = require('node-fetch')
 const { minify } = require('html-minifier')
 const router = require('./api.js')
-const { generateConfig } = require('./config')
+const { generateConfig, port } = require('./config')
 
 // 
 
@@ -96,45 +96,44 @@ function render (url) {
 }
 app.use(router.routes()).use(router.allowedMethods())
 
-const port = process.env.PORT || 8089
+const generate = (config) => co(function * () {
+    let urls = {}
+    const docsPath = config.docsPath
+    if (typeof config.urls === 'function') {
+        urls  = yield config.urls(config.baseUrl)
+    } else {
+        urls = config.urls
+    }
+    for (let i = 0, len = urls.staticUrls.length; i < len; i++) {
+        const url = urls.staticUrls[i]
+        const decode = decodeURIComponent(url)
+        const lastIndex = decode.lastIndexOf('/')
+        const dirPath = decode.substring(0, lastIndex)
+        if (!fs.existsSync(`${docsPath}${dirPath}`)) {
+            yield fse.mkdirs(`${docsPath}${dirPath}`)
+        }
+        const res = yield fetch(`${config.baseUrl}${url}`).then(res => res.text())
+        console.info('generate static file: ' + decode)
+        yield fileSystem.writeFile(`${docsPath}${decode}`, res)
+    }
+    for (let i = 0, len = urls.renderUrls.length; i < len; i++) {
+        const url = urls.renderUrls[i]
+        const decode = url === '/' ? '' : decodeURIComponent(url)
+        if (!fs.existsSync(`${docsPath}/${decode}`)) {
+            yield fse.mkdirs(`${docsPath}/${decode}`)
+        }
+        const html = yield render(url)
+        const minHtml = minify(html, minifyOpt)
+        console.info('generate render: ' + decode)
+        yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, minHtml)
+    }
+    yield fse.copy(resolve('../dist'), `${docsPath}/dist`)
+    yield fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
+    yield fse.copy(resolve('../public'), `${docsPath}/public`)
+    yield fse.copy(resolve('../manifest.json'), `${docsPath}/manifest.json`)
+})
 const listens = app.listen(port, '0.0.0.0', () => {
     console.log(`server started at localhost:${port}`)
-    const generate = (config) => co(function * () {
-        let urls = {}
-        const docsPath = config.docsPath
-        if (typeof config.urls === 'function') {
-            urls  = yield config.urls(config.baseUrl)
-        } else {
-            urls = config.urls
-        }
-        for (let i = 0, len = urls.staticUrls.length; i < len; i++) {
-            const url = urls.staticUrls[i]
-            const decode = decodeURIComponent(url)
-            const lastIndex = decode.lastIndexOf('/')
-            const dirPath = decode.substring(0, lastIndex)
-            if (!fs.existsSync(`${docsPath}${dirPath}`)) {
-                yield fse.mkdirs(`${docsPath}${dirPath}`)
-            }
-            const res = yield fetch(`${config.baseUrl}${url}`).then(res => res.text())
-            console.info('generate static file: ' + decode)
-            yield fileSystem.writeFile(`${docsPath}${decode}`, res)
-        }
-        for (let i = 0, len = urls.renderUrls.length; i < len; i++) {
-            const url = urls.renderUrls[i]
-            const decode = url === '/' ? '' : decodeURIComponent(url)
-            if (!fs.existsSync(`${docsPath}/${decode}`)) {
-                yield fse.mkdirs(`${docsPath}/${decode}`)
-            }
-            const html = yield render(url)
-            const minHtml = minify(html, minifyOpt)
-            console.info('generate render: ' + decode)
-            yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, minHtml)
-        }
-        yield fse.copy(resolve('../dist'), `${docsPath}/dist`)
-        yield fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
-        yield fse.copy(resolve('../public'), `${docsPath}/public`)
-        yield fse.copy(resolve('../manifest.json'), `${docsPath}/manifest.json`)
-    })
     const s = Date.now()
     const closeFun = () => {
         console.log(`generate: ${Date.now() - s}ms`)
