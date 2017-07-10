@@ -15,6 +15,22 @@ last_date: 2016-8-12 14:09:50
 官网: [http://www.commonjs.org](http://www.commonjs.org)
 现常用于`nodejs`,每一个文件都是一个模块,使用`require`方法引入文件它会把引入的文件执行并最后将文件中的exports对象返回.这样好处就是不再污染全局域.但是有一点它是同步的就是你引入了就会加载文件.
 官方说明可以使用在浏览器环境上，当然并没有人用.
+你可以把每个require的js文件都是被包在一个方法里的。
+然后外部通过执行这个方法后。
+``` javascript
+var exports = {
+}
+var module = {
+    exports: exports
+}
+var require = function(name) {
+    ...
+}
+(function(exports, module, ) {
+
+})(exports, module, require)
+```
+
 ### 2.AMD(Asynchronous Module Definition)规范
 
 规范文档: [https://github.com/amdjs/amdjs-api/wiki/AMD](https://github.com/amdjs/amdjs-api/wiki/AMD)
