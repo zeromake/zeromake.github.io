@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const MFS = require('memory-fs')
 const clientConfig = require('./webpack.client.config')
 const serverConfig = require('./webpack.server.config')
+const chokidar = require('chokidar')
 const { koaDevMiddleware, koaHotMiddleware } = require('koa-webpack-middleware-zm')
 
 const readFile = (fs, file) => {

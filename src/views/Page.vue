@@ -72,6 +72,8 @@ export default {
     max-width 980px
     margin 0 auto
     padding 35px
+    code
+        color #c7254e
     pre
         box-shadow 0 1px 3px #e3e3e3
         .hljs-comment, .xml .hljs-doctype, .html .hljs-doctype, .html .hljs-meta, .xml .hljs-meta
@@ -87,6 +89,8 @@ export default {
     pre.code
         font-size 0.8em
         position relative
+        code
+            color inherit
         &.html:after
             content 'HTML'
         &.js:after
