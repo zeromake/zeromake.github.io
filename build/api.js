@@ -13,7 +13,20 @@ const router = new KoaRuoter()
 marked.setOptions({
     langPrefix: '',
     highlight: function (code, lang) {
-        return hljs.highlightAuto(code).value
+        console.log(lang)
+        if (lang){
+            try {
+                const str = hljs.highlight(lang, code)
+                console.log(str.language)
+                console.log(str.value)
+                                
+                return str.value
+            } catch(e) {
+                console.error(e)
+                return hljs.highlightAuto(code)
+            }
+        }
+        return hljs.highlightAuto(code)
     }
 })
 

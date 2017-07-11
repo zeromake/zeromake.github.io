@@ -66,20 +66,127 @@ console.log(5);
 8. 在状态改变为`FULFILLED`或`REJECTED`时会回调当前`Promise`实例的队列。
 
 ## 二、Promise的简易实现
-### 1. Promise Api
+- Promise Api
 下面是`Promise`的所有开放api这里为了区分与原生的所以类名叫`Appoint`。
 顺便为了学习`typescript`
 ``` typescript
 class Appoint {
-    public static resolve(value): Appoint
-    public static reject(error): Appoint
-    public static all(iterable: Appoint[]): Appoint
-    public static race(iterable): Appoint
-    constructor<U>(resolver: () => U)
-    public then<U>(
-        onFulfilled?: (value: any) => U,
-        onRejected?: (error: any) => U,
-    ): Appoint
-    public catch(onRejected: (error: any) => U): Appoint
+    public constructor(resolver: Function){};
+    public then(onFulfilled, onRejected): Appoint {};
+    public catch(onRejected): Appoint {};
+    public static resolve(value): Appoint {};
+    public static reject(error): Appoint {};
+    public static all(iterable: Appoint[]): Appoint {};
+    public static race(iterable): Appoint {};
+}
+```
+- Appoint构造
+``` typescript
+function INTERNAL() {}
+enum AppointState {
+    PENDING,
+    FULFILLED,
+    REJECTED,
+}
+class Appoint {
+    public handled: boolean;
+    public value: any;
+    public queue: QueueItem[];
+    private state: AppointState;
+    public constructor(resolver: Function){
+        if (!isFunction(resolver)) {
+            throw new TypeError("resolver must be a function");
+        }
+        // 设置当前实例状态
+        this.state = AppointState.PENDING;
+        this.value = void 0;
+        // 初始化回调队列
+        this.queue = [];
+        // true代表没有设置then
+        this.handled = true;
+        if (resolver !== INTERNAL) {
+            // 安全执行传入的函数
+            safelyResolveThen(this, resolver);
+        }
+    }
+}
+```
+- safelyResolveThen
+``` typescript
+function safelyResolveThen(self: Appoint, then: (arg: any) => any) {
+    let called: boolean = false;
+    try {
+        then(function resolvePromise(value: any) {
+            if (called) {
+                return;
+            }
+            // 保证doResolve，doReject只执行一次
+            called = true;
+            // 改变当前状态以及调用回调队列
+            doResolve(self, value);
+        }, function rejectPromise(error: Error) {
+            if (called) {
+                return;
+            }
+            // 同上
+            called = true;
+            doReject(self, error);
+        });
+    } catch (error) {
+        // 特别捕捉错误
+        if (called) {
+            return;
+        }
+        called = true;
+        doReject(self, error);
+    }
+}
+```
+- doResolve, doReject
+``` typescript
+function doResolve(self: Appoint, value: any) {
+    try {
+        // 判断是否为Promise
+        const then = getThen(value);
+        if (then) {
+            //
+            safelyResolveThen(self, then);
+        } else {
+            // 改变状态
+            self.setState(AppointState.FULFILLED);
+            self.value = value;
+            // 调用回调队列
+            self.queue.forEach((queueItem) => {
+                queueItem.callFulfilled(value);
+            });
+        }
+        return self;
+    } catch (error) {
+        return doReject(self, error);
+    }
+}
+function doReject(self: Appoint, error: Error) {
+    // 改变状态
+    self.setState(AppointState.REJECTED);
+    self.value = error;
+    if (self.handled) {
+        // 未设置then回调
+        asap(() => {
+            // 创建一个异步任务保证代码都执行了再判断
+            if (self.handled) {
+                if (typeof process !== "undefined") {
+                    // node 环境下触发unhandledRejection事件
+                    process.emit("unhandledRejection", error, self);
+                } else {
+                    // 浏览器环境直接打印即可
+                    console.error(error);
+                }
+            }
+        });
+    }
+    self.queue.forEach((queueItem) => {
+        queueItem.callRejected(error);
+    });
+    return self;
 }
 ```
