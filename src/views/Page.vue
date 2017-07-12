@@ -13,7 +13,7 @@
                 <span class="meta-tag" v-for="meta_tag in pageData.tags" :key="meta_tag">{{ meta_tag }}</span>
             </span>
             </div>
-            <div class="markdown-body" v-html="pageData.body"></div>
+            <div class="markdown-body" v-html="pageData.body" v-once></div>
             <div v-pre id="container" class="container"></div>
         </div>
     </div>
