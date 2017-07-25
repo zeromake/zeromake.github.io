@@ -1,7 +1,7 @@
 title: preact源码解读(1)-createElement
 date: 2017-07-24 16:23:04
 tags: [preact, source, read]
-last_date: 2017-07-24 16:23:04
+last_date: 2017-07-25 12:29:04
 
 ## 前言
 
@@ -32,10 +32,10 @@ class App extends Component {
         return <h1>App</h1>;
     }
 }
-
+var test = "";
 render(
     <div className="test">
-        <span>测试</span>
+        <span style={test}>测试</span>
         <App></App>
     </div>
 ， document.body)
@@ -62,12 +62,13 @@ class App extends Component {
         return h("h1", null, "App");
     }
 }
+var test = "";
 render(
     h(
         "div",
         { className: "test" },
-        h(App),
-        h("span", null, "测试")
+        h("span", { style: test }, "测试"),
+        h(App)
     )，
     document.body
 )
@@ -104,7 +105,8 @@ class VNode {
 1. 第一个参数为原生html组件或者`Component`类。
 2. 第二个参数为该组件的属性，及自定义属性。
 3. 第三个参数及后面的所有都是这个组件的子组件。
-4. 最后返回一个`VNode`实例。
+4. 其中第三个及后面的参数为数组就会被分解放入子组件中。
+5. 最后返回一个`VNode`实例。
 
 ## 二、createElement的实现
 
@@ -193,3 +195,18 @@ function h(nodeName: string | Component, attributes: IKeyValue, ...args: any[]) 
 }
 ```
 
+这个标准jsx的`VNode`生成函数很简单，这边要注意的是子组件是连续的字符串。
+会被合并成一个，这样可以防止在生成dom时，创建多余的`Text`。
+
+## 三、后记
+
+- 这次的blog感觉好短，但是对于一个createElement函数我已经没有东西写了。
+- 话说回来vue的template，现在看来不如说是一个变异的jsx语法。
+- 感觉明明是在读preact源码却对vue的实现更加的理解了。
+- 下一篇应该是`Component`了。
+
+## 四、资料
+
+1. [preact源码](https://github.com/developit/preact)
+2. [zreact源码](https://github.com/zeromake/zreact)
+3. [React 初窥：JSX 详解](https://segmentfault.com/a/1190000010297507)
