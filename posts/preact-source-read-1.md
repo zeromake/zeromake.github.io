@@ -1,7 +1,9 @@
-title: preact源码解读(1)-createElement
+title: preact源码解读(1)
 date: 2017-07-24 16:23:04
 tags: [preact, source, read]
 last_date: 2017-07-25 12:29:04
+
+[TOC]
 
 ## 前言
 
@@ -198,14 +200,39 @@ function h(nodeName: string | Component, attributes: IKeyValue, ...args: any[]) 
 这个标准jsx的`VNode`生成函数很简单，这边要注意的是子组件是连续的字符串。
 会被合并成一个，这样可以防止在生成dom时，创建多余的`Text`。
 
-## 三、后记
+## 三、clone-element
 
-- 这次的blog感觉好短，但是对于一个createElement函数我已经没有东西写了。
+``` typescript
+import { h } from "./h";
+import { VNode } from "./vnode";
+import { extend } from "./util";
+
+/**
+ * 通过VNode对象新建一个自定义的props，children的VNode对象
+ * @param vnode 旧vnode
+ * @param props 新的props
+ * @param children 新的子组件
+ */
+export function cloneElement(vnode: VNode, props: any, ...children: any[]) {
+    const child: any = children.length > 0 ? children : vnode.children;
+    return h(
+        vnode.nodeName,
+        extend({}, vnode.attributes, props),
+        child,
+    );
+}
+```
+
+clone-element依赖于createElement
+
+## 四、后记
+
+- 这次的blog感觉好短，我已经没有东西写了。
 - 话说回来vue的template，现在看来不如说是一个变异的jsx语法。
 - 感觉明明是在读preact源码却对vue的实现更加的理解了。
 - 下一篇应该是`Component`了。
 
-## 四、资料
+## 五、资料
 
 1. [preact源码](https://github.com/developit/preact)
 2. [zreact源码](https://github.com/zeromake/zreact)
