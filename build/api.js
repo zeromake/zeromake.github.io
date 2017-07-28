@@ -53,6 +53,12 @@ const readMarkdown = function (fileDir, fileName, end) {
         })
         read.on('close', () => {
             const yamlObj = yaml.safeLoad(yamlData)
+            // if (yamlObj.date) {
+            //     yamlObj.date = new Date(yamlObj.date + 8 * 3600000)
+            // }
+            // if (yamlObj.date) {
+            //     yamlObj.last_date = new Date(yamlObj.last_date + 8 * 3600000)
+            // }
             yamlObj['filename'] = encodeURIComponent(fileName.substring(0, fileName.lastIndexOf('.')))
             resolve({ yaml: yamlObj, markdown: end ? null : markdownData })
         })

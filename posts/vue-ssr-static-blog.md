@@ -1,7 +1,7 @@
 title: vue-ssr-static-blog
-date: 2017-06-01 14:37:39
+date: 2017-06-01 14:37:39+08:00
 tags: [vue, static, blog, ssr]
-last_date: 2017-06-22 14:37:39
+last_date: 2017-06-22 14:37:39+08:00
 
 [TOC]
 ## 前言
@@ -15,7 +15,7 @@ last_date: 2017-06-22 14:37:39
 ## 二、blog数据api化
 ### 1. 思路
 我的`blog`之前是用的`hexo`的格式写的`markdown`具体格式是
-``` 
+```
 title: vue-ssr-static-blog
 date: 2017-06-01 14:37:39//yaml object
 //通过一个空白换行进行分割
@@ -97,7 +97,7 @@ router.get('/api/posts.json', convert(function * (ctx, next) {
         if (filename.indexOf('.md') > 0) {
             return true
         }
-    }).map(filename => 
+    }).map(filename =>
         readMarkdown(postDir, filename, 300)
             .then(({ yaml }) => Promise.resolve(yaml))
     ))

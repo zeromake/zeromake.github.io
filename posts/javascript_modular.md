@@ -1,7 +1,7 @@
 title: javascript的模块化
-date: 2016-8-12 12:18:25
+date: 2016-8-12 12:18:25+08:00
 tags: [javascript, amd, cmd, commonjs, umd]
-last_date: 2016-8-12 14:09:50
+last_date: 2016-8-12 14:09:50+08:00
 
 [TOC]
 ## 一、为何而生
@@ -65,7 +65,7 @@ define(function(require, exports, module){
 	module.export={
 		//```
 	}
-	
+
 });
 ```
 这样的好处不用在参数中声明.

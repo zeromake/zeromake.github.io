@@ -1,7 +1,7 @@
 title: koa-webpack-middleware-zm
-date: 2017-03-01 21:33:04
+date: 2017-03-01 21:33:04+08:00
 tags: [node, js, npm]
-last_date: 2017-03-05 12:26:04
+last_date: 2017-03-05 12:26:04+08:00
 
 [TOC]
 ## 前言

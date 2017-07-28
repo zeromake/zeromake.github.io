@@ -1,7 +1,7 @@
 title: karma使用webpack的代码覆盖率测试
-date: 2017-05-07 14:21:46
+date: 2017-05-07 14:21:46+08:00
 tags: [karma, webpack, istanbul]
-last_date: 2017-05-07 23:23:37
+last_date: 2017-05-07 23:23:37+08:00
 
 [TOC]
 ## 前言
@@ -97,9 +97,9 @@ npm run karma-single
 
 这里有两个方案:
 
-1. [karma-coverage](https://github.com/karma-runner/karma-coverage) + [isparta-loader](https://github.com/deepsweet/isparta-loader)  
+1. [karma-coverage](https://github.com/karma-runner/karma-coverage) + [isparta-loader](https://github.com/deepsweet/isparta-loader)
 来自 [element-ui](https://github.com/ElemeFE/element) 然后去看 `isparta-loader` 发觉作者已经废弃推荐换到 `istanbul-instrumenter-loader` 所以这个我也不用了，直接看另一个方案吧。
-2. [karma-coverage-istanbul-reporter](https://github.com/mattlewis92/karma-coverage-istanbul-reporter) + [istanbul-instrumenter-loader](https://github.com/webpack-contrib/istanbul-instrumenter-loader)  
+2. [karma-coverage-istanbul-reporter](https://github.com/mattlewis92/karma-coverage-istanbul-reporter) + [istanbul-instrumenter-loader](https://github.com/webpack-contrib/istanbul-instrumenter-loader)
 这两个包除了 `README` 的说明没有找到更多的资料，只好自己试着用，下面直接看如何使用吧。
 
 ### 配置 karma + webpack 的代码覆盖率测试
@@ -137,7 +137,7 @@ module.exports = function(config) {
             './index.js': ['webpack'] // 使用什么配置
         },
         // 增加代码覆盖率输出插件
-        reporters: ['spec'，'coverage-istanbul'], 
+        reporters: ['spec'，'coverage-istanbul'],
         port: 9876, // 端口
         colors: true,
         logLevel: config.LOG_INFO,
@@ -175,7 +175,7 @@ module.exports = function(config) {
     }
 }
 ```
-- test/unit/common.js  
+- test/unit/common.js
 ``` javascript
 global.chai = require("chai")
 global.should = require("chai").should()

@@ -1,7 +1,7 @@
 title: Vue2(not_webpack)
-date: 2016-11-4 13:10:25
+date: 2016-11-4 13:10:25+08:00
 tags: [vue2, requirejs]
-last_date: 2016-11-4 15:07:50
+last_date: 2016-11-4 15:07:50+08:00
 
 看到各种vue入门全部都是webpack的我表示没有什么问题。但是却发觉无法将这些webpack的工作流推荐给其它人。一说npm,webpack,babel什么的纷纷表示太麻烦。
 
@@ -142,7 +142,7 @@ new Vue({
 	});
 	/*另一种requirejs的模块声明
 	define(['vue'], function(Vue){
-		
+
 	});
 	*/
 })(require, define);

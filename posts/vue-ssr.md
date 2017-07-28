@@ -1,7 +1,7 @@
 title: vue-ssr
-date: 2017-2-18 13:17:25
+date: 2017-2-18 13:17:25+08:00
 tags: [vue, ssr]
-last_date: 2017-2-19 18:17:25
+last_date: 2017-2-19 18:17:25+08:00
 
 [TOC]
 ## 前言
@@ -151,7 +151,7 @@ function parseIndex (template) {
         tail: template.slice(i + contentMarker.length)
     }
 }// [L60-L78]
-// 模拟api 
+// 模拟api
 app.use('/api/topstories.json', serve('./public/api/topstories.json'))
 app.use('/api/newstories.json', serve('./public/api/newstories.json'))
 // 模拟了/api/item/xx.json的接口
@@ -256,28 +256,28 @@ app.get('*', (req, res) => {
     })
 ```
 ### 3. build/webpack.base.config.js
-> require: ['build/vue-loader.config.js'] 
+> require: ['build/vue-loader.config.js']
 >
 > 因为其它webpack配置都依赖这个所以就先说这个
-> 
+>
 > 其中build/vue-loader.config.js并没有什么对ssr有关的内容就不说明了
-> 
+>
 > 然后这个配置文件就是很普通的webpack2配置文件满地都是就不说了代码
-> 
+>
 > entry 默认是client, 对vue-loader做了css插件引入配置对ssr没什么用
 
 ### 4. build/webpack.client.config.js
 > require: ['build/vue-loader.config.js', 'build/webpack.base.config.js']
 > webpack_require: ['src/cilent-entry.js']
-> 
+>
 > 在resolve的alias设置好api为client的js导入
-> 
+>
 > 设置好环境变量
-> 
+>
 > 添加HtmlPlugin来生成index.html
-> 
+>
 > 剩下的也和ssr无关
- 
+
 ### 5. bulid/webpack.client.config.js
 > require: ['build/webpack.base.config.js']
 > webpack_require: ['src/server-entry.js']
@@ -467,7 +467,7 @@ export function createListView (type) {
                     return
                 }
                 this.transition = from === -1 ? null : to > from ? 'slide-left' : 'slide-right'
-                this.displayedPage = to 
+                this.displayedPage = to
                 this.displayedItems = this.$store.getters.activeItems
                 this.loading = false
             })

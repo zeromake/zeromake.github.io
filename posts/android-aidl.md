@@ -1,5 +1,5 @@
 title: Android的aidl相互通信机制
-date: 2016-01-03 13:42:01
+date: 2016-01-03 13:42:01+08:00
 tags: [Android,aidl,IBind]
 
 ## Service使用aidl的与Activity相互交互
@@ -83,7 +83,7 @@ public class ActivityClient extends Activity implements OnClickListener,ServiceC
         public void onServiceConnected(ComponentName name, IBinder service) {
     		mAsInterface = IMyAidl.Stub.asInterface(service);
     	}
-    
+
     	@Override
     	public void onServiceDisconnected(ComponentName name) {
     	}
@@ -115,7 +115,7 @@ interface IMyAidl {
 	void unregisterCallback(IMyAidlCallBack cb);
 }
 ```
-Service：ServiceMain.java 
+Service：ServiceMain.java
 ``` java
 public class ServiceMain extends Service {
 	public final static String SERVICE_CLASS_NAME = "zero.musicplay.service.ServiceMain";
