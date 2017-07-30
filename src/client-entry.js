@@ -5,6 +5,7 @@ import { createApp } from './app'
 import ProgressBar from 'components/ProgressBar.vue'
 import Gitment from 'gitment'
 import 'gitment/style/default.css'
+// import flowchart from 'flowchart.js/release/flowchart.js'
 
 const bar = new Vue(ProgressBar).$mount()
 document.body.appendChild(bar.$el)
@@ -17,9 +18,14 @@ if (Object.defineProperty) {
         value: Gitment,
         enumerable: true
     })
+    // Object.defineProperty(Vue.prototype, '$flowchart', {
+    //     value: flowchart,
+    //     enumerable: true
+    // })
 } else {
     Vue.prototype.$gitment = Gitment
     Vue.prototype.$bar = bar
+    // Vue.prototype.$flowchart = flowchart
 }
 
 /* Vue.mixin({

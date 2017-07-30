@@ -15,6 +15,7 @@
             </div>
             <div class="markdown-body" v-html="pageData.body" v-once></div>
             <div v-pre id="container" class="container"></div>
+            <div v-pre id="flow-diagram" style="display: none"></div>
         </div>
     </div>
 </template>
@@ -37,6 +38,15 @@ export default {
     },
     mounted () {
         this.loadYunTie()
+        // const nodeList = document.querySelectorAll('.flow')
+        // const flowDiagram = document.querySelector('#flow-diagram')
+        // Array.prototype.forEach.call(nodeList, (node) => {
+        //     const code = node.innerText.replace(/\\n/g, '\n')
+        //     const diagram = this.$flowchart.parse(code)
+        //     diagram.drawSVG('flow-diagram')
+        //     console.log()
+        //     node.innerHTML = flowDiagram.innerHTML
+        // })
     },
     methods: {
         loadYunTie () {
