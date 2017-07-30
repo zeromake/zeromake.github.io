@@ -10,19 +10,19 @@ const hljs = require('highlight.js')
 const { postDir } = require('./config')
 
 const router = new KoaRuoter()
-marked.use(function(self) {
-    const defaultCode = self.Renderer.prototype.code
-    self.Renderer.prototype.code = function (code, lang, escaped) {
-        if (lang === 'flow') {
-            return '<div class="flow">'+ code.replace(/\n/g, "\\n") +'</div>'
-        } else {
-            return defaultCode(code, lang, escaped)
-        }
-    }
-    return {
-        type: "code"
-    }
-})
+// marked.use(function(self) {
+//     const defaultCode = self.Renderer.prototype.code
+//     self.Renderer.prototype.code = function (code, lang, escaped) {
+//         if (lang === 'flow') {
+//             return '<div class="flow">'+ code.replace(/\n/g, "\\n") +'</div>'
+//         } else {
+//             return defaultCode(code, lang, escaped)
+//         }
+//     }
+//     return {
+//         type: "code"
+//     }
+// })
 marked.setOptions({
     langPrefix: '',
     highlight: function (code, lang) {
