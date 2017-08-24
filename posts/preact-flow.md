@@ -216,4 +216,8 @@ return ret;
 ```
 - `render`返回到用户代码，到此结束。
 
+## render流程图
+
+![render-flow](/public/img/preact-source/render-flow.svg)
+
 ## setState流程
