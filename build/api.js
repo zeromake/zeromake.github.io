@@ -10,6 +10,19 @@ const hljs = require('highlight.js')
 const { postDir } = require('./config')
 
 const router = new KoaRuoter()
+marked.use(function(self) {
+    const defaultImage = self.Renderer.prototype.image
+    self.Renderer.prototype.image = function(href, title, text) {
+        if (href.endsWith(".svg")) {
+            return `<object data="${href}" type="image/svg+xml" title="${title}" alt="${text}"></object>`
+        } else {
+            return defaultImage.call(this, href, title, text)
+        }
+    }
+    return {
+        type: "image"
+    }
+})
 // marked.use(function(self) {
 //     const defaultCode = self.Renderer.prototype.code
 //     self.Renderer.prototype.code = function (code, lang, escaped) {
