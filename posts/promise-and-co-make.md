@@ -93,7 +93,7 @@ class Appoint {
 }
 ```
 
-### Appoint
+### Appoint
 
 ``` typescript
 function INTERNAL() {}

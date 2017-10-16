@@ -6,8 +6,11 @@ const pify = require('pify')
 const readline = require('readline')
 const yaml = require('js-yaml')
 const marked = require('marked-zm')
-const hljs = require('highlight.js')
+const Prism = require('prismjs')
+// const hljs = require('highlight.js')
 const { postDir } = require('./config')
+
+global.Prism = Prism
 
 const router = new KoaRuoter()
 marked.use(function(self) {
@@ -23,30 +26,21 @@ marked.use(function(self) {
         type: "image"
     }
 })
-// marked.use(function(self) {
-//     const defaultCode = self.Renderer.prototype.code
-//     self.Renderer.prototype.code = function (code, lang, escaped) {
-//         if (lang === 'flow') {
-//             return '<div class="flow">'+ code.replace(/\n/g, "\\n") +'</div>'
-//         } else {
-//             return defaultCode(code, lang, escaped)
-//         }
-//     }
-//     return {
-//         type: "code"
-//     }
-// })
 marked.setOptions({
-    langPrefix: '',
+    langPrefix: 'language-',
     highlight: function (code, lang) {
         if (lang){
             try {
-                return hljs.highlight(lang, code).value
+                lang = lang.trim().toLocaleLowerCase()
+                if (!Prism.languages[lang]) {
+                    require('prismjs/components/prism-' + lang + '.min.js')
+                }
+                return Prism.highlight(code, Prism.languages[lang])
             } catch(e) {
-                return hljs.highlightAuto(code)
+                console.error(e)
             }
         }
-        return hljs.highlightAuto(code)
+        return code
     }
 })
 

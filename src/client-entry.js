@@ -4,6 +4,7 @@ import 'es6-promise/auto'
 import { createApp } from './app'
 import ProgressBar from 'components/ProgressBar.vue'
 import Gitment from 'gitment'
+import 'prismjs/themes/prism.css'
 import 'gitment/style/default.css'
 // import flowchart from 'flowchart.js/release/flowchart.js'
 

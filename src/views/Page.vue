@@ -13,7 +13,7 @@
                 <span class="meta-tag" v-for="meta_tag in pageData.tags" :key="meta_tag">{{ meta_tag }}</span>
             </span>
             </div>
-            <div class="markdown-body" v-html="pageData.body" v-once></div>
+            <div class="markdown-body" v-html="pageData.body"></div>
             <div v-pre id="container" class="container"></div>
             <div v-pre id="flow-diagram" style="display: none"></div>
         </div>
@@ -86,30 +86,34 @@ export default {
         color #c7254e
     pre
         box-shadow 0 1px 3px #e3e3e3
-        .hljs-comment, .xml .hljs-doctype, .html .hljs-doctype, .html .hljs-meta, .xml .hljs-meta
-            color #999999
-        .hljs-number, .ruby .hljs-keyword
-            color #538192
-        .hljs-string, .hljs-regexp, .xml .hljs-value, .html .hljs-value
-            color #739200
-        .hljs-keyword, .hljs-title, .hljs-constant, .xml .hljs-tag, .html .hljs-tag, .css .hljs-attribute
-            color #ff0055
-        .xml .hljs-tag .hljs-title, .html .hljs-tag .hljs-title, .html .hljs-tag .hljs-name, .xml .hljs-tag .hljs-name
-            color #111111
+        // .hljs-comment, .xml .hljs-doctype, .html .hljs-doctype, .html .hljs-meta, .xml .hljs-meta
+        //     color #999999
+        // .hljs-number, .ruby .hljs-keyword
+        //     color #538192
+        // .hljs-string, .hljs-regexp, .xml .hljs-value, .html .hljs-value
+        //     color #739200
+        // .hljs-keyword, .hljs-title, .hljs-constant, .xml .hljs-tag, .html .hljs-tag, .css .hljs-attribute
+        //     color #ff0055
+        // .xml .hljs-tag .hljs-title, .html .hljs-tag .hljs-title, .html .hljs-tag .hljs-name, .xml .hljs-tag .hljs-name
+        //     color #111111
     pre.code
         font-size 0.8em
         position relative
         code
             color inherit
-        &.html:after
+        &.language-html:after
             content 'HTML'
-        &.js:after
+        &.language-js:after
             content 'JS'
-        &.javascript:after
+        &.language-javascript:after
             content 'JavaScript'
-        &.css:after
+        &.language-typescript:after
+            content 'TypeScript'
+        &.language-json:after
+            content 'JSON'
+        &.language-css:after
             content 'CSS'
-        &.bash:after
+        &.language-bash:after
             content 'Shell'
         &:after
             position: absolute
