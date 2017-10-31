@@ -1,30 +1,39 @@
 <template>
     <div>
         <div class="page-view">
-            <div class="title-wrap" v-if="pageData">
-                <h1>{{ pageData.title }}</h1>
-                <div>
-                    <time>创建时间：{{ pageData.date | formatTime }}</time><br>
-                    <time v-if="pageData.last_date">最后更新：{{ pageData.last_date | formatTime }}</time>
-                </div>
-                <br>
-            <span class="post-meta post-meta-tags">
-                <i class="fa fa-tag" v-once></i>
-                <span class="meta-tag" v-for="meta_tag in pageData.tags" :key="meta_tag">{{ meta_tag }}</span>
-            </span>
+            <div class="content">
+                <div class="title-wrap" v-if="pageData">
+                    <h1>{{ pageData.title }}</h1>
+                    <div>
+                        <time>创建时间：{{ pageData.date | formatTime }}</time><br>
+                        <time v-if="pageData.last_date">最后更新：{{ pageData.last_date | formatTime }}</time>
+                    </div>
+                    <br>
+            <div class="tocs">
+                <div>目录</div>
+                <page-toc v-if="pageData" :tocs="pageData.toc"></page-toc>
             </div>
-            <div class="markdown-body" v-html="pageData.body"></div>
-            <div v-pre id="container" class="container"></div>
-            <div v-pre id="flow-diagram" style="display: none"></div>
+                    <span class="post-meta post-meta-tags">
+                        <i class="fa fa-tag" v-once></i>
+                        <span class="meta-tag" v-for="meta_tag in pageData.tags" :key="meta_tag">{{ meta_tag }}</span>
+                    </span>
+                </div>
+                <div class="markdown-body" v-html="pageData.body"></div>
+                <div v-pre id="container" class="container"></div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import PageToc from 'components/page-toc'
 export default {
     asyncData ({ store, route }) {
         const page = route.params.page
         return store.dispatch('FETCH_PAGE_DATA', { page })
+    },
+    components: {
+        PageToc
     },
     data () {
         return {
@@ -130,5 +139,4 @@ export default {
 @media (max-width 767px)
     .markdown-body
         padding 15px
-
 </style>

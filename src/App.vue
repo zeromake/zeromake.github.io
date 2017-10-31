@@ -42,7 +42,8 @@ export default {
 
 <style lang="stylus">
 body
-    font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    // font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family "Source Sans Pro", "Helvetica Neue", Arial, sans-serif
     font-size 15px
     background-color lighten(#fff, 30%)
     margin 0
@@ -74,7 +75,7 @@ body
         box-sizing border-box
         margin 0 auto
         padding 15px 5px
-    
+
     a
         color rgba(32, 32, 32, .8)
         line-height 24px
@@ -98,6 +99,7 @@ body
     display inline-block
     vertical-align middle
 .view
+    overflow hidden
     padding 10px 20px
     max-width 800px
     margin 10px auto 0

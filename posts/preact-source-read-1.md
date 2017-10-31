@@ -3,7 +3,6 @@ date: 2017-07-24 16:23:04+08:00
 tags: [preact, source, read]
 last_date: 2017-07-25 12:29:04+08:00
 
-[TOC]
 
 ## 前言
 

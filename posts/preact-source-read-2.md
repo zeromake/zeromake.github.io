@@ -3,7 +3,6 @@ date: 2017-07-26 15:23:04+08:00
 tags: [preact, source, read]
 last_date: 2017-07-26 15:23:04+08:00
 
-[TOC]
 ## 前言
 - 这里是第二篇，[第一篇在这里](https://blog.zeromake.com/pages/preact-source-read-1)
 - 这次讲Component，以及它的一些轻量依赖。

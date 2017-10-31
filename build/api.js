@@ -13,6 +13,12 @@ const { postDir } = require('./config')
 global.Prism = Prism
 
 const router = new KoaRuoter()
+let toc = []
+
+// function zescapeFun(html, encode) {
+//     html = html.replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+//     return html;
+// }
 marked.use(function(self) {
     const defaultImage = self.Renderer.prototype.image
     self.Renderer.prototype.image = function(href, title, text) {
@@ -21,6 +27,17 @@ marked.use(function(self) {
         } else {
             return defaultImage.call(this, href, title, text)
         }
+    }
+    const defaultHead = self.Renderer.prototype.heading
+    self.Renderer.prototype.heading = function(text, level) {
+        // const escapedText = zescapeFun(text.toLowerCase());
+        const tocItem = {
+            text: text,
+            level: level
+            // escape: escapedText
+        }
+        toc.push(tocItem)
+        return defaultHead.call(this, text, level)
     }
     return {
         type: "image"
@@ -109,6 +126,8 @@ router.get('/api/pages/:page.json', convert(function * (ctx, next) {
         const { yaml, markdown } = yield readMarkdown(postDir, page + '.md')
         const pageBody = markdown && marked(markdown)
         yaml['body'] = pageBody
+        yaml['toc'] = toc
+        toc = []
         ctx.body = yaml
     } else {
         ctx.status = 404

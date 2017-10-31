@@ -3,7 +3,7 @@ date: 2017-2-19 18:36:25+08:00
 tags: [vue, ssr, koa2]
 last_date: 2017-2-19 18:17:25+08:00
 
-[TOC]
+
 ## 前言
 - 在之前的[vue-ssr](http://blog.zeromake.com/pages/vue-ssr)中我是使用express来做ssr服务器+api服务器。
 - 但是有些时候可能我希望换一个web框架。

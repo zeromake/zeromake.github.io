@@ -3,7 +3,6 @@ date: 2017-03-01 21:33:04+08:00
 tags: [node, js, npm]
 last_date: 2017-03-05 12:26:04+08:00
 
-[TOC]
 ## 前言
 - 在前面的对`vue-ssr`改造为`koa`的`web`框架，我使用了一个第三方npm库。
 - 包名为 ~~`koa2-webpack-middleware-zm`~~ 已迁移到`koa-webpack-middleware-zm`。

@@ -11,7 +11,7 @@ export function createRouter () {
         mode: 'history',
         fallback: false,
         scrollBehavior: (to, from) => {
-            if (from.path.indexOf('/pages/') !== 0 && to.path.indexOf('/pages/') === 0) {
+            if (from.path.indexOf('/pages/') === 0 && to.path.indexOf('/pages/') === 0) {
                 return
             }
             return { y: 0 }
