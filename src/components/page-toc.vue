@@ -25,7 +25,7 @@ function renderLi (h, tocItem, tocs) {
         'a',
         {
             class: 'left_toca',
-            attrs: { title: tocItem.text, href: '#' + tocItem.text }
+            attrs: { title: tocItem.text, href: '#' + tocItem.text.toLowerCase() }
         },
         [tocItem.text]
     )
