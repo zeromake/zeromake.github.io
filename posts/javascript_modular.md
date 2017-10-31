@@ -79,7 +79,7 @@ import jquery from 'jquery';
 ```
 export在es6模块导入时使用是一个关键字可以多次使用
 
-``` javascrtip
+``` javascript
 export function test(){}
 export class Demo{
 }

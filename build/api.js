@@ -33,6 +33,9 @@ marked.setOptions({
             try {
                 lang = lang.trim().toLocaleLowerCase()
                 if (!Prism.languages[lang]) {
+                    if (lang === 'shell') {
+                        lang = 'bash'
+                    }
                     require('prismjs/components/prism-' + lang + '.min.js')
                 }
                 return Prism.highlight(code, Prism.languages[lang])
