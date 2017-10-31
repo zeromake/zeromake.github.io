@@ -75,6 +75,6 @@ router.onReady(() => {
     app.$mount('#app')
 })
 
-if (process.env.NODE_ENV === 'production' && location.protocol === 'https:' && navigator.serviceWorker) {
+if (location.protocol === 'https:' && navigator.serviceWorker) {
     navigator.serviceWorker.register('/service-worker.js')
 }
