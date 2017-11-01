@@ -1,5 +1,6 @@
 title: vue-ssr-koa2
 date: 2017-2-19 18:36:25+08:00
+type: vue
 tags: [vue, ssr, koa2]
 last_date: 2017-2-19 18:17:25+08:00
 

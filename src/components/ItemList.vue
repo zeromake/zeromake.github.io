@@ -71,8 +71,14 @@ export default {
         color #ccc
 
 .news-list
-    margin 10px 0
-    width 100%
+    float right
+    box-sizing: border-box
+    padding 40px
+    width 700px
+    background #fff
+    min-height 700px
+    box-shadow initial
+    border-radius: initial
     transition all .5s cubic-bezier(.55,0,.1,1)
     ul
         list-style-type none

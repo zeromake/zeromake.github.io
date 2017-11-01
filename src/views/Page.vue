@@ -81,6 +81,8 @@ export default {
 @import url('../../node_modules/github-markdown-css/github-markdown.css')
 .page-view
     background-color #fff
+    width 700px
+    float right
 .title-wrap
     margin 20px 0
     padding-bottom 10px

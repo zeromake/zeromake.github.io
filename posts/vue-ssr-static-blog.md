@@ -1,5 +1,6 @@
 title: vue-ssr-static-blog
 date: 2017-06-01 14:37:39+08:00
+type: vue
 tags: [vue, static, blog, ssr]
 last_date: 2017-06-22 14:37:39+08:00
 

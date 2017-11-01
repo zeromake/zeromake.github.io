@@ -37,7 +37,9 @@ marked.use(function(self) {
             // escape: escapedText
         }
         toc.push(tocItem)
-        return defaultHead.call(this, text, level)
+        var escapedText = text.toLowerCase();
+        return '<h' + level + ' class="heading">' + text + '</h' + level + '>';
+        // return defaultHead.call(this, text, level)
     }
     return {
         type: "image"

@@ -1,5 +1,6 @@
 title: karma使用webpack的代码覆盖率测试
 date: 2017-05-07 14:21:46+08:00
+type: istanbul
 tags: [karma, webpack, istanbul]
 last_date: 2017-05-07 23:23:37+08:00
 

@@ -1,5 +1,6 @@
 title: javascript的模块化
 date: 2016-8-12 12:18:25+08:00
+type: modular
 tags: [javascript, amd, cmd, commonjs, umd]
 last_date: 2016-8-12 14:09:50+08:00
 

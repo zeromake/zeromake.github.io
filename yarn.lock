@@ -3183,6 +3183,10 @@ lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "http://registry.npm.taobao.org/lodash.clonedeep/download/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
 
+lodash.debounce@^4.0.8:
+  version "4.0.8"
+  resolved "http://registry.npm.taobao.org/lodash.debounce/download/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
+
 lodash.defaults@^4.2.0:
   version "4.2.0"
   resolved "http://registry.npm.taobao.org/lodash.defaults/download/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"

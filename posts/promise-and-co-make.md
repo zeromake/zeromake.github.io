@@ -1,5 +1,6 @@
 title: promise-and-co-make
 date: 2017-07-10 15:24:39+08:00
+type: source
 tags: [promise, co, async]
 last_date: 2017-07-10 15:24:39+08:00
 

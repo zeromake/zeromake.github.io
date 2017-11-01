@@ -1,5 +1,6 @@
 title: ci自动部署
 date: 2017-10-31 15:44:00+08:00
+type: deploy
 tags: [ci, docker, deploy]
 last_date: 2017-10-31 15:44:00+08:00
 

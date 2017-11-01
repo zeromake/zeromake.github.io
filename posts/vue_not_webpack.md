@@ -1,5 +1,6 @@
 title: Vue2(not_webpack)
 date: 2016-11-4 13:10:25+08:00
+type: vue
 tags: [vue2, requirejs]
 last_date: 2016-11-4 15:07:50+08:00
 

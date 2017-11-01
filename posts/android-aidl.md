@@ -1,5 +1,6 @@
 title: Android的aidl相互通信机制
 date: 2016-01-03 13:42:01+08:00
+type: android
 tags: [Android,aidl,IBind]
 
 ## Service使用aidl的与Activity相互交互
