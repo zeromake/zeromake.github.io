@@ -138,6 +138,10 @@ export default {
             height 15px
             font-weight 600
 
+@media (max-width: 991px)
+    .page-view
+        width auto
+
 @media (max-width 767px)
     .markdown-body
         padding 15px

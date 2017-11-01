@@ -209,7 +209,7 @@ a.router-link-active::after
 .view
     overflow hidden
     padding 10px 20px
-    max-width 960px
+    width 960px
     margin 10px auto 0
     box-shadow 0 1px 3px #e3e3e3
 .side
@@ -264,6 +264,8 @@ a.router-link-active::after
     color #ddd
 
 @media (max-width: 991px)
+    .view
+        width auto
     .header
         width auto
         .inner
