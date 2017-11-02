@@ -2,38 +2,68 @@
     <div>
         <div class="page-view">
             <div class="content">
-                <div class="title-wrap" v-if="pageData">
+                <!-- <div class="title-wrap" v-if="pageData">
                     <h1>{{ pageData.title }}</h1>
                     <div>
                         <time>创建时间：{{ pageData.date | formatTime }}</time><br>
                         <time v-if="pageData.last_date">最后更新：{{ pageData.last_date | formatTime }}</time>
                     </div>
                     <br>
-            <div class="tocs">
-                <div>目录</div>
-                <page-toc v-if="pageData" :tocs="pageData.toc"></page-toc>
-            </div>
                     <span class="post-meta post-meta-tags">
                         <i class="fa fa-tag" v-once></i>
                         <span class="meta-tag" v-for="meta_tag in pageData.tags" :key="meta_tag">{{ meta_tag }}</span>
                     </span>
-                </div>
+                </div> -->
+                <header class="post-header" v-if="pageData">
+                    <h1 class="post-title">{{pageData.title}}</h1>
+                    <div class="post-meta">
+                        <span class="post-time">
+                            <span class="post-meta-item-icon">
+                                <i class="fa fa-calendar-o"></i>
+                            </span>
+                            <span class="post-meta-item-text">发表于</span>
+                            <time title="创建于">
+                                {{ pageData.date | formatTime }}
+                            </time>
+                        </span>
+                        <span class="post-category">
+                            <span class="post-meta-divider">|</span>
+                            <span class="post-meta-item-icon">
+                                <i class="fa fa-folder-o"></i>
+                            </span>
+                            <span class="post-meta-item-text">分类于</span>
+                            <span>
+                                <a href="javascript:void(0);">
+                                    <span>{{pageData.type}}</span>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                </header>
                 <div class="markdown-body" v-html="pageData.body"></div>
                 <div v-pre id="container" class="container"></div>
             </div>
         </div>
+        <sidebar></sidebar>
     </div>
 </template>
 
 <script>
+import Sidebar from 'components/sidebar'
 import PageToc from 'components/page-toc'
 export default {
+    beforeCreate () {
+        if (this.$store.getters.activePage) {
+            this.$store.commit('SET_TOCS', this.$store.getters.activePage.toc)
+        }
+    },
     asyncData ({ store, route }) {
         const page = route.params.page
         return store.dispatch('FETCH_PAGE_DATA', { page })
     },
     components: {
-        PageToc
+        PageToc,
+        Sidebar
     },
     data () {
         return {
@@ -79,14 +109,41 @@ export default {
 
 <style lang="stylus">
 @import url('../../node_modules/github-markdown-css/github-markdown.css')
+.post-meta a
+    color #555
+    text-decoration none
+    border-bottom 1px solid #999
+    word-wrap break-word
+    background-color transparent
+
+.post-meta a:hover
+    color #222
+    border-bottom-color #222
+.post-meta a:active, a:hover
+    outline 0
 .page-view
-    background-color #fff
-    width 700px
     float right
-.title-wrap
-    margin 20px 0
-    padding-bottom 10px
-    border-bottom 1px solid #e0e0e0
+    box-sizing border-box
+    padding 40px
+    width 700px
+    background #fff
+    min-height 700px
+    box-shadow initial
+    border-radius initial
+.post-title
+    font-size 26px
+    text-align center
+    word-break break-word
+    font-weight 400
+.post-meta
+    margin 3px 0 60px 0
+    color #999
+    font-size 12px
+    text-align center
+.post-meta-divider
+    margin 0 0.5em
+.post-meta-item-icon
+    margin-right 3px
 .markdown-body
     box-sizing border-box
     min-width 200px
@@ -97,16 +154,6 @@ export default {
         color #c7254e
     pre
         box-shadow 0 1px 3px #e3e3e3
-        // .hljs-comment, .xml .hljs-doctype, .html .hljs-doctype, .html .hljs-meta, .xml .hljs-meta
-        //     color #999999
-        // .hljs-number, .ruby .hljs-keyword
-        //     color #538192
-        // .hljs-string, .hljs-regexp, .xml .hljs-value, .html .hljs-value
-        //     color #739200
-        // .hljs-keyword, .hljs-title, .hljs-constant, .xml .hljs-tag, .html .hljs-tag, .css .hljs-attribute
-        //     color #ff0055
-        // .xml .hljs-tag .hljs-title, .html .hljs-tag .hljs-title, .html .hljs-tag .hljs-name, .xml .hljs-tag .hljs-name
-        //     color #111111
     pre.code
         font-size 0.8em
         position relative

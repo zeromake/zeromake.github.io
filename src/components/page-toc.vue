@@ -24,16 +24,18 @@ function renderLi (h, tocItem, tocs) {
     const toca = h(
         'a',
         {
-            class: 'left_toca',
+            class: 'nav-link',
             attrs: { title: tocItem.text, href: '#' + tocItem.text.toLowerCase() }
         },
         [tocItem.text]
     )
     return !tocs ? h(
         'li',
+        { class: 'nav-item' },
         [toca]
     ) : h(
         'li',
+        { class: 'nav-item' },
         [
             toca,
             h(
@@ -53,20 +55,34 @@ export default {
     },
     render (h) {
         const tocs = renderTocs(h, this.tocs, 0)
-        return h('div', null, [h('ul', { class: 'left_toc_ul' }, tocs.toc)])
+        return h('div', null, [h('ul', { class: 'nav' }, tocs.toc)])
     }
 }
 </script>
 
 <style lang="stylus" scoped>
-.left_toca
-    color: #34495e;
-    padding 3px 0
+.nav
+    margin 0
+    padding 0 2px 5px 10px
+    text-align left
+    list-style none
+    font-size 14px
+.nav-item
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+    line-height 1.8
+.nav a
+    transition-duration 0.2s
+    transition-timing-function ease-in-out
+    transition-delay 0s
+    transition-property all
+    color #666
+    border-bottom-color: #ccc
     text-decoration none
-    display block
-.left_toc_ul
-    list-style-type square
-.left_toca:hover
-    text-decoration underline
+    border-bottom 1px solid #999
+.nav a:hover
+    color #000
+    border-bottom-color #000
 </style>
 

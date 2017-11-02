@@ -7,16 +7,22 @@
             </transition-group>
         </div>
     </transition>
+    <sidebar></sidebar>
 </div>
 </template>
 
 <script>
 import Item from './Item.vue'
+import Sidebar from './sidebar'
 
 export default {
+    beforeCreate () {
+        this.$store.commit('SET_TOCS', null)
+    },
     name: 'item-list',
     components: {
-        Item
+        Item,
+        Sidebar
     },
     props: {
         type: String
@@ -73,10 +79,9 @@ export default {
 .news-list
     float right
     box-sizing: border-box
-    padding 40px
+    padding 20px
     width 700px
     background #fff
-    min-height 700px
     box-shadow initial
     border-radius: initial
     transition all .5s cubic-bezier(.55,0,.1,1)
@@ -106,7 +111,7 @@ export default {
 
 @media (max-width: 991px)
     .news-list
-        width auto
+        width 100%
 @media (max-width 600px)
     .news-list
         margin 10px 0

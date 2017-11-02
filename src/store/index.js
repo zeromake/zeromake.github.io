@@ -12,9 +12,13 @@ export function createStore () {
             activeType: null,
             itemsPerPage: 20,
             items: [],
+            tags: null,
+            types: null,
             page: {},
             code: null,
-            activePage: null
+            activePage: null,
+            showSidebar: false,
+            tocs: null
         },
         actions,
         mutations,

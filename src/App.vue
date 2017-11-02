@@ -7,7 +7,7 @@
         </div>
         <div class="headband"></div>
         <header class="header">
-            <div class="inner">
+            <div class="inner" ref="header">
                 <div class="site-brand-wrapper" ref="head">
                     <div class="site-meta ">
                         <div class="custom-logo-site-title">
@@ -75,23 +75,32 @@ import debounce from 'lodash.debounce'
 export default {
     mounted () {
         const head = this.$refs['head']
-        if (head) {
-            if ('IntersectionObserver' in window) {
-                this.io = new IntersectionObserver(debounce((entries) => {
+        const header = this.$refs['header']
+        if ('IntersectionObserver' in window) {
+            if (head) {
+                this.io1 = new IntersectionObserver(debounce((entries) => {
                     const top = entries[0].intersectionRatio <= 0
                     if (top !== this.showTop) {
                         this.showTop = top
                     }
                 }, 200))
-                this.io.observe(head)
-            } else {
-                this.showTop = true
+                this.io1.observe(head)
+            }
+            if (header) {
+                this.io2 = new IntersectionObserver(debounce((entries) => {
+                    const top = entries[0].intersectionRatio <= 0
+                    this.$store.commit('TOGGLE_SIDEBAR', top)
+                }, 200))
+                this.io2.observe(header)
             }
         }
     },
     beforeDestroy () {
-        if (this.io) {
-            this.io.disconnect()
+        if (this.io1) {
+            this.io1.disconnect()
+        }
+        if (this.io2) {
+            this.io2.disconnect()
         }
     },
     data () {
@@ -208,9 +217,8 @@ a.router-link-active::after
     background-color #bbb
 .view
     overflow hidden
-    padding 10px 20px
     width 960px
-    margin 10px auto 0
+    margin 0 auto
     box-shadow 0 1px 3px #e3e3e3
 .side
     position fixed

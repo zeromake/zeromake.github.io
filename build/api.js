@@ -38,8 +38,8 @@ marked.use(function(self) {
         }
         toc.push(tocItem)
         var escapedText = text.toLowerCase();
-        return '<h' + level + ' class="heading">' + text + '</h' + level + '>';
-        // return defaultHead.call(this, text, level)
+        // return '<h' + level + ' class="heading">' + text + '</h' + level + '>';
+        return defaultHead.call(this, text, level)
     }
     return {
         type: "image"
@@ -95,12 +95,6 @@ const readMarkdown = function (fileDir, fileName, end) {
         })
         read.on('close', () => {
             const yamlObj = yaml.safeLoad(yamlData)
-            // if (yamlObj.date) {
-            //     yamlObj.date = new Date(yamlObj.date + 8 * 3600000)
-            // }
-            // if (yamlObj.date) {
-            //     yamlObj.last_date = new Date(yamlObj.last_date + 8 * 3600000)
-            // }
             yamlObj['filename'] = encodeURIComponent(fileName.substring(0, fileName.lastIndexOf('.')))
             resolve({ yaml: yamlObj, markdown: end ? null : markdownData })
         })
@@ -110,17 +104,40 @@ const readMarkdown = function (fileDir, fileName, end) {
 const convert = function (fun) {
     return (ctx, next) => co(fun, ctx, next)
 }
+function dictToArray(obj) {
+    const tmp = []
+    for (const key in obj) {
+        tmp.push(key)
+    }
+    return tmp
+}
 
 router.get('/api/posts.json', convert(function * (ctx, next) {
     const files = yield pify(fs.readdir)(postDir)
+    const types = Object.create(null)
+    const tags = Object.create(null)
     const yamls = yield Promise.all(files.filter(filename => {
         if (filename.indexOf('.md') > 0) {
             return true
         }
-    }).map(filename => readMarkdown(postDir, filename, 300).then(({ yaml }) => Promise.resolve(yaml))))
+    }).map(filename => readMarkdown(postDir, filename, 300).then(({ yaml }) => {
+        yaml.tags.forEach(function(tag) {
+            if (tag) {
+                tags[tag] = true
+            }
+        });
+        if (yaml.type) {
+            types[yaml.type] = true
+        }
+        return Promise.resolve(yaml)
+    })))
     yamls.sort((a, b) => b.date - a.date)
-    ctx.body = yamls
-    // yield pify(fs.readdir)(postDir)
+    const data = {
+        posts: yamls,
+        types: dictToArray(types),
+        tags: dictToArray(tags)
+    }
+    ctx.body = data
 }))
 router.get('/api/pages/:page.json', convert(function * (ctx, next) {
     const page = ctx.params.page
