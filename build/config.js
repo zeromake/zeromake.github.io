@@ -12,7 +12,8 @@ module.exports = {
             const renderUrls = ['/']
             return fetch(`${baseUrl}${beforeUrl}`)
             .then(res => res.json())
-            .then(data => {
+            .then(listData => {
+                const data = listData.posts
                 for (let i = 0, len = data.length; i < len; i++) {
                     const element = data[i]
                     renderUrls.push('/pages/' + element.filename)
