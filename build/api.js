@@ -20,14 +20,14 @@ let toc = []
 //     return html;
 // }
 marked.use(function(self) {
-    const defaultImage = self.Renderer.prototype.image
-    self.Renderer.prototype.image = function(href, title, text) {
-        if (href.endsWith(".svg")) {
-            return `<object data="${href}" type="image/svg+xml" title="${title}" alt="${text}"></object>`
-        } else {
-            return defaultImage.call(this, href, title, text)
-        }
-    }
+    // const defaultImage = self.Renderer.prototype.image
+    // self.Renderer.prototype.image = function(href, title, text) {
+    //     // if (href.endsWith(".svg")) {
+    //     //     return `<object style="width: 100%" data="${href}" type="image/svg+xml" title="${title}" alt="${text}"></object>`
+    //     // } else {
+    //     //     return defaultImage.call(this, href, title, text)
+    //     // }
+    // }
     const defaultHead = self.Renderer.prototype.heading
     self.Renderer.prototype.heading = function(text, level) {
         // const escapedText = zescapeFun(text.toLowerCase());

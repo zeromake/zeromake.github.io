@@ -187,9 +187,17 @@ export default {
 
 @media (max-width: 991px)
     .page-view
-        width auto
+        width 100%
+    .page-view
+        padding 20px
 
 @media (max-width 767px)
     .markdown-body
-        padding 15px
+        padding 10px
+
+@media (max-width 767px)
+    .markdown-body
+        padding 0
+    .page-view
+        padding 10px
 </style>
