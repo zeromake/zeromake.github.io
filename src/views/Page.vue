@@ -40,7 +40,15 @@
                         </span>
                     </div>
                 </header>
-                <div class="markdown-body" v-html="pageData.body"></div>
+                <div class="markdown-body" v-html="pageData.body">
+                </div>
+                <div>
+                    <h3>支持我</h3>
+                    <div class="alipay_div">
+                        <p>如果你觉得这篇文章对你有帮助请支持我。</p>
+                        <img src="/public/alipay.png" alt="支付宝">
+                    </div>
+                </div>
                 <div v-pre id="container" class="container"></div>
             </div>
         </div>
@@ -109,6 +117,9 @@ export default {
 
 <style lang="stylus">
 @import url('../../node_modules/github-markdown-css/github-markdown.css')
+.alipay_div
+    width 300px
+    margin 0 auto
 .post-meta a
     color #555
     text-decoration none
