@@ -127,7 +127,7 @@ const generate = (config) => co(function * () {
         console.info('generate render: ' + decode)
         yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, minHtml)
     }
-    yield fse.copy(resolve('../dist'), `${docsPath}/dist`)
+    yield fse.copy(resolve('../dist/'), `${docsPath}/dist`)
     yield fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
     yield fse.copy(resolve('../public'), `${docsPath}/public`)
     yield fse.copy(resolve('../manifest.json'), `${docsPath}/manifest.json`)

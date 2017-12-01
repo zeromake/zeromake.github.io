@@ -65,6 +65,7 @@ module.exports = {
                 test: /\.css$/,
                 use: isProd
                     ? ExtractTextPlugin.extract({
+                        publicPath: '/dist/',
                         use: 'css-loader?minimize',
                         fallback: 'vue-style-loader'
                     })

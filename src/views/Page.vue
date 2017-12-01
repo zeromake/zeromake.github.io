@@ -2,18 +2,6 @@
     <div>
         <div class="page-view">
             <div class="content">
-                <!-- <div class="title-wrap" v-if="pageData">
-                    <h1>{{ pageData.title }}</h1>
-                    <div>
-                        <time>创建时间：{{ pageData.date | formatTime }}</time><br>
-                        <time v-if="pageData.last_date">最后更新：{{ pageData.last_date | formatTime }}</time>
-                    </div>
-                    <br>
-                    <span class="post-meta post-meta-tags">
-                        <i class="fa fa-tag" v-once></i>
-                        <span class="meta-tag" v-for="meta_tag in pageData.tags" :key="meta_tag">{{ meta_tag }}</span>
-                    </span>
-                </div> -->
                 <header class="post-header" v-if="pageData">
                     <h1 class="post-title">{{pageData.title}}</h1>
                     <div class="post-meta">
@@ -46,7 +34,12 @@
                     <h3>支持我</h3>
                     <div class="alipay_div">
                         <p>如果你觉得这篇文章对你有帮助请支持我。</p>
-                        <img src="/public/alipay.png" alt="支付宝">
+                        <a href="https://qr.alipay.com/tsx014836oaivqqvutbcb9a" alt="支付宝" title="支付宝">
+                            <img class="support" src="/public/alipay.png" alt="支付宝">
+                        </a>
+                        <a href="https://paypal.me/zerobuild" alt="PayPal" title="PayPal">
+                            <img class="support" src="/public/paypal.png" alt="PayPal">
+                        </a>
                     </div>
                 </div>
                 <div v-pre id="container" class="container"></div>
@@ -85,15 +78,6 @@ export default {
     },
     mounted () {
         this.loadYunTie()
-        // const nodeList = document.querySelectorAll('.flow')
-        // const flowDiagram = document.querySelector('#flow-diagram')
-        // Array.prototype.forEach.call(nodeList, (node) => {
-        //     const code = node.innerText.replace(/\\n/g, '\n')
-        //     const diagram = this.$flowchart.parse(code)
-        //     diagram.drawSVG('flow-diagram')
-        //     console.log()
-        //     node.innerHTML = flowDiagram.innerHTML
-        // })
     },
     methods: {
         loadYunTie () {
@@ -117,9 +101,18 @@ export default {
 
 <style lang="stylus">
 @import url('../../node_modules/github-markdown-css/github-markdown.css')
+.support
+    padding 10px
+    width 240px
+
 .alipay_div
-    width 300px
+    width 520px
     margin 0 auto
+
+@media (max-width 520px)
+    .alipay_div
+        width 260px
+
 .post-meta a
     color #555
     text-decoration none

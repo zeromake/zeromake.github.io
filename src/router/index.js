@@ -9,6 +9,7 @@ const createListView = id => () => import('../views/CreateListView').then(m => m
 export function createRouter () {
     const router = new Router({
         mode: 'history',
+        // mode: 'hash',
         fallback: false,
         scrollBehavior: (to, from) => {
             if (from.path.indexOf('/pages/') === 0 && to.path.indexOf('/pages/') === 0) {
