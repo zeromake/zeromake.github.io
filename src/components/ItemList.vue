@@ -80,7 +80,7 @@ export default {
     float right
     box-sizing: border-box
     padding 20px
-    width 700px
+    width calc(100% - 240px)
     background #fff
     box-shadow initial
     border-radius: initial

@@ -118,6 +118,9 @@ export default {
 </script>
 
 <style lang="stylus">
+html
+    width 100%
+    height 100%
 body
     font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     font-size 15px
@@ -127,6 +130,8 @@ body
     overflow-y scroll
     word-wrap break-word
     line-height 2
+    width 100%
+    height 100%
 .post-meta
     margin-left: 8px;
     padding-left: 12px;
@@ -150,7 +155,7 @@ body
     margin-top: 4px
 
 .header
-    width 960px
+    width 70%
     background transparent
     margin 0 auto
     display block
@@ -217,7 +222,7 @@ a.router-link-active::after
     background-color #bbb
 .view
     overflow hidden
-    width 960px
+    width 70%
     margin 0 auto
     box-shadow 0 1px 3px #e3e3e3
 .side

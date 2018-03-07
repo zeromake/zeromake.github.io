@@ -100,7 +100,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import url('../../node_modules/github-markdown-css/github-markdown.css')
+// @import url('../../node_modules/github-markdown-css/github-markdown.css')
 .support
     padding 10px
     width 240px
@@ -129,9 +129,8 @@ export default {
     float right
     box-sizing border-box
     padding 40px
-    width 700px
+    width calc(100% - 240px)
     background #fff
-    min-height 700px
     box-shadow initial
     border-radius initial
 .post-title
@@ -154,6 +153,8 @@ export default {
     max-width 980px
     margin 0 auto
     padding 35px
+    img 
+        width 100%
     code
         color #c7254e
     pre

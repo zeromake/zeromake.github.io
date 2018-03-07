@@ -72,6 +72,16 @@ module.exports = {
                     : ['vue-style-loader', 'css-loader']
             },
             {
+                test: /\.scss$/,
+                use: isProd
+                    ? ExtractTextPlugin.extract({
+                        publicPath: '/dist/',
+                        use: ['css-loader', 'sass-loader'],
+                        fallback: 'vue-style-loader'
+                    })
+                    : ['vue-style-loader', 'css-loader', 'sass-loader']
+            },
+            {
                 test: /\.json/,
                 use: 'json-loader'
             }
