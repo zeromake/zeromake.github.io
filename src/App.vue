@@ -275,6 +275,11 @@ a.router-link-active::after
     margin-top 10px
     font-size 13px
     color #ddd
+@media (max-width: 1500px)
+    .view
+        width 90%
+    .header
+        width 90%
 
 @media (max-width: 991px)
     .view

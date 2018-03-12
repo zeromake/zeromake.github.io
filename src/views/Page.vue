@@ -158,6 +158,7 @@ export default {
     code
         color #c7254e
     pre
+        background-color #2D2D2D
         box-shadow 0 1px 3px #e3e3e3
     pre.code
         font-size 0.8em
@@ -178,11 +179,15 @@ export default {
             content 'CSS'
         &.language-bash:after
             content 'Shell'
+        &.language-yaml:after
+            content 'Yaml'
+        &.language-python:after
+            content 'Python'
         &:after
             position: absolute
             top 0
             right 0
-            color #ccc
+            color #c7254e
             text-align right
             font-size 0.75em
             padding 5px 10px 0
