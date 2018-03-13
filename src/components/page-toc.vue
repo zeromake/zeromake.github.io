@@ -72,6 +72,8 @@ export default {
     text-overflow ellipsis
     white-space nowrap
     line-height 1.8
+    ul
+        padding-left 1.2rem
 .nav a
     transition-duration 0.2s
     transition-timing-function ease-in-out
