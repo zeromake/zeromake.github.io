@@ -131,6 +131,7 @@ const generate = (config) => co(function * () {
     yield fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
     yield fse.copy(resolve('../public'), `${docsPath}/public`)
     yield fse.copy(resolve('../manifest.json'), `${docsPath}/manifest.json`)
+    yield fse.copy(resolve('../baidu-verify-03770132C2.txt'), `${docsPath}/baidu-verify-03770132C2.txt`)
 })
 const listens = app.listen(port, '0.0.0.0', () => {
     console.log(`server started at localhost:${port}`)
