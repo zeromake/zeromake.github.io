@@ -51,10 +51,14 @@ marked.setOptions({
         if (lang){
             try {
                 lang = lang.trim().toLocaleLowerCase()
-                if (!Prism.languages[lang]) {
+                if (lang === "text") {
+                    return code
+                }else if (!Prism.languages[lang]) {
                     if (lang === 'shell') {
                         lang = 'bash'
-                    }
+                    } else if (lang === 'c++'){
+                        lang = "cpp"
+                    } 
                     require('prismjs/components/prism-' + lang + '.min.js')
                 }
                 return Prism.highlight(code, Prism.languages[lang])

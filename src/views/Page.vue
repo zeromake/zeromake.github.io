@@ -183,13 +183,19 @@ export default {
             content 'Yaml'
         &.language-python:after
             content 'Python'
+        &.language-c:after
+            content 'C'
+        &.language-c\+\+:after
+            content 'CPP'
+        &.language-cpp:after
+            content 'CPP'
         &:after
             position: absolute
             top 0
             right 0
             color #c7254e
             text-align right
-            font-size 0.75em
+            font-size 1em
             padding 5px 10px 0
             line-height 15px
             height 15px

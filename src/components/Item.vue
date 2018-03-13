@@ -29,7 +29,7 @@ export default {
 .news-item
     background-color #fff
     padding 20px 30px 20px 80px
-    border-bottom 1px solid #eee
+    border 1px solid #eee
     position relative
     line-height 20px
     .score

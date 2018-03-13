@@ -230,7 +230,7 @@ TCP/UDP 都有一个监听端口(默认: 2425) 分工情况见下:
 
 #### 6) 附件扩展文件属性
 
-```c
+``` c
 // 用户id
 #define IPMSG_FILE_UID          0x00000001UL
 // uid by string 用户名
