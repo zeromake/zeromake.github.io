@@ -113,53 +113,53 @@ TCP/UDP 都有一个监听端口(默认: 2425) 分工情况见下:
 
 ``` c
 // 离线模式(与成员识别命令一起使用)
-#define IPMSG_ABSENCEOPT    0x00000100UL
+#define IPMSG_ABSENCEOPT        0x00000100UL
 // 服务器(预订)
-#define IPMSG_SERVEROPT     0x00000200UL
+#define IPMSG_SERVEROPT         0x00000200UL
 // 成员识别命令
-#define IPMSG_DIALUPOPT     0x00010000UL
+#define IPMSG_DIALUPOPT         0x00010000UL
 
 // 检查发送
-#define IPMSG_SENDCHECKOPT  0x00000100UL
+#define IPMSG_SENDCHECKOPT      0x00000100UL
 // 加密
-#define IPMSG_SECRETOPT     0x00000200UL
+#define IPMSG_SECRETOPT         0x00000200UL
 // 检查加密(版本8追加)
-#define IPMSG_PASSWORDOPT   0x00008000UL
+#define IPMSG_PASSWORDOPT       0x00008000UL
 // 广播(全局选择)
-#define IPMSG_BROADCASTOPT  0x00000400UL
+#define IPMSG_BROADCASTOPT      0x00000400UL
 // 多播(多个选择)
-#define IPMSG_MULTICASTOPT  0x00000800UL
+#define IPMSG_MULTICASTOPT      0x00000800UL
 // 新版本多播，未找到定义
-#define IPMSG_NEWMULTIOPT   null
+#define IPMSG_NEWMULTIOPT       null
 // 不写入日志
-#define IPMSG_NOLOGOPT      0x00020000UL
+#define IPMSG_NOLOGOPT          0x00020000UL
 // 启启动时不加入用户列表
-#define IPMSG_NOADDLISTOPT  0x00080000UL
+#define IPMSG_NOADDLISTOPT      0x00080000UL
 // 自动应答
-#define IPMSG_AUTORETOPT    0x00002000UL
+#define IPMSG_AUTORETOPT        0x00002000UL
 
 // 附件
-#define IPMSG_FILEATTACHOPT 0x00200000UL
+#define IPMSG_FILEATTACHOPT     0x00200000UL
 // 密码
-#define IPMSG_ENCRYPTOPT    0x00400000UL
+#define IPMSG_ENCRYPTOPT        0x00400000UL
 // 在密文中包含附件信息和目的地信息
-#define IPMSG_ENCEXTMSGOPT  0x04000000UL
+#define IPMSG_ENCEXTMSGOPT      0x04000000UL
 
 // 使用UTF-8
-#define IPMSG_CAPUTF8OPT    0x01000000UL
+#define IPMSG_CAPUTF8OPT        0x01000000UL
 // 消息使用 UTF-8
-#define IPMSG_UTF8OPT       0x00800000UL
+#define IPMSG_UTF8OPT           0x00800000UL
 // 支持嵌入图片的消息
-#define IPMSG_CLIPBOARDOPT  0x08000000UL
+#define IPMSG_CLIPBOARDOPT      0x08000000UL
 // 附件加密请求
-#define IPMSG_ENCFILEOPT    0x00000800UL
+#define IPMSG_ENCFILEOPT        0x00000800UL
 // 支持 IPDict 格式
-#define IPMSG_CAPIPDICTOPT  0x02000000UL
+#define IPMSG_CAPIPDICTOPT      0x02000000UL
 // 群主
-#define IPMSG_DIR_MASTER    0x10000000UL
+#define IPMSG_DIR_MASTER        0x10000000UL
 
 // 重传标志(HOSTLIST 获取时使用)
-#define IPMSG_RETRYOPT      0x00004000UL
+#define IPMSG_RETRYOPT          0x00004000UL
 ```
 
 #### 3) 密码扩展标志(扩展名使用十六进制表达式组合)
@@ -277,16 +277,57 @@ Ver(1) : Packet编码 : 用户名 : host名 : Command号 : 追加内容
 
 #### 2) 以当前命令格式发送消息的示例
 
+普通的不带任何选项的消息:
+
 ``` text
-1:100:shirouzu:jupiter:32:Hello
+1:100:shirouzu:jupiter:32:Hello\0
+```
+
+其中 Command 可以带各种选项如 `IPMSG_SENDCHECKOPT(检查消息)`:
+
+``` c
+// 0x00000120UL
+unsigned long Command = IPMSG_SENDMSG | IPMSG_SENDCHECKOPT;
+```
+
+``` text
+1:100:shirouzu:jupiter:288:Hello\0
+```
+
+所以当拿到 `Command` 需要处理:
+
+```c
+// 0x00000020UL
+unsigned long com = command & 0xffffff00;
 ```
 
 ### 3. 命令处理概要
 
 #### 1) 成员认可
 
-服务启动后，广播 `IPMSG_BR_ENTRY` 命令通知已启动的成员，有新成员加入。
+服务启动后，广播 `IPMSG_BR_ENTRY` 命令通知已启动的成员，有新成员加入。附加可以用于设置昵称。
 
-通过这个广播，已启动成员将新成员添加到成员列表中。另外还会回复 `IPMSG_ANSENTRY` 给新成员。(备注: Win版中，根据成员数量和 IP 地址距离，随机等待 0-4 秒)
+``` text
+1:100:shirouzu:jupiter:1:nickname\0
+```
+
+通过这个广播，已启动成员将新成员添加到成员列表中。另外还会回复 `IPMSG_ANSENTRY`(与 `IPMSG_BR_ENTRY` 格式相同) 给新成员。(备注: Win版中，根据成员数量和 IP 地址距离，随机等待 0-4 秒)
+
+``` text
+1:100:shirouzu:jupiter:3:nickname\0
+```
+
+新成员通过收到 `IPMSG_ANSENTRY` 消息可以获得所有已启动成员。
+因此除非 `IP` 数据包丢失，否则所有成员都能够获得相同的成员列表。
+
+更改离线模式，昵称等，会使用 `IPMSG_BR_ABSENCE` 广播通知所有成员。(与 `IPMSG_BR_ENTRY` 不同，不会回复 `IPMSG_ANSENTRY`)
+
+``` text
+
+```
+
+通过 `IPMSG_BR_ENTRY`, `IPMSG_ANSENTRY`, `IPMSG_BR_ABSENCE` 命令，根据离线模式设置 `IPMSG_ANSENCEOPT`, 并在命令附加昵称。此外，未收到网络指定广播的成员(如拨号用户)将设置 `IPMSG_DIALUPOPT`。对于设置了该选项的成员，请手动发送成员识别命令。
+
+(群扩展)在 `IPMSG_BR_ENTRY`, `IPMSG_ANSENTRY`, `IPMSG_BR_ABSENCE` 中，可以发送群名，通过在原有命令的后面添加群名(用 `\0` 分割)来设置群名。这样会把发送命令的成员添加到该群中。
 
 
