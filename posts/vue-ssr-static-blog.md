@@ -1,9 +1,10 @@
+---
 title: vue-ssr-static-blog
 date: 2017-06-01 14:37:39+08:00
 type: vue
 tags: [vue, static, blog, ssr]
 last_date: 2017-06-22 14:37:39+08:00
-
+...
 
 ## 前言
 - 自上次博文又快过去一个月了，感觉之前想写的东西现在写了也没什么意义。

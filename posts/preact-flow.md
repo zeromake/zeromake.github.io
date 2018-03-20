@@ -1,8 +1,10 @@
+---
 title: preact执行流程
 date: 2017-07-30 08:46:04+08:00
 type: source
 tags: [preact, flow]
 last_date: 2017-07-30 08:46:04+08:00
+...
 
 ## 前言
 - 应[@ToPeas](https://github.com/ToPeas)的[Issue](https://github.com/zeromake/zreact#1)来描述下preact的流程。

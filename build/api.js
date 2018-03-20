@@ -88,7 +88,10 @@ const readMarkdown = function (fileDir, fileName, end) {
         const read = readline.createInterface({ input: readableStream })
         read.on('line', function (line) {
             if (isYaml) {
-                if (line === '') {
+                if (line === "---") {
+                    return
+                }
+                if (line === '...') {
                     isYaml = false
                     return
                 }

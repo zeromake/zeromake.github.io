@@ -1,8 +1,10 @@
+---
 title: element-ui升级2.x问题
 date: 2017-11-22 11:20:00+08:00
 type: vue
 tags: [vue, element-ui]
 last_date: 2017-12-07 11:20:00+08:00
+...
 
 
 ## 前言

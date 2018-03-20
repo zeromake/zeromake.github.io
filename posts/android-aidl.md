@@ -1,10 +1,14 @@
+---
 title: Android的aidl相互通信机制
 date: 2016-01-03 13:42:01+08:00
 type: android
 tags: [Android,aidl,IBind]
+...
 
 ## Service使用aidl的与Activity相互交互
+
 #### 一、为什么要使用aidl
+
 原因是当我们的Client和Service不是同一个进程时是无法直接使用的，而在android中进程间通讯的方法有Activity、Content Provider、Broadcast和Service。
 其中Activity需要界面，隐式调用没有回调Broadcast的接收对象经常会重新被实例化，且以上两种都是通过intent传送。回调不能完成交互。
 Content Provider则只提供数据，Service有aidl这门进程间调用函数的机制。

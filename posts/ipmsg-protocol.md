@@ -1,8 +1,10 @@
+---
 title: ipmsg协议
 date: 2018-03-12 16:10:00+08:00
 type: protocol
 tags: [protocol, ipmsg]
 last_date: 2018-03-12 16:10:00+08:00
+...
 
 ## 前言
 

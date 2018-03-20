@@ -1,8 +1,10 @@
+---
 title: koa-webpack-middleware-zm
 date: 2017-03-01 21:33:04+08:00
 type: middleware
 tags: [node, js, npm]
 last_date: 2017-03-05 12:26:04+08:00
+...
 
 ## 前言
 - 在前面的对`vue-ssr`改造为`koa`的`web`框架，我使用了一个第三方npm库。
