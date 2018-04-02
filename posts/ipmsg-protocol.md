@@ -325,11 +325,43 @@ unsigned long com = command & 0xffffff00;
 更改离线模式，昵称等，会使用 `IPMSG_BR_ABSENCE` 广播通知所有成员。(与 `IPMSG_BR_ENTRY` 不同，不会回复 `IPMSG_ANSENTRY`)
 
 ``` text
-
+1:100:shirouzu:jupiter:4:nickname[离线模式]\0
 ```
 
 通过 `IPMSG_BR_ENTRY`, `IPMSG_ANSENTRY`, `IPMSG_BR_ABSENCE` 命令，根据离线模式设置 `IPMSG_ANSENCEOPT`, 并在命令附加昵称。此外，未收到网络指定广播的成员(如拨号用户)将设置 `IPMSG_DIALUPOPT`。对于设置了该选项的成员，请手动发送成员识别命令。
 
 (群扩展)在 `IPMSG_BR_ENTRY`, `IPMSG_ANSENTRY`, `IPMSG_BR_ABSENCE` 中，可以发送群名，通过在原有命令的后面添加群名(用 `\0` 分割)来设置群名。这样会把发送命令的成员添加到该群中。
+
+``` text
+1:100:shirouzu:jupiter:1:nickname\0Group\0
+```
+
+(IPv6广播扩展) `IPMSG_BR_ENTRY`, `IPMSG_BR_ABSENCE` 通过使用 `IPv6` 多播，即使在 `IPv6` 网络中也可以识别不同路由器的成员，利用多播地址 `ff15::979`，启动 `IPV6_JOIN_GROUP` 同时发送 `IPMSG_BR_ENTRY` 到该多播地址。退出时发送 `IPMSG_BR_EXIT` 后执行
+ `IPV6_LEAVE_GROUP`。
+ (对于链路中的所有结点使用 `ff02::1`)
+请注意，需要在 `IPv6` 路由器间配置可组播可互分发的功能。(视频分发的树形拓扑结构不足)
+
+#### 2) 带公钥指纹的用户名 (版本10追加)
+
+使用`2046bitRSA` 和 `SHA-1` 签名的用户，可以使用用户ID末尾的公匙添加指纹(稍后描述):
+
+1. 使用户名更加简单
+2. 防止公匙欺骗(`IPMSG_ANSPUBKEY` 收信时进行密匙与指纹的一致确认)
+
+可以参考。([发送和接收消息-加密扩展])
+
+按照以下方式使用公匙为用户名签名。
+
+1. 为公匙(\*1)生成(\*2) `SHA-1` 签名(160bit)
+2. 追加一个 32bit 的 0 得到一个 192bit 的值
+3. 192bit 分割为 64bit * 3 的三个字段，使用这三个字段进行 XOR。
+4. 64bit 值通过hex转换为十六进制长度为 16。
+5. 在用户名末尾添加用户名 `用户名-签名`。
+
+(\*1)(\*2) 这部分和SHA-1使用的方法二进制使用小端格式。(历史问题)
+
+如果 `IPMSG_ENCRYPTOPT` 标记未在 Entry 系统设置，或者 `IPMSG_RSA_2048`/`IPMSG_SIGN_SHA1`未在`IPMSG_GETPUBKEY`/`IPMSG_ANSPUBKEY` 中设置，即使发送带有公匙签名的用户名，也会导致非法数据包，建议丢弃数据包。
+
+#### 3) 消息传输
 
 
