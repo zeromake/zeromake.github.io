@@ -8,7 +8,7 @@ const KoaRuoter = require('koa-router')
 const { createBundleRenderer } = require('vue-server-renderer')
 const LRU = require('lru-cache')
 const fetch = require('node-fetch')
-// const { minify } = require('html-minifier')
+const { minify } = require('html-minifier')
 const router = require('./api.js')
 const { generateConfig, port } = require('./config')
 
@@ -24,26 +24,27 @@ const fileSystem = {
     writeFile: pify(fs.writeFile),
     unlink: pify(fs.unlink)
 }
-// const minifyOpt = {
-//     collapseBooleanAttributes: true,
-//     collapseWhitespace: true,
-//     decodeEntities: true,
-//     minifyCSS: true,
-//     minifyJS: true,
-//     processConditionalComments: true,
-//     removeAttributeQuotes: false,
-//     removeComments: false,
-//     removeEmptyAttributes: true,
-//     removeOptionalTags: true,
-//     removeRedundantAttributes: true,
-//     removeScriptTypeAttributes: false,
-//     removeStyleLinkTypeAttributes: false,
-//     removeTagWhitespace: false,
-//     sortAttributes: true,
-//     sortClassName: true,
-//     trimCustomFragments: true,
-//     useShortDoctype: true
-// }
+const minifyOpt = {
+    collapseBooleanAttributes: true,
+    collapseWhitespace: true,
+    decodeEntities: true,
+    minifyCSS: true,
+    minifyJS: true,
+    processConditionalComments: true,
+    removeAttributeQuotes: false,
+    removeComments: false,
+    removeEmptyAttributes: true,
+    removeOptionalTags: true,
+    removeRedundantAttributes: true,
+    removeScriptTypeAttributes: false,
+    removeStyleLinkTypeAttributes: false,
+    removeTagWhitespace: false,
+    sortAttributes: true,
+    sortClassName: true,
+    trimCustomFragments: true,
+    useShortDoctype: true
+}
+
 const resolve = file => path.resolve(__dirname, file)
 const isProd = process.env.NODE_ENV === 'production'
 const app = new Koa()
@@ -122,8 +123,12 @@ const generate = (config) => co(function * () {
         if (!fs.existsSync(`${docsPath}/${decode}`)) {
             yield fse.mkdirs(`${docsPath}/${decode}`)
         }
-        const html = yield render(url)
-        // const minHtml = minify(html, minifyOpt)
+        let html = yield render(url)
+        try {
+            html = minify(html, minifyOpt)
+        } catch (error) {
+            console.error(error)
+        }
         console.info('generate render: ' + decode)
         yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, html)
     }
