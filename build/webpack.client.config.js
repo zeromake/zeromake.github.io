@@ -1,13 +1,13 @@
 const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const base = require('./webpack.base.config')
+const BuildConfig = require('./webpack.base.config')
 const SWPrecachePlugin = require('sw-precache-webpack-plugin')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 
-const config = merge(base, {
+const config = merge(BuildConfig(true), {
     entry: {
         app: './src/client-entry.js'
     },
@@ -50,12 +50,12 @@ const config = merge(base, {
         },
         splitChunks: {
             cacheGroups: {
-                // styles: {
-                //     name: 'styles',
-                //     test: /\.(css|styl|stylus|scss|less)$/,
-                //     chunks: 'all',
-                //     enforce: true
-                // },
+                styles: {
+                    name: 'styles',
+                    test: /\.(css|styl|stylus|scss|less)$/,
+                    chunks: 'all',
+                    enforce: true
+                },
                 vendors: {
                     test: /([\\/]node_modules[\\/].+\.)(js|vue|jsm)$/,
                     chunks: "all",

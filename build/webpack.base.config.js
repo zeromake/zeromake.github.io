@@ -8,8 +8,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const isProd = process.env.NODE_ENV === 'production'
 
+module.exports = function BuildConfig(isExtract) {
+
 function buildCss(use) {
-    if (false) {
+    if (isExtract) {
         return [
             MiniCssExtractPlugin.loader,
             ...use
@@ -23,7 +25,7 @@ function buildCss(use) {
     ]
 }
 
-module.exports = {
+return {
     mode: isProd ? 'production' : 'development',
     devtool: '#inline-source-map',
     output: {
@@ -120,3 +122,6 @@ module.exports = {
             })
         ]
 }
+
+}
+
