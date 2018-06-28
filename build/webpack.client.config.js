@@ -15,29 +15,31 @@ const config = merge(base, {
             'create-api': './create-api-client.js'
         }
     },
+    optimization: {
+        runtimeChunk: {
+            name: "manifest"
+        },
+        splitChunks: {
+            cacheGroups: {
+                styles: {
+                    name: 'styles',
+                    test: /\.(css|styl)$/,
+                    chunks: 'all',
+                    enforce: true
+                },
+                vendors: {
+                    test: /[\\/]node_modules[\\/].+\.js$/,
+                    chunks: "all",
+                    name: "vendor"
+                }
+            }
+        },
+    },
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
             'process.env.VUE_ENV': '"client"',
             'process.env.DEBUG_API': '"true"'
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: function (module) {
-                return (
-                    module.resource &&
-                    /\.js$/.test(module.resource) &&
-                    module.resource.indexOf(
-                        path.join(__dirname, '../node_modules')
-                    ) === 0
-                )
-                /* return (
-                    /node_modules/.test(module.context) && !/\.css$/.test(module.require)
-                ) */
-            }
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest'
         }),
         new VueSSRClientPlugin()
     ]
@@ -54,10 +56,6 @@ if (process.env.NODE_ENV === 'production'){
             minify: true,
             stripPrefixMulti: prefixMulti,
             dontCacheBustUrlsMatching: /./,
-            /* dynamicUrlToDependencies: {
-                '/': glob.sync('./dist/*.js'),
-                '/top': glob.sync('./dist/*.js')
-            }, */
             staticFileGlobsIgnorePatterns: [/\.map$/, /\.json$/],
             runtimeCaching: [
                 {

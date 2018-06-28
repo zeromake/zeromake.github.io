@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const vueConfig = require('./vue-loader.config')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -23,12 +24,12 @@ module.exports = {
     module: {
         noParse: /es6-promise\.js$/,
         rules: [
-            {
-                test: /\.(js|vue)/,
-                use: 'eslint-loader',
-                enforce: 'pre',
-                exclude: /node_modules/
-            },
+            // {
+            //     test: /\.(js|vue)/,
+            //     use: 'eslint-loader',
+            //     enforce: 'pre',
+            //     exclude: /node_modules/
+            // },
             {
                 test: /\.vue$/,
                 use: {
@@ -82,6 +83,19 @@ module.exports = {
                     : ['vue-style-loader', 'css-loader', 'sass-loader']
             },
             {
+                test: /\.styl(us)?$/,
+                use: isProd
+                ? ExtractTextPlugin.extract({
+                    publicPath: '/dist/',
+                    use: ['css-loader', 'stylus-loader'],
+                    fallback: 'vue-style-loader'
+                }) : [
+                    'vue-style-loader',
+                    'css-loader',
+                    'stylus-loader'
+                ]
+            },
+            {
                 test: /\.json/,
                 use: 'json-loader'
             }
@@ -93,15 +107,17 @@ module.exports = {
     },
     plugins: isProd
         ? [
-            new webpack.optimize.UglifyJsPlugin({
-                compress: { warnings: false }
-            }),
-            new webpack.optimize.ModuleConcatenationPlugin(),
+            // new webpack.optimize.UglifyJsPlugin({
+            //     compress: { warnings: false }
+            // }),
+            // new webpack.optimize.ModuleConcatenationPlugin(),
+            new VueLoaderPlugin(),
             new ExtractTextPlugin({
                 filename: 'common.[chunkhash].css'
             })
         ]
         : [
+            new VueLoaderPlugin(),
             new FriendlyErrorsPlugin(),
             new ExtractTextPlugin({
                 filename: 'common.[chunkhash].css'

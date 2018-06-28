@@ -106,7 +106,7 @@ export default {
     width 240px
 
 .alipay_div
-    width 520px
+    width 600px
     margin 0 auto
 
 @media (max-width 520px)
@@ -153,7 +153,7 @@ export default {
     max-width 980px
     margin 0 auto
     padding 35px
-    img 
+    img
         width 100%
     code
         color #c7254e
