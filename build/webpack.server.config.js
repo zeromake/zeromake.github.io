@@ -7,7 +7,7 @@ const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 
 module.exports = merge(base, {
     target: 'node',
-    devtool: '#source-map',
+    devtool: 'source-map',
     entry: './src/server-entry.js',
     output: {
         filename: 'server-bundle.js',
@@ -19,7 +19,7 @@ module.exports = merge(base, {
         }
     },
     externals: nodeExternals({
-        whitelist: /\.css$/
+        whitelist: [/\.(css|stylus|styl)$/]
     }),
     plugins: [
         new webpack.DefinePlugin({

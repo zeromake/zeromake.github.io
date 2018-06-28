@@ -8,7 +8,7 @@ const KoaRuoter = require('koa-router')
 const { createBundleRenderer } = require('vue-server-renderer')
 const LRU = require('lru-cache')
 const fetch = require('node-fetch')
-const { minify } = require('html-minifier')
+// const { minify } = require('html-minifier')
 const router = require('./api.js')
 const { generateConfig, port } = require('./config')
 
@@ -124,11 +124,11 @@ const generate = (config) => co(function * () {
             yield fse.mkdirs(`${docsPath}/${decode}`)
         }
         let html = yield render(url)
-        try {
-            html = minify(html, minifyOpt)
-        } catch (error) {
-            console.error(error)
-        }
+        // try {
+        //     html = minify(html, minifyOpt)
+        // } catch (error) {
+        //     console.error(error)
+        // }
         console.info('generate render: ' + decode)
         yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, html)
     }

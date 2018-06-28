@@ -4,10 +4,27 @@ const vueConfig = require('./vue-loader.config')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const isProd = process.env.NODE_ENV === 'production'
 
+function buildCss(use) {
+    if (false) {
+        return [
+            MiniCssExtractPlugin.loader,
+            ...use
+        ]
+    }
+    return [
+        {
+            loader: "vue-style-loader"
+        },
+        ...use
+    ]
+}
+
 module.exports = {
+    mode: isProd ? 'production' : 'development',
     devtool: '#inline-source-map',
     output: {
         path: path.resolve(__dirname, '../dist'),
@@ -64,36 +81,15 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: isProd
-                    ? ExtractTextPlugin.extract({
-                        publicPath: '/dist/',
-                        use: 'css-loader?minimize',
-                        fallback: 'vue-style-loader'
-                    })
-                    : ['vue-style-loader', 'css-loader']
+                use: buildCss(['css-loader'])
             },
             {
                 test: /\.scss$/,
-                use: isProd
-                    ? ExtractTextPlugin.extract({
-                        publicPath: '/dist/',
-                        use: ['css-loader', 'sass-loader'],
-                        fallback: 'vue-style-loader'
-                    })
-                    : ['vue-style-loader', 'css-loader', 'sass-loader']
+                use: buildCss(['css-loader', 'sass-loader'])
             },
             {
                 test: /\.styl(us)?$/,
-                use: isProd
-                ? ExtractTextPlugin.extract({
-                    publicPath: '/dist/',
-                    use: ['css-loader', 'stylus-loader'],
-                    fallback: 'vue-style-loader'
-                }) : [
-                    'vue-style-loader',
-                    'css-loader',
-                    'stylus-loader'
-                ]
+                use: buildCss(['css-loader', 'stylus-loader'])
             },
             {
                 test: /\.json/,
@@ -111,16 +107,16 @@ module.exports = {
             //     compress: { warnings: false }
             // }),
             // new webpack.optimize.ModuleConcatenationPlugin(),
+            new MiniCssExtractPlugin({
+                filename: "common.[chunkhash].css",
+            }),
             new VueLoaderPlugin(),
-            new ExtractTextPlugin({
-                filename: 'common.[chunkhash].css'
-            })
         ]
         : [
             new VueLoaderPlugin(),
             new FriendlyErrorsPlugin(),
-            new ExtractTextPlugin({
-                filename: 'common.[chunkhash].css'
+            new MiniCssExtractPlugin({
+                filename: "common.[chunkhash].css",
             })
         ]
 }
