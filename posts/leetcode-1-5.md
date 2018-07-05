@@ -17,13 +17,17 @@ last_date: 2018-06-28 14:05:57+08:00
 
 [地址](https://leetcode.com/problems/two-sum)
 
-### 题目
+### 1.1 题目
 
 给定一个整数数组，返回这两个数字的索引，使它们合计成一个特定的目标。
 您可能会认为每个输入都只有一个解决方案，并且您可能不会使用相同的元素两次。
 
-> Given an array of integers, return indices of the two numbers such that they add up to a specific target.
-> You may assume that each input would have exactly one solution, and you may not use the same element twice.
+<details>
+<summary>英文</summary>
+Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+</details>
 
 Example:
 ```
@@ -33,7 +37,7 @@ Because nums[0] + nums[1] = 2 + 7 = 9,
 return [0, 1].
 ```
 
-### 思路解题
+### 1.2 思路解题
 1. 暴力破解即直接两层嵌套循环，相加并下标不同，代码复杂度: O(n^2)。
 
 ``` python
@@ -96,15 +100,21 @@ def twoSum(nums, target):
 
 [地址](https://leetcode.com/problems/add-two-numbers)
 
-### 题目
+### 2.1 题目
 
-给你两个非空链表，表示两个非负整数。 数字以相反的顺序存储，每个节点都包含一个数字。 这两个链表添加并将其作为链接列表返回。
-您可以假设这两个数字不包含任何前导零，除了数字0本身。
+给你两个非空链表，表示两个非负整数。数字以相反的顺序存储，每个节点都包含一个数字。
+
+这两个链表添加并将其作为链接列表返回。您可以假设这两个数字不包含任何前导零，除了数字0本身。
 
 > 题目有点误导性，我一直以为是什么意思，实际上意思就是这个两个链表都是一个10进制数的每个位组成的倒序链表，想办法把两个数相加并且依旧返回这种格式。
 
-> You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
-> You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+<details>
+<summary>英文</summary>
+You are given two non-empty linked lists representing two non-negative integers.
+The digits are stored in reverse order and each of their nodes contain a single digit.
+Add the two numbers and return it as a linked list.
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+</details>
 
 Example
 ```
@@ -113,12 +123,43 @@ Output: 7 -> 0 -> 8
 Explanation: 342 + 465 = 807.
 ```
 
-### 思路解题
+### 2.2 思路解题
 
-1. 最简单的暴力算法，直接转换回数字相加再转换回去。
+1. 最简单的暴力算法，直接转换回数字相加再转换回去，复杂度: O(max(n,m)) + O(n) + O(m)。
+``` python
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+def numToList(num: int) -> ListNode:
+    res = ListNode(0)
+    temp = res
+    i = num
+    while True:
+        res.val = i % 10
+        i = i // 10
+        if i == 0:
+            break
+        res.next = ListNode(0)
+        res = res.next
+    return temp
+
+def listToNum(l: ListNode) -> int:
+    res = 0
+    count = 0
+    while l:
+        res = l.val * 10 ** count
+        l = l.next
+        count += 1
+    return res
+
+def addTwoNumbers(l1, l2):
+    return numToList(listToNum(l1) + ListToNum(l2))
+```
 
 
-2. 好的做法是，由于链表是倒序的数所以只需要每个位的数相加如果有进位加到下一个位上。
+2. 好的做法是，由于链表是倒序的数所以只需要每个位的数相加如果有进位加到下一个位上，复杂度: O(max(n, m))。
 ``` python
 class ListNode:
     def __init__(self, x):
@@ -155,5 +196,26 @@ def addTwoNumbers(l1, l2):
         data.next = ListNode(last)
     return res
 ```
+## 三、Longest Substring Without Repeating Characters
 
+### 3.1 题目
+
+给定一个字符串，找出不含有重复字符的最长子串的长度。
+
+示例：
+
+给定 `abcabcbb` ，没有重复字符的最长子串是 `abc` ，那么长度就是3。
+给定 `bbbbb` ，最长的子串就是 `b` ，长度是1。
+给定 `pwwkew` ，最长子串是 `wke` ，长度是3。请注意答案必须是一个子串，`pwke` 是 子序列  而不是子串。
+
+<details>
+<summary>英文</summary>
+Given a string, find the length of the longest substring without repeating characters.
+
+Examples:
+
+Given "abcabcbb", the answer is "abc", which the length is 3.
+Given "bbbbb", the answer is "b", with the length of 1.
+Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+</details>
 

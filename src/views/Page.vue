@@ -153,6 +153,8 @@ export default {
     max-width 980px
     margin 0 auto
     padding 35px
+    h1, h2, h3, h4
+        margin-left -1.5rem
     img
         width 100%
     code
@@ -204,16 +206,20 @@ export default {
             font-weight 600
 
 @media (max-width: 991px)
+    h1, h2, h3, h4
+        margin-left -1rem
     .page-view
         width 100%
     .page-view
         padding 20px
 
-@media (max-width 767px)
-    .markdown-body
-        padding 10px
+// @media (max-width 767px)
+//     .markdown-body
+//         padding 10px
 
 @media (max-width 767px)
+    h1, h2, h3, h4
+        margin-left 0 !important
     .markdown-body
         padding 0
     .page-view
