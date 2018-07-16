@@ -38,7 +38,7 @@ return [0, 1].
 ```
 
 ### 1.2 思路解题
-1. 暴力破解即直接两层嵌套循环，相加并下标不同，代码复杂度: O(n^2)。
+- 暴力破解即直接两层嵌套循环，相加并下标不同，代码复杂度: O(n^2)。
 
 ``` python
 def towSum(nums, target):
@@ -54,7 +54,7 @@ def towSum(nums, target):
                 return [index1, index2]
 ```
 
-2. 使用的字典/map key 存放值，val 存放下标，再遍历用目标减去遍历的数再到 map 中寻找，且下标不相同, 代码复杂度: O(n)。
+- 使用的字典/map key 存放值，val 存放下标，再遍历用目标减去遍历的数再到 map 中寻找，且下标不相同, 代码复杂度: O(n)。
 
 ``` python
 def towSum(nums, target):
@@ -73,7 +73,7 @@ def towSum(nums, target):
                 return [index, index2]
 ```
 
-3. 最优解在 2 号方案的基础上优化，把 map 的生成去掉，并且去掉 enumerate，也是 O(n)，但是在 leetcode 中仅需 36ms，python 中排第一。
+- 最优解在 2 号方案的基础上优化，把 map 的生成去掉，并且去掉 enumerate，也是 O(n)，但是在 leetcode 中仅需 36ms，python 中排第一。
 
 ``` python
 def twoSum(nums, target):
@@ -125,7 +125,7 @@ Explanation: 342 + 465 = 807.
 
 ### 2.2 思路解题
 
-1. 最简单的暴力算法，直接转换回数字相加再转换回去，复杂度: O(max(n,m)) + O(n) + O(m)。
+- 最简单的暴力算法，直接转换回数字相加再转换回去，复杂度: O(max(n,m)) + O(n) + O(m)。
 ``` python
 class ListNode:
     def __init__(self, x):
@@ -159,7 +159,7 @@ def addTwoNumbers(l1, l2):
 ```
 
 
-2. 好的做法是，由于链表是倒序的数所以只需要每个位的数相加如果有进位加到下一个位上，复杂度: O(max(n, m))。
+- 好的做法是，由于链表是倒序的数所以只需要每个位的数相加如果有进位加到下一个位上，复杂度: O(max(n, m))。
 ``` python
 class ListNode:
     def __init__(self, x):
@@ -219,3 +219,49 @@ Given "bbbbb", the answer is "b", with the length of 1.
 Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
 </details>
 
+### 3.2 思路解题
+
+- 暴力破解法，双重循环，把每一种可能性遍历出来，判断是否有重复，复杂度 O(n^3).
+``` python
+def allUnique(s, start, end):
+    temp = set()
+    for i in range(start, end):
+        ch = s[i]
+        if temp.has(ch):
+            return False
+        temp.add(ch)
+    return True
+
+def lengthOfLongestSubstring(s):
+    slen = len(s)
+    res = 0
+    for i in range(slen):
+        for j in range(1, slen):
+            if allUnique(s, i, j):
+                res = max(res, j-i)
+    return res
+```
+- 最优解，滑动窗口，使用 `dict` 存放已遍历的字符为 key， val 为 index + 1，只有 `dict` 存在且上一次的 `index` 大于才是这次的字符串窗口内有重复，这个时候把窗口的开始移动到这个重复字符的后一位(保证 `abcaf` 这种可以使用), 复杂度: O(n)。
+``` python
+def lengthOfLongestSubstring(s):
+    cache = {}
+    start = 0
+    res = 0
+    slen = len(s)
+    for end in range(slen):
+        char = s[end]
+        # cache[char] <= start 说明这个字符上次重复是交叉的不在当前的字符串窗口
+        if char in cache and cache[char] > start:
+            # 如果重复的字符比 start 大说明是当前的字符串重复
+            # 如果发生重复把滑动窗口的起始移动到上一个重复的后一位
+            start = cache[char]
+            if end - start > res:
+                res = end - start
+        # 计算不重复的字符长度
+        # 设置字符并把这个字符的下一个索引写入
+        cache[char] = end + 1
+    # 判断最后一次无重复是否为最长
+    if slen - start > res:
+        res = slen - start
+    return res
+```
