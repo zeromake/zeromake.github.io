@@ -265,3 +265,192 @@ def lengthOfLongestSubstring(s):
         res = slen - start
     return res
 ```
+
+## 四、Median of Two Sorted Arrays
+
+### 4.1 题目
+
+给定两个大小为 m 和 n 的有序数组 nums1 和 nums2 。
+
+请找出这两个有序数组的中位数。要求算法的时间复杂度为 O(log (m+n)) 。
+
+你可以假设 nums1 和 nums2 均不为空。
+
+<details>
+<summary>英文</summary>
+There are two sorted arrays nums1 and nums2 of size m and n respectively.
+
+Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+
+You may assume nums1 and nums2 cannot be both empty.
+</details>
+
+### 4.2 思路解题
+
+- 暴力破解法，把两个数组合并，并且排序取中位数。
+
+由于 `python` 的特性这个方法在 `python` 的题解里是最优解。
+
+``` python
+def findMedianSortedArrays(nums1, nums2):
+    """
+    :type nums1: List[int]
+    :type nums2: List[int]
+    :rtype: float
+    """
+    num = nums1 + nums2
+    num = sorted(num)
+    if len(num)%2 != 0:
+        return num[len(num)//2]
+    x = len(num)//2
+    m = num[x] + num[x-1]
+    return m/2
+```
+
+顺便放个其它语言的暴力破解的最优解。
+``` c
+double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) {
+    int total = nums1Size+nums2Size;
+    int nums[total];
+    double result = 0.0;
+    int i1 = 0, i2 = 0;
+    int k = 0;
+    for (int i = 0 ; i < total ; i++) {
+        if (i1 >= nums1Size) {
+            nums[i] = nums2[i2++];
+        } else if( i2 >= nums2Size) {
+            nums[i] = nums1[i1++];
+        } else if(nums1[i1] > nums2[i2]) {
+            nums[i] = nums2[i2++];
+        } else if(nums1[i1] < nums2[i2]) {
+            nums[i] = nums1[i1++];
+        } else if(nums1[i1] == nums2[i2]) {
+            nums[i] = nums1[i1++];
+            nums[++i] = nums2[i2++];
+        }
+    }
+    k = total / 2;
+    if (total % 2 == 1) {
+        result = nums[k] + 0.0;
+    } else {
+        result = ( nums[k - 1] + nums[k] ) / 2.0;
+    }
+    return result;
+}
+```
+
+- 另一种解法是把问题改造为查找第 m 大的数，直接比较两个数组的第 `m//2` 个数小于的说明不在这个这个数组的前 `m//2`中。
+
+因为在 `python` 中不算是最优解就不做 `python` 了
+
+``` c
+int min(int a, int b) {
+    return a > b ? b : a;
+}
+
+void swapInt(int* a, int* b) {
+    int swap;
+    swap = *a;
+    *a = *b;
+    *b = swap;
+}
+
+int findKth(int* nums1, int m, int* nums2, int n, int k) {
+    int* snums;
+    int temp, j, i;
+
+    // 数组1的偏移量
+    int start1 = 0;
+    // 数组2的偏移量
+    int start2 = 0;
+
+    while(1) {
+        if (m > n) {
+            // 把大的放到nums2上
+            swapInt(&m, &n);
+            swapInt(&start1, &start2);
+            snums = nums1;
+            nums1 = nums2;
+            nums2 = snums;
+        }
+        if (m == 0) {
+            // 说明已经有一个数组被排除直接查找还有的数组的第 k 大数。
+            return nums2[start2 + k - 1];
+        }
+        if (k == 1) {
+            // 如果是取第一个大的数直接取两个数组的第一个数并取其中的最小值
+            return min(nums1[start1], nums2[start2]);
+        }
+        temp = k / 2;
+        i = min(m, temp);
+        j = min(n, temp);
+        // 比较 k/2 的数排除不需要的元素。
+        if (nums1[start1 + i - 1] > nums2[start2 + j -1]) {
+            k -= j;
+            start2 += j;
+            n -= j;
+        } else {
+            k -= i;
+            start1 += i;
+            m -= i;
+        }
+    }
+}
+
+double findMedianSortedArrays(int* nums1, int m, int* nums2, int n) {
+    int slen = m + n;
+    int left = (slen + 1) / 2;
+    int right = (slen + 2) / 2;
+    if (left == right){
+        // 说明只有一个中位数
+        return (double)findKth(nums1, m, nums2, n, left);
+    }
+    int res1 = findKth(nums1, m, nums2, n, left);
+    int res2 = findKth(nums1, m, nums2, n, right);
+    // 取出两个中位数相加并 /2
+    return (double)(res1 + res2) / 2.0;
+}
+```
+
+## 五、Longest Palindromic Substring
+
+### 5.1 题目
+
+给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为1000。
+
+示例 1：
+
+```
+输入: "babad"
+输出: "bab"
+注意: "aba"也是一个有效答案。
+```
+
+示例 2：
+
+```
+输入: "cbbd"
+输出: "bb"
+```
+
+<details>
+<summary>英文</summary>
+Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+
+Example 1:
+
+```
+Input: "babad"
+Output: "bab"
+Note: "aba" is also a valid answer.
+```
+
+Example 2:
+
+```
+Input: "cbbd"
+Output: "bb"
+```
+</details>
+
+
