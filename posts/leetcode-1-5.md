@@ -38,7 +38,10 @@ return [0, 1].
 ```
 
 ### 1.2 思路解题
-- 暴力破解即直接两层嵌套循环，相加并下标不同，代码复杂度: O(n^2)。
+
+**1. 暴力破解**
+
+即直接两层嵌套循环，相加并下标不同，代码复杂度: O(n^2)。
 
 ``` python
 def towSum(nums, target):
@@ -54,7 +57,9 @@ def towSum(nums, target):
                 return [index1, index2]
 ```
 
-- 使用的字典/map key 存放值，val 存放下标，再遍历用目标减去遍历的数再到 map 中寻找，且下标不相同, 代码复杂度: O(n)。
+**2. 动态规划**
+
+使用的字典/map key 存放值，val 存放下标，再遍历用目标减去遍历的数再到 map 中寻找，且下标不相同, 代码复杂度: O(n)。
 
 ``` python
 def towSum(nums, target):
@@ -73,7 +78,9 @@ def towSum(nums, target):
                 return [index, index2]
 ```
 
-- 最优解在 2 号方案的基础上优化，把 map 的生成去掉，并且去掉 enumerate，也是 O(n)，但是在 leetcode 中仅需 36ms，python 中排第一。
+**3. 最优解**
+
+在 2 号方案的基础上优化，把 map 的生成去掉，并且去掉 enumerate，也是 O(n)，但是在 leetcode 中仅需 36ms，python 中排第一。
 
 ``` python
 def twoSum(nums, target):
@@ -125,7 +132,9 @@ Explanation: 342 + 465 = 807.
 
 ### 2.2 思路解题
 
-- 最简单的暴力算法，直接转换回数字相加再转换回去，复杂度: O(max(n,m)) + O(n) + O(m)。
+**1. 暴力算法**
+
+直接转换回数字相加再转换回去，复杂度: O(max(n,m)) + O(n) + O(m)。
 ``` python
 class ListNode:
     def __init__(self, x):
@@ -159,7 +168,10 @@ def addTwoNumbers(l1, l2):
 ```
 
 
-- 好的做法是，由于链表是倒序的数所以只需要每个位的数相加如果有进位加到下一个位上，复杂度: O(max(n, m))。
+**2. 好的做法是**
+
+由于链表是倒序的数所以只需要每个位的数相加如果有进位加到下一个位上，复杂度: O(max(n, m))。
+
 ``` python
 class ListNode:
     def __init__(self, x):
@@ -221,7 +233,10 @@ Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer 
 
 ### 3.2 思路解题
 
-- 暴力破解法，双重循环，把每一种可能性遍历出来，判断是否有重复，复杂度 O(n^3).
+**1. 暴力破解法**
+
+双重循环，把每一种可能性遍历出来，判断是否有重复，复杂度 O(n^3).
+
 ``` python
 def allUnique(s, start, end):
     temp = set()
@@ -241,7 +256,10 @@ def lengthOfLongestSubstring(s):
                 res = max(res, j-i)
     return res
 ```
-- 最优解，滑动窗口，使用 `dict` 存放已遍历的字符为 key， val 为 index + 1，只有 `dict` 存在且上一次的 `index` 大于才是这次的字符串窗口内有重复，这个时候把窗口的开始移动到这个重复字符的后一位(保证 `abcaf` 这种可以使用), 复杂度: O(n)。
+**2.最优解，滑动窗口**
+
+使用 `dict` 存放已遍历的字符为 key， val 为 index + 1，只有 `dict` 存在且上一次的 `index` 大于才是这次的字符串窗口内有重复，这个时候把窗口的开始移动到这个重复字符的后一位(保证 `abcaf` 这种可以使用), 复杂度: O(n)。
+
 ``` python
 def lengthOfLongestSubstring(s):
     cache = {}
@@ -287,7 +305,9 @@ You may assume nums1 and nums2 cannot be both empty.
 
 ### 4.2 思路解题
 
-- 暴力破解法，把两个数组合并，并且排序取中位数。
+**1. 暴力破解法**
+
+把两个数组合并，并且排序取中位数。
 
 由于 `python` 的特性这个方法在 `python` 的题解里是最优解。
 
@@ -339,7 +359,9 @@ double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Si
 }
 ```
 
-- 另一种解法是把问题改造为查找第 m 大的数，直接比较两个数组的第 `m//2` 个数小于的说明不在这个这个数组的前 `m//2`中。
+**2. 另一种解法是把问题改造为查找第 m 大的数**
+
+直接比较两个数组的第 `m//2` 个数小于的说明不在这个这个数组的前 `m//2`中。
 
 因为在 `python` 中不算是最优解就不做 `python` 了
 
@@ -453,4 +475,34 @@ Output: "bb"
 ```
 </details>
 
+### 5.2 思路解题
 
+**1. 暴力破解**
+
+使用三层循环，强制枚举每个可能性。
+
+``` python
+def longestPalindrome(targetStr: str) -> str:
+    """
+    :type targetStr: str
+    :rtype: str
+    """
+    str_len = len(targetStr)
+    last_len = 0
+    index = [0,0]
+    for start_index in range(str_len - 1):
+        for end_index in range(start_index+1, str_len):
+            start = start_index
+            end = end_index
+            while start < end and targetStr[start] == targetStr[end]:
+                start += 1
+                end -= 1
+            if start >= end:
+                # 说明是一个回文
+                temp = end_index - start_index
+                if temp > last_len:
+                    last_len = temp
+                    index = [start_index, end_index + 1]
+    return targetStr[index[0]: index[1]]
+```
+**2. 使用动态规划法**
