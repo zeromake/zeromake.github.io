@@ -20,7 +20,7 @@ last_date: 2018-08-10 14:05:57+08:00
 
 `PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n`
 
-## 二、Frame 类型以及用途
+## 二、Frame 二进制格式描述
 
 `rfc` 中定义了 10 种 Frame, 下面先把一些需要的静态类型声明
 
@@ -69,6 +69,9 @@ const (
     FlagPushPromiseEndHeaders Flags = 0x4
     FlagPushPromisePadded     Flags = 0x8
 )
+
+// or (1<<31) - 1
+const PadBit uint32 = 0x7fffffff
 
 ```
 
@@ -136,7 +139,7 @@ func readFrameHeader(buf []byte, r io.Reader) (FrameHeader, error) {
         // flags 也为 uint8
         Flags:    Flags(buf[4]),
         // StreamID 正好长度为 32bit 通过binary.BigEndian.Uint32进行转换。
-		StreamID: binary.BigEndian.Uint32(buf[5:]) & (1<<31 - 1),
+		StreamID: binary.BigEndian.Uint32(buf[5:]) & PadBit,
 		valid:    true,
 	}, nil
 }
@@ -157,7 +160,7 @@ func ReadFrame(r io.Reader) {
 }
 ```
 
-### 2.2 Settings Format
+### 2.2 Settings Format 0x4
 ``` shell
  +-------------------------------+
  |       Identifier (16)         |
@@ -200,7 +203,7 @@ func ParserSettings(header FrameHeader, payload []byte) map[SettingID]Setting {
 - Ack: 0x1
 
 
-### 2.3 WindowUpdate Format
+### 2.3 WindowUpdate Format 0x8
 
 ``` shell
  +-+-------------------------------------------------------------+
@@ -213,10 +216,10 @@ func ParserSettings(header FrameHeader, payload []byte) map[SettingID]Setting {
 **解析示例**
 ``` go
 func ParserWindowUpdate(header FrameHeader, payload []byte) uint32 {
-    return binary.BigEndian.Uint32(payload[:4]) & (1<<31 - 1)
+    return binary.BigEndian.Uint32(payload[:4]) & PadBit
 }
 ```
-### 2.4 Header Format
+### 2.4 Header Format 0x1
 
 ``` shell
  +---------------+
@@ -233,7 +236,7 @@ func ParserWindowUpdate(header FrameHeader, payload []byte) uint32 {
 ```
 
 
-## 三、Frame 格式解析
+## 三、Frame 功能描述
 
 ## 四、HTTP2 的第一次消息握手
 
