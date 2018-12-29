@@ -12,7 +12,7 @@ export function createAPI ({ config, version }) {
             // url: 'https://hacker-news.firebaseio.com/v0/',
             url: `${config.url}/api/`,
             onServer: true,
-            cachedItems: LRU({
+            cachedItems: new LRU({
                 max: 1000,
                 maxAge: isProduction ? 1000 * 60 * 15 : 100
             }),

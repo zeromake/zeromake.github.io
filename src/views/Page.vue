@@ -3,7 +3,7 @@
         <div class="page-view">
             <div class="content">
                 <header class="post-header" v-if="pageData">
-                    <h1 class="post-title">{{pageData.title}}</h1>
+                    <h1 class="post-title">{{ pageData.title }}</h1>
                     <div class="post-meta">
                         <span class="post-time">
                             <span class="post-meta-item-icon">

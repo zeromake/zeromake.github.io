@@ -25,7 +25,7 @@ function createRenderer (bundle, options) {
         bundle,
         Object.assign(options, {
             template,
-            cache: LRU({
+            cache: new LRU({
                 max: 1000,
                 maxAge: 1000 * 60 * 15
             }),
@@ -65,7 +65,7 @@ app.use(serve('/manifest.json','./manifest.json', true))
 app.use(serve('/service-worker.js', './dist/servivce-worker.js'))
 
 // 1-second microcache.
-const microCache = LRU({
+const microCache = new LRU({
     max: 100,
     maxAge: isProd ? 10000 : 100
 })
