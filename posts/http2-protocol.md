@@ -3,7 +3,7 @@ title: HTTP2协议解析
 date: 2018-08-10 14:05:57+08:00
 type: protocol
 tags: [protocol, http2]
-last_date: 2018-08-10 14:05:57+08:00
+last_date: 2019-01-26 13:05:57+08:00
 ...
 
 ## 前言
@@ -76,6 +76,7 @@ const PadBit uint32 = 0x7fffffff
 ```
 
 ### 2.1 Frame Format
+[rfc-frame](https://httpwg.org/specs/rfc7540.html#FramingLayer)
 
 所有的 `Frame` 的头都是 `9bit` 长度。
 
@@ -104,34 +105,116 @@ const (
     frameHeaderLen = 9
 )
 type FrameHeader struct {
-	valid bool // caller can access []byte fields in the Frame
+    valid bool // caller can access []byte fields in the Frame
 
-	// Type is the 1 byte frame type. There are ten standard frame
-	// types, but extension frame types may be written by WriteRawFrame
-	// and will be returned by ReadFrame (as UnknownFrame).
-	Type FrameType
+    // Type is the 1 byte frame type. There are ten standard frame
+    // types, but extension frame types may be written by WriteRawFrame
+    // and will be returned by ReadFrame (as UnknownFrame).
+    Type FrameType
 
-	// Flags are the 1 byte of 8 potential bit flags per frame.
-	// They are specific to the frame type.
-	Flags Flags
+    // Flags are the 1 byte of 8 potential bit flags per frame.
+    // They are specific to the frame type.
+    Flags Flags
 
-	// Length is the length of the frame, not including the 9 byte header.
-	// The maximum size is one byte less than 16MB (uint24), but only
-	// frames up to 16KB are allowed without peer agreement.
-	Length uint32
+    // Length is the length of the frame, not including the 9 byte header.
+    // The maximum size is one byte less than 16MB (uint24), but only
+    // frames up to 16KB are allowed without peer agreement.
+    Length uint32
 
-	// StreamID is which stream this frame is for. Certain frames
-	// are not stream-specific, in which case this field is 0.
-	StreamID uint32
+    // StreamID is which stream this frame is for. Certain frames
+    // are not stream-specific, in which case this field is 0.
+    StreamID uint32
+}
+// 统一错误输出
+type ErrCode uint32
+
+const (
+    ErrCodeNo                 ErrCode = 0x0
+    ErrCodeProtocol           ErrCode = 0x1
+    ErrCodeInternal           ErrCode = 0x2
+    ErrCodeFlowControl        ErrCode = 0x3
+    ErrCodeSettingsTimeout    ErrCode = 0x4
+    ErrCodeStreamClosed       ErrCode = 0x5
+    ErrCodeFrameSize          ErrCode = 0x6
+    ErrCodeRefusedStream      ErrCode = 0x7
+    ErrCodeCancel             ErrCode = 0x8
+    ErrCodeCompression        ErrCode = 0x9
+    ErrCodeConnect            ErrCode = 0xa
+    ErrCodeEnhanceYourCalm    ErrCode = 0xb
+    ErrCodeInadequateSecurity ErrCode = 0xc
+    ErrCodeHTTP11Required     ErrCode = 0xd
+)
+
+var errCodeName = map[ErrCode]string{
+    ErrCodeNo:                 "NO_ERROR",
+    ErrCodeProtocol:           "PROTOCOL_ERROR",
+    ErrCodeInternal:           "INTERNAL_ERROR",
+    ErrCodeFlowControl:        "FLOW_CONTROL_ERROR",
+    ErrCodeSettingsTimeout:    "SETTINGS_TIMEOUT",
+    ErrCodeStreamClosed:       "STREAM_CLOSED",
+    ErrCodeFrameSize:          "FRAME_SIZE_ERROR",
+    ErrCodeRefusedStream:      "REFUSED_STREAM",
+    ErrCodeCancel:             "CANCEL",
+    ErrCodeCompression:        "COMPRESSION_ERROR",
+    ErrCodeConnect:            "CONNECT_ERROR",
+    ErrCodeEnhanceYourCalm:    "ENHANCE_YOUR_CALM",
+    ErrCodeInadequateSecurity: "INADEQUATE_SECURITY",
+    ErrCodeHTTP11Required:     "HTTP_1_1_REQUIRED",
+}
+
+func (e ErrCode) String() string {
+    if s, ok := errCodeName[e]; ok {
+        return s
+    }
+    return fmt.Sprintf("unknown error code 0x%x", uint32(e))
+}
+type connError struct {
+    Code   ErrCode // the ConnectionError error code
+    Reason string  // additional reason
+}
+
+func (e connError) Error() string {
+    return fmt.Sprintf("http2: connection error: %v: %v", e.Code, e.Reason)
+}
+
+type StreamError struct {
+    StreamID uint32
+    Code     ErrCode
+    Cause    error // optional additional detail
+}
+
+func streamError(id uint32, code ErrCode) StreamError {
+    return StreamError{StreamID: id, Code: code}
+}
+
+func (e StreamError) Error() string {
+    if e.Cause != nil {
+        return fmt.Sprintf("stream error: stream ID %d; %v; %v", e.StreamID, e.Code, e.Cause)
+    }
+    return fmt.Sprintf("stream error: stream ID %d; %v", e.StreamID, e.Code)
+}
+//
+func readByte(p []byte) ([]byte, byte, error) {
+    if len(p) == 0 {
+        return nil, 0, io.ErrUnexpectedEOF
+    }
+    return p[1:], p[0], nil
+}
+
+func readUint32(p []byte) ([]byte, uint32, error) {
+    if len(p) < 4 {
+        return nil, 0, io.ErrUnexpectedEOF
+    }
+    return p[4:], binary.BigEndian.Uint32(p[:4]), nil
 }
 
 func readFrameHeader(buf []byte, r io.Reader) (FrameHeader, error) {
     // 读出 9 个字节的 Frame 的头。
-	_, err := io.ReadFull(r, buf[:frameHeaderLen])
-	if err != nil {
-		return FrameHeader{}, err
-	}
-	return FrameHeader{
+    _, err := io.ReadFull(r, buf[:frameHeaderLen])
+    if err != nil {
+        return FrameHeader{}, err
+    }
+    return FrameHeader{
         // 把长度解析为 uint32, 由于长度不足 32 bit 手动通过位操作
         Length:   (uint32(buf[0])<<16 | uint32(buf[1])<<8 | uint32(buf[2])),
         // type 转为 uint8
@@ -139,9 +222,9 @@ func readFrameHeader(buf []byte, r io.Reader) (FrameHeader, error) {
         // flags 也为 uint8
         Flags:    Flags(buf[4]),
         // StreamID 正好长度为 32bit 通过binary.BigEndian.Uint32进行转换。
-		StreamID: binary.BigEndian.Uint32(buf[5:]) & PadBit,
-		valid:    true,
-	}, nil
+        StreamID: binary.BigEndian.Uint32(buf[5:]) & PadBit,
+        valid:    true,
+    }, nil
 }
 
 func ReadFrame(r io.Reader) {
@@ -161,6 +244,7 @@ func ReadFrame(r io.Reader) {
 ```
 
 ### 2.2 Settings Format 0x4
+[rfc-settings](https://httpwg.org/specs/rfc7540.html#SETTINGS)
 ``` shell
  +-------------------------------+
  |       Identifier (16)         |
@@ -204,7 +288,7 @@ func ParserSettings(header FrameHeader, payload []byte) map[SettingID]Setting {
 
 
 ### 2.3 WindowUpdate Format 0x8
-
+[rfc-window_update](https://httpwg.org/specs/rfc7540.html#WINDOW_UPDATE)
 ``` shell
  +-+-------------------------------------------------------------+
  |R|              Window Size Increment (31)                     |
@@ -220,7 +304,7 @@ func ParserWindowUpdate(header FrameHeader, payload []byte) uint32 {
 }
 ```
 ### 2.4 Header Format 0x1
-
+[rfc-headers](https://httpwg.org/specs/rfc7540.html#HEADERS)
 ``` shell
  +---------------+
  |Pad Length? (8)|
@@ -234,9 +318,240 @@ func ParserWindowUpdate(header FrameHeader, payload []byte) uint32 {
  |                           Padding (*)                       ...
  +---------------------------------------------------------------+
 ```
+- Pad Length: 8bit 可选，尾部 Padding 的填充字符的长度，可能用于对齐字节，需要 flag |= PADDED
+- E: 设置流是否为独占或依赖，PRIORITY 支持
+- Stream Dependency: 31bit 依赖的 stream identifier，需要 flag |= PRIORITY
+- Weight: 8bit 流的权重 1-255，需要 flag |= PRIORITY
+- Header Block Fragment: 压缩后的 Header 内容二进制
+- Padding: 填充字节
 
+**解析示例**
+``` go
+type HeadersFrame struct {
+    FrameHeader
+    headerFragBuf: []byte
+}
+func ParserHeadersFrame(fh FrameHeader, payload []byte) (*HeadersFrame, error) {
+    hf := &HeadersFrame{
+        FrameHeader: fh,
+    }
+    if fh.StreamID == 0 {
+        return nil, connError{ErrCodeProtocol, "HEADERS frame with stream ID 0"}
+    }
+    var padLength uint8
+    if fh.Flags.Has(FlagHeadersPadded) {
+        if p, padLength, err = readByte(p); err != nil {
+            return
+        }
+    }
+    // Priority
+    if fh.Flags.Has(FlagHeadersPriority) {
+        var v uint32
+        p, v, err = readUint32(p)
+        if err != nil {
+            return nil, err
+        }
+        // hf.Priority.StreamDep = v & 0x7fffffff
+        // hf.Priority.Exclusive = (v != hf.Priority.StreamDep) // high bit was set
+        // p, hf.Priority.Weight, err = readByte(p)
+        // if err != nil {
+        //     return nil, err
+        // }
+    }
+    const blockLength = len(p)
+    if blockLength - int(padLength) <= 0 {
+        return nil, streamError(fh.StreamID, ErrCodeProtocol)
+    }
+    hf.headerFragBuf = p[:blockLength - int(padLength)]
+    return hf, nil
+}
+```
 
-## 三、Frame 功能描述
+**flag**
+- END_STREAM: 0x1 是否结束这次流会话(比如 GET 的 header)
+- END_HEADERS: 0x4 header 是否结束，没有结束需要读取下面的 header 分片
+- PADDED: 0x8 是否有填充
+- PRIORITY: 0x20 是否有流依赖
+
+### 2.5 Priority Format 0x2
+[rfc-priority](http://http2.github.io/http2-spec/#rfc.section.6.3)
+``` shell
+ +-+-------------------------------------------------------------+
+ |E|                  Stream Dependency (31)                     |
+ +-+-------------+-----------------------------------------------+
+ |   Weight (8)  |
+ +-+-------------+
+```
+- E: 设置流是否为独占或依赖，PRIORITY 支持
+- Stream Dependency: 31bit 依赖的 stream identifier
+- Weight: 8bit 流的权重 1-255
+
+**解析示例**
+``` go
+type PriorityParam struct {
+    StreamDep uint32
+
+    Exclusive bool
+
+    Weight uint8
+}
+type PriorityFrame struct {
+    FrameHeader
+    PriorityParam
+}
+func parsePriorityFrame(fh FrameHeader, payload []byte) (*PriorityFrame, error) {
+    if fh.StreamID == 0 {
+        return nil, connError{
+            ErrCodeProtocol,
+            "PRIORITY frame with stream ID 0",
+        }
+    }
+    const payloadLength = len(payload)
+    if payloadLength != 5 {
+        return nil, connError{
+            ErrCodeFrameSize,
+            fmt.Sprintf(
+                "PRIORITY frame payload size was %d; want 5",
+                payloadLength,
+            ),
+        }
+    }
+    v := binary.BigEndian.Uint32(payload[:4])
+    // E 不处理
+    streamID := v & PadBit // mask off high bit
+    return &PriorityFrame{
+        FrameHeader: fh,
+        PriorityParam: PriorityParam{
+            Weight:    payload[4],
+            StreamDep: streamID,
+            Exclusive: streamID != v, // was high bit set?
+        },
+    }, nil
+}
+```
+
+## 2.6 RST_STREAM Fromat 0x3
+``` shell
+ +---------------------------------------------------------------+
+ |                        Error Code (32)                        |
+ +---------------------------------------------------------------+
+```
+- Error Code: 32bit 错误码见 [error-codes](https://httpwg.org/specs/rfc7540.html#ErrorCodes)
+
+**解析示例**
+``` go
+type RSTStreamFrame struct {
+    FrameHeader
+    ErrCode ErrCode
+}
+func parseRSTStreamFrame(fh FrameHeader, p []byte) (*RSTStreamFrame, error) {
+    if len(p) != 4 {
+        return nil, ConnectionError(ErrCodeFrameSize)
+    }
+    if fh.StreamID == 0 {
+        return nil, ConnectionError(ErrCodeProtocol)
+    }
+    return &RSTStreamFrame{fh, ErrCode(binary.BigEndian.Uint32(p[:4]))}, nil
+}
+```
+
+## 2.7 PUSH_PROMISE Format 0x5
+[rfc-push_promise](https://httpwg.org/specs/rfc7540.html#PUSH_PROMISE)
+``` shell
+ +---------------+
+ |Pad Length? (8)|
+ +-+-------------+-----------------------------------------------+
+ |R|                  Promised Stream ID (31)                    |
+ +-+-----------------------------+-------------------------------+
+ |                   Header Block Fragment (*)                 ...
+ +---------------------------------------------------------------+
+ |                           Padding (*)                       ...
+ +---------------------------------------------------------------+
+```
+- Pad Length: 8bit 填充大小，需要 flag := PADDED
+- R: 1bit 保留位
+- Promised Stream ID: 31bit 主动推送的下一个流ID
+
+**解析示例**
+``` go
+type PushPromiseFrame struct {
+    FrameHeader
+    PromiseID     uint32
+    headerFragBuf []byte // not owned
+}
+func parsePushPromise(fh FrameHeader, p []byte) (*PushPromiseFrame, err error) {
+    pp := &PushPromiseFrame{
+        FrameHeader: fh,
+    }
+    if pp.StreamID == 0 {
+        return nil, ConnectionError(ErrCodeProtocol)
+    }
+    var padLength uint8
+    if fh.Flags.Has(FlagPushPromisePadded) {
+        if p, padLength, err = readByte(p); err != nil {
+            return nil, err
+        }
+    }
+    p, pp.PromiseID, err = readUint32(p)
+    if err != nil {
+        return nil, err
+    }
+    pp.PromiseID = pp.PromiseID & PadBit
+    const payloadLength = len(p)
+    if int(padLength) > payloadLength {
+        return nil, ConnectionError(ErrCodeProtocol)
+    }
+    pp.headerFragBuf = p[:payloadLength-int(padLength)]
+    return pp, nil
+}
+```
+
+**flag**
+- END_HEADERS: 0x4 与 headers 下的作用相同
+- PADDED: 0x8 是否有填充
+
+### 2.8 PING Format 0x6
+[rfc-ping](https://httpwg.org/specs/rfc7540.html#PING)
+``` shell
+ +---------------------------------------------------------------+
+ |                                                               |
+ |                      Opaque Data (64)                         |
+ |                                                               |
+ +---------------------------------------------------------------+
+```
+- Opaque Data: 64bit 任意内容定长，用于各种协议 ping 时的自定义
+
+**解析示例**
+``` go
+type PingFrame struct {
+    FrameHeader
+    Data [8]byte
+}
+func parsePingFrame(fh FrameHeader, payload []byte) (*PingFrame, error) {
+    if len(payload) != 8 {
+        return nil, ConnectionError(ErrCodeFrameSize)
+    }
+    if fh.StreamID != 0 {
+        return nil, ConnectionError(ErrCodeProtocol)
+    }
+    f := &PingFrame{FrameHeader: fh}
+    copy(f.Data[:], payload)
+    return f, nil
+}
+```
+### 2.9 GOAWAY Format 0x7
+[rfc-goaway](https://httpwg.org/specs/rfc7540.html#GOAWAY)
+``` shell
+ +-+-------------------------------------------------------------+
+ |R|                  Last-Stream-ID (31)                        |
+ +-+-------------------------------------------------------------+
+ |                      Error Code (32)                          |
+ +---------------------------------------------------------------+
+ |                  Additional Debug Data (*)                    |
+ +---------------------------------------------------------------+
+```
+
+## 三、Frame 功能逻辑描述
 
 ## 四、HTTP2 的第一次消息握手
 
