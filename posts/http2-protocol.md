@@ -243,67 +243,57 @@ func ReadFrame(r io.Reader) {
 }
 ```
 
-### 2.2 Settings Format 0x4
-[rfc-settings](https://httpwg.org/specs/rfc7540.html#SETTINGS)
+### 2.2 DATA Format 0x0
+[rfc-data](https://httpwg.org/specs/rfc7540.html#DATA)
 ``` shell
- +-------------------------------+
- |       Identifier (16)         |
- +-------------------------------+-------------------------------+
- |                        Value (32)                             |
+ +---------------+
+ |Pad Length? (8)|
+ +---------------+-----------------------------------------------+
+ |                            Data (*)                         ...
  +---------------------------------------------------------------+
- +-------------------------------+
- |       Identifier (16)         |
- +-------------------------------+-------------------------------+
- |                        Value (32)                             |
+ |                           Padding (*)                       ...
  +---------------------------------------------------------------+
- ...
 ```
-- Identifier: 16 bit 长度的 key。
-- Value: 32 bit 长度的 value。
-- 以每一对为存在并且数量不限，有什么样设置见 [SettingValues](https://httpwg.org/specs/rfc7540.html#SettingValues)。
+
+- Pad Length: 8bit 可选，尾部 Padding 的填充字符的长度，可能用于对齐字节，需要 flag |= PADDED
+- Data: body 内容字节
+- Padding: 填充字节
 
 **解析示例**
 ``` go
-type SettingID uint16
-type Setting struct {
-    ID  SettingID
-    Val uint32
+type DataFrame struct {
+    FrameHeader
+    Data []byte
 }
-func ParserSettings(header FrameHeader, payload []byte) map[SettingID]Setting {
-    settings := map[SettingID]Setting{}
-    num := len(payload) / 6
-    for i := 0; i < num; i++ {
-        id := SettingID(binary.BigEndian.Uint16(payload[i*6 : i*6+2]))
-        s := Setting{
-            ID: id,
-            Val: binary.BigEndian.Uint32(payload[i*6+2 : i*6+6]),
-        }
-        settings[id] = s
+func parseDataFrame(fh FrameHeader, payload []byte) (*DataFrame, error) {
+    if fh.StreamID == 0 {
+        return nil, connError{ErrCodeProtocol, "DATA frame with stream ID 0"}
     }
-    return settings
+    f := &DataFrame{
+        fh,
+    }
+
+    var padSize byte
+    if fh.Flags.Has(FlagDataPadded) {
+        var err error
+        payload, padSize, err = readByte(payload)
+        if err != nil {
+            return nil, err
+        }
+    }
+    if int(padSize) > len(payload) {
+        return nil, connError{ErrCodeProtocol, "pad size larger than data payload"}
+    }
+    f.data = payload[:len(payload)-int(padSize)]
+    return f, nil
 }
 ```
-**Flags**
-- Ack: 0x1
 
+**flags**
+- END_STREAM: 0x1 会话流是否结束
+- PADDED: 0x8 是否有填充字节
 
-### 2.3 WindowUpdate Format 0x8
-[rfc-window_update](https://httpwg.org/specs/rfc7540.html#WINDOW_UPDATE)
-``` shell
- +-+-------------------------------------------------------------+
- |R|              Window Size Increment (31)                     |
- +-+-------------------------------------------------------------+
-```
-- R: 1bit 占位必须为 `0x0`。
-- Window Size Increment: 31bit 的 `uint32`。
-
-**解析示例**
-``` go
-func ParserWindowUpdate(header FrameHeader, payload []byte) uint32 {
-    return binary.BigEndian.Uint32(payload[:4]) & PadBit
-}
-```
-### 2.4 Header Format 0x1
+### 2.3 Header Format 0x1
 [rfc-headers](https://httpwg.org/specs/rfc7540.html#HEADERS)
 ``` shell
  +---------------+
@@ -329,7 +319,7 @@ func ParserWindowUpdate(header FrameHeader, payload []byte) uint32 {
 ``` go
 type HeadersFrame struct {
     FrameHeader
-    headerFragBuf: []byte
+    HeaderFragBuf: []byte
 }
 func ParserHeadersFrame(fh FrameHeader, payload []byte) (*HeadersFrame, error) {
     hf := &HeadersFrame{
@@ -362,7 +352,7 @@ func ParserHeadersFrame(fh FrameHeader, payload []byte) (*HeadersFrame, error) {
     if blockLength - int(padLength) <= 0 {
         return nil, streamError(fh.StreamID, ErrCodeProtocol)
     }
-    hf.headerFragBuf = p[:blockLength - int(padLength)]
+    hf.HeaderFragBuf = p[:blockLength - int(padLength)]
     return hf, nil
 }
 ```
@@ -373,7 +363,7 @@ func ParserHeadersFrame(fh FrameHeader, payload []byte) (*HeadersFrame, error) {
 - PADDED: 0x8 是否有填充
 - PRIORITY: 0x20 是否有流依赖
 
-### 2.5 Priority Format 0x2
+### 2.4 Priority Format 0x2
 [rfc-priority](http://http2.github.io/http2-spec/#rfc.section.6.3)
 ``` shell
  +-+-------------------------------------------------------------+
@@ -430,7 +420,7 @@ func parsePriorityFrame(fh FrameHeader, payload []byte) (*PriorityFrame, error) 
 }
 ```
 
-## 2.6 RST_STREAM Fromat 0x3
+### 2.5 RST_STREAM Fromat 0x3
 ``` shell
  +---------------------------------------------------------------+
  |                        Error Code (32)                        |
@@ -455,7 +445,50 @@ func parseRSTStreamFrame(fh FrameHeader, p []byte) (*RSTStreamFrame, error) {
 }
 ```
 
-## 2.7 PUSH_PROMISE Format 0x5
+### 2.6 Settings Format 0x4
+[rfc-settings](https://httpwg.org/specs/rfc7540.html#SETTINGS)
+``` shell
+ +-------------------------------+
+ |       Identifier (16)         |
+ +-------------------------------+-------------------------------+
+ |                        Value (32)                             |
+ +---------------------------------------------------------------+
+ +-------------------------------+
+ |       Identifier (16)         |
+ +-------------------------------+-------------------------------+
+ |                        Value (32)                             |
+ +---------------------------------------------------------------+
+ ...
+```
+- Identifier: 16 bit 长度的 key。
+- Value: 32 bit 长度的 value。
+- 以每一对为存在并且数量不限，有什么样设置见 [SettingValues](https://httpwg.org/specs/rfc7540.html#SettingValues)。
+
+**解析示例**
+``` go
+type SettingID uint16
+type Setting struct {
+    ID  SettingID
+    Val uint32
+}
+func ParserSettings(header FrameHeader, payload []byte) map[SettingID]Setting {
+    settings := map[SettingID]Setting{}
+    num := len(payload) / 6
+    for i := 0; i < num; i++ {
+        id := SettingID(binary.BigEndian.Uint16(payload[i*6 : i*6+2]))
+        s := Setting{
+            ID: id,
+            Val: binary.BigEndian.Uint32(payload[i*6+2 : i*6+6]),
+        }
+        settings[id] = s
+    }
+    return settings
+}
+```
+**Flags**
+- Ack: 0x1
+
+### 2.7 PUSH_PROMISE Format 0x5
 [rfc-push_promise](https://httpwg.org/specs/rfc7540.html#PUSH_PROMISE)
 ``` shell
  +---------------+
@@ -477,7 +510,7 @@ func parseRSTStreamFrame(fh FrameHeader, p []byte) (*RSTStreamFrame, error) {
 type PushPromiseFrame struct {
     FrameHeader
     PromiseID     uint32
-    headerFragBuf []byte // not owned
+    HeaderFragBuf []byte // not owned
 }
 func parsePushPromise(fh FrameHeader, p []byte) (*PushPromiseFrame, err error) {
     pp := &PushPromiseFrame{
@@ -501,7 +534,7 @@ func parsePushPromise(fh FrameHeader, p []byte) (*PushPromiseFrame, err error) {
     if int(padLength) > payloadLength {
         return nil, ConnectionError(ErrCodeProtocol)
     }
-    pp.headerFragBuf = p[:payloadLength-int(padLength)]
+    pp.HeaderFragBuf = p[:payloadLength-int(padLength)]
     return pp, nil
 }
 ```
@@ -550,6 +583,77 @@ func parsePingFrame(fh FrameHeader, payload []byte) (*PingFrame, error) {
  |                  Additional Debug Data (*)                    |
  +---------------------------------------------------------------+
 ```
+- Last-Stream-ID: 31bit 最后的流ID。
+- Error Code: 32bit 错误编码。
+- Additional Debug Data: 任意调试数据。
+
+**解析示例**
+``` go
+type GoAwayFrame struct {
+    FrameHeader
+    LastStreamID uint32
+    ErrCode      ErrCode
+    DebugData    []byte
+}
+func parseGoAwayFrame(fh FrameHeader, p []byte) (*GoAwayFrame, error) {
+    if fh.StreamID != 0 {
+        return nil, ConnectionError(ErrCodeProtocol)
+    }
+    if len(p) < 8 {
+        return nil, ConnectionError(ErrCodeFrameSize)
+    }
+    return &GoAwayFrame{
+        FrameHeader:  fh,
+        LastStreamID: binary.BigEndian.Uint32(p[:4]) & PadBit,
+        ErrCode:      ErrCode(binary.BigEndian.Uint32(p[4:8])),
+        debugData:    p[8:],
+    }, nil
+}
+```
+
+### 2.10 WindowUpdate Format 0x8
+[rfc-window_update](https://httpwg.org/specs/rfc7540.html#WINDOW_UPDATE)
+``` shell
+ +-+-------------------------------------------------------------+
+ |R|              Window Size Increment (31)                     |
+ +-+-------------------------------------------------------------+
+```
+- R: 1bit 占位必须为 `0x0`。
+- Window Size Increment: 31bit 的 `uint32`。
+
+**解析示例**
+``` go
+func ParserWindowUpdate(header FrameHeader, payload []byte) uint32 {
+    return binary.BigEndian.Uint32(payload[:4]) & PadBit
+}
+```
+
+### 2.11 Continuation Format 0x9
+[rfc-continuation](https://httpwg.org/specs/rfc7540.html#CONTINUATION)
+``` shell
++---------------------------------------------------------------+
+ |                   Header Block Fragment (*)                 ...
+ +---------------------------------------------------------------+
+```
+- Header Block Fragment: header的分片压缩字节
+
+**解析示例**
+``` go
+type ContinuationFrame struct {
+    FrameHeader
+    HeaderFragBuf []byte
+}
+
+func parseContinuationFrame(fh FrameHeader, p []byte) (*ContinuationFrame, error) {
+    if fh.StreamID == 0 {
+        return nil, connError{ErrCodeProtocol, "CONTINUATION frame with stream ID 0"}
+    }
+    return &ContinuationFrame{fh, p}, nil
+}
+```
+
+**flags**
+- END_HEADERS: header 分片结束
 
 ## 三、Frame 功能逻辑描述
 
