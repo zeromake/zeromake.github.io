@@ -293,7 +293,7 @@ func parseDataFrame(fh FrameHeader, payload []byte) (*DataFrame, error) {
 - END_STREAM: 0x1 会话流是否结束
 - PADDED: 0x8 是否有填充字节
 
-### 2.3 HEADER Format 0x1
+### 2.03 HEADER Format 0x1
 [rfc-headers](https://httpwg.org/specs/rfc7540.html#HEADERS)
 ``` shell
  +---------------+
@@ -488,7 +488,7 @@ func ParserSettings(header FrameHeader, payload []byte) map[SettingID]Setting {
 **Flags**
 - Ack: 0x1
 
-### 2.7 PUSH_PROMISE Format 0x5
+### 2.07 PUSH_PROMISE Format 0x5
 [rfc-push_promise](https://httpwg.org/specs/rfc7540.html#PUSH_PROMISE)
 ``` shell
  +---------------+
@@ -543,7 +543,7 @@ func parsePushPromise(fh FrameHeader, p []byte) (*PushPromiseFrame, err error) {
 - END_HEADERS: 0x4 与 headers 下的作用相同
 - PADDED: 0x8 是否有填充
 
-### 2.8 PING Format 0x6
+### 2.08 PING Format 0x6
 [rfc-ping](https://httpwg.org/specs/rfc7540.html#PING)
 ``` shell
  +---------------------------------------------------------------+
@@ -572,7 +572,7 @@ func parsePingFrame(fh FrameHeader, payload []byte) (*PingFrame, error) {
     return f, nil
 }
 ```
-### 2.9 GOAWAY Format 0x7
+### 2.09 GOAWAY Format 0x7
 [rfc-goaway](https://httpwg.org/specs/rfc7540.html#GOAWAY)
 ``` shell
  +-+-------------------------------------------------------------+
