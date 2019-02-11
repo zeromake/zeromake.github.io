@@ -75,7 +75,7 @@ const PadBit uint32 = 0x7fffffff
 
 ```
 
-### 2.1 Frame Format
+### 2.01 FRAME Format
 [rfc-frame](https://httpwg.org/specs/rfc7540.html#FramingLayer)
 
 所有的 `Frame` 的头都是 `9bit` 长度。
@@ -243,7 +243,7 @@ func ReadFrame(r io.Reader) {
 }
 ```
 
-### 2.2 DATA Format 0x0
+### 2.02 DATA Format 0x0
 [rfc-data](https://httpwg.org/specs/rfc7540.html#DATA)
 ``` shell
  +---------------+
@@ -293,7 +293,7 @@ func parseDataFrame(fh FrameHeader, payload []byte) (*DataFrame, error) {
 - END_STREAM: 0x1 会话流是否结束
 - PADDED: 0x8 是否有填充字节
 
-### 2.3 Header Format 0x1
+### 2.3 HEADER Format 0x1
 [rfc-headers](https://httpwg.org/specs/rfc7540.html#HEADERS)
 ``` shell
  +---------------+
@@ -363,7 +363,7 @@ func ParserHeadersFrame(fh FrameHeader, payload []byte) (*HeadersFrame, error) {
 - PADDED: 0x8 是否有填充
 - PRIORITY: 0x20 是否有流依赖
 
-### 2.4 Priority Format 0x2
+### 2.04 PRIORITY Format 0x2
 [rfc-priority](http://http2.github.io/http2-spec/#rfc.section.6.3)
 ``` shell
  +-+-------------------------------------------------------------+
@@ -420,7 +420,7 @@ func parsePriorityFrame(fh FrameHeader, payload []byte) (*PriorityFrame, error) 
 }
 ```
 
-### 2.5 RST_STREAM Fromat 0x3
+### 2.05 RST_STREAM Fromat 0x3
 ``` shell
  +---------------------------------------------------------------+
  |                        Error Code (32)                        |
@@ -445,7 +445,7 @@ func parseRSTStreamFrame(fh FrameHeader, p []byte) (*RSTStreamFrame, error) {
 }
 ```
 
-### 2.6 Settings Format 0x4
+### 2.06 SETTINGS Format 0x4
 [rfc-settings](https://httpwg.org/specs/rfc7540.html#SETTINGS)
 ``` shell
  +-------------------------------+
@@ -611,7 +611,7 @@ func parseGoAwayFrame(fh FrameHeader, p []byte) (*GoAwayFrame, error) {
 }
 ```
 
-### 2.10 WindowUpdate Format 0x8
+### 2.10 WINDOWUPDATE Format 0x8
 [rfc-window_update](https://httpwg.org/specs/rfc7540.html#WINDOW_UPDATE)
 ``` shell
  +-+-------------------------------------------------------------+
@@ -628,7 +628,7 @@ func ParserWindowUpdate(header FrameHeader, payload []byte) uint32 {
 }
 ```
 
-### 2.11 Continuation Format 0x9
+### 2.11 CONTINUATION Format 0x9
 [rfc-continuation](https://httpwg.org/specs/rfc7540.html#CONTINUATION)
 ``` shell
 +---------------------------------------------------------------+
