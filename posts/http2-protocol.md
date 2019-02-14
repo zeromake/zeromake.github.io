@@ -208,13 +208,13 @@ func readUint32(p []byte) ([]byte, uint32, error) {
     return p[4:], binary.BigEndian.Uint32(p[:4]), nil
 }
 
-func readFrameHeader(buf []byte, r io.Reader) (FrameHeader, error) {
+func readFrameHeader(buf []byte, r io.Reader) (*FrameHeader, error) {
     // 读出 9 个字节的 Frame 的头。
     _, err := io.ReadFull(r, buf[:frameHeaderLen])
     if err != nil {
-        return FrameHeader{}, err
+        return nil, err
     }
-    return FrameHeader{
+    return &FrameHeader{
         // 把长度解析为 uint32, 由于长度不足 32 bit 手动通过位操作
         Length:   (uint32(buf[0])<<16 | uint32(buf[1])<<8 | uint32(buf[2])),
         // type 转为 uint8
@@ -265,27 +265,24 @@ type DataFrame struct {
     FrameHeader
     Data []byte
 }
-func parseDataFrame(fh FrameHeader, payload []byte) (*DataFrame, error) {
-    if fh.StreamID == 0 {
-        return nil, connError{ErrCodeProtocol, "DATA frame with stream ID 0"}
-    }
-    f := &DataFrame{
-        fh,
-    }
+func ParseDataFrame(fh *FrameHeader, payload []byte) (*DataFrame, error) {
+	if fh.StreamID == 0 {
+		return nil, ConnError{ErrCodeProtocol, "DATA frame with stream ID 0"}
+	}
+	f := &DataFrame{FrameHeader: *fh}
 
-    var padSize byte
-    if fh.Flags.Has(FlagDataPadded) {
-        var err error
-        payload, padSize, err = readByte(payload)
-        if err != nil {
-            return nil, err
-        }
-    }
-    if int(padSize) > len(payload) {
-        return nil, connError{ErrCodeProtocol, "pad size larger than data payload"}
-    }
-    f.data = payload[:len(payload)-int(padSize)]
-    return f, nil
+	var padSize byte
+	if fh.Flags.Has(FlagDataPadded) {
+		var err error
+		payload, padSize, err = readByte(payload)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if int(padSize) > len(payload) {
+		return nil, ConnError{ErrCodeProtocol, "pad size larger than data payload"}
+	}
+	f.Data = payload[:len(payload)-int(padSize)]
 }
 ```
 
@@ -319,40 +316,40 @@ func parseDataFrame(fh FrameHeader, payload []byte) (*DataFrame, error) {
 ``` go
 type HeadersFrame struct {
     FrameHeader
-    HeaderFragBuf: []byte
+    Priority PriorityParam
+    HeaderFragBuf []byte
 }
-func ParserHeadersFrame(fh FrameHeader, payload []byte) (*HeadersFrame, error) {
+func ParseHeadersFrame(fh *FrameHeader, p []byte) (*HeadersFrame, error) {
+    var err error
     hf := &HeadersFrame{
-        FrameHeader: fh,
+        FrameHeader: *fh,
     }
     if fh.StreamID == 0 {
-        return nil, connError{ErrCodeProtocol, "HEADERS frame with stream ID 0"}
+        return nil, ConnError{ErrCodeProtocol, "HEADERS frame with stream ID 0"}
     }
     var padLength uint8
     if fh.Flags.Has(FlagHeadersPadded) {
         if p, padLength, err = readByte(p); err != nil {
-            return
+            return nil, err
         }
     }
-    // Priority
     if fh.Flags.Has(FlagHeadersPriority) {
         var v uint32
         p, v, err = readUint32(p)
         if err != nil {
             return nil, err
         }
-        // hf.Priority.StreamDep = v & 0x7fffffff
-        // hf.Priority.Exclusive = (v != hf.Priority.StreamDep) // high bit was set
-        // p, hf.Priority.Weight, err = readByte(p)
-        // if err != nil {
-        //     return nil, err
-        // }
+        hf.Priority.StreamDep = v & PadBit
+        hf.Priority.Exclusive = (v != hf.Priority.StreamDep) // high bit was set
+        p, hf.Priority.Weight, err = readByte(p)
+        if err != nil {
+            return nil, err
+        }
     }
-    const blockLength = len(p)
-    if blockLength - int(padLength) <= 0 {
+    if len(p)-int(padLength) <= 0 {
         return nil, streamError(fh.StreamID, ErrCodeProtocol)
     }
-    hf.HeaderFragBuf = p[:blockLength - int(padLength)]
+    hf.HeaderFragBuf = p[:len(p)-int(padLength)]
     return hf, nil
 }
 ```
@@ -389,14 +386,14 @@ type PriorityFrame struct {
     FrameHeader
     PriorityParam
 }
-func parsePriorityFrame(fh FrameHeader, payload []byte) (*PriorityFrame, error) {
+func ParsePriorityFrame(fh *FrameHeader, payload []byte) (*PriorityFrame, error) {
     if fh.StreamID == 0 {
         return nil, connError{
             ErrCodeProtocol,
             "PRIORITY frame with stream ID 0",
         }
     }
-    const payloadLength = len(payload)
+    var payloadLength = len(payload)
     if payloadLength != 5 {
         return nil, connError{
             ErrCodeFrameSize,
@@ -410,7 +407,7 @@ func parsePriorityFrame(fh FrameHeader, payload []byte) (*PriorityFrame, error) 
     // E 不处理
     streamID := v & PadBit // mask off high bit
     return &PriorityFrame{
-        FrameHeader: fh,
+        FrameHeader: *fh,
         PriorityParam: PriorityParam{
             Weight:    payload[4],
             StreamDep: streamID,
@@ -434,14 +431,14 @@ type RSTStreamFrame struct {
     FrameHeader
     ErrCode ErrCode
 }
-func parseRSTStreamFrame(fh FrameHeader, p []byte) (*RSTStreamFrame, error) {
+func ParseRSTStreamFrame(fh *FrameHeader, p []byte) (*RSTStreamFrame, error) {
     if len(p) != 4 {
         return nil, ConnectionError(ErrCodeFrameSize)
     }
     if fh.StreamID == 0 {
         return nil, ConnectionError(ErrCodeProtocol)
     }
-    return &RSTStreamFrame{fh, ErrCode(binary.BigEndian.Uint32(p[:4]))}, nil
+    return &RSTStreamFrame{*fh, ErrCode(binary.BigEndian.Uint32(p[:4]))}, nil
 }
 ```
 
@@ -471,18 +468,27 @@ type Setting struct {
     ID  SettingID
     Val uint32
 }
-func ParserSettings(header FrameHeader, payload []byte) map[SettingID]Setting {
-    settings := map[SettingID]Setting{}
-    num := len(payload) / 6
-    for i := 0; i < num; i++ {
-        id := SettingID(binary.BigEndian.Uint16(payload[i*6 : i*6+2]))
-        s := Setting{
-            ID: id,
-            Val: binary.BigEndian.Uint32(payload[i*6+2 : i*6+6]),
-        }
-        settings[id] = s
-    }
-    return settings
+
+// SettingFrame setting frame
+type SettingFrame struct {
+	FrameHeader
+	Settings map[SettingID]Setting
+}
+func ParserSettings(header *FrameHeader, payload []byte) (*SettingFrame, error) {
+	settings := map[SettingID]Setting{}
+	num := len(payload) / 6
+	for i := 0; i < num; i++ {
+		id := SettingID(binary.BigEndian.Uint16(payload[i*6 : i*6+2]))
+		s := Setting{
+			ID:  id,
+			Val: binary.BigEndian.Uint32(payload[i*6+2 : i*6+6]),
+		}
+		settings[id] = s
+	}
+	return &SettingFrame{
+		*header,
+		settings,
+	}, nil
 }
 ```
 **Flags**
@@ -512,9 +518,10 @@ type PushPromiseFrame struct {
     PromiseID     uint32
     HeaderFragBuf []byte // not owned
 }
-func parsePushPromise(fh FrameHeader, p []byte) (*PushPromiseFrame, err error) {
+func ParsePushPromise(fh *FrameHeader, p []byte) (*PushPromiseFrame, error) {
+    var err error
     pp := &PushPromiseFrame{
-        FrameHeader: fh,
+        FrameHeader: *fh,
     }
     if pp.StreamID == 0 {
         return nil, ConnectionError(ErrCodeProtocol)
@@ -530,7 +537,7 @@ func parsePushPromise(fh FrameHeader, p []byte) (*PushPromiseFrame, err error) {
         return nil, err
     }
     pp.PromiseID = pp.PromiseID & PadBit
-    const payloadLength = len(p)
+    var payloadLength = len(p)
     if int(padLength) > payloadLength {
         return nil, ConnectionError(ErrCodeProtocol)
     }
@@ -657,19 +664,15 @@ func parseContinuationFrame(fh FrameHeader, p []byte) (*ContinuationFrame, error
 
 ## 三、Frame 功能逻辑描述
 
-## 四、HTTP2 的第一次消息握手
+## 四、Frame.StreamID 是怎么完成 HTTP2 的多路复用功能
 
-## 五、普通的一次 HTTP2 请求过程
+## 五、hpack 压缩 Header
 
-## 五、Frame.StreamID 是怎么完成 HTTP2 的多路复用功能
+## 六、分段 Header
 
-## 六、hpack 压缩 Header
+## 七、HTTP2 中的 body 发送模式
 
-## 七、分段 Header
-
-## 八、HTTP2 中的 body 发送模式
-
-## 九、参考资料
+## 八、参考资料
 
 - [rfc7540](https://httpwg.org/specs/rfc7540.html)
 
