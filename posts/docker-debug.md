@@ -41,6 +41,43 @@ last_date: 2019-03-22 12:32:21+08:00
 ```
 发现了 `GraphDriver.Data.MergedDir` 正好指向最终的合成目录，直接像挂载宿主机目录一样即可挂载到新的容器当中。
 
-## 三、代码和实现
+## 三、代码
+这边考虑只介绍 `创建容器`，`拉取镜像`，`创建exec`，`运行exec`。
+> 这边由于 github.com/docker/docker 包通过 go mod 拉取不到最新版，
+> fork 了一个 github.com/zeromake/moby 并且把 github.com/docker/docker 替换了。
 
+**拉取镜像**
+``` go
+import (
+    "context"
+
+    "github.com/pkg/errors"
+    "github.com/zeromake/moby/client"
+    "github.com/zeromake/moby/api/types"
+    "github.com/zeromake/moby/pkg/jsonmessage"
+
+    "github.com/zeromake/docker-debug/pkg/stream"
+)
+
+type Cli struct {
+    client client.APIClient
+    in     *stream.InStream
+    out    *stream.OutStream
+    err    io.Writer
+}
+
+// ImagePull 拉取镜像
+func (c *Cli) ImagePull(imageName string) error {
+    body, err := c.client.ImagePull(
+        context.Background(),
+        imageName,
+        types.ImagePullOptions{},
+    )
+    if err != nil {
+        return errors.WithStack(err)
+    }
+    defer body.Close()
+    return jsonmessage.DisplayJSONMessagesToStream(responseBody, cli.out, nil)
+}
+```
 
