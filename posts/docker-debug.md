@@ -43,20 +43,30 @@ last_date: 2019-03-22 12:32:21+08:00
 
 ## 三、代码
 这边考虑只介绍 `创建容器`，`拉取镜像`，`创建exec`，`运行exec`。
-> 这边由于 github.com/docker/docker 包通过 go mod 拉取不到最新版，
-> fork 了一个 github.com/zeromake/moby 并且把 github.com/docker/docker 替换了。
 
 **拉取镜像**
 ``` go
 import (
     "context"
+    "strings"
 
     "github.com/pkg/errors"
-    "github.com/zeromake/moby/client"
-    "github.com/zeromake/moby/api/types"
-    "github.com/zeromake/moby/pkg/jsonmessage"
+    "github.com/docker/docker/client"
+    "github.com/docker/docker/api/types"
+    "github.com/docker/docker/pkg/jsonmessage"
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/mount"
+	"github.com/docker/docker/api/types/strslice"
 
     "github.com/zeromake/docker-debug/pkg/stream"
+	"github.com/zeromake/docker-debug/pkg/tty"
+)
+
+const (
+    legacyDefaultDomain = "index.docker.io"
+    defaultDomain       = "docker.io"
+    fficialRepoName = "library"
 )
 
 type Cli struct {
@@ -65,19 +75,161 @@ type Cli struct {
     out    *stream.OutStream
     err    io.Writer
 }
+// splitDockerDomain 分割镜像名和domain
+func splitDockerDomain(name string) (domain, remainder string) {
+	i := strings.IndexRune(name, '/')
+	if i == -1 || (!strings.ContainsAny(name[:i], ".:") && name[:i] != "localhost") {
+		domain, remainder = defaultDomain, name
+	} else {
+		domain, remainder = name[:i], name[i+1:]
+	}
+	if domain == legacyDefaultDomain {
+		domain = defaultDomain
+	}
+	if domain == defaultDomain && !strings.ContainsRune(remainder, '/') {
+        // 处理docker hub 镜像名映射
+		remainder = officialRepoName + "/" + remainder
+	}
+	return
+}
 
 // ImagePull 拉取镜像
 func (c *Cli) ImagePull(imageName string) error {
+    domain, remainder := splitDockerDomain(imageName);
     body, err := c.client.ImagePull(
         context.Background(),
-        imageName,
+        domain + '/' + remainder,
         types.ImagePullOptions{},
     )
     if err != nil {
         return errors.WithStack(err)
     }
     defer body.Close()
+    // docker 包里自带处理 pull 的 http 输出到 tty。
     return jsonmessage.DisplayJSONMessagesToStream(responseBody, cli.out, nil)
 }
+
+// CreateContainer 创建一个自定义镜像的新容器并把目标容器的各种资源挂载到新容器上
+func (c *Cli) CreateContainer(targetContainerID string) error {
+    ctx := context.Background()
+    info, err := cli.client.ContainerInspect(ctx, targetContainerID)
+    if err != nil {
+        return errors.WithStack(err)
+    }
+    mountDir, ok := info.GraphDriver.Data["MergedDir"]
+    mounts = []mount.Mount{}
+    targetMountDir = '/mnt/container';
+    // 通过 Inspect 查找出 MergedDir 位置并挂载到新容器的 /mnt/container
+    if ok {
+        mounts = append(mounts, mount.Mount{
+            Type:   "bind",
+            Source: mountDir,
+            Target: targetMountDir,
+        })
+    }
+    // 继承目标容器的挂载目录
+    for _, i := range info.Mounts {
+        var mountType = i.Type
+        if i.Type == "volume" {
+            // 虚拟目录在 docker 处理后也是一个在宿主机上的普通目录改为 bind
+            mountType = "bind"
+        }
+        mounts = append(mounts, mount.Mount{
+            Type:     mountType,
+            Source:   i.Source,
+            Target:   targetMountDir + i.Destination,
+            ReadOnly: !i.RW,
+        })
+    }
+    targetName := fmt.Sprintf("container:%s", targetContainerID)
+    containerConfig := &container.Config{
+        // 直接使用 sh 命令作为统一的容器后台进程
+        Entrypoint: strslice.StrSlice([]string{"/usr/bin/env", "sh"}),
+        // 默认镜像，真实项目中应该来自配置
+        Image:      'nicolaka/netshoot:latest',
+        Tty:        true,
+        OpenStdin:  true,
+        StdinOnce:  true,
+    }
+    hostConfig := &container.HostConfig{
+        // network 共享
+        NetworkMode: container.NetworkMode(targetName),
+        // 用户共享
+        UsernsMode:  container.UsernsMode(targetName),
+        // ipc 共享
+        IpcMode:     container.IpcMode(targetName),
+        // pid 共享
+        PidMode:     container.PidMode(targetName),
+        // 文件共享
+		Mounts:      mounts,
+    }
+}
+
+// ExecCreate 创建exec
+func ExecCreate(containerID string) error {
+    ctx := context.Background()
+    execConfig := types.ExecConfig{
+        // User:         options.user,
+        // Privileged:   options.privileged,
+        // DetachKeys:   options.detachKeys,
+        // 是否分配一个 tty vim 之类的 cli 交互类工具需要
+        Tty:          true,
+        // 是否附加各种标准流
+        AttachStderr: true,
+        AttachStdin:  true,
+        AttachStdout: true,
+        // exec 需要执行的命令也就是目标命令
+        Cmd:          [
+            'bash',
+            '-l',
+        ],
+    }
+    resp, err := cli.client.ContainerExecCreate(ctx, container, opt)
+    return resp, errors.WithStack(err)
+}
+
+func (cli *DebugCli) ExecStart(execID string) error {
+    ctx := context.Background()
+	execConfig := types.ExecStartCheck{
+		Tty: true,
+	}
+	response, err := cli.client.ContainerExecAttach(ctx, execID, execConfig)
+	if err != nil {
+		return errors.WithStack(err)
+    }
+    // 把 docker cli 包的 tty 移植了可以直接处理 HijackedIO。
+	streamer := tty.HijackedIOStreamer{
+		Streams:      cli,
+		InputStream:  cli.in,
+		OutputStream: cli.out,
+		ErrorStream:  cli.err,
+		Resp:         response,
+		TTY:          true,
+	}
+	return streamer.Stream(ctx)
+}
 ```
+
+## 四、一些边角处理
+
+### 4.1 通过环境变量获取 docker 配置
+
+### 4.2 docker/client 的 opts 包引入报错
+
+### 4.3 使用 git-chglog 来生成 changelog
+
+### 4.4 go 编译二进制的一些问题
+
+## 五、下一步计划
+
+- 抽取 cli 的操作，开放到 pkg 里。
+- 构建一个 http rpc api 支持在网页上操作，通过 `websocket` 或 `socket.io` 支持 `tty` 映射。
+- 单独构建一个前端操作界面，可支持静态部署类似 `aria2ui` 之类的。
+
+## 六、参考和感谢
+
+- [kubectl-debug](https://github.com/aylei/kubectl-debug): docker-debug 想法来自这个 kubectl 调试工具。
+- [Docker核心技术与实现原理](https://draveness.me/docker): docker-debug 的文件系统挂载原理来自这个博文。
+- [docker-engine-api-doc](https://docs.docker.com/engine/api/latest): docker engine api 文档。
+- [docker-cli](https://github.com/docker/cli): 拷贝了不少 cli 的 tty 处理库。
 
