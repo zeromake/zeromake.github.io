@@ -2,9 +2,10 @@ const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const BuildConfig = require('./webpack.base.config')
-const SWPrecachePlugin = require('sw-precache-webpack-plugin')
+// const SWPrecachePlugin = require('sw-precache-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+// const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 
 const config = merge(BuildConfig(true), {
@@ -79,13 +80,15 @@ if (process.env.NODE_ENV === 'production'){
         [srcDir]: ''
     }
     config.plugins.push(
-        new SWPrecachePlugin({
+        new WorkboxPlugin.GenerateSW({
+            importWorkboxFrom: 'local',
+            navigateFallback: '/',
             cacheId: 'ssr-blog',
-            filename: 'service-worker.js',
-            minify: true,
-            stripPrefixMulti: prefixMulti,
-            dontCacheBustUrlsMatching: /./,
-            staticFileGlobsIgnorePatterns: [/\.map$/, /\.json$/],
+            swDest: 'service-worker.js',
+            skipWaiting: true,
+            clientsClaim: true,
+            globPatterns: ['**/*.{html,js,css,png.jpg}'], // 匹配的文件
+            globIgnores: ['service-wroker.js', '*.map', '*.json'], // 忽略的文件
             runtimeCaching: [
                 {
                     urlPattern: '/',
@@ -96,7 +99,25 @@ if (process.env.NODE_ENV === 'production'){
                     handler: 'networkFirst'
                 }
             ]
-        })
+        }),
+        // new SWPrecachePlugin({
+        //     cacheId: 'ssr-blog',
+        //     filename: 'service-worker.js',
+        //     minify: true,
+        //     stripPrefixMulti: prefixMulti,
+        //     dontCacheBustUrlsMatching: /./,
+        //     staticFileGlobsIgnorePatterns: [/\.map$/, /\.json$/],
+        //     runtimeCaching: [
+        //         {
+        //             urlPattern: '/',
+        //             handler: 'networkFirst'
+        //         },
+        //         {
+        //             urlPattern: '/pages/:page/',
+        //             handler: 'networkFirst'
+        //         }
+        //     ]
+        // })
     )
 }
 module.exports = config
