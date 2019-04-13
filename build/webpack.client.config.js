@@ -82,7 +82,6 @@ if (process.env.NODE_ENV === 'production'){
     config.plugins.push(
         new WorkboxPlugin.GenerateSW({
             importWorkboxFrom: 'local',
-            navigateFallback: '/index.html',
             cacheId: 'ssr-blog',
             swDest: 'service-worker.js',
             skipWaiting: true,
@@ -92,11 +91,11 @@ if (process.env.NODE_ENV === 'production'){
             runtimeCaching: [
                 {
                     urlPattern: '/',
-                    handler: 'networkFirst'
+                    handler: 'NetworkFirst'
                 },
                 {
                     urlPattern: '/pages/:page/',
-                    handler: 'networkFirst'
+                    handler: 'NetworkFirst'
                 }
             ]
         }),
