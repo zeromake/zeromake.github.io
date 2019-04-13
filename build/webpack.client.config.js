@@ -82,7 +82,7 @@ if (process.env.NODE_ENV === 'production'){
     config.plugins.push(
         new WorkboxPlugin.GenerateSW({
             importWorkboxFrom: 'local',
-            navigateFallback: '/',
+            navigateFallback: '/index.html',
             cacheId: 'ssr-blog',
             swDest: 'service-worker.js',
             skipWaiting: true,
