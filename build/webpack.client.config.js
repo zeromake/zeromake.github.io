@@ -86,15 +86,15 @@ if (process.env.NODE_ENV === 'production'){
             swDest: 'service-worker.js',
             skipWaiting: true,
             clientsClaim: true,
-            globPatterns: ['**/*.{html,js,css,png.jpg}'], // 匹配的文件
+            globPatterns: ['**/*.{html,js,css,png,jpg,woff,woff2}'], // 匹配的文件
             globIgnores: ['service-wroker.js', '*.map', '*.json'], // 忽略的文件
             runtimeCaching: [
                 {
-                    urlPattern: '/',
+                    urlPattern: /\.com\/$/,
                     handler: 'NetworkFirst'
                 },
                 {
-                    urlPattern: '/pages/:page/',
+                    urlPattern: /\.com\/pages\/[\w_-]+$/,
                     handler: 'NetworkFirst'
                 }
             ]
