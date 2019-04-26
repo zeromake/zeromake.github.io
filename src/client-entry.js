@@ -4,6 +4,7 @@ import 'unfetch/polyfill'
 // import 'font-awesome/css/font-awesome.min.css'
 import { createApp } from './app'
 import ProgressBar from 'components/ProgressBar.vue'
+import ZeroLayer from 'components/zero-layer'
 import Gitment from 'gitment'
 // import 'prismjs/themes/prism-tomorrow.css'
 import 'prismjs/themes/prism-solarizedlight.css'
@@ -12,7 +13,9 @@ import 'primer-markdown/build/build.css'
 // import flowchart from 'flowchart.js/release/flowchart.js'
 
 const bar = new Vue(ProgressBar).$mount()
+const layer = new Vue(ZeroLayer).$mount()
 document.body.appendChild(bar.$el)
+document.body.appendChild(layer.$el)
 if (Object.defineProperty) {
     Object.defineProperty(Vue.prototype, '$bar', {
         value: bar,
@@ -22,6 +25,10 @@ if (Object.defineProperty) {
         value: Gitment,
         enumerable: true
     })
+    Object.defineProperty(Vue.prototype, '$layer', {
+        value: layer,
+        enumerable: true
+    })
     // Object.defineProperty(Vue.prototype, '$flowchart', {
     //     value: flowchart,
     //     enumerable: true
@@ -29,6 +36,7 @@ if (Object.defineProperty) {
 } else {
     Vue.prototype.$gitment = Gitment
     Vue.prototype.$bar = bar
+    Vue.prototype.$layer = layer
     // Vue.prototype.$flowchart = flowchart
 }
 

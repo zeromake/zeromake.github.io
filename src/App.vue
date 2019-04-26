@@ -55,6 +55,8 @@
                 </nav>
             </div>
         </header>
+        <zero-header :navigations="navigations" :showNav="showNav"/>
+        <zero-navigation :navigations="navigations" ref="navigation"/>
         <transition name="fade" mode="out-in">
             <router-view class="view"></router-view>
         </transition>
@@ -72,7 +74,13 @@
 </template>
 <script>
 import debounce from 'lodash.debounce'
+import ZeroHeader from './views/zero-header'
+import ZeroNavigation from './views/zero-navigation'
 export default {
+    components: {
+        ZeroHeader,
+        ZeroNavigation,
+    },
     mounted () {
         const head = this.$refs['head']
         const header = this.$refs['header']
@@ -106,12 +114,43 @@ export default {
     data () {
         return {
             showTop: false,
-            toggle: false
+            toggle: false,
+            navigations: [
+                {
+                    title: "Archives",
+                    href: "/archives",
+                    target: "_self",
+                    route: true,
+                },
+                {
+                    title: "Resume",
+                    href: "/resume",
+                    target: "_self",
+                    route: true,
+                },
+                {
+                    title: "About",
+                    href: "/about",
+                    target: "_self",
+                    route: true,
+                },
+                {
+                    title: "Rss",
+                    href: "/atom.xml",
+                    target: "_blank"
+                }
+            ],
         }
     },
     methods: {
         top () {
             window.scroll(0, 0)
+        },
+        showNav() {
+            if(this.$refs.navigation) {
+                console.log(this.$refs.navigation);
+                this.$refs.navigation.show();
+            }
         }
     }
 }
