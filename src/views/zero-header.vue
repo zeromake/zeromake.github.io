@@ -76,16 +76,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-    *
-        box-sizing border-box
-        margin 0
-        padding 0
-    a
-        color #212121
-        text-decoration none
-    a:hover
-        text-decoration none
-        color #212121
     .header
         display flex
         justify-content space-between

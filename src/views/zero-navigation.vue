@@ -6,7 +6,7 @@
             </span>
         </div>
         <div class="nav-content-main">
-            <ol class="nav-content-toc">
+            <ol class="nav-content-toc" @click="hide">
                 <li
                     v-for="nav in navigations"
                     :key="nav.href"
@@ -56,16 +56,15 @@ export default {
                 this.open = false;
             });
         },
+        hide() {
+            return this.$layer.hide();
+        }
     }
 }
 </script>
 
 
 <style lang="stylus" scoped>
-    *
-        box-sizing border-box
-        margin 0
-        padding 0
     .nav-content
         z-index 900
         right -200px
@@ -110,7 +109,6 @@ export default {
         text-align center
         line-height 35px
         a
-            text-decoration none
             border-left 0
             color #757575
             padding-left 0

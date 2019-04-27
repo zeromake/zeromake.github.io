@@ -56,7 +56,10 @@
             </div>
         </header>
         <zero-header :navigations="navigations" :showNav="showNav"/>
+        <zero-process/>
         <zero-navigation :navigations="navigations" ref="navigation"/>
+        <zero-share/>
+        <zero-bottom/>
         <transition name="fade" mode="out-in">
             <router-view class="view"></router-view>
         </transition>
@@ -74,12 +77,18 @@
 </template>
 <script>
 import debounce from 'lodash.debounce'
+import ZeroProcess from 'components/zero-process'
 import ZeroHeader from './views/zero-header'
 import ZeroNavigation from './views/zero-navigation'
+import ZeroShare from './views/zero-share'
+import ZeroBottom from './views/zero-bottom'
 export default {
     components: {
         ZeroHeader,
         ZeroNavigation,
+        ZeroShare,
+        ZeroBottom,
+        ZeroProcess,
     },
     mounted () {
         const head = this.$refs['head']
@@ -148,7 +157,6 @@ export default {
         },
         showNav() {
             if(this.$refs.navigation) {
-                console.log(this.$refs.navigation);
                 this.$refs.navigation.show();
             }
         }
