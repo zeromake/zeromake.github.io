@@ -30,7 +30,6 @@
     "lru-cache": "^5.1.1",
     "markdown-it": "^8.4.2",
     "markdown-it-prism": "^2.0.1",
-    "marked-zm": "github:zeromake/marked-zm",
     "node-fetch": "^2.4.1",
     "primer-markdown": "^4.0.0",
     "prismjs": "^1.16.0",

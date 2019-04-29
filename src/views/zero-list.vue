@@ -33,7 +33,7 @@
                         :to="'/pages/' + item.filename"
                         class="home-article-read"
                     >
-                        {{more}} >>>
+                        {{ more }} >>>
                     </router-link>
                     <div class="passage-tags">
                         <router-link
@@ -42,7 +42,7 @@
                             :to="`/tags/${tag}`"
                         >
                             <i class="fa fa-tags"/>
-                            {{tag}}
+                            {{ tag }}
                         </router-link>
                     </div>
                 </div>
@@ -59,7 +59,7 @@ export default {
     data() {
         return {
             displayedItems: this.$store.getters.activeItems,
-            more: 'README MORE',
+            more: '阅读更多',
         };
     },
 

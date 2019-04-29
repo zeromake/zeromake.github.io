@@ -9,7 +9,6 @@ import Gitment from 'gitment'
 import 'prismjs/themes/prism-tomorrow.css'
 // import 'prismjs/themes/prism-solarizedlight.css'
 import 'gitment/style/default.css'
-import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
 // import 'primer-markdown/build/build.css'
 // import flowchart from 'flowchart.js/release/flowchart.js'
 
