@@ -10,6 +10,7 @@ last_date: 2017-07-30 08:46:04+08:00
 - 应[@ToPeas](https://github.com/ToPeas)的[Issue](https://github.com/zeromake/zreact#1)来描述下preact的流程。
 - 这里决定使用我自己改过的[zreact](https://github.com/zeromake/zreact/tree/flow)的flow分支，这个分支的代码不会再变。
 
+<!--more-->
 ## 代码例子
 这次用个简单的例子, 这里为了简化就不使用jsx转换了，手写jsx。
 ``` javascript

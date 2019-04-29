@@ -11,7 +11,7 @@ last_date: 2017-07-10 15:24:39+08:00
 1. 上篇博客写着写着没动力，然后就拖了一个月。
 2. 现在打算在一周内完成。
 3. 这篇讲`Promise`和`co`的原理+实现。
-
+<!--more-->
 ## 一、Promise的原理
 
 Promise的规范有很多，其中`ECMAScript 6`采用的是[Promises/A+](http://www.ituring.com.cn/article/66566).

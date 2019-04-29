@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const createListView = id => () => import('../views/CreateListView').then(m => m.default(id))
+// const createListView = id => () => import('../views/CreateListView').then(m => m.default(id))
 // import { createListView } from '../views/CreateListView'
 
 export function createRouter () {
@@ -18,7 +18,7 @@ export function createRouter () {
             return { y: 0 }
         },
         routes: [
-            { path: '/', component: createListView('posts') },
+            { path: '/', component: () => import('../views/zero-list') },
             { path: '/pages/:page', component: () => import('../views/Page') }
         ]
     })

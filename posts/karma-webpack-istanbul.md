@@ -10,6 +10,8 @@ last_date: 2017-05-07 23:23:37+08:00
 - 距离上一次博客有2个月了，倒不是没有可写东西就是提不起劲写。
 - 不说这些了这次写下我使用 `karma + webpack` 中遇到的代码覆盖率问题。
 
+<!--more-->
+
 ## 一、karma的使用
 自个去搜吧，感觉讲这个的真的多。我就说一些建议。
 - karma的测试框架改用mocha这样对于一个需要nodejs, browser测试的测试用例可以共用。具体的可以看我的 [marked-zm](https://github.com/zeromake/marked-zm)

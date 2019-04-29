@@ -101,127 +101,127 @@ export default {
 
 <style lang="stylus">
 // @import url('../../node_modules/github-markdown-css/github-markdown.css')
-.support
-    padding 10px
-    width 240px
+// .support
+//     padding 10px
+//     width 240px
 
-.alipay_div
-    width 600px
-    margin 0 auto
+// .alipay_div
+//     width 600px
+//     margin 0 auto
 
-@media (max-width 520px)
-    .alipay_div
-        width 260px
+// @media (max-width 520px)
+//     .alipay_div
+//         width 260px
 
-.post-meta a
-    color #555
-    text-decoration none
-    border-bottom 1px solid #999
-    word-wrap break-word
-    background-color transparent
+// .post-meta a
+//     color #555
+//     text-decoration none
+//     border-bottom 1px solid #999
+//     word-wrap break-word
+//     background-color transparent
 
-.post-meta a:hover
-    color #222
-    border-bottom-color #222
-.post-meta a:active, a:hover
-    outline 0
-.page-view
-    float right
-    box-sizing border-box
-    padding 40px
-    width calc(100% - 240px)
-    background #fff
-    box-shadow initial
-    border-radius initial
-.post-title
-    font-size 26px
-    text-align center
-    word-break break-word
-    font-weight 400
-.post-meta
-    margin 3px 0 60px 0
-    color #999
-    font-size 12px
-    text-align center
-.post-meta-divider
-    margin 0 0.5em
-.post-meta-item-icon
-    margin-right 3px
-.markdown-body
-    box-sizing border-box
-    min-width 200px
-    max-width 980px
-    margin 0 auto
-    padding 35px
-    h1, h2, h3, h4
-        margin-left -1.5rem
-    img
-        width 100%
-    code
-        color #c7254e
-    pre
-        // background-color #2D2D2D
-        box-shadow 0 1px 3px #e3e3e3
-    pre.code
-        font-size 0.8em
-        position relative
-        code
-            color inherit
-        &.language-html:after
-            content 'HTML'
-        &.language-js:after
-            content 'JS'
-        &.language-javascript:after
-            content 'JavaScript'
-        &.language-typescript:after
-            content 'TypeScript'
-        &.language-json:after
-            content 'JSON'
-        &.language-css:after
-            content 'CSS'
-        &.language-bash:after
-            content 'Shell'
-        &.language-yaml:after
-            content 'Yaml'
-        &.language-python:after
-            content 'Python'
-        &.language-c:after
-            content 'C'
-        &.language-c\+\+:after
-            content 'CPP'
-        &.language-cpp:after
-            content 'CPP'
-        &:after
-            position: absolute
-            top 0
-            right 0
-            // color #ccc
-            // color #c7254e
-            color #268bd2
-            text-align right
-            font-size 1em
-            padding 5px 10px 0
-            line-height 15px
-            height 15px
-            font-weight 600
+// .post-meta a:hover
+//     color #222
+//     border-bottom-color #222
+// .post-meta a:active, a:hover
+//     outline 0
+// .page-view
+//     float right
+//     box-sizing border-box
+//     padding 40px
+//     width calc(100% - 240px)
+//     background #fff
+//     box-shadow initial
+//     border-radius initial
+// .post-title
+//     font-size 26px
+//     text-align center
+//     word-break break-word
+//     font-weight 400
+// .post-meta
+//     margin 3px 0 60px 0
+//     color #999
+//     font-size 12px
+//     text-align center
+// .post-meta-divider
+//     margin 0 0.5em
+// .post-meta-item-icon
+//     margin-right 3px
+// .markdown-body
+//     box-sizing border-box
+//     min-width 200px
+//     max-width 980px
+//     margin 0 auto
+//     padding 35px
+//     h1, h2, h3, h4
+//         margin-left -1.5rem
+//     img
+//         width 100%
+//     code
+//         color #c7254e
+//     pre
+//         // background-color #2D2D2D
+//         box-shadow 0 1px 3px #e3e3e3
+//     pre.code
+//         font-size 0.8em
+//         position relative
+//         code
+//             color inherit
+//         &.language-html:after
+//             content 'HTML'
+//         &.language-js:after
+//             content 'JS'
+//         &.language-javascript:after
+//             content 'JavaScript'
+//         &.language-typescript:after
+//             content 'TypeScript'
+//         &.language-json:after
+//             content 'JSON'
+//         &.language-css:after
+//             content 'CSS'
+//         &.language-bash:after
+//             content 'Shell'
+//         &.language-yaml:after
+//             content 'Yaml'
+//         &.language-python:after
+//             content 'Python'
+//         &.language-c:after
+//             content 'C'
+//         &.language-c\+\+:after
+//             content 'CPP'
+//         &.language-cpp:after
+//             content 'CPP'
+//         &:after
+//             position: absolute
+//             top 0
+//             right 0
+//             // color #ccc
+//             // color #c7254e
+//             color #268bd2
+//             text-align right
+//             font-size 1em
+//             padding 5px 10px 0
+//             line-height 15px
+//             height 15px
+//             font-weight 600
 
-@media (max-width: 991px)
-    h1, h2, h3, h4
-        margin-left -1rem
-    .page-view
-        width 100%
-    .page-view
-        padding 20px
+// @media (max-width: 991px)
+//     h1, h2, h3, h4
+//         margin-left -1rem
+//     .page-view
+//         width 100%
+//     .page-view
+//         padding 20px
+
+// // @media (max-width 767px)
+// //     .markdown-body
+// //         padding 10px
 
 // @media (max-width 767px)
+//     h1, h2, h3, h4
+//         margin-left 0 !important
 //     .markdown-body
+//         padding 0
+//     .page-view
 //         padding 10px
-
-@media (max-width 767px)
-    h1, h2, h3, h4
-        margin-left 0 !important
-    .markdown-body
-        padding 0
-    .page-view
-        padding 10px
 </style>

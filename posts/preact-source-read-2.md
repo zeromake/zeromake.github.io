@@ -12,7 +12,7 @@ last_date: 2017-07-26 15:23:04+08:00
 - 顺便说下[司徒正美的preact源码学习](https://segmentfault.com/u/situzhengmei/articles)
 - 感觉比我写的好多了，图文并茂，还能提出和其它如React的源码比较。
 - 我唯一好点的可能就是代码几乎每行都有注释，并且使用了typescript添加了类型的标注。
-
+<!--more-->
 ## Component使用
 
 ``` javascript

@@ -18,7 +18,7 @@ last_date: 2017-07-25 12:29:04+08:00
 - 这里是第一篇，createElement，也就是vue,react的render所返回的VNode对象。
 - 平常则是使用babel+jsx来生成createElement调用。
 - vue常用则是template，但是通过webpack会做到预先转换为render。
-
+<!--more-->
 ## 一、jsx的转换原理。
 
 对于preact来说，最常见的就是jsx。

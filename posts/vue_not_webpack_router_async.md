@@ -12,7 +12,7 @@ last_date: 2016-11-7 18:00:20+08:00
 然后发现vue_router的component是同步加载的。。要是后台功能多js就很大了，这个就是所谓的单页应用。
 但是单页应用不用webpack打包手动把js写一个也太蛋疼了。然后发现了webpack用chunk可以异步会把每个路由的js单独打包。
 具体的原理下面也会讲解。
-
+<!--more-->
 ## 零、一些注意事项
 1. 源码在[这里](https://github.com/zeromake/vue_demo)
 

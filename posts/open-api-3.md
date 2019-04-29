@@ -13,7 +13,7 @@ last_date: 2018-03-07 10:22:00+08:00
 3. 这里只讲述 openapi3 的配置结构，并与官方文档统一使用 `yaml` 格式来说明。
 4. 由于使用 `python` 代码中的配置与 `json` 格式相同。
 5. 在阅读此文前请自行了解 `json`, `yaml`。`python` 生成代码部分可无视。
-
+<!--more-->
 ## 一、openapi整体结构
 
 [官方文档](https://swagger.io/docs/specification/basic-structure/)

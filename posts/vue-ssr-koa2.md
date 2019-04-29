@@ -12,7 +12,7 @@ last_date: 2017-2-19 18:17:25+08:00
 - 但是有些时候可能我希望换一个web框架。
 - 所以就有了这篇闲的慌系类。
 - vue-ssr中使用koa2来替代express
-
+<!--more-->
 ## 一.更换依赖包
 1. 删掉 express 及它的中间组件 ['compression', 'express', 'serve-favicon']
 2. 添加 koa2 及它的一些中间组件 ['koa2', 'koa-router@7.x', 'koa-send']

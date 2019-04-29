@@ -17,6 +17,7 @@ last_date: 2017-03-05 12:26:04+08:00
 > - koa 中间件的编写。
 > - 把`webpack-dev-middleware`这种`express`中间件改造为一个`koa`中间件。
 
+<!--more-->
 
 ## 一. koa与express的普通中间件区别。
 - npm 包安装

@@ -11,7 +11,7 @@ last_date: 2017-2-19 18:17:25+08:00
 
 因为百度之类的爬虫不会执行js来渲染所以无法得到内容。大部分主流的`mvvm`框架都有了 `ssr(Server Side Rendering)` 意为服务端渲染。
 ~~不是手游的ssr，好像暴露了什么~~
-
+<!--more-->
 ## 一.ssr的技术选择
 - [vue-server-renderer](https://github.com/vuejs/vue/tree/dev/packages/vue-server-renderer)
 

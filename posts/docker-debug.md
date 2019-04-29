@@ -13,6 +13,8 @@ last_date: 2019-03-22 12:32:21+08:00
 3. 再后来看到 [@github/aylei](https://github.com/aylei) 的 [kubectl-debug](https://github.com/aylei/kubectl-debug) 发现了容器之间可以共享各种资源。
 4. 但是 `kubectl-debug` 只能够提供给 `kubernetes` 进行使用，所以我这边模仿了 `kubectl-debug` 写了一个 [docker-debug](https://github.com/zeromake/docker-debug)。
 
+<!--more-->
+
 ## 二、原理和方案
 
 **docker内置的资源共享**

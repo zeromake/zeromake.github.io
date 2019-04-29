@@ -1,6 +1,17 @@
+html
+    width 100%
+    height 100%
+    margin 0
+    padding 0
+    font-size 16px
+    color #212121
 body
+    width 100%
+    height 100%
+    margin 0
+    padding 0
+    background #FAFAFA
     font-family Consolas, Microsoft Jhenghei, Hiragino Sans GB, Microsoft YaHei
-
 *
     box-sizing border-box
     margin 0
@@ -11,3 +22,103 @@ a
 a:hover
     text-decoration none
     color #212121
+
+.passage-article
+    h1,h2,h3,h4,h5,h6
+        position relative
+        font-weight 600
+        margin 15px 0
+        a
+            padding-left 5px
+            transition all .15s linear
+    h1::before,h2::before,h3::before,h4::before,h5::before,h6::before
+        font-size 0.8em
+        content "\f0c1"
+        color #F4511E
+        font-family FontAwesome
+    h1:hover a,h2:hover a,h3:hover a,h4:hover a,h5:hover a,h6:hover a
+        padding-left 10px
+    h1:hover::before,h2:hover::before,h3:hover::before,h4:hover::before,h5:hover::before,h6:hover::before
+        color #2196F3
+    h1
+        font-size 2em
+        margin 16px 0
+    h2
+        font-size 1.75em
+    h3
+        font-size 1.5em
+    h4
+        font-size 1.25em
+    h5
+        font-size 1.125em
+    h6
+        font-size 1em
+    p
+        margin 12px 0
+    blockquote
+        margin 15px 0
+        padding 1px 12px
+        border-left 3px solid #757575
+        color #424242;
+        background #F5F5F5
+    a
+        display inline-block
+        position relative
+        color #F4511E
+        font-weight bolder
+    a::before
+        content ""
+        position absolute
+        width 0
+        right 0
+        bottom 0
+        height 2px
+        background #2196F3
+        transition all 0.3s ease
+
+    a:hover
+        color #2196F3
+    a:hover::before
+        width 100%
+        left 0
+        right auto
+    code
+        font-family Consolas, Microsoft Jhenghei, Hiragino Sans GB, Microsoft YaHei;
+        background #EEEEEE
+        color #D84315
+        word-wrap break-word
+        margin 0 3px
+    img
+        display block
+        margin 0 auto
+        max-width 90%
+        border-radius 5px
+        cursor zoom-in
+        transition all .3s linear
+    img:hover
+        box-shadow 0 0 3px #9E9E9E
+    ol, ul
+        margin 0 0 16px
+        padding-left 1.2em
+    ol ol, ul ol
+        list-style-type lower-roman
+.passage-article > table
+    width 100%
+    border-collapse collapse
+    text-align left
+    border-left 1px solid #EEEEEE
+    border-right 1px solid #EEEEEE
+    border-radius 4px 4px 0 0
+    margin 16px 0
+.passage-article > table thead
+    background #F5F5F5
+.passage-article > table thead th
+    padding 16px
+    border-bottom 1px solid #EEEEEE
+.passage-article > table tbody tr
+    transition all .3s ease
+.passage-article > table tbody tr:hover
+    background #E1F5FE
+.passage-article > table tbody tr td
+    padding 16px
+    border-bottom 1px solid #EEEEEE
