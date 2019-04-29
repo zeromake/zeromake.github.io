@@ -12,14 +12,40 @@ export function createRouter () {
         // mode: 'hash',
         fallback: false,
         scrollBehavior: (to, from) => {
-            if (from.path.indexOf('/pages/') === 0 && to.path.indexOf('/pages/') === 0) {
+            if (from.path.startsWith('/pages/') && to.path.startsWith('/pages/')) {
                 return
             }
             return { y: 0 }
         },
         routes: [
-            { path: '/', component: () => import('../views/zero-list') },
-            { path: '/pages/:page', component: () => import('../views/Page') }
+            {
+                path: '/',
+                component: () => import('../views/zero-list')
+            },
+            {
+                path: '/pages/:page',
+                component: () => import('../views/zero-page')
+            },
+            {
+                path: '/categories/:category',
+                component: () => import('../views/zero-categories-list')
+            },
+            {
+                path: '/tags/:tag',
+                component: () => import('../views/zero-tags-list')
+            },
+            {
+                path: '/archives',
+                component: () => import('../views/zero-archives-list')
+            },
+            {
+                path: '/resume',
+                component: () => import('../views/zero-resume')
+            },
+            {
+                path: '/about',
+                component: () => import('../views/zero-about')
+            }
         ]
     })
 

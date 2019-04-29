@@ -101,7 +101,7 @@ function render (ctx, next) {
             }
         }
         const context = {
-            title: 'Vue Ssr 2.3',
+            title: 'zeromake\'blog',
             url: ctx.url
         }
         renderer.renderToString(context, (err, html) => {
