@@ -5,77 +5,9 @@ const path = require('path')
 const pify = require('pify')
 const readline = require('readline')
 const yaml = require('js-yaml')
-// const marked = require('marked-zm')
-// const Prism = require('prismjs')
-// const hljs = require('highlight.js')
 const { postDir } = require('./config')
-const markdownIt = require('markdown-it')
-const prism = require('markdown-it-prism')
-
-const marked = new markdownIt("commonmark")
-marked.use(prism)
-// global.Prism = Prism
-
+const marked = require('./renderer')()
 const router = new KoaRuoter()
-let toc = []
-
-// function zescapeFun(html, encode) {
-//     html = html.replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-//     return html;
-// }
-// marked.use(function(self) {
-//     // const defaultImage = self.Renderer.prototype.image
-//     // self.Renderer.prototype.image = function(href, title, text) {
-//     //     // if (href.endsWith(".svg")) {
-//     //     //     return `<object style="width: 100%" data="${href}" type="image/svg+xml" title="${title}" alt="${text}"></object>`
-//     //     // } else {
-//     //     //     return defaultImage.call(this, href, title, text)
-//     //     // }
-//     // }
-//     const defaultHead = self.Renderer.prototype.heading
-//     self.Renderer.prototype.heading = function(text, level) {
-//         // const escapedText = zescapeFun(text.toLowerCase());
-//         const tocItem = {
-//             text: text,
-//             level: level
-//             // escape: escapedText
-//         }
-//         toc.push(tocItem)
-//         var escapedText = text.toLowerCase();
-//         // return '<h' + level + ' class="heading">' + text + '</h' + level + '>';
-//         return defaultHead.call(this, text, level)
-//     }
-//     return {
-//         type: "image"
-//     }
-// })
-// marked.setOptions({
-//     langPrefix: 'language-',
-//     highlight: function (code, lang) {
-//         if (lang){
-//             try {
-//                 lang = lang.trim().toLocaleLowerCase()
-//                 if (lang === "text") {
-//                     return code
-//                 }
-//                 else if (!Prism.languages[lang]) {
-//                     if (lang === 'shell') {
-//                         lang = 'bash'
-//                     } else if (lang === 'c++'){
-//                         lang = "cpp"
-//                     } else if (lang === "dockerfile") {
-//                         lang = "docker"
-//                     }
-//                     require('prismjs/components/prism-' + lang + '.min.js')
-//                 }
-//                 return Prism.highlight(code, Prism.languages[lang])
-//             } catch(e) {
-//                 console.error(e)
-//             }
-//         }
-//         return code
-//     }
-// })
 
 /**
 * 读取yaml,markdown的混合文件
@@ -107,6 +39,7 @@ const readMarkdown = function (fileDir, fileName, end) {
                 }
                 yamlData += line + '\n'
             } else if(more) {
+                markdownData += line + '\n'
                 if(line.startsWith('#')) {
                     return
                 }
@@ -119,11 +52,10 @@ const readMarkdown = function (fileDir, fileName, end) {
                 }
                 moreData += line + '\n'
             } else {
-                    markdownData += line + '\n'
+                markdownData += line + '\n'
             }
         })
         read.on('close', () => {
-            markdownData = moreData + '\n' + markdownData;
             if(more) {
                 moreData = null
             }
@@ -179,8 +111,7 @@ router.get('/api/pages/:page.json', convert(function * (ctx, next) {
         const { yaml, markdown } = yield readMarkdown(postDir, page + '.md')
         const pageBody = markdown && marked.render(markdown)
         yaml['body'] = pageBody
-        yaml['toc'] = toc
-        toc = []
+        yaml['toc'] = marked.toc();
         ctx.body = yaml
     } else {
         ctx.status = 404

@@ -7,9 +7,10 @@ import ProgressBar from 'components/ProgressBar.vue'
 import ZeroLayer from 'components/zero-layer'
 import Gitment from 'gitment'
 // import 'prismjs/themes/prism-tomorrow.css'
-import 'prismjs/themes/prism-solarizedlight.css'
+// import 'prismjs/themes/prism-solarizedlight.css'
+import 'highlight.js/styles/solarized-light.css'
 import 'gitment/style/default.css'
-import 'primer-markdown/build/build.css'
+// import 'primer-markdown/build/build.css'
 // import flowchart from 'flowchart.js/release/flowchart.js'
 
 const bar = new Vue(ProgressBar).$mount()

@@ -9,16 +9,19 @@ export default {
         return fetchPostsByType(type)
             .then(items => commit('SET_ITEMS', { type, items }))
     },
-    FETCH_PAGE_DATA: ({ commit, state }, { page }) => {
-        commit('SET_ACTIVE_PAGE', { page })
+    FETCH_POST_DATA: ({ commit, state }, { post }) => {
+        commit('SET_ACTIVE_PAGE', { post })
         const now = Date.now()
-        const activePage = state.page[page]
+        const activePage = state.post[post]
         if (!activePage || (now - activePage.__lastUpdated > 1000 * 180)) {
-            return fetchPage(page)
-                .then(pageData => commit('SET_PAGE', { page, pageData }))
+            return fetchPage(post)
+                .then(data => commit('SET_POST', { post, data }))
         }
     },
     SET_CODE: ({ commit }, { code }) => {
         commit('SET_CODE', { code })
+    },
+    SET_PAGE: ({ commit }, { num, route }) => {
+        commit('SET_PAGE', { num, route })
     }
 }

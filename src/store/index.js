@@ -14,11 +14,13 @@ export function createStore () {
             items: [],
             tags: null,
             types: null,
-            page: {},
+            post: {},
             code: null,
             activePage: null,
             showSidebar: false,
-            tocs: null
+            tocs: null,
+            route: null,
+            total: 0
         },
         actions,
         mutations,

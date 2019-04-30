@@ -3,7 +3,7 @@
         <div class="home-article-wrapper" v-for="item in displayedItems" :key="item.date">
             <div :class="{'home-article': true, 'home-article-has-cover': !!item.cover}">
                 <div :class="{'home-article-inner': true, 'home-article-inner-has-cover': !!item.cover}">
-                    <div class="passage-meta">
+                    <!-- <div class="passage-meta">
                         <span>
                             <i class="fa fa-calendar"/>
                             {{ item.date | formatTime }}
@@ -17,7 +17,8 @@
                                 {{item.type}}
                             </router-link>
                         </span>
-                    </div>
+                    </div> -->
+                    <passage-meta :data="item"/>
                     <h1 class="home-article-title">
                         <router-link
                             :to="'/pages/' + item.filename"
@@ -55,7 +56,11 @@
 </template>
 
 <script>
+import PassageMeta from 'components/passage-meta.vue';
 export default {
+    components: {
+        PassageMeta
+    },
     data() {
         return {
             displayedItems: this.$store.getters.activeItems,
@@ -64,7 +69,12 @@ export default {
     },
 
     asyncData ({ store }) {
-        return store.dispatch('FETCH_LIST_DATA', { type: 'posts' })
+        return store.dispatch('FETCH_LIST_DATA', { type: 'posts' }).then(() => {
+            store.commit('SET_PAGE', {
+                route: "/page/:num",
+                total: 1,
+            })
+        })
     },
 }
 </script>

@@ -8,12 +8,12 @@ export default {
         state.types = items.types
         state.items = items.posts
     },
-    SET_PAGE: (state, { page, pageData }) => {
-        Vue.set(state.page, page, pageData)
-        state.tocs = pageData.toc
+    SET_POST: (state, { post, data }) => {
+        Vue.set(state.post, post, data)
+        state.tocs = data.toc
     },
-    SET_ACTIVE_PAGE: (state, { page }) => {
-        state.activePage = page
+    SET_ACTIVE_PAGE: (state, { post }) => {
+        state.activePage = post
     },
     SET_CODE: (state, { code }) => {
         state.code = code
@@ -25,5 +25,10 @@ export default {
     },
     SET_TOCS: (state, tocs) => {
         state.tocs = tocs
+    },
+    SET_PAGE: (state, { route, num, total }) => {
+        state.route = route
+        state.num = num
+        state.total = total
     }
 }

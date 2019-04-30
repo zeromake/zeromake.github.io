@@ -1,10 +1,16 @@
 <template>
     <div class="bottom">
         <div class="bottom-left" v-if="pagination">
-            <a href="javascript:void(0);" :class="{disable: hasPrevious}">
+            <router-link v-if="!disablePrevious" :class="{disable: disablePrevious}" :to="previous">
+                <i class="fa fa-arrow-left"/>
+            </router-link>
+            <a v-else :class="{disable: disablePrevious}">
                 <i class="fa fa-arrow-left"/>
             </a>
-            <a href="javascript:void(0);" :class="{disable: hasNext}">
+            <router-link v-if="!disableNext" :class="{disable: disableNext}" :to="next">
+                <i class="fa fa-arrow-right"/>
+            </router-link>
+            <a v-else :class="{disable: disableNext}">
                 <i class="fa fa-arrow-right"/>
             </a>
         </div>
@@ -49,11 +55,28 @@ export default {
         };
     },
     computed: {
-        hasPrevious() {
-            return true;
+        num() {
+            return +this.$route.params.num || 1;
         },
-        hasNext() {
-            return true;
+        disablePrevious() {
+            return this.num <= 1;
+        },
+        disableNext() {
+            return this.num >= this.$store.state.total;
+        },
+        next() {
+            if(this.$store.state.route) {
+                const route = this.$store.state.route;
+                return route.replace(':num', this.num + 1)
+            }
+            return '/';
+        },
+        previous() {
+            if(this.$store.state.route) {
+                const route = this.$store.state.route;
+                return route.replace(':num', this.num - 1);
+            }
+            return '/';
         }
     },
     mounted() {

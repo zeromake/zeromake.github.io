@@ -4,6 +4,6 @@ export default {
         return state.items
     },
     activePage (state) {
-        return state.page[state.activePage]
+        return state.post[state.activePage]
     }
 }
