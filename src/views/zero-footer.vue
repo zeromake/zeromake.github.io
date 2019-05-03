@@ -118,5 +118,14 @@ export default {
 .footer-info
     width 100%
     color #CFD8DC
+
+@media screen and (max-width: 768px)
+    .footer
+        padding 30px 20px 30px
+    .footer-col
+        width 50%
+@media screen and (min-width: 769px) and (max-width: 1024px)
+    .footer
+        padding 30px 50px 30px
 </style>
 

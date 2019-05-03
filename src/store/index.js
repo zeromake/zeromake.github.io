@@ -20,7 +20,8 @@ export function createStore () {
             showSidebar: false,
             tocs: null,
             route: null,
-            total: 0
+            total: 0,
+            comment: null
         },
         actions,
         mutations,

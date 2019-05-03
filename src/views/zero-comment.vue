@@ -28,8 +28,12 @@ export default {
                     }
                 });
                 gitment.render(thread);
+                this.$store.commit('COMMENT_CONTANIER', { select: '.comment-contanier' });
             }
         }
+    },
+    destroyed() {
+        this.$store.commit('COMMENT_CONTANIER', { select: null });
     }
 }
 </script>

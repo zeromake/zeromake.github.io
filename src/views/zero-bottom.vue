@@ -15,16 +15,16 @@
             </a>
         </div>
         <div class="bottom-right">
-            <a href="javascript:void(0);" class="toc-show-btn">
+            <a href="javascript:void(0);" class="toc-show-btn disable">
                 <i class="fa fa-bars"></i>
             </a>
-            <a href="javascript:void(0);">
+            <a href="javascript:void(0);" :class="{disable: disableComment}" @click="scrollComment">
                 <i class="fa fa-commenting"></i>
             </a>
-            <a href="javascript:void(0);" class="toggle-share-btn">
+            <a href="javascript:void(0);" class="toggle-share-btn disable">
                 <i class="fa fa-share-alt"></i>
             </a>
-            <a href="javascript:void(0);" class="reward">
+            <a href="javascript:void(0);" class="reward disable">
                 <i class="fa fa-thumbs-up"></i>
             </a>
             <a href="javascript:void(0);" class="back-top-btn" @click="backTop">
@@ -35,6 +35,46 @@
 </template>
 
 <script>
+let running = false;
+function scroll(top, time=200, delay=10) {
+    if(running) {
+        return;
+    }
+    running = true;
+
+    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    let offset = top - scrollTop;
+    const down = offset > 0;
+    if(!down) {
+        offset = -offset;
+    }
+
+    if(~~(offset) <= 10) {
+        document.documentElement.scrollTop = top;
+        document.body.scrollTop = top;
+        running = false;
+        return;
+    }
+
+    let step = Math.ceil(offset * delay / time);
+    const target = down ? top - step : step;
+
+    let timer = setInterval(() => {
+        scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const offset = down ? step + scrollTop : scrollTop - step;
+        const flag = (!down && scrollTop <= target) || (down && scrollTop >= target);
+        if(flag) {
+            document.documentElement.scrollTop = top;
+            document.body.scrollTop = top;
+            running = false;
+            clearInterval(timer);
+        } else {
+            document.documentElement.scrollTop = offset;
+            document.body.scrollTop = offset;
+        }
+    }, delay);
+}
+
 export default {
     props: {
         pagination: {
@@ -77,40 +117,56 @@ export default {
                 return route.replace(':num', this.num - 1);
             }
             return '/';
+        },
+        disableComment() {
+            return !this.$store.state.comment;
         }
     },
     mounted() {
         this.running = false;
     },
     methods: {
+        scroll(top=0) {
+            return scroll(top, this.time, this.delay);
+        },
         backTop() {
-            if(this.running) {
+            return this.scroll(0);
+            // if(this.running) {
+            //     return;
+            // }
+            // this.running = true;
+            // let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+            // if(scrollTop <= 10) {
+            //     document.documentElement.scrollTop = 0;
+            //     document.body.scrollTop = 0;
+            //     this.running = false;
+            //     return;
+            // }
+
+            // let step = Math.ceil(scrollTop * this.delay / this.time);
+
+            // let timer = setInterval(() => {
+            //     scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //     if(scrollTop <= step) {
+            //         document.documentElement.scrollTop = 0;
+            //         document.body.scrollTop = 0;
+            //         this.running = false;
+            //         clearInterval(timer);
+            //     } else {
+            //         document.documentElement.scrollTop = scrollTop - step;
+            //         document.body.scrollTop = scrollTop - step;
+            //     }
+            // }, this.delay);
+        },
+        scrollComment() {
+            if(this.disableComment) {
                 return;
             }
-            this.running = true;
-            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-
-            if(scrollTop <= 10) {
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-                this.running = false;
-                return;
+            const select = document.querySelector(this.$store.state.comment);
+            if(select) {
+                this.scroll(select.offsetTop - 60);
             }
-
-            let step = Math.ceil(scrollTop * this.delay / this.time);
-
-            let timer = setInterval(() => {
-                scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-                if(scrollTop <= step) {
-                    document.documentElement.scrollTop = 0;
-                    document.body.scrollTop = 0;
-                    this.running = false;
-                    clearInterval(timer);
-                } else {
-                    document.documentElement.scrollTop = scrollTop - step;
-                    document.body.scrollTop = scrollTop - step;
-                }
-            }, this.delay);
         }
     }
 }

@@ -1,8 +1,7 @@
 <template>
     <div class="passage-meta">
         <span>
-            <i class="fa fa-calendar"/>
-            {{ data.date | formatTime }}
+            <i class="fa fa-calendar"/>{{ data.date | formatTime }}
         </span>
         <span v-if="!!data.type">
             |

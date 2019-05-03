@@ -30,5 +30,8 @@ export default {
         state.route = route
         state.num = num
         state.total = total
+    },
+    COMMENT_CONTANIER: (state, { select }) => {
+        state.comment = select
     }
 }

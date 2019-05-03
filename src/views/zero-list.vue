@@ -3,21 +3,6 @@
         <div class="home-article-wrapper" v-for="item in displayedItems" :key="item.date">
             <div :class="{'home-article': true, 'home-article-has-cover': !!item.cover}">
                 <div :class="{'home-article-inner': true, 'home-article-inner-has-cover': !!item.cover}">
-                    <!-- <div class="passage-meta">
-                        <span>
-                            <i class="fa fa-calendar"/>
-                            {{ item.date | formatTime }}
-                        </span>
-                        <span v-if="!!item.type">
-                            |
-                            <router-link
-                                :to="'/categories/' + item.type"
-                            >
-                                <i class="fa fa-bookmark"/>
-                                {{item.type}}
-                            </router-link>
-                        </span>
-                    </div> -->
                     <passage-meta :data="item"/>
                     <h1 class="home-article-title">
                         <router-link
@@ -80,7 +65,7 @@ export default {
 </script>
 
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .home-article
     position relative
     height 100%
@@ -170,4 +155,22 @@ export default {
     min-height 330px
     margin 30px 0
     border-radius 10px
+
+@media screen and (max-width: 768px)
+    .home-article-inner
+        padding 20px 15px
+@media screen and (max-width: 768px)
+    .home-article-inner-has-cover
+        border-radius 10px
+@media screen and (min-width: 1025px)
+    .home-article-inner-has-cover
+        z-index 100
+        padding-left 80px
+        width calc(100% + 20px)
+
+@media screen and (max-width: 1024px)
+    .home-article-has-cover
+        padding 0
+    .home-article-cover
+        display none
 </style>
