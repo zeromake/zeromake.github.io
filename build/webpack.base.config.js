@@ -31,6 +31,7 @@ return {
         publicPath: '/dist/',
         filename: '[name]-[chunkhash].js'
     },
+    stats: 'errors-only',
     resolve: {
         alias: {
             'public': path.resolve(__dirname, '../public'),
