@@ -116,7 +116,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
     .bottom
         display flex
         justify-content space-between

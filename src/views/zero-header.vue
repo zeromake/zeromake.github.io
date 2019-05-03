@@ -75,7 +75,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
     .header
         display flex
         justify-content space-between
@@ -88,6 +88,8 @@ export default {
         padding-left 10px
         background #FAFAFA
         z-index 300
+        border-bottom transparent solid 2px
+        box-shadow 0 2px 2px #eee
     .header-left, .header-right
         display flex
         align-items center

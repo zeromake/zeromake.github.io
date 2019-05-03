@@ -64,7 +64,7 @@ export default {
 </script>
 
 
-<style lang="stylus" scoped>
+<style lang="stylus">
     .nav-content
         z-index 900
         right -200px
