@@ -17,25 +17,31 @@
                         {{href}}
                     </a>
                 </div>
+                <div>
+                    最后更新时间: {{post.last_date | formatTime}}
+                </div>
             <div>
                 版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
             </div>
         </aside>
+        <zero-comment param="page"/>
     </div>
 </template>
 
 <script>
 import PassageMeta from 'components/passage-meta.vue';
+import ZeroComment from './zero-comment';
 export default {
     components: {
         PassageMeta,
+        ZeroComment,
     },
     asyncData({ store, route }) {
         return store.dispatch('FETCH_POST_DATA', { post: route.params.page });
     },
     data() {
         return {
-            href: 'https://blog.zeromake.com' + this.route.fullPath,
+            href: 'https://blog.zeromake.com' + this.$route.fullPath,
             post: this.$store.getters.activePage || {}
         }
     }

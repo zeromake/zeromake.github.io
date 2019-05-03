@@ -10,6 +10,7 @@
         </main>
         <zero-share/>
         <zero-bottom/>
+        <zero-footer/>
     </div>
 </template>
 
@@ -20,6 +21,7 @@ import ZeroHeader from './views/zero-header'
 import ZeroNavigation from './views/zero-navigation'
 import ZeroShare from './views/zero-share'
 import ZeroBottom from './views/zero-bottom'
+import ZeroFooter from './views/zero-footer'
 export default {
     components: {
         ZeroHeader,
@@ -27,6 +29,7 @@ export default {
         ZeroShare,
         ZeroBottom,
         ZeroProcess,
+        ZeroFooter,
     },
     data() {
         return {
