@@ -5,9 +5,10 @@ const path = require('path')
 const pify = require('pify')
 const readline = require('readline')
 const yaml = require('js-yaml')
-const { postDir } = require('./config')
+const { postDir, aloneDir } = require('./config')
 const marked = require('./renderer')()
 const router = new KoaRuoter()
+
 
 /**
 * 读取yaml,markdown的混合文件
@@ -109,13 +110,40 @@ router.get('/api/pages/:page.json', convert(function * (ctx, next) {
     const page = ctx.params.page
     if (fs.existsSync(path.join(postDir, page + '.md'))) {
         const { yaml, markdown } = yield readMarkdown(postDir, page + '.md')
-        const pageBody = markdown && marked.render(markdown)
+        let pageBody = markdown
+        let toc = null
+        if(markdown) {
+            [pageBody, toc] = marked.renderToc(markdown)
+        }
         yaml['body'] = pageBody
-        yaml['toc'] = marked.toc();
+        yaml['toc'] = toc;
         ctx.body = yaml
     } else {
         ctx.status = 404
         ctx.body = '404|Not Blog Page'
     }
 }))
+
+for(const alone of fs.readdirSync(aloneDir)) {
+    if(alone.endsWith('.md')) {
+        const p = alone.substr(0, alone.length - 3)
+        router.get(`/api/${p}.json`, convert(function * (ctx) {
+            if (fs.existsSync(path.join(aloneDir, alone))) {
+                const { yaml, markdown } = yield readMarkdown(aloneDir, alone)
+                let pageBody = markdown
+                let toc = null
+                if(markdown) {
+                    [pageBody, toc] = marked.renderToc(markdown)
+                }
+                yaml['body'] = pageBody
+                yaml['toc'] = toc;
+                ctx.body = yaml
+            } else {
+                ctx.status = 404
+                ctx.body = '404|Not blog alone page'
+            }
+        }))
+    }
+}
+
 module.exports = router

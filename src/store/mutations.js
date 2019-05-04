@@ -33,5 +33,12 @@ export default {
     },
     COMMENT_CONTANIER: (state, { select }) => {
         state.comment = select
+    },
+    SET_ACTIVE_ALONE: (state, { type }) => {
+        state.activeAlone = type
+    },
+    SET_ALONE: (state, { type, data }) => {
+        Vue.set(state.alone, type, data)
+        state.tocs = data.toc
     }
 }

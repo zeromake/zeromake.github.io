@@ -1,8 +1,15 @@
 const fetch = require('node-fetch')
 const path = require('path')
+
+const alone = [
+    'about',
+    'resume',
+];
+
 module.exports = {
     port: 8089,
     postDir: path.resolve(__dirname, '../posts'),
+    aloneDir: path.resolve(__dirname, '../alone'),
     generateConfig: {
         baseUrl: 'http://127.0.0.1:8089',
         docsPath: path.resolve(__dirname, '../docs'),
@@ -19,6 +26,10 @@ module.exports = {
                     renderUrls.push('/pages/' + element.filename)
                     const file_name = '/api/pages/' + element.filename + '.json'
                     staticUrls.push(file_name)
+                }
+                for(const a of alone) {
+                    renderUrls.push('/' + a);
+                    staticUrls.push('/api/' + a + '.json')
                 }
                 return Promise.resolve({
                     staticUrls,

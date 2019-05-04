@@ -28,16 +28,16 @@ export default {
                     title: '实验室',
                     info: [
                         {
-                            title: 'http2',
-                            href: 'https://github.com/zeromake/http2',
-                        },
-                        {
                             title: 'docker-debug',
                             href: 'https://github.com/zeromake/docker-debug',
                         },
                         {
                             title: 'zreact',
                             href: 'https://github.com/zeromake/zreact',
+                        },
+                        {
+                            title: 'library',
+                            href: 'https://github.com/zeromake/library',
                         },
                     ]
                 },

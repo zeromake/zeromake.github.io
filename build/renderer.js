@@ -120,6 +120,22 @@ module.exports = function builder(options) {
         },
         toc() {
             return renderer.toc;
+        },
+        renderToc(text) {
+            const renderer = new Renderer();
+            const body = marked(text, Object.assign({
+                gfm: true,
+                pedantic: false,
+                sanitize: false,
+                tables: true,
+                breaks: true,
+                smartLists: true,
+                smartypants: true,
+                modifyAnchors: '',
+                autolink: true,
+                renderer,
+            }, options));
+            return [body, renderer.toc];
         }
     }
 

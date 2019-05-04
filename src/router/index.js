@@ -45,11 +45,11 @@ export function createRouter () {
             },
             {
                 path: '/resume',
-                component: () => import('../views/zero-resume')
+                component: () => import('../views/zero-alone')
             },
             {
                 path: '/about',
-                component: () => import('../views/zero-about')
+                component: () => import('../views/zero-alone')
             }
         ]
     })

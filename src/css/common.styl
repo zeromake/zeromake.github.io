@@ -11,7 +11,8 @@ body
     margin 0
     padding 0
     background #FAFAFA
-    font-family Consolas, Microsoft Jhenghei, Hiragino Sans GB, Microsoft YaHei
+    font-family "Helvetica Neue", Arial, "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", "WenQuanYi Micro Hei", SimSun, Song, sans-serif
+    // font-family Consolas, Microsoft Jhenghei, Hiragino Sans GB, Microsoft YaHei
 *
     box-sizing border-box
     margin 0
@@ -28,14 +29,15 @@ a:hover
         position relative
         font-weight 600
         margin 15px 0
+        color rgb(44, 63, 81)
         a
             padding-left 5px
             transition all .15s linear
-    h1::before,h2::before,h3::before,h4::before,h5::before,h6::before
-        font-size 0.8em
-        content "\f0c1"
-        color #F4511E
-        font-family FontAwesome
+    // h1::before,h2::before,h3::before,h4::before,h5::before,h6::before
+    //     font-size 0.8em
+    //     content "\f0c1"
+    //     color #F4511E
+    //     font-family FontAwesome
     h1:hover a,h2:hover a,h3:hover a,h4:hover a,h5:hover a,h6:hover a
         padding-left 10px
     h1:hover::before,h2:hover::before,h3:hover::before,h4:hover::before,h5:hover::before,h6:hover::before
@@ -64,7 +66,8 @@ a:hover
     a
         display inline-block
         position relative
-        color #F4511E
+        // color #F4511E
+        color #1980e6
         font-weight bolder
     a::before
         content ""
@@ -77,17 +80,16 @@ a:hover
         transition all 0.3s ease
 
     a:hover
-        color #2196F3
+        color #0f4d8a
     a:hover::before
         width 100%
         left 0
         right auto
     code
-        font-family Consolas, Microsoft Jhenghei, Hiragino Sans GB, Microsoft YaHei;
-        background #EEEEEE
-        color #D84315
-        word-wrap break-word
-        margin 0 3px
+        // background #EEEEEE
+        color #c7254e !important
+        // word-wrap break-word
+        // margin 0 3px
     img
         display block
         margin 0 auto
@@ -97,11 +99,25 @@ a:hover
         transition all .3s linear
     img:hover
         box-shadow 0 0 3px #9E9E9E
-    ol, ul
-        margin 0 0 16px
-        padding-left 1.2em
-    ol ol, ul ol
-        list-style-type lower-roman
+    ul, ol
+        margin-bottom 1.1em
+        padding-left 2em
+    ul, ol
+        margin-top 0
+        margin-bottom 10.5px
+    // ol, ul
+    //     margin 0 0 16px
+    //     padding-left 1.2em
+    // ol ol, ul ol
+    //     list-style-type lower-roman
+.passage-article > code
+    padding 2px 4px
+    font-family "Source Code Pro", Consolas, monospace, Microsoft Jhenghei, Hiragino Sans GB, Microsoft YaHei
+    font-size .9em
+    white-space normal
+    color #c7254e
+    background-color #f9f2f4
+    border-radius 4px
 .passage-article > table
     width 100%
     border-collapse collapse

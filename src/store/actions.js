@@ -23,5 +23,14 @@ export default {
     },
     SET_PAGE: ({ commit }, { num, route }) => {
         commit('SET_PAGE', { num, route })
+    },
+    FETCH_ALONE_DATA: ({ commit, state }, { type }) => {
+        commit('SET_ACTIVE_ALONE', { type })
+        const now = Date.now()
+        const activeAlone = state.alone[type]
+        if (!activeAlone || (now - activeAlone.__lastUpdated > 1000 * 180)) {
+            return fetchPostsByType(type)
+                .then(data => commit('SET_ALONE', { type, data }))
+        }
     }
 }

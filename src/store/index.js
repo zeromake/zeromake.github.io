@@ -17,11 +17,13 @@ export function createStore () {
             post: {},
             code: null,
             activePage: null,
+            activeAlone: null,
             showSidebar: false,
             tocs: null,
             route: null,
             total: 0,
-            comment: null
+            comment: null,
+            alone: {}
         },
         actions,
         mutations,

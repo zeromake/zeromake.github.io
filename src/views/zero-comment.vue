@@ -16,7 +16,7 @@ export default {
     mounted() {
         const thread = this.$refs.thread;
         if(thread) {
-            const page = this.$route.params[this.param];
+            const page = this.param === 'path' ? this.$route.path.substr(1) : this.$route.params[this.param];
             if (this.$gitment) {
                 const gitment = new this.$gitment({
                     id: page, // 可选。默认为 location.href
