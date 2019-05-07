@@ -26,6 +26,7 @@ npm i karma karma-mocha karma-phantomjs-launcher karma-sinon-chai /
 karma-spec-reporter karma-webpack mocha sinon sinon-chai -D
 ```
 
+
 - package.json
 
 ``` json
@@ -37,6 +38,7 @@ karma-spec-reporter karma-webpack mocha sinon sinon-chai -D
     }
 }
 ```
+
 
 - test/unit/karma.conf.js
 
@@ -66,12 +68,15 @@ module.exports = function(config) {
     })
 }
 ```
+
+
 - test/unit/index.js
 ``` javascript
  // 动态加载所有测试文件
 const testsContext = require.context('./specs', true, /\.spec$/)
 testsContext.keys().forEach(testsContext)
 ```
+
 
 - test/unit/specs/test.spec.js
 ``` javascript
@@ -89,6 +94,8 @@ npm run karma-start
 # new shell，运行一次测试
 npm run karma-run
 ```
+
+
 或者直接单次构建并测试
 ``` shell
 npm run karma-single
@@ -111,8 +118,9 @@ npm run karma-single
 ``` shell
 npm i karma-coverage-istanbul-reporter istanbul-instrumenter-loader -D
 ```
-- test/unit/karma.conf.js
 
+
+- test/unit/karma.conf.js
 ``` javascript
 const path = require('path')
 const srcPath = path.resolve(__dirname, '../../src')
@@ -166,6 +174,8 @@ module.exports = function(config) {
     })
 }
 ```
+
+
 - 代码参考 [vue-dragging](https://github.com/zeromake/vue-dragging/tree/test) or [marked-zm](https://github.com/zeromake/marked-zm)
 
 ## 四、nodejs, browser测试使用同一套测试用例
@@ -179,6 +189,8 @@ module.exports = function(config) {
     }
 }
 ```
+
+
 - test/unit/common.js
 ``` javascript
 global.chai = require("chai")
@@ -189,6 +201,8 @@ const sinonChai = require("sinon-chai")
 
 chai.use(sinonChai)
 ```
+
+
 无需修改其它代码见 [marked-zm](https://github.com/zeromake/marked-zm)
 
 ## 五、总结
