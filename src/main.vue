@@ -79,7 +79,7 @@ export default {
 
 @media screen and (max-width: 768px)
     .main
-        margin 0 20px
+        margin 0
 @media screen and (min-width: 769px) and (max-width: 1024px)
     .main
         margin: 0 50px;

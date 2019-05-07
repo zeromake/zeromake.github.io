@@ -1,5 +1,5 @@
 ---
-title: Vue2(not_webpack)
+title: vue不使用构建工具
 date: 2016-11-4 13:10:25+08:00
 type: vue
 tags: [vue2, requirejs]

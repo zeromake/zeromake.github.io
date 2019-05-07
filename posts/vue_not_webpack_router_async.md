@@ -1,5 +1,5 @@
 ---
-title: vue_not_webpack_router_async
+title: vue不使用构建工具懒加载
 date: 2016-11-7 17:13:25+08:00
 type: vue
 tags: [vue2, router, async]

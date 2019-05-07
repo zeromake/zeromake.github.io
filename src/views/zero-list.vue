@@ -155,13 +155,20 @@ export default {
     min-height 330px
     margin 30px 0
     border-radius 10px
+    transition all .25s ease
+    box-shadow 0 1px 2px 0 rgba(0,0,0,.1),0 2px 4px 0 rgba(0,0,0,.1)
+    &:hover
+        box-shadow 0 2px 4px 0 rgba(0,0,0,.1),0 4px 8px 0 rgba(0,0,0,.1),0 8px 16px 0 rgba(0,0,0,.1),0 16px 32px 0 rgba(0,0,0,.1)
 
-@media screen and (max-width: 768px)
-    .home-article-inner
-        padding 20px 15px
 @media screen and (max-width: 768px)
     .home-article-inner-has-cover
         border-radius 10px
+
+    .home-article-inner
+        padding 20px 15px
+
+    .home-article-wrapper
+        margin 16px 0
 @media screen and (min-width: 1025px)
     .home-article-inner-has-cover
         z-index 100

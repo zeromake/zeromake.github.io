@@ -10,7 +10,8 @@ body
     height 100%
     margin 0
     padding 0
-    background #FAFAFA
+    // background #FAFAFA
+    background #efefef
     font-family "Helvetica Neue", Arial, "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", "WenQuanYi Micro Hei", SimSun, Song, sans-serif
     // font-family Consolas, Microsoft Jhenghei, Hiragino Sans GB, Microsoft YaHei
 *
@@ -143,3 +144,116 @@ a:hover
         padding-left 0
     .gitment-editor-avatar
         display none
+
+.passage
+    max-width 1048px
+    margin 20px auto
+    background #ffffff
+    box-shadow 0 1px 2px 0 rgba(0,0,0,.1),0 2px 4px 0 rgba(0,0,0,.1)
+    transition all .25s ease
+    padding 32px 24px
+    border-radius 12px
+    &:hover
+        box-shadow 0 2px 4px 0 rgba(0,0,0,.1),0 4px 8px 0 rgba(0,0,0,.1),0 8px 16px 0 rgba(0,0,0,.1),0 16px 32px 0 rgba(0,0,0,.1)
+.passage-title
+    font-size 36px
+    line-height 42px
+    margin 25px 0 40px
+.passage-cover
+    display block
+    width 100%
+    position relative
+    padding-bottom 50%
+    margin-bottom 40px
+    figure
+        position absolute
+        left 0px
+        top 0px
+        right 0px
+        bottom 0px
+        overflow hidden
+        border-radius 10px
+        background-position 50% 50%
+        background-size contain
+        background-repeat no-repeat
+        background-attachment fixed
+.passage-article
+    font-size 16px
+    font-family -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    line-height 2
+    letter-spacing 0.2px
+    word-break break-word
+    // pre
+    //     background-color #2D2D2D
+    //     box-shadow 0 1px 3px #e3e3e3
+    pre
+        // font-size 0.8em
+        position relative
+        code
+            color inherit
+        &.language-html:after
+            content 'HTML'
+        &.language-js:after
+            content 'JS'
+        &.language-javascript:after
+            content 'JavaScript'
+        &.language-typescript:after
+            content 'TypeScript'
+        &.language-json:after
+            content 'JSON'
+        &.language-css:after
+            content 'CSS'
+        &.language-bash:after
+            content 'Shell'
+        &.language-yaml:after
+            content 'Yaml'
+        &.language-yml:after
+            content 'Yaml'
+        &.language-python:after
+            content 'Python'
+        &.language-c:after
+            content 'C'
+        &.language-c\+\+:after
+            content 'CPP'
+        &.language-cpp:after
+            content 'CPP'
+        &.language-text:after
+            content 'Text'
+        &.language:after
+            content 'Text'
+        &.language-go:after
+            content 'Go'
+        &.language-shell:after
+            content 'Shell'
+        &:after
+            position: absolute
+            top 0
+            right 0
+            // color #ccc
+            // color #c7254e
+            color #268bd2
+            text-align right
+            font-size 1em
+            padding 5px 10px 0
+            line-height 15px
+            height 15px
+            font-weight 600
+.passage-copyright
+        border-left 3px solid #FF5722
+        background #EEEEEE
+        padding 15px 20px
+        margin-top 30px
+    div
+        line-height 2
+    a
+      transition all .1s linear
+    a:hover
+        color #F4511E
+
+@media screen and (max-width: 768px)
+    .passage-cover
+        display none
+    .passage
+        padding 24px 16px
+        margin 16px auto
+        border-radius 5px

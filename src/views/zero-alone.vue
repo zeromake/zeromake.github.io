@@ -20,9 +20,9 @@ export default {
             post: this.$store.getters.activeAlone || {}
         }
     },
-    asyncData({ store, route }) {
-        return store.dispatch('FETCH_ALONE_DATA', { type: route.path.substr(1) });
-    },
+    // asyncData({ store, route }) {
+    //     return store.dispatch('FETCH_ALONE_DATA', { type: route.path.substr(1) });
+    // },
 }
 </script>
 

@@ -1,5 +1,5 @@
 ---
-title: koa-webpack-middleware-zm
+title: 为koa定制webpack的中间件
 date: 2017-03-01 21:33:04+08:00
 type: middleware
 tags: [node, js, npm]

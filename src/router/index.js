@@ -1,11 +1,30 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Alone from '../views/zero-alone'
 
 Vue.use(Router)
 
 // const createListView = id => () => import('../views/CreateListView').then(m => m.default(id))
 // import { createListView } from '../views/CreateListView'
 const list = () => import('../views/zero-list')
+const camelize = str => str.charAt(0).toUpperCase() + str.slice(1)
+function createAlone(alone) {
+    return {
+        name: `${alone}-view`,
+        asyncData ({ store }) {
+            return store.dispatch('FETCH_ALONE_DATA', { type: alone });
+        },
+        title: camelize(alone),
+        render (h) {
+            return h(
+                Alone,
+                {
+                    props: { type: alone },
+                }
+            );
+        }
+    }
+}
 
 export function createRouter () {
     const router = new Router({
@@ -45,11 +64,11 @@ export function createRouter () {
             },
             {
                 path: '/resume',
-                component: () => import('../views/zero-alone')
+                component: createAlone('resume')
             },
             {
                 path: '/about',
-                component: () => import('../views/zero-alone')
+                component: createAlone('about')
             }
         ]
     })

@@ -88,8 +88,9 @@ export default {
         padding-left 10px
         background #FAFAFA
         z-index 300
-        border-bottom transparent solid 2px
-        box-shadow 0 2px 2px #eee
+        box-shadow 0 1px 2px 0 rgba(0,0,0,.1),0 2px 4px 0 rgba(0,0,0,.1)
+        // border-bottom transparent solid 2px
+        // box-shadow 0 2px 2px #eee
     .header-left, .header-right
         display flex
         align-items center
