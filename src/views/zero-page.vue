@@ -24,7 +24,7 @@
                 版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
             </div>
         </aside>
-        <zero-comment param="page"/>
+        <zero-comment :param="page"/>
     </div>
 </template>
 
@@ -45,8 +45,9 @@ export default {
     data() {
         return {
             href: 'https://blog.zeromake.com' + this.$route.fullPath,
-            post: this.$store.getters.activePage || {}
+            post: this.$store.getters.activePage || {},
+            page: this.$store.activePage,
         }
-    }
+    },
 }
 </script>

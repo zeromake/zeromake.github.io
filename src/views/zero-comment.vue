@@ -10,17 +10,17 @@ export default {
     props: {
         param: {
             type: String,
-            default: () => 'page',
+            default: () => 'default',
         }
     },
     mounted() {
         const thread = this.$refs.thread;
         if(thread) {
-            const page = this.param === 'path' ? this.$route.path.substr(1) : this.$route.params[this.param];
+            // const page = this.param === 'path' ? this.$route.path.substr(1) : this.$route.params[this.param];
             if (this.$gitment) {
                 const gitment = new this.$gitment({
                     // container: page,
-                    id: page, // 可选。默认为 location.href
+                    id: this.param, // 可选。默认为 location.href
                     owner: 'zeromake',
                     repo: 'zeromake.github.io',
                     clientID: '6f4e103c0af2b0629e01',

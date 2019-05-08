@@ -4,7 +4,7 @@
             {{ post.title }}
         </h1>
         <article class="passage-article" v-html="post.body"/>
-        <zero-comment param="path"/>
+        <zero-comment :param="type"/>
     </div>
 </template>
 
