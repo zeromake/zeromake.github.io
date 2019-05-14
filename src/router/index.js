@@ -8,20 +8,20 @@ Vue.use(Router)
 // import { createListView } from '../views/CreateListView'
 const list = () => import('../views/zero-list')
 const camelize = str => str.charAt(0).toUpperCase() + str.slice(1)
-function createAlone(alone) {
+function createAlone (alone) {
     return {
         name: `${alone}-view`,
         asyncData ({ store }) {
-            return store.dispatch('FETCH_ALONE_DATA', { type: alone });
+            return store.dispatch('FETCH_ALONE_DATA', { type: alone })
         },
         title: camelize(alone),
         render (h) {
             return h(
                 Alone,
                 {
-                    props: { type: alone },
+                    props: { type: alone }
                 }
-            );
+            )
         }
     }
 }

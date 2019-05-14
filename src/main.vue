@@ -69,19 +69,3 @@ export default {
     }
 }
 </script>
-<style lang="stylus" scoped>
-.main
-    display block
-    margin 0 auto
-    padding-top 60px
-    min-height calc(100vh - 50px)
-    max-width 1024px
-
-@media screen and (max-width: 768px)
-    .main
-        margin 0
-@media screen and (min-width: 769px) and (max-width: 1024px)
-    .main
-        margin: 0 50px;
-</style>
-

@@ -23,13 +23,3 @@ export default {
     },
 }
 </script>
-
-<style lang="stylus" scoped>
-.passage-meta
-    font-size 16px
-    color #616161
-    i
-        display inline-block
-        margin-right 5px
-</style>
-

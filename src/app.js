@@ -6,6 +6,8 @@ import { createRouter } from './router'
 import titleMixin from './util/title'
 import * as filters from './util/filters'
 import 'font-awesome/css/font-awesome.min.css'
+import 'highlight.js/styles/solarized-dark.css'
+import 'gitalk/dist/gitalk.css'
 import './css/common.styl'
 
 Vue.mixin(titleMixin)

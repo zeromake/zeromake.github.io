@@ -42,17 +42,3 @@ export default {
     }
 }
 </script>
-
-<style lang="stylus" scoped>
-.layer
-    display block
-    z-index 600
-    position fixed
-    left 0
-    right 0
-    top 0
-    bottom 0
-    background-color rgba(0, 0, 0, 0.8)
-.layer-hide
-    display none
-</style>

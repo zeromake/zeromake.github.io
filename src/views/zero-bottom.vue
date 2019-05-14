@@ -171,39 +171,3 @@ export default {
     }
 }
 </script>
-
-<style lang="stylus">
-    .bottom
-        display flex
-        justify-content space-between
-        position fixed
-        bottom 0
-        left 0
-        width 100%
-        height 50px
-        background #F5F5F5
-        overflow auto
-        z-index 300
-        a.disable
-            color #90CAF9
-            cursor not-allowed
-        a
-            display inline-block
-            width 40px
-            height 40px
-            line-height 40px
-            text-align center
-            transition all .15s linear
-            color #42A5F5
-        a:hover
-            border-radius 50%
-            color white
-            background #42A5F5
-        a.disable:hover
-            background #90CAF9
-    .bottom-left, .bottom-right
-        display inline-flex
-        align-items center
-
-</style>
-

@@ -25,11 +25,3 @@ export default {
     // },
 }
 </script>
-
-<style lang="stylus">
-.passage-title
-    font-size 36px
-    line-height 42px
-    margin 25px 0 40px
-</style>
-

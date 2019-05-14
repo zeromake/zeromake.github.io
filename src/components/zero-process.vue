@@ -48,12 +48,3 @@ export default {
     }
 }
 </script>
-
-<style lang="stylus" scoped>
-    .process
-        position fixed
-        left 0
-        height 2px
-        background #42A5F5
-        z-index 300
-</style>

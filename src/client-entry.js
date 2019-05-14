@@ -8,8 +8,6 @@ import ZeroLayer from 'components/zero-layer'
 import Gitment from 'gitalk'
 // import 'prismjs/themes/prism-tomorrow.css'
 // import 'prismjs/themes/prism-solarizedlight.css'
-import 'highlight.js/styles/solarized-dark.css'
-import 'gitalk/dist/gitalk.css'
 // import 'primer-markdown/build/build.css'
 // import flowchart from 'flowchart.js/release/flowchart.js'
 

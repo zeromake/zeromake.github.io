@@ -2,7 +2,7 @@ const path = require('path')
 const vueConfig = require('./vue-loader.config')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require("@zeromake/mini-css-extract-plugin");
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -25,7 +25,7 @@ function buildCss(use) {
 
 return {
     mode: isProd ? 'production' : 'development',
-    devtool: '#inline-source-map',
+    devtool: isProd ? false : '#inline-source-map',
     output: {
         path: path.resolve(__dirname, '../dist'),
         publicPath: '/dist/',
@@ -84,10 +84,10 @@ return {
                 test: /\.css$/,
                 use: buildCss(['css-loader'])
             },
-            {
-                test: /\.scss$/,
-                use: buildCss(['css-loader', 'sass-loader'])
-            },
+            // {
+            //     test: /\.scss$/,
+            //     use: buildCss(['css-loader', 'sass-loader'])
+            // },
             {
                 test: /\.styl(us)?$/,
                 use: buildCss(['css-loader', 'stylus-loader'])
@@ -109,7 +109,7 @@ return {
             // }),
             // new webpack.optimize.ModuleConcatenationPlugin(),
             new MiniCssExtractPlugin({
-                filename: "common.[chunkhash].css",
+                filename: 'common.[chunkhash].css',
             }),
             new VueLoaderPlugin(),
         ]
@@ -117,7 +117,7 @@ return {
             new VueLoaderPlugin(),
             new FriendlyErrorsPlugin(),
             new MiniCssExtractPlugin({
-                filename: "common.[chunkhash].css",
+                filename: 'common.[chunkhash].css',
             })
         ]
 }
