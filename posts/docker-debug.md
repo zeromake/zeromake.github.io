@@ -3,7 +3,7 @@ title: docker容器调试新姿势
 date: 2019-03-22 12:32:21+08:00
 type: docker
 tags: [docker, debug, go]
-last_date: 2019-03-22 12:32:21+08:00
+last_date: 2019-05-28 21:32:28+08:00
 ...
 
 ## 一、前言
@@ -215,12 +215,25 @@ func (cli *DebugCli) ExecStart(execID string) error {
 ## 四、一些边角处理
 
 ### 4.1 通过环境变量获取 docker 配置
+在各种系统环境下 `docker` 的 `cli` 获取连接的配置都是用环境变量和固定值来做的。
+
+- `DOCKER_HOST` 对应 `docker` 服务端 `api` 地址。
+- `DOCKER_TLS_VERIFY` `api` 的连接是否为 `tls`。
+- `DOCKER_CERT_PATH` 使用的证书目录。
 
 ### 4.2 docker/client 的 opts 包引入报错
 
+在直接使用 `docker/client` 的 `opts` 包发现有很多奇怪的引入照成了各种错误，经过研究发现我的项目只需要一部分提取后放到了项目中。
+
 ### 4.3 使用 git-chglog 来生成 changelog
 
+在开发过程中 `changelog` 如果使用手动维护会十分麻烦，所以考虑寻找一个 `cli` 通过 `git log` 自动生成。
+
+后面找到了 [git-chglog](https://github.com/git-chglog/git-chglog) 这个工具效果还不错就是比较麻烦的是 `changelog` 自己也在 `git` 管理下每次的生成都会错过这次生成的提及。
+
 ### 4.4 go 编译二进制的一些问题
+
+`golang` 的程序编译后只有单个执行文件，但是大小有 10MB - 11MB 左右，后来考虑使用 `upx` 进行压缩，但是却发现 `upx` 的压缩虽然能够在 `linux` 上压缩 `mac` 的二进制但是会出现压缩后二进制文件无法执行了，直接在 `mac` 上压缩是没问题的。
 
 ## 五、下一步计划
 
