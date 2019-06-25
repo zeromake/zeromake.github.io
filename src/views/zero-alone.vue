@@ -3,7 +3,7 @@
         <h1 class="passage-title">
             {{ post.title }}
         </h1>
-        <article class="passage-article" v-html="post.body"/>
+        <article class="passage-article markdown-section" v-html="post.body"/>
         <zero-comment :param="type"/>
     </div>
 </template>

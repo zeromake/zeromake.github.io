@@ -7,7 +7,7 @@
         <div class="passage-cover" v-if="post.cover">
             <figure :style="`background-image:url(${post.cover});`"/>
         </div>
-        <article class="passage-article" v-html="post.body">
+        <article class="passage-article markdown-section" v-html="post.body">
         </article>
         <aside class="passage-copyright">
             <div>本文作者: zeromake</div>

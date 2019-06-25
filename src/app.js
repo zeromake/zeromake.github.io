@@ -9,6 +9,7 @@ import 'font-awesome/css/font-awesome.min.css'
 import 'highlight.js/styles/solarized-dark.css'
 import 'gitalk/dist/gitalk.css'
 import './css/common.styl'
+import './css/vue.styl'
 
 Vue.mixin(titleMixin)
 

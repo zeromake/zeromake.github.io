@@ -11,7 +11,7 @@
                             {{item.title}}
                         </router-link>
                     </h1>
-                    <div class="home-article-content passage-article" v-html="item.content">
+                    <div class="home-article-content passage-article markdown-section" v-html="item.content">
 
                     </div>
 

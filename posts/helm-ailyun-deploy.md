@@ -16,7 +16,8 @@ last_date: 2019-04-12 16:25:21+08:00
 
 ### 2.1 k8s 环境
 
-**minikube**
+**使用 minikube 搭建:**
+
 [minikube](https://github.com/kubernetes/minikube)
 
 
@@ -25,17 +26,21 @@ last_date: 2019-04-12 16:25:21+08:00
 国内特点(1.0.0版本新增的 `registry-repository` 选项):
 > --registry-mirror=设置镜像源
 > --registry-repository=设置 k8s.gcr.io 的替代镜像地址
+
+
 ``` shell
 minikube start --registry-mirror=http://f1361db2.m.daocloud.io --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers
 ```
 
 完成后直接使用 `kubcli` 就可以管理。
 
-**云上k8s**
+**使用云上k8s:**
 这个就不用我说了，现在各个云厂商都有现成的 `k8s` 集群可以购买，购买后把配置放到 `~/.kube/config` 或者直接保存为单个文件(~/.kube/ali-config)然后通过环境变量加载。
+
 ``` shell
 export KUBECONFIG=~/.kube/ali-config
 ```
+
 然后使用 `kubcli` 就可以管理。
 
 **k3s**
