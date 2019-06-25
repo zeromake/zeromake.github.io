@@ -6,7 +6,7 @@ const logRequests = process.env.NODE_ENV !== 'production'
 const api = createAPI({
     version: '/v0',
     config: {
-        url: 'https://127.0.0.1:8089'
+        url: 'http://127.0.0.1:8089'
     }
 })
 
