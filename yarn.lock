@@ -2495,6 +2495,13 @@ fast-levenshtein@~2.0.4:
   resolved "http://registry.npm.taobao.org/fast-levenshtein/download/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
+feed@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.taobao.org/feed/download/feed-3.0.0.tgz#be9cada49c692197e7e14083711597562d14a486"
+  integrity sha1-vpytpJxpIZfn4UCDcRWXVi0UpIY=
+  dependencies:
+    xml-js "^1.6.11"
+
 figgy-pudding@^3.5.1:
   version "3.5.1"
   resolved "http://registry.npm.taobao.org/figgy-pudding/download/figgy-pudding-3.5.1.tgz#862470112901c727a0e495a80744bd5baa1d6790"
@@ -6427,6 +6434,13 @@ write@1.0.3:
   integrity sha1-CADhRSO5I6OH5BUSPIZWFqrg9cM=
   dependencies:
     mkdirp "^0.5.1"
+
+xml-js@^1.6.11:
+  version "1.6.11"
+  resolved "https://registry.npm.taobao.org/xml-js/download/xml-js-1.6.11.tgz#927d2f6947f7f1c19a316dd8eea3614e8b18f8e9"
+  integrity sha1-kn0vaUf38cGaMW3Y7qNhTosY+Ok=
+  dependencies:
+    sax "^1.2.4"
 
 xml@1.0.1:
   version "1.0.1"

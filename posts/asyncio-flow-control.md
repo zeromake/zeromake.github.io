@@ -1,11 +1,10 @@
 ---
-
 title: asyncio 的流量控制
 date: 2018-05-23 15:58:00+08:00
 type: asyncio
 tags: [asyncio, python3]
 last_date: 2018-05-23 15:58:00+08:00
-...
+---
 
 ## 前言
 

@@ -1,11 +1,10 @@
 ---
-
 title: 位操作的应用
 date: 2019-02-28 10:30:00+08:00
 type: business
 tags: [bit, operation]
 last_date: 2019-02-28 10:30:00+08:00
-...
+---
 
 ## 一、前言
 

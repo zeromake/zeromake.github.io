@@ -1,11 +1,10 @@
 ---
-
 title: 修改 helm 模板支持阿里云
 date: 2019-04-12 16:25:21+08:00
 type: helm
 tags: [kube, docker, helm, ailyun]
 last_date: 2019-04-12 16:25:21+08:00
-...
+---
 
 ## 一、前言
 

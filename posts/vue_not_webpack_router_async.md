@@ -1,11 +1,10 @@
 ---
-
 title: vue 不使用构建工具懒加载
 date: 2016-11-7 17:13:25+08:00
 type: vue
 tags: [vue2, router, async]
 last_date: 2016-11-7 18:00:20+08:00
-...
+---
 
 # vue 不使用 webpack,vue_router 怎么异步
 

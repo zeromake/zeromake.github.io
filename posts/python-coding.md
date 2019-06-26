@@ -1,11 +1,10 @@
 ---
-
 title: python 编码
 date: 2018-05-04 13:33:00+08:00
 type: python
 tags: [python, coding]
 last_date: 2018-05-04 13:33:00+08:00
-...
+---
 
 ## 前言
 

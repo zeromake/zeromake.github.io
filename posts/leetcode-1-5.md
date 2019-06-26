@@ -5,7 +5,7 @@ date: 2018-06-28 14:05:57+08:00
 type: algorithm
 tags: [leetcode, problems, algorithm]
 last_date: 2018-06-28 14:05:57+08:00
-...
+---
 
 ## 前言
 

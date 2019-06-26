@@ -1,11 +1,10 @@
 ---
-
 title: 为 koa 定制 webpack 的中间件
 date: 2017-03-01 21:33:04+08:00
 type: middleware
 tags: [node, js, npm]
 last_date: 2017-03-05 12:26:04+08:00
-...
+---
 
 ## 前言
 

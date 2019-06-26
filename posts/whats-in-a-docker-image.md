@@ -1,11 +1,10 @@
 ---
-
 title: (翻译)docker 镜像中有什么？
 date: 2019-03-09 12:58:39+08:00
 type: docker
 tags: [docker, translation]
 last_date: 2019-03-09 12:58:39+08:00
-...
+---
 
 > 翻译自 [whats-in-a-docker-image](https://cameronlonsdale.com/2018/11/26/whats-in-a-docker-image/)
 

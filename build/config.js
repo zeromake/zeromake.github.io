@@ -31,6 +31,7 @@ module.exports = {
                     renderUrls.push('/' + a);
                     staticUrls.push('/api/' + a + '.json')
                 }
+                staticUrls.push('/api/atom.xml')
                 return Promise.resolve({
                     staticUrls,
                     renderUrls

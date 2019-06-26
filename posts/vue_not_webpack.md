@@ -1,11 +1,10 @@
 ---
-
 title: vue 不使用构建工具
 date: 2016-11-4 13:10:25+08:00
 type: vue
 tags: [vue2, requirejs]
 last_date: 2016-11-4 15:07:50+08:00
-...
+---
 
 看到各种 vue 入门全部都是 webpack 的我表示没有什么问题。但是却发觉无法将这些 webpack 的工作流推荐给其它人。一说 npm,webpack,babel 什么的纷纷表示太麻烦。
 

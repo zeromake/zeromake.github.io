@@ -5,6 +5,9 @@ const path = require('path')
 const pify = require('pify')
 const readline = require('readline')
 const yaml = require('js-yaml')
+const { Feed } = require('feed')
+
+
 const { postDir, aloneDir } = require('./config')
 const marked = require('./renderer')()
 const router = new KoaRuoter()
@@ -28,12 +31,14 @@ const readMarkdown = function (fileDir, fileName, end) {
         const file = path.join(fileDir, fileName)
         const readableStream = fs.createReadStream(file, option)
         const read = readline.createInterface({ input: readableStream })
+        let yamlStart = false;
         read.on('line', function (line) {
             if (isYaml) {
-                if (line === "---") {
+                if (!yamlStart && line === '---') {
+                    yamlStart = true;
                     return
                 }
-                if (line === '...') {
+                if (yamlStart && line === '---') {
                     isYaml = false
                     more = true
                     return
@@ -78,15 +83,16 @@ function dictToArray(obj) {
     return tmp
 }
 
-router.get('/api/posts.json', convert(function * (ctx, next) {
-    const files = yield pify(fs.readdir)(postDir)
+async function readPosts(render=false) {
+    const end = render ? null : 1000;
+    const files = await pify(fs.readdir)(postDir)
     const types = Object.create(null)
     const tags = Object.create(null)
-    const yamls = yield Promise.all(files.filter(filename => {
+    const yamls = await Promise.all(files.filter(filename => {
         if (filename.indexOf('.md') > 0) {
             return true
         }
-    }).map(filename => readMarkdown(postDir, filename, 1000).then(({ yaml, more }) => {
+    }).map(filename => readMarkdown(postDir, filename, end).then(({ yaml, more, markdown }) => {
         yaml.tags.forEach(function(tag) {
             if (tag) {
                 tags[tag] = true
@@ -95,21 +101,30 @@ router.get('/api/posts.json', convert(function * (ctx, next) {
         if (yaml.type) {
             types[yaml.type] = true
         }
-        yaml.content = more ? marked.render(more) : null
+        if(render) {
+            yaml.content = marked.render(markdown);
+        } else {
+            yaml.content = more ? marked.render(more) : null
+        }
+        yaml.file = filename.substr(0, filename.length - 3);
         return Promise.resolve(yaml)
     })))
     yamls.sort((a, b) => b.date - a.date)
-    const data = {
+    return {
         posts: yamls,
         types: dictToArray(types),
         tags: dictToArray(tags)
     }
-    ctx.body = data
-}))
-router.get('/api/pages/:page.json', convert(function * (ctx, next) {
+}
+
+router.get('/api/posts.json', async function (ctx) {
+    ctx.body = await readPosts()
+})
+
+router.get('/api/pages/:page.json', async function (ctx) {
     const page = ctx.params.page
     if (fs.existsSync(path.join(postDir, page + '.md'))) {
-        const { yaml, markdown } = yield readMarkdown(postDir, page + '.md')
+        const { yaml, markdown } = await readMarkdown(postDir, page + '.md')
         let pageBody = markdown
         let toc = null
         if(markdown) {
@@ -122,7 +137,7 @@ router.get('/api/pages/:page.json', convert(function * (ctx, next) {
         ctx.status = 404
         ctx.body = '404|Not Blog Page'
     }
-}))
+})
 
 for(const alone of fs.readdirSync(aloneDir)) {
     if(alone.endsWith('.md')) {
@@ -145,5 +160,42 @@ for(const alone of fs.readdirSync(aloneDir)) {
         }))
     }
 }
+
+const feedConfig = {
+    title: "zeromake'blog",
+    description: "keep codeing and thinking!",
+    id: "https://blog.zeromake.com",
+    link: "https://blog.zeromake.com",
+    language: "zh",
+    favicon: "https://blog.zeromake.com/favicon.ico",
+    copyright: "All rights reserved 2019, zeromake<a390720046@gmail.com>",
+    updated: new Date(),
+    generator: "Feed for Node.js",
+    feedLinks: {
+        atom: "https://blog.zeromake.com/api/atom.xml"
+    },
+    author: {
+        name: "zeromake",
+        email: "a390720046@gmail.com",
+        link: "https://github.com/zeromake"
+    }
+};
+
+
+router.get('/api/atom.xml', async (ctx) => {
+    const { posts } = await readPosts(true);
+    const feed = new Feed(feedConfig);
+    for(const post of posts.slice(0, 5)) {
+        const url = `https://blog.zeromake.com/pages/${post.file}`;
+        feed.addItem({
+            title: post.title,
+            id: url,
+            link: url,
+            content: post.content,
+            date: post.last_date,
+        });
+    }
+    ctx.body = feed.atom1();
+});
 
 module.exports = router

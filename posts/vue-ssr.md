@@ -1,11 +1,10 @@
 ---
-
 title: vue-ssr
 date: 2017-2-18 13:17:25+08:00
 type: vue
 tags: [vue, ssr]
 last_date: 2017-2-19 18:17:25+08:00
-...
+---
 
 ## 前言
 

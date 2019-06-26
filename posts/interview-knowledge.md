@@ -5,7 +5,7 @@ date: 2018-09-15 07:42:57+08:00
 type: interview
 tags: [interview]
 last_date: 2018-09-15 22:42:57+08:00
-...
+---
 
 ## 前言
 

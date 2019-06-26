@@ -1,11 +1,10 @@
 ---
-
 title: preact 源码解读(2)
 date: 2017-07-26 15:23:04+08:00
 type: source
 tags: [preact, source, read]
 last_date: 2017-07-26 15:23:04+08:00
-...
+---
 
 ## 前言
 

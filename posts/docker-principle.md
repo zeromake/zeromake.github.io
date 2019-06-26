@@ -1,11 +1,10 @@
 ---
-
 title: docker 原理
 date: 2019-06-26 10:21:06+08:00
 type: docker
 tags: [docker, principle, linux]
 last_date: 2019-06-26 10:21:06+08:00
-...
+---
 
 ## 一、前言
 

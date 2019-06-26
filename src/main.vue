@@ -54,7 +54,7 @@ export default {
                 },
                 {
                     title: "Rss",
-                    href: "/atom.xml",
+                    href: "/api/atom.xml",
                     target: "_blank"
                 }
             ],
