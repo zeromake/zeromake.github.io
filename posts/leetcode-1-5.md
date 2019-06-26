@@ -1,4 +1,5 @@
 ---
+
 title: leetcode 1-5 算法题
 date: 2018-06-28 14:05:57+08:00
 type: algorithm
@@ -7,10 +8,12 @@ last_date: 2018-06-28 14:05:57+08:00
 ...
 
 ## 前言
-- 最近也还是没怎么写博文，所以打算直接找个不用怎么难写的算法来写写博客。
-- 为了加深印象，需要书写博文进行归纳，并且进行伪代码连续，以及手写算法。
-- 这边会缓慢更新。
-<!--more-->
+
+-   最近也还是没怎么写博文，所以打算直接找个不用怎么难写的算法来写写博客。
+-   为了加深印象，需要书写博文进行归纳，并且进行伪代码连续，以及手写算法。
+-   这边会缓慢更新。
+    <!--more-->
+
 ## 一、Tow Sum
 
 > 作为 leetcode 的第一题难度很低。
@@ -27,9 +30,11 @@ last_date: 2018-06-28 14:05:57+08:00
 Given an array of integers, return indices of the two numbers such that they add up to a specific target.
 
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
 </details>
 
 Example:
+
 ```
 Given nums = [2, 7, 11, 15], target = 9,
 
@@ -43,7 +48,7 @@ return [0, 1].
 
 即直接两层嵌套循环，相加并下标不同，代码复杂度: O(n^2)。
 
-``` python
+```python
 def towSum(nums, target):
     """
     :type nums: List[int]
@@ -61,7 +66,7 @@ def towSum(nums, target):
 
 使用的字典/map key 存放值，val 存放下标，再遍历用目标减去遍历的数再到 map 中寻找，且下标不相同, 代码复杂度: O(n)。
 
-``` python
+```python
 def towSum(nums, target):
     """
     :type nums: List[int]
@@ -82,7 +87,7 @@ def towSum(nums, target):
 
 在 2 号方案的基础上优化，把 map 的生成去掉，并且去掉 enumerate，也是 O(n)，但是在 leetcode 中仅需 36ms，python 中排第一。
 
-``` python
+```python
 def twoSum(nums, target):
     """
     :type nums: List[int]
@@ -111,9 +116,9 @@ def twoSum(nums, target):
 
 给你两个非空链表，表示两个非负整数。数字以相反的顺序存储，每个节点都包含一个数字。
 
-这两个链表添加并将其作为链接列表返回。您可以假设这两个数字不包含任何前导零，除了数字0本身。
+这两个链表添加并将其作为链接列表返回。您可以假设这两个数字不包含任何前导零，除了数字 0 本身。
 
-> 题目有点误导性，我一直以为是什么意思，实际上意思就是这个两个链表都是一个10进制数的每个位组成的倒序链表，想办法把两个数相加并且依旧返回这种格式。
+> 题目有点误导性，我一直以为是什么意思，实际上意思就是这个两个链表都是一个 10 进制数的每个位组成的倒序链表，想办法把两个数相加并且依旧返回这种格式。
 
 <details>
 <summary>英文</summary>
@@ -124,6 +129,7 @@ You may assume the two numbers do not contain any leading zero, except the numbe
 </details>
 
 Example
+
 ```
 Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
 Output: 7 -> 0 -> 8
@@ -135,7 +141,8 @@ Explanation: 342 + 465 = 807.
 **1. 暴力算法**
 
 直接转换回数字相加再转换回去，复杂度: O(max(n,m)) + O(n) + O(m)。
-``` python
+
+```python
 class ListNode:
     def __init__(self, x):
         self.val = x
@@ -167,12 +174,11 @@ def addTwoNumbers(l1, l2):
     return numToList(listToNum(l1) + ListToNum(l2))
 ```
 
-
 **2. 好的做法是**
 
 由于链表是倒序的数所以只需要每个位的数相加如果有进位加到下一个位上，复杂度: O(max(n, m))。
 
-``` python
+```python
 class ListNode:
     def __init__(self, x):
         self.val = x
@@ -208,6 +214,7 @@ def addTwoNumbers(l1, l2):
         data.next = ListNode(last)
     return res
 ```
+
 ## 三、Longest Substring Without Repeating Characters
 
 ### 3.1 题目
@@ -216,9 +223,9 @@ def addTwoNumbers(l1, l2):
 
 示例：
 
-给定 `abcabcbb` ，没有重复字符的最长子串是 `abc` ，那么长度就是3。
-给定 `bbbbb` ，最长的子串就是 `b` ，长度是1。
-给定 `pwwkew` ，最长子串是 `wke` ，长度是3。请注意答案必须是一个子串，`pwke` 是 子序列  而不是子串。
+给定 `abcabcbb` ，没有重复字符的最长子串是 `abc` ，那么长度就是 3。
+给定 `bbbbb` ，最长的子串就是 `b` ，长度是 1。
+给定 `pwwkew` ，最长子串是 `wke` ，长度是 3。请注意答案必须是一个子串，`pwke` 是 子序列 而不是子串。
 
 <details>
 <summary>英文</summary>
@@ -229,6 +236,7 @@ Examples:
 Given "abcabcbb", the answer is "abc", which the length is 3.
 Given "bbbbb", the answer is "b", with the length of 1.
 Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+
 </details>
 
 ### 3.2 思路解题
@@ -237,7 +245,7 @@ Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer 
 
 双重循环，把每一种可能性遍历出来，判断是否有重复，复杂度 O(n^3).
 
-``` python
+```python
 def allUnique(s, start, end):
     temp = set()
     for i in range(start, end):
@@ -256,11 +264,12 @@ def lengthOfLongestSubstring(s):
                 res = max(res, j-i)
     return res
 ```
+
 **2.最优解，滑动窗口**
 
 使用 `dict` 存放已遍历的字符为 key， val 为 index + 1，只有 `dict` 存在且上一次的 `index` 大于才是这次的字符串窗口内有重复，这个时候把窗口的开始移动到这个重复字符的后一位(保证 `abcaf` 这种可以使用), 复杂度: O(n)。
 
-``` python
+```python
 def lengthOfLongestSubstring(s):
     cache = {}
     start = 0
@@ -301,6 +310,7 @@ There are two sorted arrays nums1 and nums2 of size m and n respectively.
 Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
 
 You may assume nums1 and nums2 cannot be both empty.
+
 </details>
 
 ### 4.2 思路解题
@@ -311,7 +321,7 @@ You may assume nums1 and nums2 cannot be both empty.
 
 由于 `python` 的特性这个方法在 `python` 的题解里是最优解。
 
-``` python
+```python
 def findMedianSortedArrays(nums1, nums2):
     """
     :type nums1: List[int]
@@ -328,7 +338,8 @@ def findMedianSortedArrays(nums1, nums2):
 ```
 
 顺便放个其它语言的暴力破解的最优解。
-``` c
+
+```c
 double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) {
     int total = nums1Size+nums2Size;
     int nums[total];
@@ -365,7 +376,7 @@ double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Si
 
 因为在 `python` 中不算是最优解就不做 `python` 了
 
-``` c
+```c
 int min(int a, int b) {
     return a > b ? b : a;
 }
@@ -438,7 +449,7 @@ double findMedianSortedArrays(int* nums1, int m, int* nums2, int n) {
 
 ### 5.1 题目
 
-给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为1000。
+给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
 
 示例 1：
 
@@ -473,6 +484,7 @@ Example 2:
 Input: "cbbd"
 Output: "bb"
 ```
+
 </details>
 
 ### 5.2 思路解题
@@ -481,7 +493,7 @@ Output: "bb"
 
 使用三层循环，强制枚举每个可能性。
 
-``` python
+```python
 def longestPalindrome(targetStr: str) -> str:
     """
     :type targetStr: str
@@ -505,4 +517,5 @@ def longestPalindrome(targetStr: str) -> str:
                     index = [start_index, end_index + 1]
     return targetStr[index[0]: index[1]]
 ```
+
 **2. 使用动态规划法**

@@ -1,5 +1,6 @@
 ---
-title: preact源码解读(2)
+
+title: preact 源码解读(2)
 date: 2017-07-26 15:23:04+08:00
 type: source
 tags: [preact, source, read]
@@ -7,15 +8,18 @@ last_date: 2017-07-26 15:23:04+08:00
 ...
 
 ## 前言
-- 这里是第二篇，[第一篇在这里](https://blog.zeromake.com/pages/preact-source-read-1)
-- 这次讲Component，以及它的一些轻量依赖。
-- 顺便说下[司徒正美的preact源码学习](https://segmentfault.com/u/situzhengmei/articles)
-- 感觉比我写的好多了，图文并茂，还能提出和其它如React的源码比较。
-- 我唯一好点的可能就是代码几乎每行都有注释，并且使用了typescript添加了类型的标注。
-<!--more-->
-## Component使用
 
-``` javascript
+-   这里是第二篇，[第一篇在这里](https://blog.zeromake.com/pages/preact-source-read-1)
+-   这次讲 Component，以及它的一些轻量依赖。
+-   顺便说下[司徒正美的 preact 源码学习](https://segmentfault.com/u/situzhengmei/articles)
+-   感觉比我写的好多了，图文并茂，还能提出和其它如 React 的源码比较。
+-   我唯一好点的可能就是代码几乎每行都有注释，并且使用了 typescript 添加了类型的标注。
+
+<!--more-->
+
+## Component 使用
+
+```javascript
 import { h, Component, render } from "preact"
 
 class App extends Component {
@@ -36,16 +40,17 @@ class App extends Component {
 }
 render(<App/>, document.body)
 ```
+
 上面是一个简单的点击改变当前状态的组件示例。
-其中与`vue`不同`preact`通过`Component.prototype.setState`来触发新的dom改变。
+其中与`vue`不同`preact`通过`Component.prototype.setState`来触发新的 dom 改变。
 当然`preact`还有其它的更新方式。
 
-## Component代码
+## Component 代码
 
 这里的代码是通过`typescript`重写过的所以有所不同,
 但是更好的了解一个完整的`Component`整体应该有什么。
 
-``` typescript
+```typescript
 import { FORCE_RENDER } from "./constants";
 import { renderComponent } from "./vdom/component";
 import { VNode } from "./vnode";
@@ -232,12 +237,12 @@ export class Component {
 如果你看过原来的`preact`的代码会发觉多了很多可选属性，
 其中除了`child`这个属性其它实际上官方的也有，但是都是可选属性。
 
-这里重点说`setState`和`forceUpdate`这两个触发dom更新
+这里重点说`setState`和`forceUpdate`这两个触发 dom 更新
 
-`setState`保存旧的`this.state`到`this.prevState`里，然后新的state是直接设置在`this.state`。
+`setState`保存旧的`this.state`到`this.prevState`里，然后新的 state 是直接设置在`this.state`。
 然后通过`enqueueRender`来加入队列中，这个更新是在异步中的。所以不要写出这种代码
 
-``` javascript
+```javascript
 test() {
     // 这里的setState已经入异步栈，
     this.setState({...})
@@ -252,7 +257,7 @@ test() {
 
 ## render-queue
 
-``` typescript
+```typescript
 import { Component } from "./component";
 import options from "./options";
 import { defer } from "./util";
@@ -285,7 +290,7 @@ export function rerender() {
     let p: Component | undefined;
     const list = items;
     items = [];
-    while (p = list.pop()) {
+    while ((p = list.pop())) {
         if (p._dirty) {
             // 防止多次render。
             renderComponent(p);
@@ -300,7 +305,7 @@ export function rerender() {
 
 ## 顺便写下`options`
 
-``` typescript
+```typescript
 import { VNode } from "./vnode";
 import { Component } from "component";
 
@@ -322,7 +327,7 @@ const options: {
     // 是否自动对事件方法绑定this为组件，默认为true(preact没有)
     eventBind?: boolean;
 } = {
-    eventBind: true,
+    eventBind: true
 };
 
 export default options;
@@ -330,5 +335,5 @@ export default options;
 
 ## 后记
 
-- 感觉有了更多的注释，就没有必要说明太多了。
-- 下一篇应该是到了`renderComponent`和`diff`部分了。
+-   感觉有了更多的注释，就没有必要说明太多了。
+-   下一篇应该是到了`renderComponent`和`diff`部分了。

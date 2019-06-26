@@ -1,4 +1,5 @@
 ---
+
 title: vue-ssr
 date: 2017-2-18 13:17:25+08:00
 type: vue
@@ -7,17 +8,21 @@ last_date: 2017-2-19 18:17:25+08:00
 ...
 
 ## 前言
-自从前端技术栈换到 `mvvm` 之类的以后网站的源码查看就只会有一些js了，对于用户是没什么问题但是却对 `seo` 有很大的问题。
 
-因为百度之类的爬虫不会执行js来渲染所以无法得到内容。大部分主流的`mvvm`框架都有了 `ssr(Server Side Rendering)` 意为服务端渲染。
-~~不是手游的ssr，好像暴露了什么~~
+自从前端技术栈换到 `mvvm` 之类的以后网站的源码查看就只会有一些 js 了，对于用户是没什么问题但是却对 `seo` 有很大的问题。
+
+因为百度之类的爬虫不会执行 js 来渲染所以无法得到内容。大部分主流的`mvvm`框架都有了 `ssr(Server Side Rendering)` 意为服务端渲染。
+~~不是手游的 ssr，好像暴露了什么~~
+
 <!--more-->
-## 一.ssr的技术选择
-- [vue-server-renderer](https://github.com/vuejs/vue/tree/dev/packages/vue-server-renderer)
 
-> vue官方的服务端渲染包
+## 一.ssr 的技术选择
 
-- [nuxt](https://github.com/nuxt/nuxt.js)
+-   [vue-server-renderer](https://github.com/vuejs/vue/tree/dev/packages/vue-server-renderer)
+
+> vue 官方的服务端渲染包
+
+-   [nuxt](https://github.com/nuxt/nuxt.js)
 
 > 使用官方 `vue-server-renderer` 包装后的脚手架工具，极大的简化了 `ssr` 的搭建；
 
@@ -26,7 +31,8 @@ last_date: 2017-2-19 18:17:25+08:00
 > 如果不是有特殊需求，直接使用 `nuxt` ，以便节省时间特别是不会英文的童鞋 `nuxt` 官方文档还带支持中文。
 
 ## 二.初始化项目
-``` shell
+
+```shell
 yarn init
 # node项目初始化
 yarn add axios compression cross-env es6-promise \
@@ -70,7 +76,8 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
 ```
 
 ## 三.项目结构
-``` yaml
+
+```yaml
 │  package.json
 │  server.js                # server-render
 │  yarn.lock
@@ -112,11 +119,14 @@ webpack-hot-middleware extract-text-webpack-plugin@2.0.0-rc3 --dev
 ```
 
 ## 四.部分代码分析
-> 我将根据依赖关系来一个个说明,npm包不说明
+
+> 我将根据依赖关系来一个个说明,npm 包不说明
 
 ### 1. server.js(就说点重点代码)
+
 > require: ['build/setup-dev-server.js']
-``` javascript
+
+```javascript
 // [L16-L48]
 let indexHTML
 let renderer
@@ -221,217 +231,246 @@ app.get('*', (req, res) => {
     })
 })
 ```
+
 ### 2. build/setup-dev-server.js
+
 > require: ['build/webpack.client.config.js','build/webpack.server.config.js']
-``` javascript
+
+```javascript
 // [L24-L37]
-    // 在client-webpack转换完成时获取devMiddleware的fileSystem。
-    // 读取生成的index.html并通过传入的opt的回调设置到server.js里
-    clientCompiler.plugin('done', () => {
-        const fs = devMiddleware.fileSystem
-        const filePath = path.join(clientConfig.output.path, 'index.html')
-        fs.stat(filePath, (err, stats) => {
-            if (stats && stats.isFile()){
-                fs.readFile(filePath, 'utf-8', (err, data) => {
-                    opts.indexUpdated(data)
-                })
-            } else {
-                console.error(err)
-            }
-        })
-    })
+// 在client-webpack转换完成时获取devMiddleware的fileSystem。
+// 读取生成的index.html并通过传入的opt的回调设置到server.js里
+clientCompiler.plugin("done", () => {
+    const fs = devMiddleware.fileSystem;
+    const filePath = path.join(clientConfig.output.path, "index.html");
+    fs.stat(filePath, (err, stats) => {
+        if (stats && stats.isFile()) {
+            fs.readFile(filePath, "utf-8", (err, data) => {
+                opts.indexUpdated(data);
+            });
+        } else {
+            console.error(err);
+        }
+    });
+});
 // [L41-L52]
-    // 通过memory-fs创建一个内存文件系统对象
-    const mfs = new MFS()
-    const outputPath = path.join(serverConfig.output.path, serverConfig.output.filename)
-    // 把server-webpack生成的文件重定向到内存中
-    serverCompiler.outputFileSystem = mfs
-    // 设置文件重新编译监听并通过opt的回调设置到server.js
-    serverCompiler.watch({}, (err, stats) => {
-        if (err) throw err
-        stats = stats.toJson()
-        stats.errors.forEach(err => console.error(err))
-        stats.warnings.forEach(err => console.warn(err))
-        mfs.readFile(outputPath, 'utf-8', (err, data) => {
-            opts.bundleUpdated(data)
-        })
-    })
+// 通过memory-fs创建一个内存文件系统对象
+const mfs = new MFS();
+const outputPath = path.join(
+    serverConfig.output.path,
+    serverConfig.output.filename
+);
+// 把server-webpack生成的文件重定向到内存中
+serverCompiler.outputFileSystem = mfs;
+// 设置文件重新编译监听并通过opt的回调设置到server.js
+serverCompiler.watch({}, (err, stats) => {
+    if (err) throw err;
+    stats = stats.toJson();
+    stats.errors.forEach(err => console.error(err));
+    stats.warnings.forEach(err => console.warn(err));
+    mfs.readFile(outputPath, "utf-8", (err, data) => {
+        opts.bundleUpdated(data);
+    });
+});
 ```
+
 ### 3. build/webpack.base.config.js
+
 > require: ['build/vue-loader.config.js']
 >
-> 因为其它webpack配置都依赖这个所以就先说这个
+> 因为其它 webpack 配置都依赖这个所以就先说这个
 >
-> 其中build/vue-loader.config.js并没有什么对ssr有关的内容就不说明了
+> 其中 build/vue-loader.config.js 并没有什么对 ssr 有关的内容就不说明了
 >
-> 然后这个配置文件就是很普通的webpack2配置文件满地都是就不说了代码
+> 然后这个配置文件就是很普通的 webpack2 配置文件满地都是就不说了代码
 >
-> entry 默认是client, 对vue-loader做了css插件引入配置对ssr没什么用
+> entry 默认是 client, 对 vue-loader 做了 css 插件引入配置对 ssr 没什么用
 
 ### 4. build/webpack.client.config.js
+
 > require: ['build/vue-loader.config.js', 'build/webpack.base.config.js']
 > webpack_require: ['src/cilent-entry.js']
 >
-> 在resolve的alias设置好api为client的js导入
+> 在 resolve 的 alias 设置好 api 为 client 的 js 导入
 >
 > 设置好环境变量
 >
-> 添加HtmlPlugin来生成index.html
+> 添加 HtmlPlugin 来生成 index.html
 >
-> 剩下的也和ssr无关
+> 剩下的也和 ssr 无关
 
 ### 5. bulid/webpack.client.config.js
+
 > require: ['build/webpack.base.config.js']
 > webpack_require: ['src/server-entry.js']
-``` javascript
+
+```javascript
 module.exports = Object.assign({}, base, {
     // 生成后的运行环境在node
-    target: 'node',
+    target: "node",
     // 关闭map
     devtool: false,
     // 替换到server-entry.js
-    entry: './src/server-entry.js',
+    entry: "./src/server-entry.js",
     // 设置输出文件名与模块导出为commonjs2
     output: Object.assign({}, base.output, {
-        filename: 'server-bundle.js',
-        libraryTarget: 'commonjs2'
+        filename: "server-bundle.js",
+        libraryTarget: "commonjs2"
     }),
     // api设置到server的api上
     resolve: {
         alias: Object.assign({}, base.resolve.alias, {
-            'create-api': './create-api-server.js'
+            "create-api": "./create-api-server.js"
         })
     },
     // 不打包运行时依赖，后面这个文件在node中运行
-    externals: Object.keys(require('../package.json').dependencies),
+    externals: Object.keys(require("../package.json").dependencies),
     // 设置环境变量
     plugins: [
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-            'process.env.VUE_ENV': '"server"'
+            "process.env.NODE_ENV": JSON.stringify(
+                process.env.NODE_ENV || "development"
+            ),
+            "process.env.VUE_ENV": '"server"'
         })
     ]
-})
+});
 ```
+
 ### 6. src/client-entry.js
+
 > webpack_require: ['src/app.js']
-``` javascript
-import 'es6-promise/auto'
-import { app, store } from './app'
+
+```javascript
+import "es6-promise/auto";
+import { app, store } from "./app";
 // 第一次进入页面时获取ssr的state替换上
 if (window.__INSTAL_STATE__) {
-    store.replaceState(window.__INSTAL_STATE__)
+    store.replaceState(window.__INSTAL_STATE__);
 }
 // 把app直接与ssr的html同步
-app.$mount('#app')
+app.$mount("#app");
 // 生产环境优化使用sw缓存
-if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator){
-    navigator.serviceWorker.register('/service-worker.js')
+if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/service-worker.js");
 }
 ```
 
 ### 7. src/server-entry.js
+
 > webpack-require: ['src/app.js']
-``` javascript
-import { app, router, store } from './app'
-const isDev = process.env.NODE_ENV !== 'prodution'
+
+```javascript
+import { app, router, store } from "./app";
+const isDev = process.env.NODE_ENV !== "prodution";
 // server.js的renderToStream方法会调用这里
 export default context => {
-    const s = isDev && Date.now()
+    const s = isDev && Date.now();
     // 使用前端路由切换到请求的url
-    router.push(context.url)
+    router.push(context.url);
     // 并获取该路由的所有Component
-    const matchedComponents = router.getMatchedComponents()
+    const matchedComponents = router.getMatchedComponents();
     // 没有Component说明没有路由匹配
     if (!matchedComponents.length) {
-        return Promise.reject({ code: '404' })
+        return Promise.reject({ code: "404" });
     }
     // 使用Promise.all把所有的Component有异步preFetch方法执行
-    return Promise.all(matchedComponents.map(component => {
-        if (component.preFetch){
-            return component.preFetch(store)
-        }
-    })).then(() => {
-        isDev && console.log(`data pre-fetch: ${Date.now() - s}ms`)
+    return Promise.all(
+        matchedComponents.map(component => {
+            if (component.preFetch) {
+                return component.preFetch(store);
+            }
+        })
+    ).then(() => {
+        isDev && console.log(`data pre-fetch: ${Date.now() - s}ms`);
         // 把vuex的state设置到传入的context.initialState上
-        context.initialState = store.state
+        context.initialState = store.state;
         // 返回已经设置好state, router的app
-        return app
-    })
-}
+        return app;
+    });
+};
 ```
 
 ### 8. src/app.js
+
 > webpack-require: ['src/App.vue', 'src/store/index.js', 'src/router/index.js']
-``` javascript
+
+```javascript
 const app = new Vue({
     router,
     store,
     // 把App.vue的所有对象属性设置到新的根vue上
     ...App
-})
+});
 // 导出app,router,store给ssr使用
-export { app, router, store }
+export { app, router, store };
 ```
 
 ### 9. src/store/index.js
+
 > webpack-require: ['src/store/api.js']
-> 没有什么有ssr有关的东西，只是api请求都在api.js
+> 没有什么有 ssr 有关的东西，只是 api 请求都在 api.js
 
 ### 10. src/store/api.js
+
 > webpack-require: ['src/store/create-api-(client|server).js']
-``` javascript
+
+```javascript
 // [L15-L29]
-function fetch (child) {
-    const cache = api.cachedItems
+function fetch(child) {
+    const cache = api.cachedItems;
     // 优化可不做
     if (cache && cache.has(child)) {
-        return Promise.resolve(cache.get(child))
+        return Promise.resolve(cache.get(child));
     } else {
         // 获取api数据并设置最后更新时间
         return new Promise((resolve, reject) => {
-            Axios.get(api.url + child + '.json').then(res => {
-                const val = res.data
-                if (val) val.__lastUpdate = Date.now()
-                cache && cache.set(child, val)
-                resolve(val)
-            }).catch(reject)
-        })
+            Axios.get(api.url + child + ".json")
+                .then(res => {
+                    const val = res.data;
+                    if (val) val.__lastUpdate = Date.now();
+                    cache && cache.set(child, val);
+                    resolve(val);
+                })
+                .catch(reject);
+        });
     }
 }
 // [L51-L75]
-export function watchList (type, cb) {
-    let first = true
-    let isOn = true
-    let timeoutId = null
+export function watchList(type, cb) {
+    let first = true;
+    let isOn = true;
+    let timeoutId = null;
     const handler = res => {
-        cb(res.data)
-    }
+        cb(res.data);
+    };
     // 创建一个无限的定时循环来请求数据
     function watchTimeout() {
         if (first) {
-            first = false
+            first = false;
         } else {
-            Axios.get(`${api.url}${type}stories.json`).then(handler)
+            Axios.get(`${api.url}${type}stories.json`).then(handler);
         }
-        if (isOn){
-            timeoutId = setTimeout(watchTimeout, 1000 * 60 * 15)
+        if (isOn) {
+            timeoutId = setTimeout(watchTimeout, 1000 * 60 * 15);
         }
     }
-    watchTimeout()
+    watchTimeout();
     // 返回一个结束无限定时循环的函数
     return () => {
-        isOn = false
-        if (timeoutId){
-            clearTimeout(timeoutId)
+        isOn = false;
+        if (timeoutId) {
+            clearTimeout(timeoutId);
         }
-    }
+    };
 }
 ```
 
 ### 11. src/views/CreateListView.js
+
 > webpack-require: ['src/components/ItemList.vue']
-> src/router/index.js没有什么有和ssr有关的直接来到这里
+> src/router/index.js 没有什么有和 ssr 有关的直接来到这里
+
 ```
 // 导出的方法通过参数来重新包装component,
 // preFetch则是保证ssr时component的data里数据已经完成异步获取。
@@ -450,7 +489,8 @@ export function createListView (type) {
 ```
 
 ### 12. src/components/ItemList.vue
-``` javascript
+
+```javascript
 // [L60-L30]
     // 在判断root已经挂载说明是路由跳转重新调用loadItems
     beforeMount () {
@@ -475,14 +515,16 @@ export function createListView (type) {
             })
         },
 ```
+
 ## 五.文字流程说明
-- node server.js : 设置路由所有请求通过ssr生成器
-- server.js -> setup-dev-server.js : dev时生成index.html和server-bundle.js
-- setup-dev-server.js -> (server|client)-entry.js : 通过webpack对入口文件生成
-- client-entry.js : 挂载ssr的vuex的state
-- server-entry.js : 通过url来preFetch设置vuex的state
-- component: 需要有preFetch来获取异步数据
+
+-   node server.js : 设置路由所有请求通过 ssr 生成器
+-   server.js -> setup-dev-server.js : dev 时生成 index.html 和 server-bundle.js
+-   setup-dev-server.js -> (server|client)-entry.js : 通过 webpack 对入口文件生成
+-   client-entry.js : 挂载 ssr 的 vuex 的 state
+-   server-entry.js : 通过 url 来 preFetch 设置 vuex 的 state
+-   component: 需要有 preFetch 来获取异步数据
 
 ## 六.源码
-[源码这里](https://github.com/zeromake/my-vue-hackernews/tree/ssr-demo)
 
+[源码这里](https://github.com/zeromake/my-vue-hackernews/tree/ssr-demo)

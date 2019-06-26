@@ -1,5 +1,6 @@
 ---
-title: python编码
+
+title: python 编码
 date: 2018-05-04 13:33:00+08:00
 type: python
 tags: [python, coding]
@@ -8,15 +9,16 @@ last_date: 2018-05-04 13:33:00+08:00
 
 ## 前言
 
-- 最近对 `python` 的编码感觉到很迷，`python2` 和 `python3` 的 str bytes 完全不一样。
-- 这边记录下各种方式输入的字符串编码，以及各种编码对象的转换备忘。
+-   最近对 `python` 的编码感觉到很迷，`python2` 和 `python3` 的 str bytes 完全不一样。
+-   这边记录下各种方式输入的字符串编码，以及各种编码对象的转换备忘。
+
 <!--more-->
 
 ## 一、input 函数在各个平台和 python 版本中的变化
 
 ### 1.1 测试代码
 
-``` python
+```python
 # -*- coding=utf8 -*-
 import sys
 
@@ -53,10 +55,12 @@ if __name__ == "__main__":
     test_input()
 
 ```
+
 ### 1.2. UNIX 下
 
 **python2**
-``` shell
+
+```shell
 $ python test.py
 test str: 测试
 ('input str: ', '\xe6\xb5\x8b\xe8\xaf\x95')
@@ -80,7 +84,8 @@ UnicodeDecodeError: 'ascii' codec can't decode byte 0xe6 in position 0: ordinal 
 3. 至于有 `encode` 不能转换就是因为本身就是 `str(bytes)` 无法在转换。还有就是设计问题，否则 `python3` 就不用改了。
 
 **python3**
-``` shell
+
+```shell
 $ python3 test.py
 test str: 测试
 input str:  测试
@@ -97,7 +102,6 @@ has encode: b'\xe6\xb5\x8b\xe8\xaf\x95' <class 'bytes'>
 
 ### 1.3. windows 系统
 
-
 ## 二、编写代码时的字面量
 
 ### 2.1. 测试说明
@@ -108,7 +112,7 @@ has encode: b'\xe6\xb5\x8b\xe8\xaf\x95' <class 'bytes'>
 
 **测试代码**
 
-``` python
+```python
 def main():
     print("raw")
     print_str("测试")
@@ -120,7 +124,7 @@ def main():
 
 **执行结果**
 
-``` shell
+```shell
 $ python test.py
 raw
 ('input str: ', '\xe6\xb5\x8b\xe8\xaf\x95')
@@ -151,7 +155,7 @@ bytes
 
 **测试代码**
 
-``` python
+```python
 def main():
     print("raw")
     print_str("测试")
@@ -163,7 +167,7 @@ def main():
 
 **执行结果**
 
-``` shell
+```shell
 $ python3 test.py
 raw
 input str:  测试

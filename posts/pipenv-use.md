@@ -1,5 +1,6 @@
 ---
-title: pipenv使用
+
+title: pipenv 使用
 date: 2017-11-22 13:04:00+08:00
 type: python
 tags: [pip, python, virtualenv]
@@ -9,7 +10,9 @@ last_date: 2017-11-22 13:04:00+08:00
 ## 前言
 
 最近用了`pipenv`感觉挺不错的，写篇博文来推广一下。
+
 <!--more-->
+
 ## 一、优点
 
 1. 自动关联项目相关的`virtualenv`，能够快速的加载`virtualenv`。
@@ -19,7 +22,6 @@ last_date: 2017-11-22 13:04:00+08:00
 5. 解决了`pip install pandas`时里的`numpy`依旧走官方`pypi`.
 6. 还有就是可以直接切换`python2,3`
 7. 使用`pipenv graph`命令可以看到依赖树
-
 
 ## 二、缺点
 
@@ -32,15 +34,16 @@ last_date: 2017-11-22 13:04:00+08:00
 ## 三、快速使用
 
 ### 安装
+
 `pipenv`作为一个`python`包，最快的安装方案当然是。
 
-``` shell
+```shell
 pip install pipenv
 ```
 
 注意`linux`可能没有权限，如果有直接的系统包建议安装系统包
 
-``` shell
+```shell
 sudo pip install pipenv
 ```
 
@@ -48,7 +51,7 @@ sudo pip install pipenv
 
 打开项目目录控制台执行下面命令
 
-``` shell
+```shell
 # use python2
 pipenv --two
 
@@ -69,13 +72,14 @@ pipenv install -r requirements.txt
 默认设置`Pipfile`文件，我提了[issues](https://github.com/kennethreitz/pipenv/issues/1040).
 
 但是[@kennethreitz](https://github.com/kennethreitz),关闭了该`issues`,并且说了
+
 > not in scope
 
 看来是不会有了。
 
 然后就是进入与退出`virtualenv`
 
-``` shell
+```shell
 # 进入
 pipenv shell
 
@@ -87,7 +91,7 @@ exit
 
 ### 新项目使用
 
-``` shell
+```shell
 # use python2
 pipenv --two
 
@@ -97,12 +101,12 @@ pipenv --two
 # use source doubanio
 sed -i s/pypi.python.org/pypi.doubanio.com/g Pipfile
 ```
-依旧是换源，接下来只需要`pipenv install`或`pipenv install -d`，来替代`pip install`即可。
 
+依旧是换源，接下来只需要`pipenv install`或`pipenv install -d`，来替代`pip install`即可。
 
 ## pipenv --help
 
-``` shell
+```shell
 Usage: pipenv [OPTIONS] COMMAND [ARGS]...
 
 Options:

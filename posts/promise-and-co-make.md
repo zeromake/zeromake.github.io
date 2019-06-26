@@ -1,4 +1,5 @@
 ---
+
 title: promise-and-co-make
 date: 2017-07-10 15:24:39+08:00
 type: source
@@ -11,43 +12,45 @@ last_date: 2017-07-10 15:24:39+08:00
 1. 上篇博客写着写着没动力，然后就拖了一个月。
 2. 现在打算在一周内完成。
 3. 这篇讲`Promise`和`co`的原理+实现。
-<!--more-->
-## 一、Promise的原理
 
-Promise的规范有很多，其中`ECMAScript 6`采用的是[Promises/A+](http://www.ituring.com.cn/article/66566).
+<!--more-->
+
+## 一、Promise 的原理
+
+Promise 的规范有很多，其中`ECMAScript 6`采用的是[Promises/A+](http://www.ituring.com.cn/article/66566).
 想要了解更多最好仔细读完`Promises/A+`，顺便说下`Promise`是依赖于异步实现。
 
-### JavaScript中的异步队列
+### JavaScript 中的异步队列
 
 而在`JavaScript`中有两种异步宏任务`macro-task`和微任务`micro-task`.
+
 > 在挂起任务时，JS 引擎会将所有任务按照类别分到这两个队列中，首先在 macrotask 的队列（这个队列也被叫做 task queue）中取出第一个任务，执行完毕后取出 microtask 队列中的所有任务顺序执行；之后再取 macrotask 任务，周而复始，直至两个队列的任务都取完。
 
 常见的异步代码实现
 
-- `macro-task`: script(整体代码), setTimeout, setInterval, setImmediate, I/O, UI rendering
-- `micro-task`: process.nextTick, Promises（原生 Promise）, ~~Object.observe(api已废弃)~~, MutationObserver
-
+-   `macro-task`: script(整体代码), setTimeout, setInterval, setImmediate, I/O, UI rendering
+-   `micro-task`: process.nextTick, Promises（原生 Promise）, ~~Object.observe(api 已废弃)~~, MutationObserver
 
 以上的知识摘查于[Promises/A+](http://www.ituring.com.cn/article/66566)
 顺便说下一个前段时间看到的一个`js`面试题
 
-``` javascript
+```javascript
 setTimeout(function() {
-  console.log(1)
+    console.log(1);
 }, 0);
 new Promise(function executor(resolve) {
-  console.log(2);
-  for( var i=0 ; i<10000 ; i++ ) {
-    i == 9999 && resolve();
-  }
-  console.log(3);
+    console.log(2);
+    for (var i = 0; i < 10000; i++) {
+        i == 9999 && resolve();
+    }
+    console.log(3);
 }).then(function() {
-  console.log(4);
+    console.log(4);
 });
 console.log(5);
 ```
 
-在node v8.13使用原生的`Promise`是： "2 3 5 4 1"。
+在 node v8.13 使用原生的`Promise`是： "2 3 5 4 1"。
 但是如果使用`bluebird`的第三方`Promise`就是: "2 3 5 1 4"。
 这个原因是因为`bluebird`在这个环境下优先使用`setImmediate`[代码](https://github.com/petkaantonov/bluebird/blob/master/src/schedule.js)。
 然后再看上面的代码执行顺序.
@@ -57,16 +60,15 @@ console.log(5);
 3. `micro-task`执行`then`被执行所以打出`4`。
 4. 重新执行`macro-task`所以打出`1`
 
-
 但是在`bluebird`里的`then`使用`setImmediate`所以上面的步骤会变成：
 
-- 步骤2`then`在`setTimeout`后加入`macro-task`。
-- 步骤3会因为`micro-task`为空跳过。
-- 步骤4 执行`setTimeout`，`then`打出`1 4`。
+-   步骤 2`then`在`setTimeout`后加入`macro-task`。
+-   步骤 3 会因为`micro-task`为空跳过。
+-   步骤 4 执行`setTimeout`，`then`打出`1 4`。
 
-### Promise执行流程
+### Promise 执行流程
 
-1. new Promise(func:(resolve, reject)=> void 0), 这里的func方法被同步执行。
+1. new Promise(func:(resolve, reject)=> void 0), 这里的 func 方法被同步执行。
 2. `Promise` 会有三种状态`PENDING(执行)`，`FULFILLED(执行成功）`,`REJECTED(执行失败)`。
 3. 在`resolve`，`reject`均未调用且未发生异常时状态为`PENDING`。
 4. `resolve`调用为`FULFILLED`,`reject`调用或者发生异常为`REJECTED`。
@@ -75,40 +77,40 @@ console.log(5);
 7. 状态为`PENDING`则会把`callFulfilled`和`callRejected`放入当前`Promise`实例的回调队列中,队列还会存储新的`Promise`实例。
 8. 在状态改变为`FULFILLED`或`REJECTED`时会回调当前`Promise`实例的队列。
 
-## 二、Promise的简易实现
+## 二、Promise 的简易实现
 
-- Promise Api
+-   Promise Api
 
-下面是`Promise`的所有开放api这里为了区分与原生的所以类名叫`Appoint`。
+下面是`Promise`的所有开放 api 这里为了区分与原生的所以类名叫`Appoint`。
 顺便为了学习`typescript`
 
-``` typescript
+```typescript
 class Appoint {
-    public constructor(resolver: Function){};
-    public then(onFulfilled, onRejected): Appoint {};
-    public catch(onRejected): Appoint {};
-    public static resolve(value): Appoint {};
-    public static reject(error): Appoint {};
-    public static all(iterable: Appoint[]): Appoint {};
-    public static race(iterable): Appoint {};
+    public constructor(resolver: Function) {}
+    public then(onFulfilled, onRejected): Appoint {}
+    public catch(onRejected): Appoint {}
+    public static resolve(value): Appoint {}
+    public static reject(error): Appoint {}
+    public static all(iterable: Appoint[]): Appoint {}
+    public static race(iterable): Appoint {}
 }
 ```
 
 ### Appoint
 
-``` typescript
+```typescript
 function INTERNAL() {}
 enum AppointState {
     PENDING,
     FULFILLED,
-    REJECTED,
+    REJECTED
 }
 class Appoint {
     public handled: boolean;
     public value: any;
     public queue: QueueItem[];
     private state: AppointState;
-    public constructor(resolver: Function){
+    public constructor(resolver: Function) {
         if (!isFunction(resolver)) {
             throw new TypeError("resolver must be a function");
         }
@@ -138,26 +140,29 @@ class Appoint {
 
 ### safelyResolveThen
 
-``` typescript
+```typescript
 function safelyResolveThen(self: Appoint, then: (arg: any) => any) {
     let called: boolean = false;
     try {
-        then(function resolvePromise(value: any) {
-            if (called) {
-                return;
+        then(
+            function resolvePromise(value: any) {
+                if (called) {
+                    return;
+                }
+                // 保证doResolve，doReject只执行一次
+                called = true;
+                // 改变当前状态以及调用回调队列
+                doResolve(self, value);
+            },
+            function rejectPromise(error: Error) {
+                if (called) {
+                    return;
+                }
+                // 同上
+                called = true;
+                doReject(self, error);
             }
-            // 保证doResolve，doReject只执行一次
-            called = true;
-            // 改变当前状态以及调用回调队列
-            doResolve(self, value);
-        }, function rejectPromise(error: Error) {
-            if (called) {
-                return;
-            }
-            // 同上
-            called = true;
-            doReject(self, error);
-        });
+        );
     } catch (error) {
         // 特别捕捉错误
         if (called) {
@@ -171,7 +176,7 @@ function safelyResolveThen(self: Appoint, then: (arg: any) => any) {
 
 ### doResolve, doReject
 
-``` typescript
+```typescript
 /**
 * 如果value不是一个Promise，对Promise调用回调队列。
 * 如果是就等待这个Promise回调
@@ -242,7 +247,7 @@ function getThen(obj: any): Function {
 
 ### Appoint().then, Appoint().catch
 
-``` typescript
+```typescript
 /**
 * 使用micro-task的异步方案来执行方法
 */
@@ -319,7 +324,7 @@ public catch<U>(onRejected: (error?: any) => U): Appoint {
 
 ### QueueItem
 
-``` typescript
+```typescript
 export class QueueItem {
     // 每次then|catch生成的新实例
     public promise: Appoint;
@@ -365,7 +370,7 @@ export class QueueItem {
 
 ### utils
 
-``` typescript
+```typescript
 export function isFunction(func: any): boolean {
     return typeof func === "function";
 }
@@ -379,7 +384,7 @@ export function isArray(arr: any): boolean {
 
 ### Appoint.resolve, Appoint.reject
 
-``` typescript
+```typescript
 public static resolve(value: any): Appoint {
     if (value instanceof Appoint) {
         return value;
@@ -396,7 +401,7 @@ public static reject(error: any): Appoint {
 
 ### Appoint.all, Appoint.race
 
-``` typescript
+```typescript
 /**
 * 传入一个Promise数组生成新的Promise所有Promise执行完后回调
 */
@@ -471,9 +476,9 @@ public static race(iterable: Appoint[]): Appoint {
 
 ## 三、co 原理
 
-不使用co的话不停的then，和callback明显会很难受。
+不使用 co 的话不停的 then，和 callback 明显会很难受。
 
-``` javascript
+```javascript
 function callback (null, name) {
     console.log(name)
 }
@@ -487,38 +492,38 @@ new Promise(function(resolve) {
 
 ```
 
-改用co异步代码感觉和写同步代码一样。
+改用 co 异步代码感觉和写同步代码一样。
 
-``` javascript
-const co = require("co")
-co(function *test()  {
+```javascript
+const co = require("co");
+co(function* test() {
     const html = yield new Promise(function(resolve) {
-        resolve('<h1>test</h1>')
-    })
-    console.log('--------')
-    const name = yield function (callback) {
-        setTimeout(function(){
-            callback(null, 'test' + html)
-        }, 100)
-    }
-    return name
-}).then(console.log)
+        resolve("<h1>test</h1>");
+    });
+    console.log("--------");
+    const name = yield function(callback) {
+        setTimeout(function() {
+            callback(null, "test" + html);
+        }, 100);
+    };
+    return name;
+}).then(console.log);
 ```
 
-这里不得不说下Generator了，直接看执行效果吧：
+这里不得不说下 Generator 了，直接看执行效果吧：
 
-``` javascript
-function *gen() {
-    const a = yield 1
-    console.log('a: ', a)
-    const b = yield 2
-    console.log('b: ', b)
-    return 3
+```javascript
+function* gen() {
+    const a = yield 1;
+    console.log("a: ", a);
+    const b = yield 2;
+    console.log("b: ", b);
+    return 3;
 }
-const test = gen()
-test.next() // Object { value: 1, done: false }
-test.next(4) // a: 4\n Object { value: 2, done: false }
-test.next(5) // b: 5\n Object { value: 3, done: true }
+const test = gen();
+test.next(); // Object { value: 1, done: false }
+test.next(4); // a: 4\n Object { value: 2, done: false }
+test.next(5); // b: 5\n Object { value: 3, done: true }
 ```
 
 很明显除了第一次`next`的参数都会赋值到上一次的`yield`的左边变量。
@@ -527,7 +532,7 @@ test.next(5) // b: 5\n Object { value: 3, done: true }
 
 ## 四、co 的实现
 
-``` typescript
+```typescript
 const slice = Array.prototype.slice;
 const co: any = function co_(gen) {
     const ctx = this;
@@ -546,9 +551,9 @@ const co: any = function co_(gen) {
         // 执行,第一次next不需要值
         onFulfilled();
         /**
-            * @param {Mixed} res
-            * @return {null}
-            */
+         * @param {Mixed} res
+         * @return {null}
+         */
         function onFulfilled(res?: any) {
             let ret;
             try {
@@ -563,9 +568,9 @@ const co: any = function co_(gen) {
             return null;
         }
         /**
-            * @param {Error} err
-            * @return {undefined}
-            */
+         * @param {Error} err
+         * @return {undefined}
+         */
         function onRejected(err) {
             let ret;
             try {
@@ -590,9 +595,15 @@ const co: any = function co_(gen) {
                 return value.then(onFulfilled, onRejected);
             }
             // yield的值不支持
-            return onRejected(new TypeError("You may only yield a function, promise,"
-                + " generator, array, or object, "
-                + 'but the following object was passed: "' + String(ret.value) + '"'));
+            return onRejected(
+                new TypeError(
+                    "You may only yield a function, promise," +
+                        " generator, array, or object, " +
+                        'but the following object was passed: "' +
+                        String(ret.value) +
+                        '"'
+                )
+            );
         }
     });
 };
@@ -600,10 +611,14 @@ const co: any = function co_(gen) {
 
 toPromise
 
-``` typescript
+```typescript
 function toPromise(ctx: any, obj: any) {
-    if (!obj) { return obj; }
-    if (isPromise(obj)) { return obj; }
+    if (!obj) {
+        return obj;
+    }
+    if (isPromise(obj)) {
+        return obj;
+    }
     // 判断是 Generator 对象|方法 直接通过 co 转换为Promise
     if (isGeneratorFunction(obj) || isGenerator(obj)) {
         return co.call(ctx, obj);
@@ -627,11 +642,13 @@ function toPromise(ctx: any, obj: any) {
 
 转换方法这个懒得说了
 
-``` typescript
+```typescript
 function thunkToPromise(ctx, fn) {
     return new Promise(function _p(resolve, reject) {
         fn.call(ctx, function _(err, res) {
-            if (err) { return reject(err); }
+            if (err) {
+                return reject(err);
+            }
             if (arguments.length > 2) {
                 res = slice.call(arguments, 1);
             }
@@ -641,7 +658,7 @@ function thunkToPromise(ctx, fn) {
 }
 
 function arrayToPromise(ctx, obj: any[]) {
-    return Promise.all(obj.map((item) => toPromise(ctx, item)));
+    return Promise.all(obj.map(item => toPromise(ctx, item)));
 }
 
 function objectToPromise(ctx, obj) {
@@ -653,9 +670,11 @@ function objectToPromise(ctx, obj) {
         const val = obj[key];
         const promise = toPromise(ctx, val);
         if (promise && isPromise(promise)) {
-            promises.push(promise.then(function _(res) {
-                results[key] = res;
-            }));
+            promises.push(
+                promise.then(function _(res) {
+                    results[key] = res;
+                })
+            );
         } else {
             results[key] = val;
         }
@@ -668,7 +687,7 @@ function objectToPromise(ctx, obj) {
 
 还有一些判断工具函数
 
-``` typescript
+```typescript
 function isPromise(obj: { then: Function) {
     return "function" === typeof obj.then;
 }
@@ -694,11 +713,11 @@ function isObject(val) {
 
 1. [项目源代码](https://github.com/zeromake/appoint)
 2. [深入 Promise(一)——Promise 实现详解](https://zhuanlan.zhihu.com/p/25178630)
-3. [英文版Promise/A+](https://promisesaplus.com/)
-4. [中文版Promise/A+](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/)
+3. [英文版 Promise/A+](https://promisesaplus.com/)
+4. [中文版 Promise/A+](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/)
 
 ## 六、后记
 
-1. 这次逼着自己写3天就写完了，果然就是懒。
+1. 这次逼着自己写 3 天就写完了，果然就是懒。
 2. 接下来写一个系列文章`preact`的源码解析与实现。
 3. 尽量一周出一篇？看看情况吧。

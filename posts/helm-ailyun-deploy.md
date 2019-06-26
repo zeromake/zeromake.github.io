@@ -1,4 +1,5 @@
 ---
+
 title: 修改 helm 模板支持阿里云
 date: 2019-04-12 16:25:21+08:00
 type: helm
@@ -10,7 +11,7 @@ last_date: 2019-04-12 16:25:21+08:00
 
 1. 最近公司内部需要在 `k8s` 上部署一些东西，然后发现现在有了一个 `helm` 的工具能够快速的部署。
 2. 对于普通的 `k8s` 阿里云上则需要有一些特殊的操作，这边记录一下如何修改 `helm` 的模板以支持阿里云的部署。
-<!--more-->
+    <!--more-->
 
 ## 二、环境搭建
 
@@ -20,24 +21,23 @@ last_date: 2019-04-12 16:25:21+08:00
 
 [minikube](https://github.com/kubernetes/minikube)
 
-
 官方推荐的本地 `k8s` 环境搭建，通过创建虚拟机来代替 `k8s` 需要的节点。
 
-国内特点(1.0.0版本新增的 `registry-repository` 选项):
+国内特点(1.0.0 版本新增的 `registry-repository` 选项):
+
 > --registry-mirror=设置镜像源
 > --registry-repository=设置 k8s.gcr.io 的替代镜像地址
 
-
-``` shell
+```shell
 minikube start --registry-mirror=http://f1361db2.m.daocloud.io --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers
 ```
 
 完成后直接使用 `kubcli` 就可以管理。
 
-**使用云上k8s:**
+**使用云上 k8s:**
 这个就不用我说了，现在各个云厂商都有现成的 `k8s` 集群可以购买，购买后把配置放到 `~/.kube/config` 或者直接保存为单个文件(~/.kube/ali-config)然后通过环境变量加载。
 
-``` shell
+```shell
 export KUBECONFIG=~/.kube/ali-config
 ```
 
@@ -51,32 +51,35 @@ export KUBECONFIG=~/.kube/ali-config
 **other**
 
 ### 2.2 kubectl && helm 安装和初始化
+
 以上的 `k8s` 环境都需要 `kubectl` 来进行管理，使用 `web` 面板也行但是效率过低。
 
-[kubectl官方安装说明](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+[kubectl 官方安装说明](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 安装后配置好 `~/.kube/config`，使用 `kubectl cluster-info` 可以查看集群信息。
 
 对于 `k8s` 的服务部署的 `yaml` 由于过于复杂，有了一个 `helm` 可以通过模板生成我们需要的 `yaml` 自动的部署和更新到 `k8s` 上。
 
-[helm官方安装说明](https://github.com/helm/helm)
+[helm 官方安装说明](https://github.com/helm/helm)
 
 ## 三、使用 helm
-**初始化helm**
+
+**初始化 helm**
 `k8s` 第一次使用 `helm` 需要执行 `helm init` 创建本地配置和远端 `k8s` api 服务。
 
-``` shell
+```shell
 helm init
 ```
 
-国内特有情况(tiller镜像版本与 helm 版本相同)：
-``` shell
+国内特有情况(tiller 镜像版本与 helm 版本相同)：
+
+```shell
 helm init -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.13.1 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 ```
 
 如果 `k8s` 有 `rbac` 的权限控制请自行查找方案处理权限问题。
 
-**helm的charts源**
+**helm 的 charts 源**
 在上面的命令中我设置 `--stable-repo-url` 就是阿里云的 `stable` 的 `charts` 源，源路径在 [helm/charts](https://github.com/helm/charts)。
 
 这里面有很多直接支持 `helm` 的模板可以进行参考。
@@ -84,11 +87,12 @@ helm init -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.13.1 
 ## 四、helm 的模板
 
 我们创建一个干净的模板看看
-``` shell
+
+```shell
 helm create test && tree ./test/
 ```
 
-``` shell
+```shell
 ├── Chart.yaml          # 包的元信息
 ├── templates           # k8s 模板
 │   ├── NOTES.txt       # 部署后的说明模板
@@ -102,7 +106,7 @@ helm create test && tree ./test/
 ```
 
 在 `templetes` 文件下的文件都会被 `{{}}` 这个指令支持内部可使用一下模板语法进行替换。
-具体的不描述了可以见 [chart模板手册](https://helm.sh/docs/chart_template_guide/)
+具体的不描述了可以见 [chart 模板手册](https://helm.sh/docs/chart_template_guide/)
 
 对于 `helm install` 的执行顺序发现是按照 `configmap.yaml`, `pv.yaml`, `pvc.yaml`, `deployment.yaml`, `service.yaml`, `ingress.yaml` 的有依赖关系进行执行的，没有找到有控制和文件名的限制应该是用 `kind` 来做依赖分析的。
 
@@ -115,21 +119,24 @@ helm create test && tree ./test/
 把这个目录下载到本地就可以通过 `helm [install|template] ./verdaccio` 输出到本地或到 `k8s` 来调试。
 
 ### 5.1 阿里云云盘支持
+
 `verdaccio` 的模板只有 `pvc` 没有 `pv` 需要自行添加一个
 
 **values.yaml**
-``` yaml
+
+```yaml
 pv:
-  enabled: true
-  size: 20Gi
-  volume:
-  fsType: xfs
-  zone: cn-hangzhou-b
-  region: cn-hangzhou
+    enabled: true
+    size: 20Gi
+    volume:
+    fsType: xfs
+    zone: cn-hangzhou-b
+    region: cn-hangzhou
 ```
 
 **pv.yaml**
-``` yaml
+
+```yaml
 # 无需 pv 时通过这个控制不会触发pv创建
 {{- if and .Values.pv.enabled (.Values.pv.volume) }}
 apiVersion: v1
@@ -152,22 +159,24 @@ spec:
       volumeId: "{{ .Values.pv.volume }}"
 {{- end}}
 ```
-1. size: pv分配大小单位 `Gi`
-2. volume: 云盘id
+
+1. size: pv 分配大小单位 `Gi`
+2. volume: 云盘 id
 3. fsType: 文件系统 `xfs`, `ext4`
 4. zone: 云盘域
 5. region: 云盘地区
 
 以上的配置可以通 `--set` 命令传入 `helm` 重新设置。
 
-``` shell
+```shell
 helm install --set pv.volume=xx-dfgafgf,pv.zone=cn-hangzhou-b,pv.region=cn-hangzhou ./verdaccio/
 ```
 
 由于使用的特有的云盘我们需要修改 `pvc` 支持
 **pvc.yaml**
-在 `spec` 下添加 `selector`, `volumeName` 设置为云盘id即可。
-``` yaml
+在 `spec` 下添加 `selector`, `volumeName` 设置为云盘 id 即可。
+
+```yaml
 # ...
 spec:
 # ...
@@ -180,47 +189,48 @@ spec:
 # ...
 ```
 
-### 5.2 阿里云nas支持
+### 5.2 阿里云 nas 支持
 
-可以参考上面的方式根据 [阿里云k8s nas指南](https://help.aliyun.com/document_detail/88940.html) 修改 `pv` 和 `pvc` 来支持。
+可以参考上面的方式根据 [阿里云 k8s nas 指南](https://help.aliyun.com/document_detail/88940.html) 修改 `pv` 和 `pvc` 来支持。
 
 pv.yaml:
-``` yaml
+
+```yaml
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-nas
+    name: pv-nas
 spec:
-  capacity:
-    storage: 5Gi
-  storageClassName: nas
-  accessModes:
-    - ReadWriteMany
-  flexVolume:
-    driver: "alicloud/nas"
-    options:
-      server: "0cd8b4a576-uih75.cn-hangzhou.nas.aliyuncs.com"
-      path: "/k8s"
-      vers: "4.0"
+    capacity:
+        storage: 5Gi
+    storageClassName: nas
+    accessModes:
+        - ReadWriteMany
+    flexVolume:
+        driver: "alicloud/nas"
+        options:
+            server: "0cd8b4a576-uih75.cn-hangzhou.nas.aliyuncs.com"
+            path: "/k8s"
+            vers: "4.0"
 ```
 
 pvc.yaml:
-``` yaml
+
+```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-nas
+    name: pvc-nas
 spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: nas
-  resources:
-    requests:
-      storage: 5Gi
+    accessModes:
+        - ReadWriteMany
+    storageClassName: nas
+    resources:
+        requests:
+            storage: 5Gi
 ```
 
 主要是 `storageClassName` 的关联。
-
 
 ## 六、一些问题
 
@@ -229,6 +239,6 @@ spec:
 
 ## 七、参考
 
-- [helm官网文档](https://helm.sh/docs)
-- [阿里云k8s云盘指南](https://help.aliyun.com/document_detail/86612.html)
-- [阿里云k8s nas指南](https://help.aliyun.com/document_detail/88940.html)
+-   [helm 官网文档](https://helm.sh/docs)
+-   [阿里云 k8s 云盘指南](https://help.aliyun.com/document_detail/86612.html)
+-   [阿里云 k8s nas 指南](https://help.aliyun.com/document_detail/88940.html)

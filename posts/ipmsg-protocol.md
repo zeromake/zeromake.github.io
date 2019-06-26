@@ -1,5 +1,6 @@
 ---
-title: ipmsg协议
+
+title: ipmsg 协议
 date: 2018-03-12 16:10:00+08:00
 type: protocol
 tags: [protocol, ipmsg]
@@ -8,19 +9,19 @@ last_date: 2018-04-2 17:46:00+08:00
 
 ## 前言
 
-- 最近看了一下 飞鸽传书(ipmsg) 突然对它的协议有了兴趣，这边找了官方的来自行翻译
+-   最近看了一下 飞鸽传书(ipmsg) 突然对它的协议有了兴趣，这边找了官方的来自行翻译
 
 <!--more-->
 
 ## 协议版本信息
 
-|  标题    | 说明     |
-|:---------:|:---------:|
-| 标题     | IP Messenger 通信协议规范(草案14版) |
-| 创建于 | 1996/02/21 |
-| 最近修改时间 | 2017/06/12 |
-| 作者 | H.Shirouzu |
-| 官方网站 | [https://ipmsg.org](https://ipmsg.org) |
+|     标题     |                  说明                  |
+| :----------: | :------------------------------------: |
+|     标题     | IP Messenger 通信协议规范(草案 14 版)  |
+|    创建于    |               1996/02/21               |
+| 最近修改时间 |               2017/06/12               |
+|     作者     |               H.Shirouzu               |
+|   官方网站   | [https://ipmsg.org](https://ipmsg.org) |
 
 ## 一、概要
 
@@ -35,14 +36,14 @@ last_date: 2018-04-2 17:46:00+08:00
 
 TCP/UDP 都有一个监听端口(默认: 2425) 分工情况见下:
 
-- 消息发送: UDP
-- 文件传输和接收: TCP
+-   消息发送: UDP
+-   文件传输和接收: TCP
 
 ### 1. 命令
 
-#### 1) 命令类型(32位命令的低8位)
+#### 1) 命令类型(32 位命令的低 8 位)
 
-``` c
+```c
 // 无操作
 #define IPMSG_NOOPERATION       0x00000000UL
 // 开启服务(启动时广播)
@@ -113,9 +114,9 @@ TCP/UDP 都有一个监听端口(默认: 2425) 分工情况见下:
 #define IPMSG_DIR_AGENTPACKET   0x000000b6UL
 ```
 
-#### 2) 选项标志类型 (32位命令的高24位)
+#### 2) 选项标志类型 (32 位命令的高 24 位)
 
-``` c
+```c
 // 离线模式(与成员识别命令一起使用)
 #define IPMSG_ABSENCEOPT        0x00000100UL
 // 服务器(预订)
@@ -193,7 +194,7 @@ TCP/UDP 都有一个监听端口(默认: 2425) 分工情况见下:
 #define IPMSG_NOENC_FILEBODY    0x04000000UL
 ```
 
-#### 4) 附件的文件类型(fileattr低8位)
+#### 4) 附件的文件类型(fileattr 低 8 位)
 
 ```c
 // 普通文件
@@ -217,9 +218,9 @@ TCP/UDP 都有一个监听端口(默认: 2425) 分工情况见下:
 
 ```
 
-#### 5) 附件文件属性(fileattr高24位)
+#### 5) 附件文件属性(fileattr 高 24 位)
 
-``` c
+```c
 // 只读文件
 #define IPMSG_FILE_RONLYOPT     0x00000100UL
 // 隐藏文件
@@ -234,7 +235,7 @@ TCP/UDP 都有一个监听端口(默认: 2425) 分工情况见下:
 
 #### 6) 附件扩展文件属性
 
-``` c
+```c
 // 用户id
 #define IPMSG_FILE_UID          0x00000001UL
 // uid by string 用户名
@@ -275,26 +276,26 @@ TCP/UDP 都有一个监听端口(默认: 2425) 分工情况见下:
 
 ### 2. 命令格式(所有都为表示为字符串)
 
-#### 1) 命令(格式版本1)
+#### 1) 命令(格式版本 1)
 
-Ver(1) : Packet编码 : 用户名 : host名 : Command号 : 追加内容
+Ver(1) : Packet 编码 : 用户名 : host 名 : Command 号 : 追加内容
 
 #### 2) 以当前命令格式发送消息的示例
 
 普通的不带任何选项的消息:
 
-``` text
+```text
 1:100:shirouzu:jupiter:32:Hello\0
 ```
 
 其中 Command 可以带各种选项如 `IPMSG_SENDCHECKOPT(检查消息)`:
 
-``` c
+```c
 // 0x00000120UL
 unsigned long Command = IPMSG_SENDMSG | IPMSG_SENDCHECKOPT;
 ```
 
-``` text
+```text
 1:100:shirouzu:jupiter:288:Hello\0
 ```
 
@@ -311,13 +312,13 @@ unsigned long com = command & 0xffffff00;
 
 服务启动后，广播 `IPMSG_BR_ENTRY` 命令通知已启动的成员，有新成员加入。附加可以用于设置昵称。
 
-``` text
+```text
 1:100:shirouzu:jupiter:1:nickname\0
 ```
 
-通过这个广播，已启动成员将新成员添加到成员列表中。另外还会回复 `IPMSG_ANSENTRY`(与 `IPMSG_BR_ENTRY` 格式相同) 给新成员。(备注: Win版中，根据成员数量和 IP 地址距离，随机等待 0-4 秒)
+通过这个广播，已启动成员将新成员添加到成员列表中。另外还会回复 `IPMSG_ANSENTRY`(与 `IPMSG_BR_ENTRY` 格式相同) 给新成员。(备注: Win 版中，根据成员数量和 IP 地址距离，随机等待 0-4 秒)
 
-``` text
+```text
 1:100:shirouzu:jupiter:3:nickname\0
 ```
 
@@ -326,7 +327,7 @@ unsigned long com = command & 0xffffff00;
 
 更改离线模式，昵称等，会使用 `IPMSG_BR_ABSENCE` 广播通知所有成员。(与 `IPMSG_BR_ENTRY` 不同，不会回复 `IPMSG_ANSENTRY`)
 
-``` text
+```text
 1:100:shirouzu:jupiter:4:nickname[离线模式]\0
 ```
 
@@ -334,18 +335,18 @@ unsigned long com = command & 0xffffff00;
 
 (群扩展)在 `IPMSG_BR_ENTRY`, `IPMSG_ANSENTRY`, `IPMSG_BR_ABSENCE` 中，可以发送群名，通过在原有命令的后面添加群名(用 `\0` 分割)来设置群名。这样会把发送命令的成员添加到该群中。
 
-``` text
+```text
 1:100:shirouzu:jupiter:1:nickname\0Group\0
 ```
 
-(IPv6广播扩展) `IPMSG_BR_ENTRY`, `IPMSG_BR_ABSENCE` 通过使用 `IPv6` 多播，即使在 `IPv6` 网络中也可以识别不同路由器的成员，利用多播地址 `ff15::979`，启动 `IPV6_JOIN_GROUP` 同时发送 `IPMSG_BR_ENTRY` 到该多播地址。退出时发送 `IPMSG_BR_EXIT` 后执行
- `IPV6_LEAVE_GROUP`。
- (对于链路中的所有结点使用 `ff02::1`)
+(IPv6 广播扩展) `IPMSG_BR_ENTRY`, `IPMSG_BR_ABSENCE` 通过使用 `IPv6` 多播，即使在 `IPv6` 网络中也可以识别不同路由器的成员，利用多播地址 `ff15::979`，启动 `IPV6_JOIN_GROUP` 同时发送 `IPMSG_BR_ENTRY` 到该多播地址。退出时发送 `IPMSG_BR_EXIT` 后执行
+`IPV6_LEAVE_GROUP`。
+(对于链路中的所有结点使用 `ff02::1`)
 请注意，需要在 `IPv6` 路由器间配置可组播可互分发的功能。(视频分发的树形拓扑结构不足)
 
-#### 2) 带公钥指纹的用户名 (版本10追加)
+#### 2) 带公钥指纹的用户名 (版本 10 追加)
 
-使用`2046bitRSA` 和 `SHA-1` 签名的用户，可以使用用户ID末尾的公匙添加指纹(稍后描述):
+使用`2046bitRSA` 和 `SHA-1` 签名的用户，可以使用用户 ID 末尾的公匙添加指纹(稍后描述):
 
 1. 使用户名更加简单
 2. 防止公匙欺骗(`IPMSG_ANSPUBKEY` 收信时进行密匙与指纹的一致确认)
@@ -356,14 +357,12 @@ unsigned long com = command & 0xffffff00;
 
 1. 为公匙(\*1)生成(\*2) `SHA-1` 签名(160bit)
 2. 追加一个 32bit 的 0 得到一个 192bit 的值
-3. 192bit 分割为 64bit * 3 的三个字段，使用这三个字段进行 XOR。
-4. 64bit 值通过hex转换为十六进制长度为 16。
+3. 192bit 分割为 64bit \* 3 的三个字段，使用这三个字段进行 XOR。
+4. 64bit 值通过 hex 转换为十六进制长度为 16。
 5. 在用户名末尾添加用户名 `用户名-签名`。
 
-(\*1)(\*2) 这部分和SHA-1使用的方法二进制使用小端格式。(历史问题)
+(\*1)(\*2) 这部分和 SHA-1 使用的方法二进制使用小端格式。(历史问题)
 
 如果 `IPMSG_ENCRYPTOPT` 标记未在 Entry 系统设置，或者 `IPMSG_RSA_2048`/`IPMSG_SIGN_SHA1`未在`IPMSG_GETPUBKEY`/`IPMSG_ANSPUBKEY` 中设置，即使发送带有公匙签名的用户名，也会导致非法数据包，建议丢弃数据包。
 
 #### 3) 消息传输
-
-

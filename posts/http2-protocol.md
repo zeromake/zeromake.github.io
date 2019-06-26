@@ -1,5 +1,6 @@
 ---
-title: HTTP2协议解析
+
+title: HTTP2 协议解析
 date: 2018-08-10 14:05:57+08:00
 type: protocol
 tags: [protocol, http2]
@@ -8,15 +9,15 @@ last_date: 2019-01-26 13:05:57+08:00
 
 ## 前言
 
-- 最近工作都在做跟 `http2` 协议有关的东西，记录下协议的格式与资料。
-- 下篇(~~这篇~~)文章中会简略的写出一个支持高并发的 `golang` 的 `http2` 转发器。
-<!--more-->
+-   最近工作都在做跟 `http2` 协议有关的东西，记录下协议的格式与资料。
+-   下篇(~~这篇~~)文章中会简略的写出一个支持高并发的 `golang` 的 `http2` 转发器。
+    <!--more-->
 
 ## 一、tcp 数据头特征
 
 由于 `HTTP2` 依旧是客户端主动模式，所以协议头只有客户端到服务端的。
 
-**协议头的ascii模式**
+**协议头的 ascii 模式**
 头为 `32byte` 的二进制可以 `ascii` 模式显示, 完成后直接开始 `Frame` 通信。
 
 `PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n`
@@ -25,7 +26,7 @@ last_date: 2019-01-26 13:05:57+08:00
 
 `rfc` 中定义了 10 种 Frame, 下面先把一些需要的静态类型声明
 
-``` go
+```go
 type FrameType uint8
 
 const (
@@ -77,11 +78,12 @@ const PadBit uint32 = 0x7fffffff
 ```
 
 ### 2.01 FRAME Format
+
 [rfc-frame](https://httpwg.org/specs/rfc7540.html#FramingLayer)
 
 所有的 `Frame` 的头都是 `9bit` 长度。
 
-``` shell
+```shell
  +-----------------------------------------------+
  |                 Length (24)                   |
  +---------------+---------------+---------------+
@@ -93,15 +95,16 @@ const PadBit uint32 = 0x7fffffff
  +---------------------------------------------------------------+
 ```
 
-- Length: 24bit 长度的转换为 `int`，范围在 `2^14` 到 `2^24-1` 之间。
-- Type: 8bit 的区分 `Frame` 的类型。
-- Flags: 8bit 通过位运算可以放置8个标识。
-- R: 1bit 占位必须为 `0x0`。
-- Stream Identifier: 31bit 的无符号 int 。
-- Frame Payload: 长度为上面的 `Length` 的二进制。
+-   Length: 24bit 长度的转换为 `int`，范围在 `2^14` 到 `2^24-1` 之间。
+-   Type: 8bit 的区分 `Frame` 的类型。
+-   Flags: 8bit 通过位运算可以放置 8 个标识。
+-   R: 1bit 占位必须为 `0x0`。
+-   Stream Identifier: 31bit 的无符号 int 。
+-   Frame Payload: 长度为上面的 `Length` 的二进制。
 
 **解析示例**
-``` go
+
+```go
 const (
     frameHeaderLen = 9
 )
@@ -245,8 +248,10 @@ func ReadFrame(r io.Reader) {
 ```
 
 ### 2.02 DATA Format 0x0
+
 [rfc-data](https://httpwg.org/specs/rfc7540.html#DATA)
-``` shell
+
+```shell
  +---------------+
  |Pad Length? (8)|
  +---------------+-----------------------------------------------+
@@ -256,12 +261,13 @@ func ReadFrame(r io.Reader) {
  +---------------------------------------------------------------+
 ```
 
-- Pad Length: 8bit 可选，尾部 Padding 的填充字符的长度，可能用于对齐字节，需要 flag |= PADDED
-- Data: body 内容字节
-- Padding: 填充字节
+-   Pad Length: 8bit 可选，尾部 Padding 的填充字符的长度，可能用于对齐字节，需要 flag |= PADDED
+-   Data: body 内容字节
+-   Padding: 填充字节
 
 **解析示例**
-``` go
+
+```go
 type DataFrame struct {
     FrameHeader
     Data []byte
@@ -288,12 +294,15 @@ func ParseDataFrame(fh *FrameHeader, payload []byte) (*DataFrame, error) {
 ```
 
 **flags**
-- END_STREAM: 0x1 会话流是否结束
-- PADDED: 0x8 是否有填充字节
+
+-   END_STREAM: 0x1 会话流是否结束
+-   PADDED: 0x8 是否有填充字节
 
 ### 2.03 HEADER Format 0x1
+
 [rfc-headers](https://httpwg.org/specs/rfc7540.html#HEADERS)
-``` shell
+
+```shell
  +---------------+
  |Pad Length? (8)|
  +-+-------------+-----------------------------------------------+
@@ -306,15 +315,17 @@ func ParseDataFrame(fh *FrameHeader, payload []byte) (*DataFrame, error) {
  |                           Padding (*)                       ...
  +---------------------------------------------------------------+
 ```
-- Pad Length: 8bit 可选，尾部 Padding 的填充字符的长度，可能用于对齐字节，需要 flag |= PADDED
-- E: 设置流是否为独占或依赖，PRIORITY 支持
-- Stream Dependency: 31bit 依赖的 stream identifier，需要 flag |= PRIORITY
-- Weight: 8bit 流的权重 1-255，需要 flag |= PRIORITY
-- Header Block Fragment: 压缩后的 Header 内容二进制
-- Padding: 填充字节
+
+-   Pad Length: 8bit 可选，尾部 Padding 的填充字符的长度，可能用于对齐字节，需要 flag |= PADDED
+-   E: 设置流是否为独占或依赖，PRIORITY 支持
+-   Stream Dependency: 31bit 依赖的 stream identifier，需要 flag |= PRIORITY
+-   Weight: 8bit 流的权重 1-255，需要 flag |= PRIORITY
+-   Header Block Fragment: 压缩后的 Header 内容二进制
+-   Padding: 填充字节
 
 **解析示例**
-``` go
+
+```go
 type HeadersFrame struct {
     FrameHeader
     Priority PriorityParam
@@ -356,26 +367,31 @@ func ParseHeadersFrame(fh *FrameHeader, p []byte) (*HeadersFrame, error) {
 ```
 
 **flag**
-- END_STREAM: 0x1 是否结束这次流会话(比如 GET 的 header)
-- END_HEADERS: 0x4 header 是否结束，没有结束需要读取下面的 header 分片
-- PADDED: 0x8 是否有填充
-- PRIORITY: 0x20 是否有流依赖
+
+-   END_STREAM: 0x1 是否结束这次流会话(比如 GET 的 header)
+-   END_HEADERS: 0x4 header 是否结束，没有结束需要读取下面的 header 分片
+-   PADDED: 0x8 是否有填充
+-   PRIORITY: 0x20 是否有流依赖
 
 ### 2.04 PRIORITY Format 0x2
+
 [rfc-priority](http://http2.github.io/http2-spec/#rfc.section.6.3)
-``` shell
+
+```shell
  +-+-------------------------------------------------------------+
  |E|                  Stream Dependency (31)                     |
  +-+-------------+-----------------------------------------------+
  |   Weight (8)  |
  +-+-------------+
 ```
-- E: 设置流是否为独占或依赖，PRIORITY 支持
-- Stream Dependency: 31bit 依赖的 stream identifier
-- Weight: 8bit 流的权重 1-255
+
+-   E: 设置流是否为独占或依赖，PRIORITY 支持
+-   Stream Dependency: 31bit 依赖的 stream identifier
+-   Weight: 8bit 流的权重 1-255
 
 **解析示例**
-``` go
+
+```go
 type PriorityParam struct {
     StreamDep uint32
 
@@ -419,15 +435,18 @@ func ParsePriorityFrame(fh *FrameHeader, payload []byte) (*PriorityFrame, error)
 ```
 
 ### 2.05 RST_STREAM Fromat 0x3
-``` shell
+
+```shell
  +---------------------------------------------------------------+
  |                        Error Code (32)                        |
  +---------------------------------------------------------------+
 ```
-- Error Code: 32bit 错误码见 [error-codes](https://httpwg.org/specs/rfc7540.html#ErrorCodes)
+
+-   Error Code: 32bit 错误码见 [error-codes](https://httpwg.org/specs/rfc7540.html#ErrorCodes)
 
 **解析示例**
-``` go
+
+```go
 type RSTStreamFrame struct {
     FrameHeader
     ErrCode ErrCode
@@ -444,8 +463,10 @@ func ParseRSTStreamFrame(fh *FrameHeader, p []byte) (*RSTStreamFrame, error) {
 ```
 
 ### 2.06 SETTINGS Format 0x4
+
 [rfc-settings](https://httpwg.org/specs/rfc7540.html#SETTINGS)
-``` shell
+
+```shell
  +-------------------------------+
  |       Identifier (16)         |
  +-------------------------------+-------------------------------+
@@ -458,12 +479,14 @@ func ParseRSTStreamFrame(fh *FrameHeader, p []byte) (*RSTStreamFrame, error) {
  +---------------------------------------------------------------+
  ...
 ```
-- Identifier: 16 bit 长度的 key。
-- Value: 32 bit 长度的 value。
-- 以每一对为存在并且数量不限，有什么样设置见 [SettingValues](https://httpwg.org/specs/rfc7540.html#SettingValues)。
+
+-   Identifier: 16 bit 长度的 key。
+-   Value: 32 bit 长度的 value。
+-   以每一对为存在并且数量不限，有什么样设置见 [SettingValues](https://httpwg.org/specs/rfc7540.html#SettingValues)。
 
 **解析示例**
-``` go
+
+```go
 type SettingID uint16
 type Setting struct {
     ID  SettingID
@@ -492,12 +515,16 @@ func ParserSettings(header *FrameHeader, payload []byte) (*SettingFrame, error) 
 	}, nil
 }
 ```
+
 **Flags**
-- Ack: 0x1
+
+-   Ack: 0x1
 
 ### 2.07 PUSH_PROMISE Format 0x5
+
 [rfc-push_promise](https://httpwg.org/specs/rfc7540.html#PUSH_PROMISE)
-``` shell
+
+```shell
  +---------------+
  |Pad Length? (8)|
  +-+-------------+-----------------------------------------------+
@@ -508,12 +535,14 @@ func ParserSettings(header *FrameHeader, payload []byte) (*SettingFrame, error) 
  |                           Padding (*)                       ...
  +---------------------------------------------------------------+
 ```
-- Pad Length: 8bit 填充大小，需要 flag := PADDED
-- R: 1bit 保留位
-- Promised Stream ID: 31bit 主动推送的下一个流ID
+
+-   Pad Length: 8bit 填充大小，需要 flag := PADDED
+-   R: 1bit 保留位
+-   Promised Stream ID: 31bit 主动推送的下一个流 ID
 
 **解析示例**
-``` go
+
+```go
 type PushPromiseFrame struct {
     FrameHeader
     PromiseID     uint32
@@ -548,22 +577,27 @@ func ParsePushPromise(fh *FrameHeader, p []byte) (*PushPromiseFrame, error) {
 ```
 
 **flag**
-- END_HEADERS: 0x4 与 headers 下的作用相同
-- PADDED: 0x8 是否有填充
+
+-   END_HEADERS: 0x4 与 headers 下的作用相同
+-   PADDED: 0x8 是否有填充
 
 ### 2.08 PING Format 0x6
+
 [rfc-ping](https://httpwg.org/specs/rfc7540.html#PING)
-``` shell
+
+```shell
  +---------------------------------------------------------------+
  |                                                               |
  |                      Opaque Data (64)                         |
  |                                                               |
  +---------------------------------------------------------------+
 ```
-- Opaque Data: 64bit 任意内容定长，用于各种协议 ping 时的自定义
+
+-   Opaque Data: 64bit 任意内容定长，用于各种协议 ping 时的自定义
 
 **解析示例**
-``` go
+
+```go
 type PingFrame struct {
     FrameHeader
     Data [8]byte
@@ -580,9 +614,12 @@ func parsePingFrame(fh FrameHeader, payload []byte) (*PingFrame, error) {
     return f, nil
 }
 ```
+
 ### 2.09 GOAWAY Format 0x7
+
 [rfc-goaway](https://httpwg.org/specs/rfc7540.html#GOAWAY)
-``` shell
+
+```shell
  +-+-------------------------------------------------------------+
  |R|                  Last-Stream-ID (31)                        |
  +-+-------------------------------------------------------------+
@@ -591,12 +628,14 @@ func parsePingFrame(fh FrameHeader, payload []byte) (*PingFrame, error) {
  |                  Additional Debug Data (*)                    |
  +---------------------------------------------------------------+
 ```
-- Last-Stream-ID: 31bit 最后的流ID。
-- Error Code: 32bit 错误编码。
-- Additional Debug Data: 任意调试数据。
+
+-   Last-Stream-ID: 31bit 最后的流 ID。
+-   Error Code: 32bit 错误编码。
+-   Additional Debug Data: 任意调试数据。
 
 **解析示例**
-``` go
+
+```go
 type GoAwayFrame struct {
     FrameHeader
     LastStreamID uint32
@@ -620,33 +659,41 @@ func parseGoAwayFrame(fh FrameHeader, p []byte) (*GoAwayFrame, error) {
 ```
 
 ### 2.10 WINDOWUPDATE Format 0x8
+
 [rfc-window_update](https://httpwg.org/specs/rfc7540.html#WINDOW_UPDATE)
-``` shell
+
+```shell
  +-+-------------------------------------------------------------+
  |R|              Window Size Increment (31)                     |
  +-+-------------------------------------------------------------+
 ```
-- R: 1bit 占位必须为 `0x0`。
-- Window Size Increment: 31bit 的 `uint32`。
+
+-   R: 1bit 占位必须为 `0x0`。
+-   Window Size Increment: 31bit 的 `uint32`。
 
 **解析示例**
-``` go
+
+```go
 func ParserWindowUpdate(header FrameHeader, payload []byte) uint32 {
     return binary.BigEndian.Uint32(payload[:4]) & PadBit
 }
 ```
 
 ### 2.11 CONTINUATION Format 0x9
+
 [rfc-continuation](https://httpwg.org/specs/rfc7540.html#CONTINUATION)
-``` shell
+
+```shell
 +---------------------------------------------------------------+
  |                   Header Block Fragment (*)                 ...
  +---------------------------------------------------------------+
 ```
-- Header Block Fragment: header的分片压缩字节
+
+-   Header Block Fragment: header 的分片压缩字节
 
 **解析示例**
-``` go
+
+```go
 type ContinuationFrame struct {
     FrameHeader
     HeaderFragBuf []byte
@@ -661,7 +708,8 @@ func parseContinuationFrame(fh FrameHeader, p []byte) (*ContinuationFrame, error
 ```
 
 **flags**
-- END_HEADERS: header 分片结束
+
+-   END_HEADERS: header 分片结束
 
 ## 三、Frame 功能逻辑描述
 
@@ -675,5 +723,4 @@ func parseContinuationFrame(fh FrameHeader, p []byte) (*ContinuationFrame, error
 
 ## 八、参考资料
 
-- [rfc7540](https://httpwg.org/specs/rfc7540.html)
-
+-   [rfc7540](https://httpwg.org/specs/rfc7540.html)

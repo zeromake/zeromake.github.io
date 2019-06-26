@@ -1,5 +1,5 @@
 ---
-title: docker容器调试新姿势
+title: docker 容器调试新姿势
 date: 2019-03-22 12:32:21+08:00
 type: docker
 tags: [docker, debug, go]
@@ -17,8 +17,8 @@ last_date: 2019-05-28 21:32:28+08:00
 
 ## 二、原理和方案
 
-**docker内置的资源共享**
-在 [ContainerCreate](https://docs.docker.com/engine/api/v1.39/#operation/ContainerCreate) api文档中我们可以找到
+**docker 内置的资源共享**
+在 [ContainerCreate](https://docs.docker.com/engine/api/v1.39/#operation/ContainerCreate) api 文档中我们可以找到
 `HostConfig` 下有 `NetworkMode`, `UsernsMode`, `IpcMode`, `PidMode`。
 
 只要根据文档格式设置即可在新的容器中共享 `network`, `user`, `ipc`, `pid` 这些资源。
@@ -26,10 +26,11 @@ last_date: 2019-05-28 21:32:28+08:00
 **文件系统共享**
 `docker` 从宿主机挂载的目录文件可以直接继承设置到新的容器创建配置中即可使用。
 
-在 [Docker核心技术与实现原理](https://draveness.me/docker) 这篇博文中我了解到对于最终运行中的容器是有一个通过 `UnionFS` 在文件系统提供一个合并的目录，然后再挂载到容器中的。
+在 [Docker 核心技术与实现原理](https://draveness.me/docker) 这篇博文中我了解到对于最终运行中的容器是有一个通过 `UnionFS` 在文件系统提供一个合并的目录，然后再挂载到容器中的。
 
-在这个基础上我去 `/var/lib/docker/overlay2` 下找到了很多hash目录经过检查发现就是我想要的合成目录，但是这个时候却发现不知道如何找到对应容器的最终合成目录，找了一下发现 `docker inspect` 能够打出容器的各种信息。
-``` json
+在这个基础上我去 `/var/lib/docker/overlay2` 下找到了很多 hash 目录经过检查发现就是我想要的合成目录，但是这个时候却发现不知道如何找到对应容器的最终合成目录，找了一下发现 `docker inspect` 能够打出容器的各种信息。
+
+```json
 {
     "GraphDriver": {
         "Data": {
@@ -41,13 +42,16 @@ last_date: 2019-05-28 21:32:28+08:00
     }
 }
 ```
+
 发现了 `GraphDriver.Data.MergedDir` 正好指向最终的合成目录，直接像挂载宿主机目录一样即可挂载到新的容器当中。
 
 ## 三、代码
+
 这边考虑只介绍 `创建容器`，`拉取镜像`，`创建exec`，`运行exec`。
 
 **拉取镜像**
-``` go
+
+```go
 import (
     "context"
     "strings"
@@ -215,11 +219,12 @@ func (cli *DebugCli) ExecStart(execID string) error {
 ## 四、一些边角处理
 
 ### 4.1 通过环境变量获取 docker 配置
+
 在各种系统环境下 `docker` 的 `cli` 获取连接的配置都是用环境变量和固定值来做的。
 
-- `DOCKER_HOST` 对应 `docker` 服务端 `api` 地址。
-- `DOCKER_TLS_VERIFY` `api` 的连接是否为 `tls`。
-- `DOCKER_CERT_PATH` 使用的证书目录。
+-   `DOCKER_HOST` 对应 `docker` 服务端 `api` 地址。
+-   `DOCKER_TLS_VERIFY` `api` 的连接是否为 `tls`。
+-   `DOCKER_CERT_PATH` 使用的证书目录。
 
 ### 4.2 docker/client 的 opts 包引入报错
 
@@ -237,14 +242,13 @@ func (cli *DebugCli) ExecStart(execID string) error {
 
 ## 五、下一步计划
 
-- 抽取 cli 的操作，开放到 pkg 里。
-- 构建一个 http rpc api 支持在网页上操作，通过 `websocket` 或 `socket.io` 支持 `tty` 映射。
-- 单独构建一个前端操作界面，可支持静态部署类似 `aria2ui` 之类的。
+-   抽取 cli 的操作，开放到 pkg 里。
+-   构建一个 http rpc api 支持在网页上操作，通过 `websocket` 或 `socket.io` 支持 `tty` 映射。
+-   单独构建一个前端操作界面，可支持静态部署类似 `aria2ui` 之类的。
 
 ## 六、参考和感谢
 
-- [kubectl-debug](https://github.com/aylei/kubectl-debug): docker-debug 想法来自这个 kubectl 调试工具。
-- [Docker核心技术与实现原理](https://draveness.me/docker): docker-debug 的文件系统挂载原理来自这个博文。
-- [docker-engine-api-doc](https://docs.docker.com/engine/api/latest): docker engine api 文档。
-- [docker-cli](https://github.com/docker/cli): 拷贝了不少 cli 的 tty 处理库。
-
+-   [kubectl-debug](https://github.com/aylei/kubectl-debug): docker-debug 想法来自这个 kubectl 调试工具。
+-   [Docker 核心技术与实现原理](https://draveness.me/docker): docker-debug 的文件系统挂载原理来自这个博文。
+-   [docker-engine-api-doc](https://docs.docker.com/engine/api/latest): docker engine api 文档。
+-   [docker-cli](https://github.com/docker/cli): 拷贝了不少 cli 的 tty 处理库。

@@ -1,30 +1,32 @@
 ---
-title: preact源码解读(1)
+
+title: preact 源码解读(1)
 date: 2017-07-24 16:23:04+08:00
 type: source
 tags: [preact, source, read]
 last_date: 2017-07-25 12:29:04+08:00
 ...
 
-
 ## 前言
 
-- 和上次说的一样这次带来`preact`的解读
-- preact实际上把它当作是一个精简版`react`就好了。
-- 这次我抄下了`preact`，并且改写了代码, 命名为`zreact`
-- 把之前将事件，props之类的单独放出来，这样这份`zreact`。
-- 可以支持ie8，虽然并没有什么用。
-- 这次代码解读顺序按使用preact的代码顺序。
-- 这里是第一篇，createElement，也就是vue,react的render所返回的VNode对象。
-- 平常则是使用babel+jsx来生成createElement调用。
-- vue常用则是template，但是通过webpack会做到预先转换为render。
+-   和上次说的一样这次带来`preact`的解读
+-   preact 实际上把它当作是一个精简版`react`就好了。
+-   这次我抄下了`preact`，并且改写了代码, 命名为`zreact`
+-   把之前将事件，props 之类的单独放出来，这样这份`zreact`。
+-   可以支持 ie8，虽然并没有什么用。
+-   这次代码解读顺序按使用 preact 的代码顺序。
+-   这里是第一篇，createElement，也就是 vue,react 的 render 所返回的 VNode 对象。
+-   平常则是使用 babel+jsx 来生成 createElement 调用。
+-   vue 常用则是 template，但是通过 webpack 会做到预先转换为 render。
+
 <!--more-->
-## 一、jsx的转换原理。
 
-对于preact来说，最常见的就是jsx。
-下面是一个最简单的使用preact。
+## 一、jsx 的转换原理。
 
-``` javascript
+对于 preact 来说，最常见的就是 jsx。
+下面是一个最简单的使用 preact。
+
+```javascript
 import {h, render, Component} from "preact";
 
 /** @jsx h */
@@ -47,18 +49,16 @@ render(
 
 .babelrc
 
-``` json
+```json
 {
     "presets": ["es2015"],
-    "plugins": [
-        ["transform-react-jsx", { "pragma":"h" }]
-    ]
+    "plugins": [["transform-react-jsx", { "pragma": "h" }]]
 }
 ```
 
-通过babel转换后会变成
+通过 babel 转换后会变成
 
-``` javascript
+```javascript
 import {h, render} from "preact";
 
 class App extends Component {
@@ -78,26 +78,26 @@ render(
 )
 ```
 
-所以对于preact最先执行的东西是这个`h`函数也就是`createElement`
+所以对于 preact 最先执行的东西是这个`h`函数也就是`createElement`
 对于`jsx`标准的`createElement`函数签名为
 
-``` typescript
+```typescript
 interface IKeyValue {
     [name: string]: any;
 }
 /**
-* 标准JSX转换函数
-* @param {string|Component} nodeName 组件
-* @param {IKeyValue} attributes 组件属性
-* @param {any[]} childs 这个VNode的子组件
-*/
+ * 标准JSX转换函数
+ * @param {string|Component} nodeName 组件
+ * @param {IKeyValue} attributes 组件属性
+ * @param {any[]} childs 这个VNode的子组件
+ */
 function h(
     nodeName: string | function,
     attributes: IKeyValue,
     ...childs: any[]
 ): VNode;
 class VNode {
-    public nodeName: string| Component;
+    public nodeName: string | Component;
     public children: any[];
     public attributes: IKeyValue | undefined;
     public key: any | undefined;
@@ -106,16 +106,20 @@ class VNode {
 
 所以这里的标准`jsx`非常简单。
 
-1. 第一个参数为原生html组件或者`Component`类。
+1. 第一个参数为原生 html 组件或者`Component`类。
 2. 第二个参数为该组件的属性，及自定义属性。
 3. 第三个参数及后面的所有都是这个组件的子组件。
 4. 其中第三个及后面的参数为数组就会被分解放入子组件中。
 5. 最后返回一个`VNode`实例。
 
-## 二、createElement的实现
+## 二、createElement 的实现
 
-``` typescript
-function h(nodeName: string | Component, attributes: IKeyValue, ...args: any[]) {
+```typescript
+function h(
+    nodeName: string | Component,
+    attributes: IKeyValue,
+    ...args: any[]
+) {
     // 初始化子元素列表
     const stack: any[] = [];
     const children: any[] = [];
@@ -143,7 +147,7 @@ function h(nodeName: string | Component, attributes: IKeyValue, ...args: any[]) 
         let child: any = stack.pop();
         if (child && child.pop !== undefined) {
             // 如果是个数组就倒序放入stack
-            for (let i = child.length; i-- ; ) {
+            for (let i = child.length; i--; ) {
                 stack.push(child[i]);
             }
         } else {
@@ -199,12 +203,12 @@ function h(nodeName: string | Component, attributes: IKeyValue, ...args: any[]) 
 }
 ```
 
-这个标准jsx的`VNode`生成函数很简单，这边要注意的是子组件是连续的字符串。
-会被合并成一个，这样可以防止在生成dom时，创建多余的`Text`。
+这个标准 jsx 的`VNode`生成函数很简单，这边要注意的是子组件是连续的字符串。
+会被合并成一个，这样可以防止在生成 dom 时，创建多余的`Text`。
 
 ## 三、clone-element
 
-``` typescript
+```typescript
 import { h } from "./h";
 import { VNode } from "./vnode";
 import { extend } from "./util";
@@ -217,25 +221,21 @@ import { extend } from "./util";
  */
 export function cloneElement(vnode: VNode, props: any, ...children: any[]) {
     const child: any = children.length > 0 ? children : vnode.children;
-    return h(
-        vnode.nodeName,
-        extend({}, vnode.attributes, props),
-        child,
-    );
+    return h(vnode.nodeName, extend({}, vnode.attributes, props), child);
 }
 ```
 
-clone-element依赖于createElement
+clone-element 依赖于 createElement
 
 ## 四、后记
 
-- 这次的blog感觉好短，我已经没有东西写了。
-- 话说回来vue的template，现在看来不如说是一个变异的jsx语法。
-- 感觉明明是在读preact源码却对vue的实现更加的理解了。
-- 下一篇应该是`Component`了。
+-   这次的 blog 感觉好短，我已经没有东西写了。
+-   话说回来 vue 的 template，现在看来不如说是一个变异的 jsx 语法。
+-   感觉明明是在读 preact 源码却对 vue 的实现更加的理解了。
+-   下一篇应该是`Component`了。
 
 ## 五、资料
 
-1. [preact源码](https://github.com/developit/preact)
-2. [zreact源码](https://github.com/zeromake/zreact)
+1. [preact 源码](https://github.com/developit/preact)
+2. [zreact 源码](https://github.com/zeromake/zreact)
 3. [React 初窥：JSX 详解](https://segmentfault.com/a/1190000010297507)
