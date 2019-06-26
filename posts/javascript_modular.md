@@ -1,20 +1,19 @@
 ---
-title: javascript的模块化
+
+title: javascript 的模块化
 date: 2016-8-12 12:18:25+08:00
 type: modular
 tags: [javascript, amd, cmd, commonjs, umd]
 last_date: 2016-8-12 14:09:50+08:00
----
+...
+
 ## 一、为何而生
----
 
 这个些模块加载都是为了更好的管理 js 文件，以及引用其他文件更加方便，并且使每一个模块的全局域不再互相污染。模块化后可以使用`npm`进行管理以便分享。
 
 <!--more-->
 
 ## 二、模块加载规范
-
----
 
 ### 1.CommonJS
 

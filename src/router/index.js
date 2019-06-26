@@ -35,7 +35,9 @@ export function createRouter () {
             if (from.path.startsWith('/pages/') && to.path.startsWith('/pages/')) {
                 return
             }
-            return { y: 0 }
+            return {
+                y: 0
+            }
         },
         routes: [
             {

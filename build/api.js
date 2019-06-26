@@ -47,7 +47,7 @@ const readMarkdown = function (fileDir, fileName, end) {
                 if(line.startsWith('+') || line.startsWith('-')) {
                     line = line.substr(1)
                 }
-                if(line === '<!--more-->') {
+                if(line.trim() === '<!--more-->') {
                     more = false
                     return
                 }
