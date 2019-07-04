@@ -28,3 +28,9 @@ last_date: 2019-06-26 10:21:06+08:00
 -   以上只是 `docker` 做到环境隔离和资源控制的原理。
 -   要真正的作为一个 `docker` 必不可少的还有我们经常见到的 `docker image`。
 -   但是感觉当前文章已经足够长，考虑放到下一篇博文去。
+
+## 八、参考资料
+
+- [左耳大佬的博文](https://coolshell.cn/?s=docker)
+- [draveness大佬的博文](https://draveness.me/tag/Docker)
+- [自己动手写Docker](https://github.com/xianlubird/mydocker)
