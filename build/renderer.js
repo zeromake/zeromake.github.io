@@ -1,14 +1,16 @@
 const marked = require("marked");
 const util = require("hexo-util");
+const prismjs = require("prismjs");
 const stripIndent = require("strip-indent");
+require('prismjs/components/prism-autoit.min.js');
 
-const highlight = util.highlight;
+// const highlight = util.highlight;
 const stripHTML = util.stripHTML;
 
 const MarkedRenderer = marked.Renderer;
 
-const codeStart = /<pre><code *[^>]*>/i;
-const codeEnd = /<\/code><\/pre>/i;
+// const codeStart = /<pre><code *[^>]*>/i;
+// const codeEnd = /<\/code><\/pre>/i;
 
 class Renderer extends MarkedRenderer {
     constructor() {
@@ -106,7 +108,7 @@ class Renderer extends MarkedRenderer {
             }
         }
 
-        code = code.replace(codeStart, '').replace(codeEnd, '');
+        // code = code.replace(codeStart, '').replace(codeEnd, '');
 
 
         if (!lang) {
@@ -132,15 +134,46 @@ class Renderer extends MarkedRenderer {
 function anchorId(str, transformOption) {
     return util.slugize(str.trim(), { transform: transformOption });
 }
+
+const languageAlias = {
+    sh: "bash",
+    shell: "bash",
+    js: "javascript",
+    ts: "typescript",
+    dockerfile: "docker",
+    text: "autoit",
+}
+
+function loadLanguage(lang) {
+    if(!lang) {
+        return Prism.languages.autoit;
+    }
+    lang = languageAlias[lang] || lang;
+    const language = Prism.languages[lang];
+    if (!language) {
+        try {
+            require(`prismjs/components/prism-${lang}.min.js`);
+        } catch (e) {
+            console.warn(e);
+            return Prism.languages.autoit;
+        }
+        return Prism.languages[lang];
+    }
+    return language;
+}
+
 marked.setOptions({
-    langPrefix: "",
+    //
+    langPrefix: "language-",
     highlight: function(code, lang) {
-        return highlight(stripIndent(code), {
-            hljs: true,
-            lang: lang,
-            gutter: false,
-            wrap: false
-        });
+        const language = loadLanguage(lang) || Prism.languages.autoit;
+        return prismjs.highlight(stripIndent(code), language, lang);
+        // return highlight(stripIndent(code), {
+        //     hljs: true,
+        //     lang: lang,
+        //     gutter: false,
+        //     wrap: false
+        // });
     }
 });
 
