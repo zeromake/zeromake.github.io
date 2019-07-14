@@ -1,7 +1,7 @@
 const path = require('path')
 const vueConfig = require('./vue-loader.config')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const { VueLoaderPlugin } = require('vue-loader')
 const MiniCssExtractPlugin = require("@zeromake/mini-css-extract-plugin");
 
 const isProd = process.env.NODE_ENV === 'production'
@@ -42,12 +42,12 @@ return {
     module: {
         noParse: /es6-promise\.js$/,
         rules: [
-            // {
-            //     test: /\.(js|vue)/,
-            //     use: 'eslint-loader',
-            //     enforce: 'pre',
-            //     exclude: /node_modules/
-            // },
+            {
+                enforce: 'pre',
+                use: 'eslint-loader',
+                test: /\.(js|vue)$/,
+                exclude: /node_modules/
+            },
             {
                 test: /\.vue$/,
                 use: {
@@ -56,7 +56,7 @@ return {
                 }
             },
             {
-                test: /\.js$/,
+                test: /\.m?js$/,
                 use: 'babel-loader',
                 exclude: /node_modules/
             },

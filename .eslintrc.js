@@ -1,20 +1,15 @@
+// .eslintrc.js
 module.exports = {
-    "parser": 'babel-eslint',
-    "parserOptions": {
-        ecmaVersion: 6,
-        sourceType: 'module'
+    parserOptions: {
+        parser: "babel-eslint",
+        sourceType: "module"
     },
-    "extends": "vue",
-    "env": {
-        browser: true,
-        amd: true,
-        es6: true,
-        node: true,
-        mocha: true
-    },
-    "rules": {
+    extends: [
+        "plugin:vue/essential"
+    ],
+    rules: {
         "no-console": 0,
         "no-alert": 1,
         "indent": ["warn", 4]
     }
-}
+};

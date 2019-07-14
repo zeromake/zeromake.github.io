@@ -13,8 +13,10 @@
 import ZeroComment from './zero-comment';
 export default {
     props: {
-        type: String,
-        required: true
+        type: {
+            type: String,
+            required: true,
+        }
     },
     components: {
         ZeroComment,

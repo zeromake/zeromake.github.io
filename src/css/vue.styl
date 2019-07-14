@@ -1,121 +1,139 @@
 // copy to https://github.com/docsifyjs/docsify/blob/develop/src/themes/vue.styl
-
+// 导入谷歌字体
 @import url('https://fonts.loli.net/css?family=Roboto+Mono|Source+Sans+Pro:300,400,600');
 
+// 链接颜色
 $color-primary = #42b983
+// 代码字体
+$code-font-family = 'Roboto Mono', Monaco, courier, monospace
+// 代码背景色
+$code-bg-color = #f8f8f8
+// 行内代码字体颜色
+$code-line-color = #e96900
+// 代码字体颜色
+$code-color = #525252
+
+// 标题颜色
+$title-color = #2c3e50
+// 小标题颜色
+$small-title-color = #777
+
+// blockquote 字体颜色
+$bq-color = #858585
+
+// em 字体颜色
+$em-color = #7f8c8d
 
 /* markdown content found on pages */
-.markdown-section h1, .markdown-section h2, .markdown-section h3, .markdown-section h4, .markdown-section strong
-  color #2c3e50
-  font-weight 600
+.markdown-section
+    h1, h2, h3, h4, strong
+        color #2c3e50
+        font-weight 600
+    a
+        color var(--theme-color, $color-primary)
+        font-weight 600
 
-.markdown-section a
-  color var(--theme-color, $color-primary)
-  font-weight 600
+    h1
+        font-size 2rem
+        margin 0 0 1rem
 
-.markdown-section h1
-  font-size 2rem
-  margin 0 0 1rem
+    h2
+        font-size 1.75rem
+        margin 45px 0 0.8rem
 
-.markdown-section h2
-  font-size 1.75rem
-  margin 45px 0 0.8rem
+    h3
+        font-size 1.5rem
+        margin 40px 0 0.6rem
 
-.markdown-section h3
-  font-size 1.5rem
-  margin 40px 0 0.6rem
+    h4
+        font-size 1.25rem
 
-.markdown-section h4
-  font-size 1.25rem
+    h5
+        font-size 1rem
 
-.markdown-section h5
-  font-size 1rem
+    h6
+        color $small-title-color
+        font-size 1rem
 
-.markdown-section h6
-  color #777
-  font-size 1rem
+    figure, p
+        margin 1.2em 0
 
-.markdown-section figure, .markdown-section p
-  margin 1.2em 0
+    p, ul, ol
+        line-height 1.6rem
+        word-spacing 0.05rem
 
-.markdown-section p, .markdown-section ul, .markdown-section ol
-  line-height 1.6rem
-  word-spacing 0.05rem
+    ul, ol
+        padding-left 1.5rem
 
-.markdown-section ul, .markdown-section ol
-  padding-left 1.5rem
+    blockquote
+        border-left 4px solid var(--theme-color, $color-primary)
+        color $bq-color
+        margin 2em 0
+        padding-left 20px
 
-.markdown-section blockquote
-  border-left 4px solid var(--theme-color, $color-primary)
-  color #858585
-  margin 2em 0
-  padding-left 20px
+    blockquote p
+        font-weight 600
+        margin-left 0
 
-.markdown-section blockquote p
-  font-weight 600
-  margin-left 0
+    iframe
+        margin 1em 0
 
-.markdown-section iframe
-  margin 1em 0
+    em
+        color $em-color
 
-.markdown-section em
-  color #7f8c8d
+    code, pre, pre > code
+        background-color $code-bg-color
+        font-family $code-font-family
 
-.markdown-section code
-  background-color #f8f8f8
-  border-radius 2px
-  color #e96900
-  font-family 'Roboto Mono', Monaco, courier, monospace
-  font-size 0.8rem
-  margin 0 2px
-  padding 3px 5px
-  white-space pre-wrap
+    code
+        border-radius 2px
+        color $code-line-color
+        font-size 0.8rem
+        margin 0 2px
+        padding 3px 5px
+        white-space pre-wrap
 
-.markdown-section pre
-  -moz-osx-font-smoothing initial
-  -webkit-font-smoothing initial
-  background-color #f8f8f8
-  font-family 'Roboto Mono', Monaco, courier, monospace
-  line-height 1.5rem
-  margin 1.2em 0
-  overflow auto
-  padding 0 1.4rem
-  position relative
-  word-wrap normal
+    pre, pre > code
+        font-smoothing initial
 
-.markdown-section pre > code
-  -moz-osx-font-smoothing initial
-  -webkit-font-smoothing initial
-  background-color #f8f8f8
-  border-radius 2px
-  color #525252
-  display block
-  font-family 'Roboto Mono', Monaco, courier, monospace
-  font-size 0.8rem
-  line-height inherit
-  margin 0 2px
-  max-width inherit
-  overflow inherit
-  padding 2.2em 5px
-  white-space inherit
+    pre
+        line-height 1.5rem
+        margin 1.2em 0
+        overflow auto
+        padding 0 .8rem
+        position relative
+        word-wrap normal
 
-.markdown-section code::after, .markdown-section code::before
-  letter-spacing 0.05rem
+    pre > code
+        border-radius 2px
+        color $code-color
+        display block
+        font-size 1rem
+        line-height inherit
+        margin 0 2px
+        max-width inherit
+        // overflow inherit
+        padding 1.8em 5px
+        white-space inherit
 
-code .token
-  -moz-osx-font-smoothing initial
-  -webkit-font-smoothing initial
-  min-height 1.5rem
+    code::after, code::before
+        letter-spacing 0.05rem
 
-pre::after
-  color #ccc
-  content attr(data-lang)
-  font-size 0.6rem
-  font-weight 600
-  height 15px
-  line-height 15px
-  padding 5px 10px 0
-  position absolute
-  right 0
-  text-align right
-  top 0
+    code .token
+        font-smoothing initial
+        min-height 1.5rem
+
+    pre::after
+        color #ccc
+        content attr(data-lang)
+        font-size 0.6rem
+        font-weight 600
+        height 15px
+        line-height 15px
+        padding 5px 10px 0
+        position absolute
+        right 0
+        text-align right
+        top 0
+    img
+        max-width 100%
