@@ -11,6 +11,7 @@ const { Feed } = require('feed')
 const { postDir, aloneDir } = require('./config')
 const marked = require('./renderer')()
 const router = new KoaRuoter()
+const isProd = process.env.NODE_ENV === 'production'
 
 
 /**
@@ -98,6 +99,10 @@ async function readPosts(render=false) {
                 tags[tag] = true
             }
         });
+        // 私有文章仅在本地开发模式显示
+        if(yaml.private && isProd) {
+            return Promise.resolve(null);
+        }
         if (yaml.type) {
             types[yaml.type] = true
         }
@@ -109,9 +114,9 @@ async function readPosts(render=false) {
         yaml.file = filename.substr(0, filename.length - 3);
         return Promise.resolve(yaml)
     })))
-    yamls.sort((a, b) => b.date - a.date)
+    const data = yamls.filter((i => !!i)).sort((a, b) => b.date - a.date)
     return {
-        posts: yamls,
+        posts: data,
         types: dictToArray(types),
         tags: dictToArray(tags)
     }
