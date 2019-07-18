@@ -47,6 +47,14 @@ export default {
                         {
                             title: 'Github',
                             href: 'https://github.com/zeromake',
+                        },
+                        {
+                            title: 'QQ',
+                            href: 'https://wpa.qq.com/msgrd?v=3&uin=390720046&site=https%3A%2F%2Fblog.zeromake.com&menu=yes'
+                        },
+                        {
+                            title: 'telegram',
+                            href: 'https://telegram.me/zeromake'
                         }
                     ]
                 },
@@ -58,8 +66,12 @@ export default {
                             href: 'https://draveness.me',
                         },
                         {
-                            title: '吴叶磊',
-                            href: 'http://aleiwu.com',
+                            title: 'Aylei\'s Blog',
+                            href: 'https://aleiwu.com/post/',
+                        },
+                        {
+                            title: 'No Headback',
+                            href: 'http://xargin.com',
                         }
                     ]
                 }
