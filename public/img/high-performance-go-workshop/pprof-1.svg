@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 630 410">
+<g id="viewport"><g id="graph0" class="graph" transform="translate(4 393)">
+<title>unnamed</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-393 616,-393 616,4 -4,4"></polygon>
+<g id="clust1" class="cluster">
+<title>cluster_L</title>
+<polygon fill="none" stroke="#000000" points="8,-303 8,-381 464,-381 464,-303 8,-303"></polygon>
+</g>
+<!-- Type: inuse_space -->
+<g id="node1" class="node">
+<title>Type: inuse_space</title>
+<polygon fill="#f8f8f8" stroke="#000000" points="456,-373 16,-373 16,-311 456,-311 456,-373"></polygon>
+<text text-anchor="start" x="24" y="-356.2" font-family="Times,serif" font-size="16.00" fill="#000000">Type: inuse_space</text>
+<text text-anchor="start" x="24" y="-338.2" font-family="Times,serif" font-size="16.00" fill="#000000">Time: Mar 23, 2019 at 6:14pm (CET)</text>
+<text text-anchor="start" x="24" y="-320.2" font-family="Times,serif" font-size="16.00" fill="#000000">Showing nodes accounting for 368.72kB, 100% of 368.72kB total</text>
+</g>
+<!-- N1 -->
+<g id="node1" class="node">
+<title>N1</title>
+<g id="a_node1"><a xlink:title="main.readbyte (368.72kB)">
+<polygon fill="#edd5d5" stroke="#b20000" points="612,-173 424,-173 424,-87 612,-87 612,-173"></polygon>
+<text text-anchor="middle" x="518" y="-149.8" font-family="Times,serif" font-size="24.00" fill="#000000">main</text>
+<text text-anchor="middle" x="518" y="-123.8" font-family="Times,serif" font-size="24.00" fill="#000000">readbyte</text>
+<text text-anchor="middle" x="518" y="-97.8" font-family="Times,serif" font-size="24.00" fill="#000000">368.72kB (100%)</text>
+</a>
+</g>
+</g>
+<!-- NN1_0 -->
+<g id="NN1_0" class="node">
+<title>NN1_0</title>
+<g id="a_NN1_0"><a xlink:title="368.72kB">
+<polygon fill="#f8f8f8" stroke="#000000" points="545,-36 495,-36 491,-32 491,0 541,0 545,-4 545,-36"></polygon>
+<polyline fill="none" stroke="#000000" points="541,-32 491,-32 "></polyline>
+<polyline fill="none" stroke="#000000" points="541,-32 541,0 "></polyline>
+<polyline fill="none" stroke="#000000" points="541,-32 545,-36 "></polyline>
+<text text-anchor="middle" x="518" y="-16.1" font-family="Times,serif" font-size="8.00" fill="#000000">16B</text>
+</a>
+</g>
+</g>
+<!-- N1&#45;&gt;NN1_0 -->
+<g id="edge1" class="edge">
+<title>N1-&gt;NN1_0</title>
+<g id="a_edge1"><a xlink:title="368.72kB">
+<path fill="none" stroke="#000000" d="M518,-86.6979C518,-73.0814 518,-58.4077 518,-46.1319"></path>
+<polygon fill="#000000" stroke="#000000" points="521.5001,-46.0482 518,-36.0482 514.5001,-46.0482 521.5001,-46.0482"></polygon>
+</a>
+</g>
+<g id="a_edge1-label"><a xlink:title="368.72kB">
+<text text-anchor="middle" x="547.5" y="-57.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 368.72kB</text>
+</a>
+</g>
+</g>
+<!-- N2 -->
+<g id="node2" class="node">
+<title>N2</title>
+<g id="a_node2"><a xlink:title="runtime.main (368.72kB)">
+<polygon fill="#edd5d5" stroke="#b20000" points="562,-360 474,-360 474,-324 562,-324 562,-360"></polygon>
+<text text-anchor="middle" x="518" y="-349.1" font-family="Times,serif" font-size="8.00" fill="#000000">runtime</text>
+<text text-anchor="middle" x="518" y="-340.1" font-family="Times,serif" font-size="8.00" fill="#000000">main</text>
+<text text-anchor="middle" x="518" y="-331.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 368.72kB (100%)</text>
+</a>
+</g>
+</g>
+<!-- N3 -->
+<g id="node3" class="node">
+<title>N3</title>
+<g id="a_node3"><a xlink:title="main.main (368.72kB)">
+<polygon fill="#edd5d5" stroke="#b20000" points="562,-260 474,-260 474,-224 562,-224 562,-260"></polygon>
+<text text-anchor="middle" x="518" y="-249.1" font-family="Times,serif" font-size="8.00" fill="#000000">main</text>
+<text text-anchor="middle" x="518" y="-240.1" font-family="Times,serif" font-size="8.00" fill="#000000">main</text>
+<text text-anchor="middle" x="518" y="-231.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 368.72kB (100%)</text>
+</a>
+</g>
+</g>
+<!-- N2&#45;&gt;N3 -->
+<g id="edge3" class="edge">
+<title>N2-&gt;N3</title>
+<g id="a_edge3"><a xlink:title="runtime.main -> main.main (368.72kB)">
+<path fill="none" stroke="#b20000" stroke-width="6" d="M518,-323.6585C518,-308.7164 518,-287.3665 518,-270.2446"></path>
+<polygon fill="#b20000" stroke="#b20000" stroke-width="6" points="523.2501,-270.2252 518,-260.2253 512.7501,-270.2253 523.2501,-270.2252"></polygon>
+</a>
+</g>
+<g id="a_edge3-label"><a xlink:title="runtime.main -> main.main (368.72kB)">
+<text text-anchor="middle" x="547.5" y="-281.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 368.72kB</text>
+</a>
+</g>
+</g>
+<!-- N3&#45;&gt;N1 -->
+<g id="edge2" class="edge">
+<title>N3-&gt;N1</title>
+<g id="a_edge2"><a xlink:title="main.main -> main.readbyte (368.72kB)">
+<path fill="none" stroke="#b20000" stroke-width="6" d="M518,-223.5055C518,-212.5063 518,-197.9346 518,-183.5757"></path>
+<polygon fill="#b20000" stroke="#b20000" stroke-width="6" points="523.2501,-183.2119 518,-173.212 512.7501,-183.212 523.2501,-183.2119"></polygon>
+</a>
+</g>
+<g id="a_edge2-label"><a xlink:title="main.main -> main.readbyte (368.72kB)">
+<text text-anchor="middle" x="547.5" y="-194.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 368.72kB</text>
+</a>
+</g>
+</g>
+</g>
+</g></svg>

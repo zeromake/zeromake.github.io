@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 600 520">
+<g id="viewport"><g id="graph0" class="graph" transform="translate(4 510)">
+<title>unnamed</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-510 573,-510 573,4 -4,4"></polygon>
+<g id="clust1" class="cluster">
+<title>cluster_L</title>
+<polygon fill="none" stroke="#000000" points="8,-402 8,-498 432,-498 432,-402 8,-402"></polygon>
+</g>
+<!-- Type: alloc_objects -->
+<g id="node1" class="node">
+<title>Type: alloc_objects</title>
+<polygon fill="#f8f8f8" stroke="#000000" points="423.5,-490 16.5,-490 16.5,-410 423.5,-410 423.5,-490"></polygon>
+<text text-anchor="start" x="24.5" y="-473.2" font-family="Times,serif" font-size="16.00" fill="#000000">Type: alloc_objects</text>
+<text text-anchor="start" x="24.5" y="-455.2" font-family="Times,serif" font-size="16.00" fill="#000000">Time: Mar 23, 2019 at 1:08pm (GMT)</text>
+<text text-anchor="start" x="24.5" y="-437.2" font-family="Times,serif" font-size="16.00" fill="#000000">Showing nodes accounting for 43837, 99.83% of 43910 total</text>
+<text text-anchor="start" x="24.5" y="-419.2" font-family="Times,serif" font-size="16.00" fill="#000000">Dropped 66 nodes (cum &lt;= 219)</text>
+</g>
+<!-- N1 -->
+<g id="node1" class="node">
+<title>N1</title>
+<g id="a_node1"><a xlink:title="main.makeByteSlice (43806)">
+<polygon fill="#edd5d5" stroke="#b20000" points="569,-173 397,-173 397,-87 569,-87 569,-173"></polygon>
+<text text-anchor="middle" x="483" y="-149.8" font-family="Times,serif" font-size="24.00" fill="#000000">main</text>
+<text text-anchor="middle" x="483" y="-123.8" font-family="Times,serif" font-size="24.00" fill="#000000">makeByteSlice</text>
+<text text-anchor="middle" x="483" y="-97.8" font-family="Times,serif" font-size="24.00" fill="#000000">43806 (99.76%)</text>
+</a>
+</g>
+</g>
+<!-- NN1_0 -->
+<g id="NN1_0" class="node">
+<title>NN1_0</title>
+<g id="a_NN1_0"><a xlink:title="43806">
+<polygon fill="#f8f8f8" stroke="#000000" points="510,-36 460,-36 456,-32 456,0 506,0 510,-4 510,-36"></polygon>
+<polyline fill="none" stroke="#000000" points="506,-32 456,-32 "></polyline>
+<polyline fill="none" stroke="#000000" points="506,-32 506,0 "></polyline>
+<polyline fill="none" stroke="#000000" points="506,-32 510,-36 "></polyline>
+<text text-anchor="middle" x="483" y="-16.1" font-family="Times,serif" font-size="8.00" fill="#000000">16B</text>
+</a>
+</g>
+</g>
+<!-- N1&#45;&gt;NN1_0 -->
+<g id="edge1" class="edge">
+<title>N1-&gt;NN1_0</title>
+<g id="a_edge1"><a xlink:title="43806">
+<path fill="none" stroke="#000000" d="M483,-86.6979C483,-73.0814 483,-58.4077 483,-46.1319"></path>
+<polygon fill="#000000" stroke="#000000" points="486.5001,-46.0482 483,-36.0482 479.5001,-46.0482 486.5001,-46.0482"></polygon>
+</a>
+</g>
+<g id="a_edge1-label"><a xlink:title="43806">
+<text text-anchor="middle" x="502.5" y="-57.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 43806</text>
+</a>
+</g>
+</g>
+<!-- N2 -->
+<g id="node2" class="node">
+<title>N2</title>
+<g id="a_node2"><a xlink:title="runtime.main (43856)">
+<polygon fill="#edd5d5" stroke="#b20000" points="524.5,-468 441.5,-468 441.5,-432 524.5,-432 524.5,-468"></polygon>
+<text text-anchor="middle" x="483" y="-457.1" font-family="Times,serif" font-size="8.00" fill="#000000">runtime</text>
+<text text-anchor="middle" x="483" y="-448.1" font-family="Times,serif" font-size="8.00" fill="#000000">main</text>
+<text text-anchor="middle" x="483" y="-439.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 43856 (99.88%)</text>
+</a>
+</g>
+</g>
+<!-- N4 -->
+<g id="node4" class="node">
+<title>N4</title>
+<g id="a_node4"><a xlink:title="main.main (43856)">
+<polygon fill="#edd5d5" stroke="#b20000" points="524.5,-359 441.5,-359 441.5,-323 524.5,-323 524.5,-359"></polygon>
+<text text-anchor="middle" x="483" y="-348.1" font-family="Times,serif" font-size="8.00" fill="#000000">main</text>
+<text text-anchor="middle" x="483" y="-339.1" font-family="Times,serif" font-size="8.00" fill="#000000">main</text>
+<text text-anchor="middle" x="483" y="-330.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 43856 (99.88%)</text>
+</a>
+</g>
+</g>
+<!-- N2&#45;&gt;N4 -->
+<g id="edge2" class="edge">
+<title>N2-&gt;N4</title>
+<g id="a_edge2"><a xlink:title="runtime.main -> main.main (43856)">
+<path fill="none" stroke="#b20000" stroke-width="5" d="M483,-431.5096C483,-414.4952 483,-389.0055 483,-369.4076"></path>
+<polygon fill="#b20000" stroke="#b20000" stroke-width="5" points="487.3751,-369.2172 483,-359.2173 478.6251,-369.2173 487.3751,-369.2172"></polygon>
+</a>
+</g>
+<g id="a_edge2-label"><a xlink:title="runtime.main -> main.main (43856)">
+<text text-anchor="middle" x="502.5" y="-380.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 43856</text>
+</a>
+</g>
+</g>
+<!-- N3 -->
+<g id="node3" class="node">
+<title>N3</title>
+<g id="a_node3"><a xlink:title="main.allocate (43837)">
+<polygon fill="#edd5d5" stroke="#b20000" points="525.5,-272 440.5,-272 440.5,-224 525.5,-224 525.5,-272"></polygon>
+<text text-anchor="middle" x="483" y="-260.8" font-family="Times,serif" font-size="9.00" fill="#000000">main</text>
+<text text-anchor="middle" x="483" y="-250.8" font-family="Times,serif" font-size="9.00" fill="#000000">allocate</text>
+<text text-anchor="middle" x="483" y="-240.8" font-family="Times,serif" font-size="9.00" fill="#000000">31 (0.071%)</text>
+<text text-anchor="middle" x="483" y="-230.8" font-family="Times,serif" font-size="9.00" fill="#000000">of 43837 (99.83%)</text>
+</a>
+</g>
+</g>
+<!-- N3&#45;&gt;N1 -->
+<g id="edge4" class="edge">
+<title>N3-&gt;N1</title>
+<g id="a_edge4"><a xlink:title="main.allocate -> main.makeByteSlice (43806)">
+<path fill="none" stroke="#b20000" stroke-width="5" d="M483,-223.8362C483,-212.1166 483,-197.5399 483,-183.3966"></path>
+<polygon fill="#b20000" stroke="#b20000" stroke-width="5" points="487.3751,-183.2217 483,-173.2218 478.6251,-183.2218 487.3751,-183.2217"></polygon>
+</a>
+</g>
+<g id="a_edge4-label"><a xlink:title="main.allocate -> main.makeByteSlice (43806)">
+<text text-anchor="middle" x="502.5" y="-194.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 43806</text>
+</a>
+</g>
+</g>
+<!-- N4&#45;&gt;N3 -->
+<g id="edge3" class="edge">
+<title>N4-&gt;N3</title>
+<g id="a_edge3"><a xlink:title="main.main -> main.allocate (43837)">
+<path fill="none" stroke="#b20000" stroke-width="5" d="M483,-322.6262C483,-311.1524 483,-296.019 483,-282.3808"></path>
+<polygon fill="#b20000" stroke="#b20000" stroke-width="5" points="487.3751,-282.3283 483,-272.3284 478.6251,-282.3284 487.3751,-282.3283"></polygon>
+</a>
+</g>
+<g id="a_edge3-label"><a xlink:title="main.main -> main.allocate (43837)">
+<text text-anchor="middle" x="502.5" y="-293.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 43837</text>
+</a>
+</g>
+</g>
+</g>
+</g></svg>
