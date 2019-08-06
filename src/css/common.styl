@@ -531,3 +531,24 @@ a
     opacity 1
     background-color #42a5f5
     z-index 300
+
+// line number
+
+.hljs-ln
+    border-collapse collapse
+.hljs-ln-n:before
+    content attr(data-line-number)
+
+.hljs-ln-numbers
+    user-select none
+    text-align center
+    color #ccc
+    border-right 1px solid #CCC
+    vertical-align top
+    padding-right 0.5rem
+    margin-left -0.5rem
+    display block
+    // white-space normal
+
+.hljs-ln-code
+    padding-left 0.5rem

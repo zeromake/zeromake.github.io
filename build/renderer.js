@@ -2,6 +2,7 @@ const marked = require("marked");
 const util = require("hexo-util");
 const prismjs = require("prismjs");
 const stripIndent = require("strip-indent");
+const lineNumbers = require('./highlight-line-numbers');
 require('prismjs/components/prism-autoit.min.js');
 
 // const highlight = util.highlight;
@@ -109,7 +110,8 @@ class Renderer extends MarkedRenderer {
         }
 
         // code = code.replace(codeStart, '').replace(codeEnd, '');
-
+        // console.log(code);
+        code = lineNumbers(code);
 
         if (!lang) {
             return (
@@ -142,6 +144,7 @@ const languageAlias = {
     ts: "typescript",
     dockerfile: "docker",
     text: "autoit",
+    mathjax: "autoit"
 }
 
 function loadLanguage(lang) {
