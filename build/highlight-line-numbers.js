@@ -7,7 +7,6 @@ const TABLE_NAME = 'hljs-ln',
     NUMBER_LINE_NAME = 'hljs-ln-n',
     DATA_ATTR_NAME = 'data-line-number',
     BREAK_LINE_REGEXP = /\r\n|\r|\n/g;
-
 function lineNumbersInternal (code, options) {
     // define options or set default
     options = options || {

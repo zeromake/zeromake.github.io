@@ -46,9 +46,9 @@ class Renderer extends MarkedRenderer {
             id +
             '" class="headerlink anchor" title="' +
             stripHTML(text) +
-            '"><span>' +
+            '"></a><span class="header-text">' +
             text +
-            "</span></a></h" +
+            "</span></h" +
             level +
             ">"
         );

@@ -9,18 +9,15 @@ private: true
 
 > 原文地址 https://dave.cheney.net/high-performance-go-workshop/gopherchina-2019.html
 
-## [Overview](#overview)
+## Overview
 
-The goal for this workshop is to give you the tools you need to diagnose performance problems in your Go applications and fix them.
+本次研讨讲座的目标是让您能够诊断 `Go` 应用程序中的性能问题，并且修复这些问题。
 
-Through the day we’ll work from the small — learning how to write benchmarks, then profiling a small piece of code. Then step out and talk about the execution tracer, the garbage collector and tracing running applications. The remainder of the day will be a chance for you to ask questions, experiment with your own code.
+这一天，我们将从小做起 - 学习如何编写基准测试，然后分析一小段代码。然后讨论代码执行跟踪器，垃圾收集器和跟踪运行的应用程序。最后会有剩下的时间，您可以提出问题，并尝试编写您自己的代码。
 
-> You can find the latest version of this presentation at
-> ![](http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=https%3A%2F%2Fdave.cheney.net%2Fhigh-performance-go-workshop%2Fgopherchina-2019.html&qzone=1&margin=0&size=400x400&ecc=L)
+### Schedule
 
-### [Schedule](#schedule)
-
-Here’s the (approximate) schedule for the day.
+这里是这一天的时间安排表（大概）。
 
 | Start | Description |
 | ----- | ----------- |
@@ -38,7 +35,7 @@ Here’s the (approximate) schedule for the day.
 | 16:45 | [Final Questions and Conclusion](#conclusion) |
 | 17:00 | Close |
 
-## [Welcome](#welcome)
+## Welcome
 
 Hello and welcome! 🎉
 
@@ -46,25 +43,25 @@ The goal for this workshop is to give you the tools you need to diagnose perform
 
 Through the day we’ll work from the small — learning how to write benchmarks, then profiling a small piece of code. Then step out and talk about the execution tracer, the garbage collector and tracing running applications. The remainder of the day will be a chance for you to ask questions, experiment with your own code.
 
-### [Instructors](#instructors)
+### Instructors
 
 * Dave Cheney [dave@cheney.net](mailto:dave@cheney.net)
 
-### [License and Materials](#license_and_materials)
+### License and Materials
 
 This workshop is a collaboration between [David Cheney](https://twitter.com/davecheney) and [Francesc Campoy](https://twitter.com/francesc).
 
 This presentation is licensed under the [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) licence.
 
-### [Prerequisites](#prerequisites)
+### Prerequisites
 
 The are several software downloads you will need today.
 
-#### [The workshop repository](#the_workshop_repository)
+#### The workshop repository
 
 Download the source to this document and code samples at [https://github.com/davecheney/high-performance-go-workshop](https://github.com/davecheney/high-performance-go-workshop)
 
-#### [Laptop, power supplies, etc.](#laptop_power_supplies_etc)
+#### Laptop, power supplies, etc.
 
 The workshop material targets Go 1.12.
 
@@ -72,7 +69,7 @@ The workshop material targets Go 1.12.
 
 > If you’ve already upgraded to Go 1.13 that’s ok. There are always some small changes to optimisation choices between minor Go releases and I’ll try to point those out as we go along.
 
-#### [Graphviz](#graphviz)
+#### Graphviz
 
 The section on pprof requires the `dot` program which ships with the `graphviz` suite of tools.
 
@@ -82,17 +79,17 @@ The section on pprof requires the `dot` program which ships with the `graphviz` 
     * Homebrew: `brew install graphviz`
 * [Windows](https://graphviz.gitlab.io/download/#Windows) (untested)
 
-#### [Google Chrome](#google_chrome)
+#### Google Chrome
 
 The section on the execution tracer requires Google Chrome. It will not work with Safari, Edge, Firefox, or IE 4.01. Please tell your battery I’m sorry.
 
 [Download Google Chrome](https://www.google.com/chrome/)
 
-#### [Your own code to profile and optimise](#your_own_code_to_profile_and_optimise)
+#### Your own code to profile and optimise
 
 The final section of the day will be an open session where you can experiment with the tools you’ve learnt.
 
-### [One more thing …​](#one_more_thing)
+### One more thing …​
 
 This isn’t a lecture, it’s a conversation. We’ll have lots of breaks to ask questions.
 
@@ -106,7 +103,7 @@ I want to start today with a short lecture on how I think about the history of t
 
 The reality is that software runs on hardware, so to talk about writing high performance code, first we need to talk about the hardware that runs our code.
 
-### [1.1\. Mechanical Sympathy](#mechanical_sympathy)
+### 1.1\. Mechanical Sympathy
 
 ![](https://dave.cheney.netimages/image-20180818145606919.png)
 
@@ -118,7 +115,7 @@ To be a great race car driver, you don’t need to be a great mechanic, but you 
 
 I believe the same is true for us as software engineers. I don’t think any of us in this room will be a professional CPU designer, but that doesn’t mean we can ignore the problems that CPU designers face.
 
-### [1.2\. Six orders of magnitude](#six_orders_of_magnitude)
+### 1.2\. Six orders of magnitude
 
 There’s a common internet meme that goes something like this;
 
@@ -166,7 +163,7 @@ This is Hennessy’s quote from Google Next 18 and his Turing Award lecture. His
 
 Why is this happening?
 
-### [1.4\. Clock speeds](#clock_speeds)
+### 1.4\. Clock speeds
 
 ![](https://dave.cheney.netimages/stuttering.png)
 
@@ -176,7 +173,7 @@ However, If we look at the middle line, we see clock speeds have not increased i
 
 The bottom graph shows thermal dissipation power; that is electrical power that is turned into heat, follows a same pattern—​clock speeds and cpu heat dissipation are correlated.
 
-### [1.5\. Heat](#heat)
+### 1.5\. Heat
 
 Why does a CPU produce heat? It’s a solid state device, there are no moving components, so effects like friction are not (directly) relevant here.
 
@@ -192,7 +189,7 @@ The power consumption of a CMOS device, which is what every transistor in this r
 
 3.  Crowbar, or short circuit current. We like to think of transistors as digital devices occupying one state or another, off or on, atomically. In reality a transistor is an analog device. As a switch a transistor starts out _mostly_ off, and transitions, or switches, to a state of being _mostly_ on. This transition or switching time is very fast, in modern processors it is in the order of pico seconds, but that still represents a period of time when there is a low resistance path from Vcc to ground. The faster the transistor switches, its frequency, the more heat is dissipated.
 
-### [1.6\. The end of Dennard scaling](#the_end_of_dennard_scaling)
+### 1.6\. The end of Dennard scaling
 
 To understand what happened next we need to look to a paper written in 1974 co-authored by [Robert H. Dennard](https://en.wikipedia.org/wiki/Robert_H._Dennard). Dennard’s Scaling law states roughly that as transistors get smaller their [power density](https://en.wikipedia.org/wiki/Power_density) stays constant. Smaller transistors can run at lower voltages, have lower gate capacitance, and switch faster, which helps reduce the amount of dynamic power.
 
@@ -226,7 +223,7 @@ Even the term gate length, measured in nano meters, has become ambiguous. Variou
 
  |
 
-### [1.7\. More cores](#more_cores)
+### 1.7\. More cores
 
 ![](https://i.redd.it/y5cdp7nhs2uy.jpg)
 
@@ -246,19 +243,19 @@ Amdahl’s law tells us that the maximum speedup of a program is limited by the 
 
 Think about the programs that you work on every day, how much of their execution is parralisable?
 
-### [1.9\. Dynamic Optimisations](#dynamic_optimisations)
+### 1.9\. Dynamic Optimisations
 
 With clock speeds stalled and limited returns from throwing extra cores at the problem, where are the speedups coming from? They are coming from architectural improvements in the chips themselves. These are the big five to seven year projects with names like [Nehalem, Sandy Bridge, and Skylake](https://en.wikipedia.org/wiki/List_of_Intel_CPU_microarchitectures#Pentium_4_/_Core_Lines).
 
 Much of the improvement in performance in the last two decades has come from architectural improvements:
 
-#### [1.9.1\. Out of order execution](#out_of_order_execution)
+#### 1.9.1\. Out of order execution
 
 Out of Order, also known as super scalar, execution is a way of extracting so called _Instruction level parallelism_ from the code the CPU is executing. Modern CPUs effectively do SSA at the hardware level to identify data dependencies between operations, and where possible run independent instructions in parallel.
 
 However there is a limit to the amount of parallelism inherent in any piece of code. It’s also tremendously power hungry. Most modern CPUs have settled on six execution units per core as there is an n squared cost of connecting each execution unit to all others at each stage of the pipeline.
 
-#### [1.9.2\. Speculative execution](#speculative_execution)
+#### 1.9.2\. Speculative execution
 
 Save the smallest micro controllers, all CPUs utilise an _instruction pipeline_ to overlap parts of in the instruction fetch/decode/execute/commit cycle.
 
@@ -274,7 +271,7 @@ All these optimisations lead to the improvements in single threaded performance 
 
 |  | Cliff Click has a [wonderful presentation](https://www.youtube.com/watch?v=OFgxAFdxYAQ) that argues out of order and speculative execution is most useful for starting cache misses early thereby reducing observed cache latency. |
 
-### [1.10\. Modern CPUs are optimised for bulk operations](#modern_cpus_are_optimised_for_bulk_operations)
+### 1.10\. Modern CPUs are optimised for bulk operations
 
 > Modern processors are a like nitro fuelled funny cars, they excel at the quarter mile. Unfortunately modern programming languages are like Monte Carlo, they are full of twists and turns. — David Ungar
 
@@ -286,7 +283,7 @@ Thus, modern CPUs are optimised for bulk transfers and bulk operations. At every
 
 *   Vector instructions like MMX and SSE allow a single instruction to execute against multiple items of data concurrently providing your program can be expressed in that form.
 
-### [1.11\. Modern processors are limited by memory latency not memory capacity](#modern_processors_are_limited_by_memory_latency_not_memory_capacity)
+### 1.11\. Modern processors are limited by memory latency not memory capacity
 
 If the situation in CPU land wasn’t bad enough, the news from the memory side of the house doesn’t get much better.
 
@@ -302,7 +299,7 @@ But, in terms of processor cycles lost waiting for memory, physical memory is st
 
 So, most modern processors are limited by memory latency not capacity.
 
-### [1.12\. Cache rules everything around me](#cache_rules_everything_around_me)
+### 1.12\. Cache rules everything around me
 
 ![](https://www.extremetech.com/wp-content/uploads/2014/08/latency.png)
 
@@ -320,7 +317,7 @@ But;
 
 By caches are limited in size because they are [physically large on the CPU die](http://www.itrs.net/Links/2000UpdateFinal/Design2000final.pdf), consume a lot of power. To halve the cache miss rate you must _quadruple_ the cache size.
 
-### [1.13\. The free lunch is over](#the_free_lunch_is_over)
+### 1.13\. The free lunch is over
 
 In 2005 Herb Sutter, the C++ committee leader, wrote an article entitled [The free lunch is over](http://www.gotw.ca/publications/concurrency-ddj.htm). In his article Sutter discussed all the points I covered and asserted that future programmers will not longer be able to rely on faster hardware to fix slow programs—​or slow programming languages.
 
@@ -328,7 +325,7 @@ Now, more than a decade later, there is no doubt that Herb Sutter was right. Mem
 
 Moore’s Law is still in effect, but for all of us in this room, the free lunch is over.
 
-### [1.14\. Conclusion](#conc)
+### 1.14\. Conclusion
 
 > The numbers I would cite would be by 2010: 30GHz, 10billion transistors, and 1 tera-instruction per second. — [Pat Gelsinger, Intel CTO, April 2002](https://www.cnet.com/news/intel-cto-chip-heat-becoming-critical-issue/)
 
@@ -362,7 +359,7 @@ The point of this lecture was to illustrate that when you’re talking about the
 
 But there is good news, there is a tonne of improvements we can make in software, and that is what we’re going to talk about today.
 
-#### [1.14.2\. Further reading](#further_reading)
+#### 1.14.2\. Further reading
 
 *   [The Future of Microprocessors, Sophie Wilson](https://www.youtube.com/watch?v=zX4ZNfvw1cw) JuliaCon 2018
 
@@ -372,7 +369,7 @@ But there is good news, there is a tonne of improvements we can make in software
 
 *   [The future of computing: a conversation with John Hennessy](https://www.youtube.com/watch?v=Azt8Nc-mtKM) (Google I/O '18)
 
-## [2\. Benchmarking](#benchmarking)
+## 2\. Benchmarking
 
 > Measure twice and cut once. — Ancient proverb
 
@@ -380,7 +377,7 @@ Before we attempt to improve the performance of a piece of code, first we must k
 
 This section focuses on how to construct useful benchmarks using the Go testing framework, and gives practical tips for avoiding the pitfalls.
 
-### [2.1\. Benchmarking ground rules](#benchmarking_ground_rules)
+### 2.1\. Benchmarking ground rules
 
 Before you benchmark, you must have a stable environment to get repeatable results.
 
@@ -394,7 +391,7 @@ If you can afford it, buy dedicated performance test hardware. Rack it, disable 
 
 For the rest of us, have a before and after sample and run them multiple times to get consistent results.
 
-### [2.2\. Using the testing package for benchmarking](#using_the_testing_package_for_benchmarking)
+### 2.2\. Using the testing package for benchmarking
 
 The `testing` package has built in support for writing benchmarks. If we have a simple function like this:
 
@@ -448,7 +445,7 @@ ok      _/Users/dfc/devel/high-performance-go-workshop/examples/fib     1.671s
 go test -run=^$
 ```
 
-#### [2.2.2\. How benchmarks work](#how_benchmarks_work)
+#### 2.2.2\. How benchmarks work
 
 Each benchmark function is called with different value for `b.N`, this is the number of iterations the benchmark should run for.
 
@@ -476,7 +473,7 @@ ok      _/Users/dfc/devel/high-performance-go-workshop/examples/fib     5.531s
 This shows running the benchmark with 1, 2, and 4 cores. In this case the flag has little effect on the outcome because this benchmark is entirely sequential.
 
 
-#### [2.2.3\. Improving benchmark accuracy](#improving_benchmark_accuracy)
+#### 2.2.3\. Improving benchmark accuracy
 
 The `fib` function is a slightly contrived example—​unless your writing a TechPower web server benchmark—​it’s unlikely your business is going to be gated on how quickly you can compute the 20th number in the Fibonaci sequence. But, the benchmark does provide a faithful example of a valid benchmark.
 
@@ -527,7 +524,7 @@ Try running the fib bench above with a `-benchtime` of 10x, 20x, 50x, 100x, and 
 
 |  | If you find that the defaults that `go test` applies need to be tweaked for a particular package, I suggest codifying those settings in a `Makefile` so everyone who wants to run your benchmarks can do so with the same settings. |
 
-### [2.3\. Comparing benchmarks with benchstat](#comparing_benchmarks_with_benchstat)
+### 2.3\. Comparing benchmarks with benchstat
 
 In the previous section I suggested running benchmarks more than once to get more data to average. This is good advice for any benchmark because of the effects of power management, background processes, and thermal management that I mentioned at the start of the chapter.
 
@@ -621,7 +618,7 @@ There are three things to check when comparing benchmarks
 
 *   Missing samples. benchstat will report how many of the old and new samples it considered to be valid, sometimes you may find only, say, 9 reported, even though you did `-count=10`. A 10% or lower rejection rate is ok, higher than 10% may indicate your setup is unstable and you may be comparing too few samples.
 
-### [2.4\. Avoiding benchmarking start up costs](#avoiding_benchmarking_start_up_costs)
+### 2.4\. Avoiding benchmarking start up costs
 
 Sometimes your benchmark has a once per run setup cost. `b.ResetTimer()` will can be used to ignore the time accrued in setup.
 
@@ -653,7 +650,7 @@ func BenchmarkComplicated(b *testing.B) {
 | **1** | Pause benchmark timer |
 | **2** | Resume timer |
 
-### [2.5\. Benchmarking allocations](#benchmarking_allocations)
+### 2.5\. Benchmarking allocations
 
 Allocation count and size is strongly correlated with benchmark time. You can tell the `testing` framework to record the number of allocations made by code under test.
 
@@ -709,7 +706,7 @@ ok      bufio   20.366s
 ```
 
 
-### [2.6\. Watch out for compiler optimisations](#watch_out_for_compiler_optimisations)
+### 2.6\. Watch out for compiler optimisations
 
 This example comes from [issue 14813](https://github.com/golang/go/issues/14813#issue-140603392).
 
@@ -774,7 +771,7 @@ Use `gcflags="-l -S"` to disable inlining, how does that affect the assembly out
 > This is only going to get more common as the Go compiler improves.
 
 
-#### [2.6.2\. Fixing the benchmark](#fixing_the_benchmark)
+#### 2.6.2\. Fixing the benchmark
 
 Disabling inlining to make the benchmark work is unrealistic; we want to build our code with optimisations on.
 
@@ -802,7 +799,7 @@ What happens if we assign to `Result` directly? Does this affect the benchmark t
 
 > In our earlier `Fib` benchmark we didn’t take these precautions, should we have done so?
 
-### [2.7\. Benchmark mistakes](#benchmark_mistakes)
+### 2.7\. Benchmark mistakes
 
 The `for` loop is crucial to the operation of the benchmark.
 
@@ -824,7 +821,7 @@ func BenchmarkFibWrong2(b *testing.B) {
 
 Run these benchmarks, what do you see?
 
-### [2.8\. Profiling benchmarks](#profiling_benchmarks)
+### 2.8\. Profiling benchmarks
 
 The `testing` package has built in support for generating CPU, memory, and block profiles.
 
@@ -841,13 +838,13 @@ Using any of these flags also preserves the binary.
 % go tool pprof c.p
 ```
 
-### [2.9\. Discussion](#discussion)
+### 2.9\. Discussion
 
 Are there any questions?
 
 Perhaps it is time for a break.
 
-## [3\. Performance measurement and profiling](#profiling)
+## 3\. Performance measurement and profiling
 
 In the previous section we looked at benchmarking individual functions which is useful when you know ahead of time where the bottlekneck is. However, often you will find yourself in the position of asking
 
@@ -855,7 +852,7 @@ In the previous section we looked at benchmarking individual functions which is 
 
 Profiling _whole_ programs which is useful for answering high level questions like. In this section we’ll use profiling tools built into Go to investigate the operation of the program from the inside.
 
-### [3.1\. pprof](#pprof)
+### 3.1\. pprof
 
 The first tool we’re going to be talking about today is _pprof_. [pprof](https://github.com/google/pprof) descends from the [Google Perf Tools](https://github.com/gperftools/gperftools) suite of tools and has been integrated into the Go runtime since the earliest public releases.
 
@@ -865,7 +862,7 @@ The first tool we’re going to be talking about today is _pprof_. [pprof](https
 
 *   `go tool pprof` for investigating profiles.
 
-### [3.2\. Types of profiles](#types_of_profiles)
+### 3.2\. Types of profiles
 
 pprof supports several types of profiling, we’ll discuss three of these today:
 
@@ -877,7 +874,7 @@ pprof supports several types of profiling, we’ll discuss three of these today:
 
 *   Mutex contention profiling.
 
-#### [3.2.1\. CPU profiling](#cpu_profiling)
+#### 3.2.1\. CPU profiling
 
 CPU profiling is the most common type of profile, and the most obvious.
 
@@ -887,7 +884,7 @@ Once the profile is complete we can analyse it to determine the hottest code pat
 
 The more times a function appears in the profile, the more time that code path is taking as a percentage of the total runtime.
 
-#### [3.2.2\. Memory profiling](#memory_profiling)
+#### 3.2.2\. Memory profiling
 
 Memory profiling records the stack trace when a _heap_ allocation is made.
 
@@ -899,7 +896,7 @@ Because of memory profiling is sample based and because it tracks _allocations_ 
 
 _Personal Opinion:_ I do not find memory profiling useful for finding memory leaks. There are better ways to determine how much memory your application is using. We will discuss these later in the presentation.
 
-#### [3.2.3\. Block profiling](#block_profiling)
+#### 3.2.3\. Block profiling
 
 Block profiling is quite unique to Go.
 
@@ -917,13 +914,13 @@ Block profiling can show you when a large number of goroutines _could_ make prog
 
 Block profiling is a very specialised tool, it should not be used until you believe you have eliminated all your CPU and memory usage bottlenecks.
 
-#### [3.2.4\. Mutex profiling](#mutex_profiling)
+#### 3.2.4\. Mutex profiling
 
 Mutex profiling is simlar to Block profiling, but is focused exclusively on operations that lead to delays caused by mutex contention.
 
 I don’t have a lot of experience with this type of profile but I have built an example to demonstrate it. We’ll look at that example shortly.
 
-### [3.3\. One profile at at time](#one_profile_at_at_time)
+### 3.3\. One profile at at time
 
 Profiling is not free.
 
@@ -934,7 +931,7 @@ Most tools will not stop you from enabling multiple profiles at once.
 > Do not enable more than one kind of profile at a time.
 > If you enable multiple profile’s at the same time, they will observe their own interactions and throw off your results.
 
-### [3.4\. Collecting a profile](#collecting_a_profile)
+### 3.4\. Collecting a profile
 
 The Go runtime’s profiling interface lives in the `runtime/pprof` package. `runtime/pprof` is a very low level tool, and for historic reasons the interfaces to the different kinds of profile are not uniform.
 
@@ -953,7 +950,7 @@ func main() {
 
 We’ll use the profile package throughout this section. Later in the day we’ll touch on using the `runtime/pprof` interface directly.
 
-### [3.5\. Analysing a profile with pprof](#analysing_a_profile_with_pprof)
+### 3.5\. Analysing a profile with pprof
 
 Now that we’ve talked about what pprof can measure, and how to generate a profile, let’s talk about how to use pprof to analyse a profile.
 
@@ -964,7 +961,7 @@ This tool provides several different representations of the profiling data; text
 
 > If you’ve been using Go for a while, you might have been told that `pprof` takes two arguments. Since Go 1.9 the profile file contains all the information needed to render the profile. You do no longer need the binary which produced the profile. 🎉
 
-#### [3.5.1\. Further reading](#further_reading_2)
+#### 3.5.1\. Further reading
 
 *   [Profiling Go programs](http://blog.golang.org/profiling-go-programs) (Go Blog)
 
@@ -1043,7 +1040,7 @@ So the numbers aren’t the same. `wc` is about 19% higher because what it consi
 
 Let’s investigate why these programs have different run times using pprof.
 
-#### [3.5.3\. Add CPU profiling](#add_cpu_profiling)
+#### 3.5.3\. Add CPU profiling
 
 First, edit `main.go` and enable profiling
 
@@ -1108,7 +1105,7 @@ On the graph the box that consumes the _most_ CPU time is the largest — we
 
 _Question_: Can anyone guess why our version is so much slower than `wc`?
 
-#### [3.5.4\. Improving our version](#improving_our_version)
+#### 3.5.4\. Improving our version
 
 The reason our program is slow is not because Go’s `syscall.Syscall` is slow. It is because syscalls in general are expensive operations (and getting more expensive as more Spectre family vulnerabilities are discovered).
 
@@ -1149,7 +1146,7 @@ By inserting a `bufio.Reader` between the input file and `readbyte` will
 
 Compare the times of this revised program to `wc`. How close is it? Take a profile and see what remains.
 
-#### [3.5.5\. Memory profiling](#memory_profiling_2)
+#### 3.5.5\. Memory profiling
 
 The new `words` profile suggests that something is allocating inside the `readbyte` function. We can use pprof to investigate.
 
@@ -1186,7 +1183,7 @@ We’ll talk about why this is happening in more detail in the next section, but
 
 What are some ways we can avoid this? Try them and use CPU and memory profiling to prove it.
 
-##### [Alloc objects vs. inuse objects](#alloc_objects_vs_inuse_objects)
+##### Alloc objects vs. inuse objects
 
 Memory profiles come in two varieties, named after their `go tool pprof` flags
 
@@ -1246,7 +1243,7 @@ Not surprisingly more than 99% of the allocations were inside `makeByteSlice`. N
 
 What we see is not the objects that were _allocated_ during the profile, but the objects that remain _in use_, at the time the profile was taken — this ignores the stack trace for objects which have been reclaimed by the garbage collector.
 
-#### [3.5.6\. Block profiling](#block_profiling_2)
+#### 3.5.6\. Block profiling
 
 The last profile type we’ll look at is block profiling. We’ll use the `ClientServer` benchmark from the `net/http` package
 
@@ -1256,13 +1253,13 @@ The last profile type we’ll look at is block profiling. We’ll use the `Clien
 ```
 ![](/public/img/high-performance-go-workshop/pprof-4.svg)
 
-#### [3.5.7\. Thread creation profiling](#thread_creation_profiling)
+#### 3.5.7\. Thread creation profiling
 
 Go 1.11 (?) added support for profiling the creation of operating system threads.
 
 Add thread creation profiling to `godoc` and observe the results of profiling `godoc -http=:8080 -index`.
 
-#### [3.5.8\. Framepointers](#framepointers)
+#### 3.5.8\. Framepointers
 
 Go 1.7 has been released and along with a new compiler for amd64, the compiler now enables frame pointers by default.
 
@@ -1278,7 +1275,7 @@ We won’t cover these tools in this workshop, but you can read and watch a pres
 
 *   [Seven ways to profile a Go program](https://www.bigmarker.com/remote-meetup-go/Seven-ways-to-profile-a-Go-program) (webcast, 60 mins)
 
-#### [3.5.9\. Exercise](#exercise)
+#### 3.5.9\. Exercise
 
 *   Generate a profile from a piece of code you know well. If you don’t have a code sample, try profiling `godoc`.
 
@@ -1304,7 +1301,7 @@ For example;
 
 are all handled in the front end of the compiler, while the code is still in its AST form; then the code is passed to the SSA compiler for further optimisation.
 
-### [4.1\. History of the Go compiler](#history_of_the_go_compiler)
+### 4.1\. History of the Go compiler
 
 The Go compiler started as a fork of the Plan9 compiler tool chain circa 2007\. The compiler at that time bore a strong resemblance to Aho and Ullman’s [_Dragon Book_](https://www.goodreads.com/book/show/112269.Principles_of_Compiler_Design).
 
@@ -1312,7 +1309,7 @@ In 2015 the then Go 1.5 compiler was mechanically translated from [C into Go](ht
 
 A year later, Go 1.7 introduced a [new compiler backend](https://blog.golang.org/go1.7) based on [SSA](https://en.wikipedia.org/wiki/Static_single_assignment_form) techniques replaced the previous Plan 9 style code generation. This new backend introduced many opportunities for generic and architecture specific optimistions.
 
-### [4.2\. Escape analysis](#escape_analysis)
+### 4.2\. Escape analysis
 
 The first optimisation we’re doing to discuss is _escape analysis_.
 
@@ -1407,7 +1404,7 @@ examples/esc/sum.go:22:13: main []interface {} literal does not escape
 
 In short, don’t worry about line 22, its not important to this discussion.
 
-#### [4.2.2\. Exercises](#exercises)
+#### 4.2.2\. Exercises
 
 *   Does this optimisation hold true for all values of `count`?
 
@@ -1460,7 +1457,7 @@ _Question_: What about line 19, if `p` doesn’t escape, what is escaping to the
 
 Write a benchmark to provide that `Sum` does not allocate.
 
-### [4.3\. Inlining](#inlining)
+### 4.3\. Inlining
 
 In Go function calls in have a fixed overhead; stack and preemption checks.
 
@@ -1583,7 +1580,7 @@ We can double check this with two `-m` flags
 | **1** | `Max` is no longer inlinable because it contains a `select` statement |
 | **2** | Note this is the code that the compiler sees, this is why `Max is inline twice` |
 
-#### [4.3.3\. Discussion](#discussion_2)
+#### 4.3.3\. Discussion
 
 Why did I declare `a` and `b` in `F()` to be constants?
 
@@ -1591,7 +1588,7 @@ Experiment with the output of What happens if `a` and `b` are declared as are va
 
 |  | `-gcflags=-S` doesn’t prevent the final binary being build in your working directory. If you find that subsequent runs of `go build …​` produce no output, delete the `./max` binary in your working directory. |
 
-#### [4.3.4\. Adjusting the level of inlining](#adjusting_the_level_of_inlining)
+#### 4.3.4\. Adjusting the level of inlining
 
 Adjusting the _inlining level_ is performed with the `-gcflags=-l` flag. Somewhat confusingly passing a single `-l` will disable inlining, and two or more will enable inlining at more aggressive settings.
 
@@ -1605,7 +1602,7 @@ Adjusting the _inlining level_ is performed with the `-gcflags=-l` flag. Somewha
 
 *   `-gcflags=-l=4` (four `-l`s) in Go 1.11 will enable the experimental [_mid stack_ inlining optimisation](https://github.com/golang/go/issues/19348#issuecomment-393654429). I believe as of Go 1.12 it has no effect.
 
-#### [4.3.5\. Mid Stack inlining](#mid_stack_inlining)
+#### 4.3.5\. Mid Stack inlining
 
 Since Go 1.12 so called _mid stack_ inlining has been enabled (it was previously available in preview in Go 1.11 with the `-gcflags='-l -l -l -l'` flag).
 
@@ -1617,7 +1614,7 @@ Mid stack inlining can be used to inline the fast path of a function, eliminatin
 
  |
 
-### [4.4\. Dead code elimination](#dead_code_elimination)
+### 4.4\. Dead code elimination
 
 Why is it important that `a` and `b` are constants?
 
@@ -1729,13 +1726,13 @@ const debug = false
 
 Combined with build tags this can be very useful.
 
-#### [4.4.2\. Further reading](#further_reading_3)
+#### 4.4.2\. Further reading
 
 *   [Using // +build to switch between debug and release builds](http://dave.cheney.net/2014/09/28/using-build-to-switch-between-debug-and-release)
 
 *   [How to use conditional compilation with the go build tool](http://dave.cheney.net/2013/10/12/how-to-use-conditional-compilation-with-the-go-build-tool)
 
-### [4.5\. Prove pass](#prove_pass)
+### 4.5\. Prove pass
 
 A few releases ago the SSA backend gained a, so called, prove pass. Prove, the verb form of Proof, establishes the relationship between variables.
 
@@ -1776,7 +1773,7 @@ Line 5 is `if x > 3`. The compiler is saying that is has proven that the branch 
 
 Experiment with the output of What happens if `a` and `b` are declared as are variables? What happens if `a` and `b` are passing into `F()` as parameters?
 
-### [4.6\. Compiler intrinsics](#compiler_intrinsics)
+### 4.6\. Compiler intrinsics
 
 Go allows you to write functions in assembly if required. The technique involves a forwarding declared function—​a function without a body—​and a corresponding assembly function.
 
@@ -1827,7 +1824,7 @@ These replacements are implemented in the compiler backend; if your architecture
 
 As well as generating more efficient code, because intrinsic functions are just normal Go code, the rules of inlining, and mid stack inlining apply to them.
 
-#### [4.6.1\. Atomic counter example](#atomic_counter_example)
+#### 4.6.1\. Atomic counter example
 
 ```
 package main
@@ -1889,7 +1886,7 @@ This means examples like the one above compile to efficient native code on most 
 | **2** | `c.get()` |
 | **3** | `c.reset()` |
 
-##### [Further reading](#further_reading_4)
+##### Further reading
 
 *   [Mid-stack inlining in the Go compiler presentation by David Lazar](https://docs.google.com/presentation/d/1Wcblp3jpfeKwA0Y4FOmj63PW52M_qmNqlQkNaLj0P5o/edit#slide=id.p)
 
@@ -1897,7 +1894,7 @@ This means examples like the one above compile to efficient native code on most 
 
 <mark>TODO: double check</mark>
 
-### [4.7\. Compiler flags Exercises](#compiler_flags_exercises)
+### 4.7\. Compiler flags Exercises
 
 Compiler flags are provided with:
 
@@ -1921,7 +1918,7 @@ Investigate the operation of the following compiler functions:
 
 |  | If you find that subsequent runs of `go build …​` produce no output, delete the output binary in your working directory. |
 
-#### [4.7.1\. Further reading](#further_reading_5)
+#### 4.7.1\. Further reading
 
 *   [Codegen Inspection by Jaana Burcu Dogan](http://go-talks.appspot.com/github.com/rakyll/talks/gcinspect/talk.slide#1)
 
@@ -1971,7 +1968,7 @@ One way to answer that question would be to use Go’s built in pprof support to
 
 Let’s try that.
 
-### [5.2\. Generating the profile](#generating_the_profile)
+### 5.2\. Generating the profile
 
 To turn generate a profile we need to either
 
@@ -2031,7 +2028,7 @@ If we run this version, we get a profile written to the current working director
 
 |  | Using `pkg/profile` is not mandatory, but it takes care of a lot of the boilerplate around collecting and recording traces, so we’ll use it for the rest of this workshop. |
 
-#### [5.3.2\. Analysing the profile](#analysing_the_profile)
+#### 5.3.2\. Analysing the profile
 
 Now we have a profile, we can use `go tool pprof` to analyse it.
 
@@ -2093,13 +2090,13 @@ This is sort of suggesting that `main.fillPixed` is actually doing most of the w
 > You can also visualise the profile with the `web` command, which looks like this:
 > ![](/public/img/high-performance-go-workshop/pprof-5.svg)
 
-### [5.4\. Tracing vs Profiling](#tracing_vs_profiling)
+### 5.4\. Tracing vs Profiling
 
 Hopefully this example shows the limitations of profiling. Profiling told us what the profiler saw; `fillPixel` was doing all the work. There didn’t look like there was much that could be done about that.
 
 So now it’s a good time to introduce the execution tracer which gives a different view of the same program.
 
-#### [5.4.1\. Using the execution tracer](#using_the_execution_tracer)
+#### 5.4.1\. Using the execution tracer
 
 Using the tracer is as simple as asking for a `profile.TraceProfile`, nothing else changes.
 
@@ -2136,7 +2133,7 @@ Just like pprof, there is a tool in the `go` command to analyse the trace.
 
 This tool is a little bit different to `go tool pprof`. The execution tracer is reusing a lot of the profile visualisation infrastructure built into Chrome, so `go tool trace` acts as a server to translate the raw execution trace into data which Chome can display natively.
 
-#### [5.4.2\. Analysing the trace](#analysing_the_trace)
+#### 5.4.2\. Analysing the trace
 
 We can see from the trace that the program is only using one cpu.
 
@@ -2170,7 +2167,7 @@ Before we go on there are some things we should talk about the usage of the trac
 
  |
 
-### [5.5\. Using more than one CPU](#using_more_than_one_cpu)
+### 5.5\. Using more than one CPU
 
 We saw from the previous trace that the program is running sequentially and not taking advantage of the other CPUs on this machine.
 
@@ -2197,7 +2194,7 @@ As you can see this trace generated _much_ more data.
 
 *   While we’re using all four cores, because each `fillPixel` is a relatively small amount of work, we’re spending a lot of time in scheduling overhead.
 
-### [5.6\. Batching up work](#batching_up_work)
+### 5.6\. Batching up work
 
 Using one goroutine per pixel was too fine grained. There wasn’t enough work to justify the cost of the goroutine.
 
@@ -2222,7 +2219,7 @@ As you can see the trace is now smaller and easier to work with. We get to see t
 
 *   Zooming in we see `onePerRowFillImg` runs for longer, and as the goroutine _producing_ work is done early, the scheduler efficiently works through the remaining runnable goroutines.
 
-### [5.7\. Using workers](#using_workers)
+### 5.7\. Using workers
 
 `mandelbrot.go` supports one other mode, let’s try it.
 
@@ -2266,7 +2263,7 @@ This is because the channel is _unbuffered_. An unbuffered channel cannot send u
 
 What we see here is a lot of latency introduced by the unbuffered channel. There are lots of stops and starts inside the scheduler, and potentially locks and mutexes while waiting for work, this is why we see the `sys` time higher.
 
-### [5.8\. Using buffered channels](#using_buffered_channels)
+### 5.8\. Using buffered channels
 
 ```
 
@@ -2299,7 +2296,7 @@ Using this method we got nearly the same speed using a channel to hand off work 
 
 Modify `nWorkersFillImg` to work per row. Time the result and analyse the trace.
 
-### [5.9\. Mandelbrot microservice](#mandelbrot_microservice)
+### 5.9\. Mandelbrot microservice
 
 It’s 2019, generating Mandelbrots is pointless unless you can offer them on the internet as a serverless microservice. Thus, I present to you, _Mandelweb_
 
@@ -2310,7 +2307,7 @@ It’s 2019, generating Mandelbrots is pointless unless you can offer them on th
 
 [http://127.0.0.1:8080/mandelbrot](http://127.0.0.1:8080/mandelbrot)
 
-#### [5.9.1\. Tracing running applications](#tracing_running_applications)
+#### 5.9.1\. Tracing running applications
 
 In the previous example we ran the trace over the whole program.
 
@@ -2320,7 +2317,7 @@ What we want is a way to collect a short trace from a running program.
 
 Fortuntately, the `net/http/pprof` package has just such a facility.
 
-#### [5.9.2\. Collecting traces via http](#collecting_traces_via_http)
+#### 5.9.2\. Collecting traces via http
 
 Hopefully everyone knows about the `net/http/pprof` package.
 
@@ -2338,7 +2335,7 @@ We can grab a five second trace from mandelweb with `curl` (or `wget`)
 % curl -o trace.out http://127.0.0.1:8080/debug/pprof/trace?seconds=5
 ```
 
-#### [5.9.3\. Generating some load](#generating_some_load)
+#### 5.9.3\. Generating some load
 
 The previous example was interesting, but an idle webserver has, by definition, no performance issues. We need to generate some load. For this I’m using [`hey` by JBD](https://github.com/rakyll/hey).
 
@@ -2367,7 +2364,7 @@ And with that running, in another window collect the trace
 Trace viewer is listening on http://127.0.0.1:60301
 ```
 
-#### [5.9.4\. Simulating overload](#simulating_overload)
+#### 5.9.4\. Simulating overload
 
 Let’s increase the rate to 5 requests per second.
 
@@ -2395,7 +2392,7 @@ Ivan Daniluk [wrote a great post on visualising](http://divan.github.io/posts/go
 
 Let’s take a look at its operation using the execution tracer.
 
-#### [5.9.6\. More resources](#more_resources)
+#### 5.9.6\. More resources
 
 *   Rhys Hiltner, [Go’s execution tracer](https://www.youtube.com/watch?v=mmqDlbWk_XA) (dotGo 2016)
 
@@ -2421,7 +2418,7 @@ Next to your choice of algorithms, memory consumption is the most important fact
 
 This section discusses the operation of the garbage collector, how to measure the memory usage of your program and strategies for lowering memory usage if garbage collector performance is a bottleneck.
 
-### [6.1\. Garbage collector world view](#garbage_collector_world_view)
+### 6.1\. Garbage collector world view
 
 The purpose of any garbage collector is to present the illusion that there is an infinite amount of memory available to the program.
 
@@ -2431,7 +2428,7 @@ A stop the world, mark sweep GC is the most efficient in terms of total run time
 
 The design of the Go GC favors _lower_latency_ over _maximum_throughput_; it moves some of the allocation cost to the mutator to reduce the cost of cleanup later.
 
-### [6.2\. Garbage collector design](#garbage_collector_design)
+### 6.2\. Garbage collector design
 
 The design of the Go GC has changed over the years
 
@@ -2449,7 +2446,7 @@ The design of the Go GC has changed over the years
 
 *   Go 1.10+, [move away from pure cooprerative goroutine scheduling](https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md) to lower the latency when triggering a full GC cycle.
 
-### [6.3\. Garbage collector monitoring](#garbage_collector_monitoring)
+### 6.3\. Garbage collector monitoring
 
 A simple way to obtain a general idea of how hard the garbage collector is working is to enable the output of GC logging.
 
@@ -2496,7 +2493,7 @@ Be careful as this will be visible if you use `http.ListenAndServe(address, nil)
 
 DEMO: `godoc -http=:8080`, show `/debug/pprof`.
 
-#### [6.3.1\. Garbage collector tuning](#garbage_collector_tuning)
+#### 6.3.1\. Garbage collector tuning
 
 The Go runtime provides one environment variable to tune the GC, `GOGC`.
 
@@ -2517,7 +2514,7 @@ For example, if we currently have a 256MB heap, and `GOGC=100` (the default), wh
 
 The default value of 100 is _just_a_guide_. you should choose your own value _after profiling your application with production loads_.
 
-### [6.4\. Reducing allocations](#reducing_allocations)
+### 6.4\. Reducing allocations
 
 Make sure your APIs allow the caller to reduce the amount of garbage generated.
 
@@ -2566,7 +2563,7 @@ val, ok := m[key]
 
 Let’s see if this is still true. Write a benchmark comparing these two methods of using a `[]byte` as a `string` map key.
 
-### [6.7\. Avoid string concatenation](#avoid_string_concatenation)
+### 6.7\. Avoid string concatenation
 
 Go strings are immutable. Concatenating two strings generates a third. Which of the following is fastest?
 
@@ -2609,7 +2606,7 @@ Go strings are immutable. Concatenating two strings generates a third. Which of 
 
 DEMO: `go test -bench=. ./examples/concat`
 
-### [6.8\. Preallocate slices if the length is known](#preallocate_slices_if_the_length_is_known)
+### 6.8\. Preallocate slices if the length is known
 
 Append is convenient, but wasteful.
 
@@ -2648,7 +2645,7 @@ for i, v := range vals {
 return s
 ```
 
-### [6.9\. Using sync.Pool](#using_sync_pool)
+### 6.9\. Using sync.Pool
 
 The `sync` package comes with a `sync.Pool` type which is used to reuse common objects.
 
@@ -2686,7 +2683,7 @@ The design of sync.Pool emptying itself on each GC may change in Go 1.13 which w
 
  |
 
-### [6.10\. Exercises](#exercises_2)
+### 6.10\. Exercises
 
 *   Using `godoc` (or another program) observe the results of changing `GOGC` using `GODEBUG=gctrace=1`.
 
@@ -2700,7 +2697,7 @@ A random grab back of tips and suggestions
 
 This final section contains a number of tips to micro optimise Go code.
 
-### [7.1\. Goroutines](#goroutines)
+### 7.1\. Goroutines
 
 The key feature of Go that makes it a great fit for modern hardware are goroutines.
 
@@ -2714,7 +2711,7 @@ However, each goroutine does consume a minimum amount of memory for the goroutin
 
 Maybe this is a lot, maybe it isn’t given the other usages of your application.
 
-#### [7.1.1\. Know when to stop a goroutine](#know_when_to_stop_a_goroutine)
+#### 7.1.1\. Know when to stop a goroutine
 
 Goroutines are cheap to start and cheap to run, but they do have a finite cost in terms of memory footprint; you cannot create an infinite number of them.
 
@@ -2726,7 +2723,7 @@ If you don’t know the answer, that’s a potential memory leak as the goroutin
 
 |  | Never start a goroutine without knowing how it will stop. |
 
-#### [7.1.2\. Further reading](#further_reading_6)
+#### 7.1.2\. Further reading
 
 *   [Concurrency Made Easy](https://www.youtube.com/watch?v=yKQOunhhf4A&index=16&list=PLq2Nv-Sh8EbZEjZdPLaQt1qh_ohZFMDj8) (video)
 
@@ -2734,7 +2731,7 @@ If you don’t know the answer, that’s a potential memory leak as the goroutin
 
 *   [Never start a goroutine without knowning when it will stop](https://dave.cheney.net/practical-go/presentations/qcon-china.html#_never_start_a_goroutine_without_knowning_when_it_will_stop) (Practical Go, QCon Shanghai 2018)
 
-### [7.2\. Go uses efficient network polling for some requests](#go_uses_efficient_network_polling_for_some_requests)
+### 7.2\. Go uses efficient network polling for some requests
 
 The Go runtime handles network IO using an efficient operating system polling mechanism (kqueue, epoll, windows IOCP, etc). Many waiting goroutines will be serviced by a single operating system thread.
 
@@ -2760,7 +2757,7 @@ func processRequest(work *Work) {
 
  |
 
-### [7.3\. Watch out for IO multipliers in your application](#watch_out_for_io_multipliers_in_your_application)
+### 7.3\. Watch out for IO multipliers in your application
 
 If you’re writing a server process, its primary job is to multiplex clients connected over the network, and data stored in your application.
 
@@ -2772,7 +2769,7 @@ Most server programs take a request, do some processing, then return a result. T
 
 If memory is slow, relatively speaking, then IO is so slow that you should avoid doing it at all costs. Most importantly avoid doing IO in the context of a request—don’t make the user wait for your disk subsystem to write to disk, or even read.
 
-### [7.4\. Use streaming IO interfaces](#use_streaming_io_interfaces)
+### 7.4\. Use streaming IO interfaces
 
 Where-ever possible avoid reading data into a `[]byte` and passing it around.
 
@@ -2810,7 +2807,7 @@ This is a case where readability and maintenance is sacrificed for a performance
 
 Always revisit these decisions.
 
-### [7.7\. Avoid Finalisers](#avoid_finalisers)
+### 7.7\. Avoid Finalisers
 
 Finalisation is a technique to attach behaviour to an object which is just about to be garbage collected.
 
@@ -2822,7 +2819,7 @@ Finalisers run as part of the gc cycle, which means it is unpredictable when the
 
 A finaliser may not run for a long time if you have a large heap and have tuned your appliation to create minimal garbage.
 
-### [7.8\. Minimise cgo](#minimise_cgo)
+### 7.8\. Minimise cgo
 
 cgo allows Go programs to call into C libraries.
 
@@ -2848,11 +2845,11 @@ For best performance I recommend avoiding cgo in your applications.
 
 Is there anyone who’s using cgo to call expensive C code frequently?
 
-##### [Further reading](#further_reading_7)
+##### Further reading
 
 *   [cgo is not Go](http://dave.cheney.net/2016/01/18/cgo-is-not-go)
 
-### [7.9\. Always use the latest released version of Go](#always_use_the_latest_released_version_of_go)
+### 7.9\. Always use the latest released version of Go
 
 Old versions of Go will never get better. They will never get bug fixes or optimisations.
 
@@ -2868,19 +2865,19 @@ Old versions of Go will never get better. They will never get bug fixes or optim
 
 |  | Old version of Go receive no updates. **Do not use them**. Use the latest and you will get the best performance. |
 
-#### [7.9.1\. Further reading](#further_reading_8)
+#### 7.9.1\. Further reading
 
 *   [Go 1.7 toolchain improvements](http://dave.cheney.net/2016/04/02/go-1-7-toolchain-improvements)
 
 *   [Go 1.8 performance improvements](http://dave.cheney.net/2016/09/18/go-1-8-performance-improvements-one-month-in)
 
-#### [7.9.2\. Move hot fields to the top of the struct](#move_hot_fields_to_the_top_of_the_struct)
+#### 7.9.2\. Move hot fields to the top of the struct
 
-### [7.10\. Discussion](#discussion_3)
+### 7.10\. Discussion
 
 Any questions?
 
-## [Final Questions and Conclusion](#conclusion)
+## Final Questions and Conclusion
 
 > Readable means reliable — Rob Pike
 

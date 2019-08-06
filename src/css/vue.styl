@@ -26,8 +26,25 @@ $em-color = #7f8c8d
 
 /* markdown content found on pages */
 .markdown-section
+    h1, h2, h3, h4, h5, h6
+        border-bottom 1px solid #d3d3d3
+        .header-text
+            transition all .1s ease
+
+        &:hover, &:focus, &:active
+            position relative
+            .header-text
+                margin-left 1.2rem
+                display inline-block
+            .anchor::after
+                content '#'
+                position absolute
+                left 0
+                text-align left
+                top 0
+
     h1, h2, h3, h4, strong
-        color #2c3e50
+        color $title-color
         font-weight 600
     a
         color var(--theme-color, $color-primary)
@@ -84,7 +101,12 @@ $em-color = #7f8c8d
     code, pre, pre > code
         background-color $code-bg-color
         font-family $code-font-family
-
+        &::selection
+            color #586e75
+            background-color rgba(238, 232, 213, .8) !important
+        ::selection
+            color #586e75
+            background-color rgba(238, 232, 213, .8) !important
     code
         border-radius 2px
         color $code-line-color
@@ -99,8 +121,9 @@ $em-color = #7f8c8d
     pre
         line-height 1.5rem
         margin 1.2em 0
-        overflow auto
-        padding 0 .8rem
+        overflow-x auto
+        height 100%
+        padding 0 .8rem 0 .3rem
         position relative
         word-wrap normal
 
@@ -111,10 +134,10 @@ $em-color = #7f8c8d
         font-size 1rem
         line-height inherit
         margin 0 2px
-        max-width inherit
+        width 100%
         // overflow inherit
-        padding 1.8em 5px
-        white-space inherit
+        padding .8em 5px
+        white-space pre-wrap
 
     code::after, code::before
         letter-spacing 0.05rem
@@ -130,7 +153,7 @@ $em-color = #7f8c8d
         font-weight 600
         height 15px
         line-height 15px
-        padding 5px 10px 0
+        padding 0 5px 0
         position absolute
         right 0
         text-align right
