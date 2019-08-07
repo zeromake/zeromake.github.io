@@ -44,7 +44,7 @@ export default {
     },
     data() {
         return {
-            href: 'https://blog.zeromake.com' + this.$route.fullPath,
+            href: 'https://blog.zeromake.com' + this.$route.path,
             post: this.$store.getters.activePage || {},
             page: this.$store.state.activePage,
         }

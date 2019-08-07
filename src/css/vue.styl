@@ -31,17 +31,25 @@ $em-color = #7f8c8d
         .header-text
             transition all .1s ease
 
-        &:hover, &:focus, &:active
+        .anchor
+            display block
             position relative
-            .header-text
-                margin-left 1.2rem
-                display inline-block
-            .anchor::after
+            &::after
                 content '#'
                 position absolute
                 left 0
                 text-align left
                 top 0
+                visibility hidden
+
+        &:hover, &:focus, &:active
+            position relative
+            .header-text
+                margin-left 1.2rem
+                display inline-block
+
+            .anchor::after
+                visibility visible
 
     h1, h2, h3, h4, strong
         color $title-color

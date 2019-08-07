@@ -39,17 +39,17 @@ class Renderer extends MarkedRenderer {
         // add headerlink
         return (
             "<h" +
-            level +
-            ' id="' +
-            id +
-            '"><a href="#' +
-            id +
+                level +
+            '><a id="' +
+                id +
+            '" href="#' +
+                id +
             '" class="headerlink anchor" title="' +
-            stripHTML(text) +
+                stripHTML(text) +
             '"></a><span class="header-text">' +
-            text +
+                text +
             "</span></h" +
-            level +
+                level +
             ">"
         );
     }
