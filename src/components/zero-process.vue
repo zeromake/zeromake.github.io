@@ -35,7 +35,6 @@ export default {
                 const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
                 const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
 
-                this.isRunning = false;
                 let process = 100 * scrollTop / (scrollHeight - clientHeight);
                 if(process > 99) {
                     process = 100;
@@ -43,6 +42,7 @@ export default {
                     process = 0;
                 }
                 this.process = process;
+                this.isRunning = false;
             });
         }
     }

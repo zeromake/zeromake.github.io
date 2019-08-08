@@ -1,7 +1,9 @@
 <template>
     <div id="app" class="container">
-        <zero-header :navigations="navigations" :showNav="showNav"/>
-        <zero-process/>
+        <auto-hide-navbar :hide-offset="60" v-slot="slotProps">
+            <zero-header :navigations="navigations" :showNav="showNav" :show="slotProps.show"/>
+            <zero-process :top="slotProps.show ? 58 : 0"/>
+        </auto-hide-navbar>
         <zero-navigation :navigations="navigations" ref="navigation"/>
         <main class="main">
             <transition name="fade" mode="out-in">
@@ -22,6 +24,8 @@ import ZeroNavigation from './views/zero-navigation'
 // import ZeroShare from './views/zero-share'
 import ZeroBottom from './views/zero-bottom'
 import ZeroFooter from './views/zero-footer'
+import AutoHideNavbar from './components/auto-hide-navbar';
+
 export default {
     components: {
         ZeroHeader,
@@ -30,6 +34,7 @@ export default {
         ZeroBottom,
         ZeroProcess,
         ZeroFooter,
+        AutoHideNavbar,
     },
     data() {
         return {

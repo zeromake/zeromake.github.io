@@ -1,5 +1,5 @@
 <template>
-    <header class="header">
+    <header :class="{header: true, 'hide-header': !show}">
         <div class="header-left">
             <span class="header-left-title">
                 <a href="/">{{title}}</a>
@@ -58,6 +58,10 @@ export default {
             default: () => {
                 return () => {};
             }
+        },
+        show: {
+            type: Boolean,
+            default: true,
         }
     },
     name: "ZeroHeader",
