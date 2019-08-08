@@ -123,11 +123,6 @@ const generate = (config) => co(function * () {
             yield fse.mkdirs(`${docsPath}/${decode}`)
         }
         let html = yield render(url)
-        // try {
-        //     html = minify(html, minifyOpt)
-        // } catch (error) {
-        //     console.error(error)
-        // }
         console.info('generate render: ' + decode)
         yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, html)
     }
@@ -142,8 +137,10 @@ const listens = app.listen(port, '0.0.0.0', () => {
     console.log(`server started at localhost:${port}`)
     const s = Date.now()
     const closeFun = () => {
-        console.log(`generate: ${Date.now() - s}ms`)
-        listens.close(()=> {process.exit(0)})
+        listens.close(()=> {
+            console.log(`generate: ${Date.now() - s}ms`)
+            process.exit(0)
+        })
     }
     generate(generateConfig).then(closeFun)
 })
