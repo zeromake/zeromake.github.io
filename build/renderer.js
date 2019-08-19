@@ -40,15 +40,18 @@ class Renderer extends MarkedRenderer {
         return (
             "<h" +
                 level +
-            '><a id="' +
+            '>' +
+            '<span class="header-text">' +
+                text +
+            "</span>" +
+            '<a id="' +
                 id +
             '" href="#' +
                 id +
             '" class="headerlink anchor" title="' +
                 stripHTML(text) +
-            '"></a><span class="header-text">' +
-                text +
-            "</span></h" +
+            '"></a>' +
+            "</h" +
                 level +
             ">"
         );

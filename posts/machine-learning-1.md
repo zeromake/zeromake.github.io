@@ -1,5 +1,5 @@
 ---
-title: 机器学习1
+title: 机器学习第一周1
 date: 2019-08-18 13:53:00+08:00
 type: machine-learning
 tags: [machine-learning]
@@ -13,6 +13,8 @@ private: true
 - 这里决通过 `斯坦福大学(coursera)` 的 [machine-learning](https://www.coursera.org/learn/machine-learning) 免费公开课进行学习，并且把学到的知识整理为一篇一篇博文。
 - 第一篇的篇幅主要讲 `机器学习的定义`，`监督学习`，`无监督学习`。
 - 顺便整理一个专有词对应表。
+
+<!--more-->
 
 ## 一、机器学习的定义
 
@@ -45,6 +47,22 @@ In general, any machine learning problem can be assigned to one of two broad cla
 Supervised learning and Unsupervised learning.
 </details>
 
+机器学习的两个定义。 `Arthur Samuel` 将其描述为：“研究领域使计算机无需明确编程即可学习。” 这是一个较旧的非正式定义。
+
+`Tom Mitchell` 提供了一个更现代的定义：“据说计算机程序从经验 `E` 中学习某些任务T和绩效测量 `P`，如果它在 `T` 中的任务中的表现，由 `P` 测量，随经验 `E` 而改善。“
+
+示例：玩跳棋。
+
+`E` = 玩许多跳棋游戏的经验
+
+`T` = 玩跳棋的任务。
+
+`P` = 程序赢得下一场比赛的概率。
+
+通常，任何机器学习问题都可以分配到两个广泛的分类之一：
+
+- `监督学习`
+- `无监督学习`
 
 ## 二、监督学习
 
