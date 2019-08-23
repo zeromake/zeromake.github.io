@@ -10,19 +10,41 @@
         <article class="passage-article markdown-section" v-html="post.body">
         </article>
         <aside class="passage-copyright">
-            <div>本文作者: zeromake</div>
-                <div>
-                    原文链接:
-                    <a :href="href" target="_blank">
-                        {{href}}
-                    </a>
-                </div>
-                <div>
-                    最后更新时间: {{post.last_date | formatTime}}
-                </div>
+            <table>
+                <tr>
+                    <td>本文作者: </td>
+                    <td>zeromake</td>
+                </tr>
+                <tr>
+                    <td>原文链接: </td>
+                    <td>
+                        <a :href="href" target="_blank">
+                            {{href}}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>最后更新时间: </td>
+                    <td>{{post.last_date | formatTime}}</td>
+                </tr>
+                <tr>
+                    <td>版权声明: </td>
+                    <td>本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!</td>
+                </tr>
+            </table>
+            <!-- <div>本文作者: zeromake</div>
+            <div>
+                原文链接:
+                <a :href="href" target="_blank">
+                    {{href}}
+                </a>
+            </div>
+            <div>
+                最后更新时间: {{post.last_date | formatTime}}
+            </div>
             <div>
                 版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
-            </div>
+            </div> -->
         </aside>
         <zero-comment :param="page"/>
     </div>
