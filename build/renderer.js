@@ -2,6 +2,7 @@ const marked = require("marked");
 const util = require("hexo-util");
 const prismjs = require("prismjs");
 const stripIndent = require("strip-indent");
+const katex = require('katex');
 const lineNumbers = require('./highlight-line-numbers');
 require('prismjs/components/prism-autoit.min.js');
 
@@ -9,7 +10,10 @@ require('prismjs/components/prism-autoit.min.js');
 const stripHTML = util.stripHTML;
 
 const MarkedRenderer = marked.Renderer;
-
+const mathTexLine = /\$([^\$]+)\$/i;
+const mathTexCode = [
+    'tex',
+];
 // const codeStart = /<pre><code *[^>]*>/i;
 // const codeEnd = /<\/code><\/pre>/i;
 
@@ -110,6 +114,9 @@ class Renderer extends MarkedRenderer {
                 escaped = true;
                 code = out;
             }
+            if(mathTexCode.indexOf(lang) !== -1) {
+                return `<div class="tex-block">${code}</div>`;
+            }
         }
 
         // code = code.replace(codeStart, '').replace(codeEnd, '');
@@ -133,6 +140,17 @@ class Renderer extends MarkedRenderer {
             (escaped ? code : escape(code, true)) +
             "</code></pre>\n"
         );
+    }
+    /**
+     * @param {string} text
+     * @returns {string}
+     */
+    paragraph(text) {
+        text = text.replace(mathTexLine, function(sub) {
+            const code = sub.substr(1, sub.length - 2);
+            return katex.renderToString(code);
+        });
+        return '<p>' + text + '</p>\n';
     }
 }
 
@@ -172,6 +190,9 @@ marked.setOptions({
     //
     langPrefix: "language-",
     highlight: function(code, lang) {
+        if(mathTexCode.indexOf(lang) !== -1) {
+            return katex.renderToString(stripIndent(code));
+        }
         const language = loadLanguage(lang) || Prism.languages.autoit;
         return prismjs.highlight(stripIndent(code), language, lang);
         // return highlight(stripIndent(code), {

@@ -3781,6 +3781,13 @@ jsonify@~0.0.0:
   resolved "http://registry.npm.taobao.org/jsonify/download/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
   integrity sha1-LHS27kHZPKUbe1qu6PUDYx0lKnM=
 
+katex@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.npm.taobao.org/katex/download/katex-0.11.0.tgz#9a870f37dd9a5c90446277754bfc98f905c04bbc"
+  integrity sha1-mocPN92aXJBEYnd1S/yY+QXAS7w=
+  dependencies:
+    commander "^2.19.0"
+
 keygrip@~1.0.3:
   version "1.0.3"
   resolved "http://registry.npm.taobao.org/keygrip/download/keygrip-1.0.3.tgz#399d709f0aed2bab0a059e0cdd3a5023a053e1dc"

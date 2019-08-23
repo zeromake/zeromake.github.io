@@ -13,25 +13,8 @@
     <link rel="shortcut icon" sizes="48x48" href="/public/logo-48.png"/>
     <meta name="theme-color" content="#f60"/>
     <link rel="manifest" href="/manifest.json">
-    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>-->
   </head>
   <body>
     <!--vue-ssr-outlet-->
-    <script>
-        function removeCSSFallback() {
-            var ua = navigator.userAgent;
-            var isGecko = ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1 && ua.indexOf('Trident') === -1;
-            var isWebKit = ua.indexOf('AppleWebKit') > -1 && ua.indexOf('Chrome') === -1;
-            if (!isGecko && !isWebKit) {
-                var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = '/public/mathml.css';
-                document.head.appendChild(link);
-                console.info("MathML Not Supported!");
-            }
-        }
-        window.addEventListener("DOMContentLoaded", removeCSSFallback, false);
-    </script>
   </body>
 </html>

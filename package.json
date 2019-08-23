@@ -64,6 +64,7 @@
     "html-minifier": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "js-yaml": "^3.13.1",
+    "katex": "^0.11.0",
     "marked": "^0.7.0",
     "rimraf": "^3.0.0",
     "stylus": "^0.54.7",
