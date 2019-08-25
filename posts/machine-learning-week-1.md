@@ -211,6 +211,25 @@ d. 机器学习从标记数据中学习。
 
 ## 五、线性回归算法
 
+
+<details>
+<summary>原文</summary>
+
+To establish notation for future use, we’ll use `$x(i)$` to denote the `input` variables (living area in this example), also called input features, and `$y(i)$` to denote the `output` or target variable that we are trying to predict (price). A pair `$(x(i),y(i))$` is called a training example, and the dataset that we’ll be using to learn—a list of m training examples `$(x(i),y(i))$`; `i=1,...` , `$m$` is called a training set. Note that the superscript `(i)` in the notation is simply an index into the training set, and has nothing to do with exponentiation. We will also use X to denote the space of input values, and Y to denote the space of output values. In this example, `X = Y = ℝ`.
+
+To describe the supervised learning problem slightly more formally, our goal is, given a training set, to learn a function `h : X → Y` so that `h(x)` is a `good` predictor for the corresponding value of y. For historical reasons, this function h is called a hypothesis. Seen pictorially, the process is therefore like this:
+
+When the target variable that we’re trying to predict is continuous, such as in our housing example, we call the learning problem a regression problem. When y can take on only a small number of discrete values (such as if, given the living area, we wanted to predict if a dwelling is a house or an apartment, say), we call it a classification problem.
+
+</details>
+
+为了建立未来使用的符号，我们将使用 `$x(i)$` 来表示 `输入` 变量（在此示例中为生活区域），也称为输入要素，并使用 `$y(i)$` 来表示我们试图预测的 `输出` 或目标变量（价格）。一对  `$(x(i),y(i))$` 被称为训练示例，我们将使用的数据集学习 `$m$` 个训练样例列表 `$(x(i),y(i))$`; `i=1,...` ,`$m$` 称为训练集数量。请注意，符号中的上标 `$(i)$` 只是训练集的索引，与取幂无关。我们还将使用 `X` 来表示输入值的空间，并使用 `Y` 来表示输出值的空间。在这个例子中，`X = Y = ℝ`。
+
+为了更加正式地描述监督学习问题，我们的目标是，在给定训练集的情况下，学习函数 `h : X → Y`，使得 `h(x)` 是 `y` 的对应值的 `good` 预测器。由于历史原因，该函数 `h` 被称为假设。从图中可以看出，这个过程是这样的：
+
+当我们试图预测的目标变量是连续的时，例如在我们的住房示例中，我们将学习问题称为回归问题。当y只能承受少量离散值时（例如，如果给定生活区域，我们想要预测住宅是房屋还是公寓，请说），我们将其称为分类问题。
+
+
 ## 六、成本函数
 
 ## 七、梯度下降
@@ -236,3 +255,12 @@ d. 机器学习从标记数据中学习。
 | classification        | - | 分类          |
 | regression            | - | 回归          |
 
+**线性回归**
+
+| abbreviate | original    | description |
+|------------|-------------|-------------|
+| `$m$` | number of tranining examples | 训练级数量 |
+| `$x$` | `input` variable / features | 输入变量 / 特征 |
+| `$y$` | `output` variable / `target` variable | 输出变量 / 目标变量 |
+| `$(x, y)$` | - | 一个训练集样本 |
+| `$(x(i), y(i))$` | - | 第 `$i$` 个训练集样本，`$i$` 为下标 |

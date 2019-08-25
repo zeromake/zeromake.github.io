@@ -5,17 +5,22 @@ const stripIndent = require("strip-indent");
 const katex = require('katex');
 const lineNumbers = require('./highlight-line-numbers');
 require('prismjs/components/prism-autoit.min.js');
+const lruCached = require('./lru-cache');
 
 // const highlight = util.highlight;
 const stripHTML = util.stripHTML;
 
 const MarkedRenderer = marked.Renderer;
-const mathTexLine = /\$([^\$]+)\$/i;
+const mathTexLine = /\$([^\$]+)\$/gi;
 const mathTexCode = [
     'tex',
 ];
 // const codeStart = /<pre><code *[^>]*>/i;
 // const codeEnd = /<\/code><\/pre>/i;
+
+const katexRenderToString = lruCached(katex.renderToString, {
+    maxSize: 30
+});
 
 class Renderer extends MarkedRenderer {
     constructor() {
@@ -141,16 +146,26 @@ class Renderer extends MarkedRenderer {
             "</code></pre>\n"
         );
     }
-    /**
-     * @param {string} text
-     * @returns {string}
-     */
-    paragraph(text) {
-        text = text.replace(mathTexLine, function(sub) {
-            const code = sub.substr(1, sub.length - 2);
-            return katex.renderToString(code);
-        });
-        return '<p>' + text + '</p>\n';
+    // /**
+    //  * @param {string} text
+    //  * @returns {string}
+    //  */
+    // paragraph(text) {
+    //     text = text.replace(mathTexLine, function(sub) {
+    //         const code = sub.substr(1, sub.length - 2);
+    //         return katex.renderToString(code);
+    //     });
+    //     return '<p>' + text + '</p>\n';
+    // }
+    codespan(text) {
+        if(mathTexLine.test(text)) {
+            text = text.replace(mathTexLine, function(sub) {
+                const code = sub.substr(1, sub.length - 2);
+                return katexRenderToString(code);
+            });
+            return text;
+        }
+        return '<code>' + text + '</code>';
     }
 }
 
@@ -191,7 +206,7 @@ marked.setOptions({
     langPrefix: "language-",
     highlight: function(code, lang) {
         if(mathTexCode.indexOf(lang) !== -1) {
-            return katex.renderToString(stripIndent(code));
+            return katexRenderToString(stripIndent(code));
         }
         const language = loadLanguage(lang) || Prism.languages.autoit;
         return prismjs.highlight(stripIndent(code), language, lang);
