@@ -22,9 +22,6 @@ const katexRenderToString = lruCached(katex.renderToString, {
 
 
 const highlight = function(code, lang) {
-    if(mathTexCode.indexOf(lang) !== -1) {
-        return katexRenderToString(stripIndent(code));
-    }
     const language = loadLanguage(lang) || Prism.languages.autoit;
     return prismjs.highlight(stripIndent(code), language, lang);
     // return highlight(stripIndent(code), {
