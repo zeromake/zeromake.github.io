@@ -16,7 +16,20 @@ const dlTest = /(^|\s)(\S.+)(<br>:(\s+))(\S.+)/;
 // const codeStart = /<pre><code *[^>]*>/i;
 // const codeEnd = /<\/code><\/pre>/i;
 
-const katexRenderToString = lruCached(katex.renderToString, {
+const options = {
+    throwOnError: false,
+    displayMode: false,
+    maxSize: 5,
+};
+const blockOptions = {
+    throwOnError: false,
+    displayMode: true,
+    maxSize: 5,
+};
+
+const katexRenderToString = lruCached((s, block) => {
+    return katex.renderToString(s, block ? blockOptions : options);
+}, {
     maxSize: 30
 });
 
@@ -41,6 +54,28 @@ const languageAlias = {
     text: "autoit",
     mathjax: "autoit"
 }
+const decodeTable = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&#39;': `'`,
+    '&quot;': `"`,
+};
+const decodeReg = /&(\w+|#\d+);/gi
+/**
+ *
+ * @param {string} s
+ * @returns {string}
+ */
+const htmlUescape = (s) => {
+    return s.replace(decodeReg, (key) => {
+        const v = decodeTable[key];
+        if(v) {
+            return v;
+        }
+        return key;
+    });
+};
 
 function loadLanguage(lang) {
     if(!lang) {
@@ -169,8 +204,9 @@ class Renderer extends MarkedRenderer {
     paragraph(text) {
         const mathCode = mathBlock.exec(text);
         if(mathCode) {
-            const code = mathCode[1].replace(/(<br>)|(<\/br>)/ig, '\n');
-            return `<div class="tex-block">${katexRenderToString(code)}</div>`;
+
+            const code = htmlUescape(mathCode[1].replace(/(<br>)|(<\/br>)/ig, '\n'));
+            return `<span class="katex-display">${katexRenderToString(code, true)}</span>`;
         }
 
         let result = "";
@@ -186,7 +222,7 @@ class Renderer extends MarkedRenderer {
     text(text) {
         text = text.replace(mathLine, function(sub) {
             const code = sub.substr(1, sub.length - 2);
-            return katexRenderToString(code);
+            return katexRenderToString(code, false);
         });
         return text;
     }

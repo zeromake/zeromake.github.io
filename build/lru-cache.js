@@ -12,12 +12,12 @@ module.exports = function(fun, opt) {
     /**
      * @param {string} key
      */
-    return (key) => {
-        const h = hash(key);
+    return (...args) => {
+        const h = hash(JSON.stringify(args));
         if (cache.has(h)) {
             return cache.get(h);
         } else {
-            const res = fun(key);
+            const res = fun.apply(null, args);
             cache.set(h, res);
             return res;
         }
