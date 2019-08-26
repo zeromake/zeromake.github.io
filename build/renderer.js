@@ -158,10 +158,6 @@ class Renderer extends MarkedRenderer {
             escaped = true;
             code = out;
         }
-        if(mathTexCode.indexOf(lang) !== -1) {
-            return `<div class="tex-block">${code}</div>`;
-        }
-
         out = lineNumbers(code);
         if (out != null && out !== code) {
             escaped = true;
