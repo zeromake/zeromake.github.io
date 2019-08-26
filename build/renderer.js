@@ -12,6 +12,7 @@ const stripHTML = util.stripHTML;
 const MarkedRenderer = marked.Renderer;
 const mathLine = /\$([^\$]+)\$/gi;
 const mathBlock = /^\s*\$\$([^\$]+)\$\$\s*$/;
+const dlTest = /(^|\s)(\S.+)(<br>:(\s+))(\S.+)/;
 // const codeStart = /<pre><code *[^>]*>/i;
 // const codeEnd = /<\/code><\/pre>/i;
 
@@ -139,18 +140,6 @@ class Renderer extends MarkedRenderer {
         out += ">" + text + "</a>";
         return out;
     }
-    paragraph(text) {
-        let result = "";
-        const dlTest = /(^|\s)(\S.+)(<br>:(\s+))(\S.+)/;
-        const dl = "<dl>" + "<dt>$2</dt>" + "<dd>$5</dd>" + "</dl>";
-
-        if (text.match(dlTest)) {
-            result = text.replace(dlTest, dl);
-        } else {
-            result = "<p>" + text + "</p>\n";
-        }
-        return result;
-    }
     code(code, infostring, escaped) {
         const lang = (infostring || "").match(/\S*/)[0];
         let out = highlight(code, lang);
@@ -165,11 +154,9 @@ class Renderer extends MarkedRenderer {
         }
 
         if (!lang) {
-            return (
-                "<pre><code class='hljs'>" +
-                (escaped ? code : escape(code, true)) +
-                "</code></pre>"
-            );
+            return `<pre><code class='hljs'>${
+                (escaped ? code : escape(code, true))
+            }</code></pre>`
         }
 
         const escapeLang = escape(lang, true);
@@ -188,7 +175,16 @@ class Renderer extends MarkedRenderer {
             const code = mathCode[1].replace(/(<br>)|(<\/br>)/ig, '\n');
             return `<div class="tex-block">${katexRenderToString(code)}</div>`;
         }
-        return `<p>${text}</p>`
+
+        let result = "";
+        const dl = "<dl><dt>$2</dt><dd>$5</dd></dl>";
+
+        if (text.match(dlTest)) {
+            result = text.replace(dlTest, dl);
+        } else {
+            result = `<p>${text}</p>\n`;
+        }
+        return result;
     }
     text(text) {
         text = text.replace(mathLine, function(sub) {
