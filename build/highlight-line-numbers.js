@@ -35,7 +35,7 @@ function addLineNumbersBlockFor(lines, firstLineIndex) {
         for (let i = 0, l = lines.length; i < l; i++) {
             const lineIndex = i + 1;
             const line = lines[i];
-            html += `<tr><td class="${LINE_NAME} ${NUMBERS_BLOCK_NAME}" ${DATA_ATTR_NAME}="${lineIndex}"><div class="${NUMBER_LINE_NAME}" ${DATA_ATTR_NAME}="${lineIndex}">${lineIndex}</div></td><td class="${LINE_NAME} ${CODE_BLOCK_NAME}" ${DATA_ATTR_NAME}="${lineIndex}"><div class="${LINE_NAME}">${line.length > 0 ? line + '\n' : ' \n'}</div></td></tr>`;
+            html += `<tr><td class="${LINE_NAME} ${NUMBERS_BLOCK_NAME}" ${DATA_ATTR_NAME}="${lineIndex}"><div class="${NUMBER_LINE_NAME}" ${DATA_ATTR_NAME}="${lineIndex}">${lineIndex}</div></td><td class="${LINE_NAME} ${CODE_BLOCK_NAME}" ${DATA_ATTR_NAME}="${lineIndex}"><div class="${LINE_NAME}">${line.length > 0 ? line + '' : ' '}</div></td></tr>`;
         }
         return `<table class="${TABLE_NAME}">${html}</table>`;
     }

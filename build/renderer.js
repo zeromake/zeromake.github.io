@@ -7,20 +7,60 @@ const lineNumbers = require('./highlight-line-numbers');
 require('prismjs/components/prism-autoit.min.js');
 const lruCached = require('./lru-cache');
 
-// const highlight = util.highlight;
 const stripHTML = util.stripHTML;
 
 const MarkedRenderer = marked.Renderer;
-const mathTexLine = /\$([^\$]+)\$/gi;
-const mathTexCode = [
-    'tex',
-];
+const mathLine = /\$([^\$]+)\$/gi;
+const mathBlock = /^\s*\$\$([^\$]+)\$\$\s*$/;
 // const codeStart = /<pre><code *[^>]*>/i;
 // const codeEnd = /<\/code><\/pre>/i;
 
 const katexRenderToString = lruCached(katex.renderToString, {
     maxSize: 30
 });
+
+
+const highlight = function(code, lang) {
+    if(mathTexCode.indexOf(lang) !== -1) {
+        return katexRenderToString(stripIndent(code));
+    }
+    const language = loadLanguage(lang) || Prism.languages.autoit;
+    return prismjs.highlight(stripIndent(code), language, lang);
+    // return highlight(stripIndent(code), {
+    //     hljs: true,
+    //     lang: lang,
+    //     gutter: false,
+    //     wrap: false
+    // });
+}
+
+const languageAlias = {
+    sh: "bash",
+    shell: "bash",
+    js: "javascript",
+    ts: "typescript",
+    dockerfile: "docker",
+    text: "autoit",
+    mathjax: "autoit"
+}
+
+function loadLanguage(lang) {
+    if(!lang) {
+        return Prism.languages.autoit;
+    }
+    lang = languageAlias[lang] || lang;
+    const language = Prism.languages[lang];
+    if (!language) {
+        try {
+            require(`prismjs/components/prism-${lang}.min.js`);
+        } catch (e) {
+            console.warn(e);
+            return Prism.languages.autoit;
+        }
+        return Prism.languages[lang];
+    }
+    return language;
+}
 
 class Renderer extends MarkedRenderer {
     constructor() {
@@ -113,20 +153,20 @@ class Renderer extends MarkedRenderer {
     }
     code(code, infostring, escaped) {
         const lang = (infostring || "").match(/\S*/)[0];
-        if (this.options.highlight) {
-            const out = this.options.highlight(code, lang);
-            if (out != null && out !== code) {
-                escaped = true;
-                code = out;
-            }
-            if(mathTexCode.indexOf(lang) !== -1) {
-                return `<div class="tex-block">${code}</div>`;
-            }
+        let out = highlight(code, lang);
+        if (out != null && out !== code) {
+            escaped = true;
+            code = out;
+        }
+        if(mathTexCode.indexOf(lang) !== -1) {
+            return `<div class="tex-block">${code}</div>`;
         }
 
-        // code = code.replace(codeStart, '').replace(codeEnd, '');
-        // console.log(code);
-        code = lineNumbers(code);
+        out = lineNumbers(code);
+        if (out != null && out !== code) {
+            escaped = true;
+            code = out;
+        }
 
         if (!lang) {
             return (
@@ -146,26 +186,20 @@ class Renderer extends MarkedRenderer {
             "</code></pre>\n"
         );
     }
-    // /**
-    //  * @param {string} text
-    //  * @returns {string}
-    //  */
-    // paragraph(text) {
-    //     text = text.replace(mathTexLine, function(sub) {
-    //         const code = sub.substr(1, sub.length - 2);
-    //         return katex.renderToString(code);
-    //     });
-    //     return '<p>' + text + '</p>\n';
-    // }
-    codespan(text) {
-        if(mathTexLine.test(text)) {
-            text = text.replace(mathTexLine, function(sub) {
-                const code = sub.substr(1, sub.length - 2);
-                return katexRenderToString(code);
-            });
-            return text;
+    paragraph(text) {
+        const mathCode = mathBlock.exec(text);
+        if(mathCode) {
+            const code = mathCode[1].replace(/(<br>)|(<\/br>)/ig, '\n');
+            return `<div class="tex-block">${katexRenderToString(code)}</div>`;
         }
-        return '<code>' + text + '</code>';
+        return `<p>${text}</p>`
+    }
+    text(text) {
+        text = text.replace(mathLine, function(sub) {
+            const code = sub.substr(1, sub.length - 2);
+            return katexRenderToString(code);
+        });
+        return text;
     }
 }
 
@@ -173,74 +207,35 @@ function anchorId(str, transformOption) {
     return util.slugize(str.trim(), { transform: transformOption });
 }
 
-const languageAlias = {
-    sh: "bash",
-    shell: "bash",
-    js: "javascript",
-    ts: "typescript",
-    dockerfile: "docker",
-    text: "autoit",
-    mathjax: "autoit"
-}
-
-function loadLanguage(lang) {
-    if(!lang) {
-        return Prism.languages.autoit;
-    }
-    lang = languageAlias[lang] || lang;
-    const language = Prism.languages[lang];
-    if (!language) {
-        try {
-            require(`prismjs/components/prism-${lang}.min.js`);
-        } catch (e) {
-            console.warn(e);
-            return Prism.languages.autoit;
-        }
-        return Prism.languages[lang];
-    }
-    return language;
-}
 
 marked.setOptions({
-    //
     langPrefix: "language-",
-    highlight: function(code, lang) {
-        if(mathTexCode.indexOf(lang) !== -1) {
-            return katexRenderToString(stripIndent(code));
-        }
-        const language = loadLanguage(lang) || Prism.languages.autoit;
-        return prismjs.highlight(stripIndent(code), language, lang);
-        // return highlight(stripIndent(code), {
-        //     hljs: true,
-        //     lang: lang,
-        //     gutter: false,
-        //     wrap: false
-        // });
-    }
+    highlight: null,
 });
 
 module.exports = function builder(options) {
     const renderer = new Renderer();
+    const opt = Object.assign(
+        {
+            gfm: true,
+            pedantic: false,
+            sanitize: false,
+            tables: true,
+            breaks: true,
+            smartLists: true,
+            smartypants: true,
+            modifyAnchors: "",
+            autolink: true,
+            renderer,
+        },
+        options,
+    );
     return {
         render(text) {
             renderer.toc = [];
             return marked(
                 text,
-                Object.assign(
-                    {
-                        gfm: true,
-                        pedantic: false,
-                        sanitize: false,
-                        tables: true,
-                        breaks: true,
-                        smartLists: true,
-                        smartypants: true,
-                        modifyAnchors: "",
-                        autolink: true,
-                        renderer
-                    },
-                    options
-                )
+                opt,
             );
         },
         toc() {
@@ -250,21 +245,9 @@ module.exports = function builder(options) {
             const renderer = new Renderer();
             const body = marked(
                 text,
-                Object.assign(
-                    {
-                        gfm: true,
-                        pedantic: false,
-                        sanitize: false,
-                        tables: true,
-                        breaks: true,
-                        smartLists: true,
-                        smartypants: true,
-                        modifyAnchors: "",
-                        autolink: true,
-                        renderer
-                    },
-                    options
-                )
+                Object.assign({}, opt, {
+                    renderer
+                }),
             );
             return [body, renderer.toc];
         }
