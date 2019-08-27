@@ -134,69 +134,75 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 <summary>原文</summary>
 
 ---
-1. A computer program is said to learn from experience E with respect to some task T and some performance measure P if its performance on T, as measured by P, improves with experience E.Suppose we feed a learning algorithm a lot of historical weather data, and have it learn to predict weather. In this setting, what is T?
 
-a. The process of the algorithm examining a large amount of historical weather data.
-b. The probability of it correctly predicting a future date's weather.
-c. The weather prediction task.
-d. None of these.
+1. A computer program is said to learn from experience E with respect to some task T and some performance measure P if its performance on T, as measured by P, improves with experience E.Suppose we feed a learning algorithm a lot of historical weather data, and have it learn to predict weather. In this setting, what is T?
+>
+* a. The process of the algorithm examining a large amount of historical weather data.
+* b. The probability of it correctly predicting a future date's weather.
+* c. The weather prediction task.
+* d. None of these.
+
 ---
 2. The amount of rain that falls in a day is usually measured in either millimeters (mm) or inches. Suppose you use a learning algorithm to predict how much rain will fall tomorrow. Would you treat this as a classification or a regression problem?
+>
+* a. Regression
+* b. Classification
 
-a. Regression
-b. Classification
 ---
 3. Suppose you are working on stock market prediction. You would like to predict whether or not a certain company will win a patent infringement lawsuit (by training on data of companies that had to defend against similar lawsuits). Would you treat this as a classification or a regression problem?
+>
+* a. Classification
+* b. Regression
 
-a. Classification
-b. Regression
 ---
 4. Some of the problems below are best addressed using a supervised learning algorithm, and the others with an unsupervised learning algorithm. Which of the following would you apply supervised learning to? (Select all that apply.) In each case, assume some appropriate dataset is available for your algorithm to learn from.
+>
+* a. Given data on how 1000 medical patients respond to an experimental drug (such as effectiveness of the treatment, side effects, etc.), discover whether there are different categories or "types" of patients in terms of how they respond to the drug, and if so what these categories are.
+* b. Given genetic (DNA) data from a person, predict the odds of him/her developing diabetes over the next 10 years.
+* c. Given a large dataset of medical records from patients suffering from heart disease, try to learn whether there might be different clusters of such patients for which we might tailor separate treatments.
+* d. Have a computer examine an audio clip of a piece of music, and classify whether or not there are vocals (i.e., a human voice singing) in that audio clip, or if it is a clip of only musical instruments (and no vocals).
 
-a. Given data on how 1000 medical patients respond to an experimental drug (such as effectiveness of the treatment, side effects, etc.), discover whether there are different categories or "types" of patients in terms of how they respond to the drug, and if so what these categories are.
-b. Given genetic (DNA) data from a person, predict the odds of him/her developing diabetes over the next 10 years.
-c. Given a large dataset of medical records from patients suffering from heart disease, try to learn whether there might be different clusters of such patients for which we might tailor separate treatments.
-d. Have a computer examine an audio clip of a piece of music, and classify whether or not there are vocals (i.e., a human voice singing) in that audio clip, or if it is a clip of only musical instruments (and no vocals).
 ---
 5. Which of these is a reasonable definition of machine learning?
-
-a. Machine learning is the field of allowing robots to act intelligently.
-b. Machine learning is the science of programming computers.
-c. Machine learning is the field of study that gives computers the ability to learn without being explicitly programmed.
-d. Machine learning learns from labeled data.
+>
+* a. Machine learning is the field of allowing robots to act intelligently.
+* b. Machine learning is the science of programming computers.
+* c. Machine learning is the field of study that gives computers the ability to learn without being explicitly programmed.
+* d. Machine learning learns from labeled data.
 </details>
 
 ---
 1. 一个计算机程序据说可以从经验 `E` 中学习一些任务 `T` 和一些绩效测量 `P`，如果它在 `T` 上的表现，用 `P` 来衡量，随着经验的提高而提高 `E`。假设我们为学习算法提供了大量的历史天气数据，让它学会预测天气。在这种情况下，什么是 `T`？
-
-a. 该算法检查大量历史天气数据的过程。
-b. 正确预测未来日期天气的概率。
-c. 天气预报任务。
-d. 都不是。
+>
+* a. 该算法检查大量历史天气数据的过程。
+* b. 正确预测未来日期天气的概率。
+* c. 天气预报任务。
+* d. 都不是。
 ---
 2. 一天中下降的雨量通常以毫米（mm）或英寸为单位。假设您使用学习算法来预测明天将下降多少雨。您会将此视为分类还是回归问题？
+>
+* a. 回归
+* b. 分类
 
-a. 回归
-b. 分类
 ---
 3. 假设您正在进行股市预测。您想预测某家公司是否会赢得专利侵权诉讼（通过培训必须为类似诉讼辩护的公司的数据）。您会将此视为分类还是回归问题？
-
-a. 分类
-b. 回归
+>
+* a. 分类
+* b. 回归
 ---
 4. (hasMany)下面的一些问题最好使用监督学习算法解决，其他问题使用无监督学习算法。您将以下哪项应用监督学习？ （选择所有适用的选项。）在每种情况下，假设您的算法可以使用一些适当的数据集来学习。
-
-a. 根据1000名医疗患者对实验药物的反应（如治疗效果，副作用等）的数据，发现患者对药物的反应方式是否存在不同的类别或“类型”，以及如果是这样，这些类别是什么。
-b. 根据一个人的遗传（DNA）数据，预测他/她在未来10年内患糖尿病的几率。
-c. 根据患有心脏病的患者的医疗记录的大量数据集，尝试了解**是否**可能存在不同的这类患者群体，我们可以针对这些患者量身定制单独的治疗方案。
-d. 让计算机检查一段音乐的音频片段，并分类该音频片段中是否存在人声（即，人声唱歌），或者它是否仅是乐器（并且没有人声）的片段。
+>
+* a. 根据1000名医疗患者对实验药物的反应（如治疗效果，副作用等）的数据，发现患者对药物的反应方式是否存在不同的类别或“类型”，以及如果是这样，这些类别是什么。
+* b. 根据一个人的遗传（DNA）数据，预测他/她在未来10年内患糖尿病的几率。
+* c. 根据患有心脏病的患者的医疗记录的大量数据集，尝试了解**是否**可能存在不同的这类患者群体，我们可以针对这些患者量身定制单独的治疗方案。
+* d. 让计算机检查一段音乐的音频片段，并分类该音频片段中是否存在人声（即，人声唱歌），或者它是否仅是乐器（并且没有人声）的片段。
 ---
 5. 这些是机器学习的合理定义？
-
-a. 机器学习是允许机器人智能行动的领域。
-b. 机器学习是计算机编程的科学。
-c. 机器学习是一个研究领域，它使计算机无需明确编程即可学习。
-d. 机器学习从标记数据中学习。
+>
+* a. 机器学习是允许机器人智能行动的领域。
+* b. 机器学习是计算机编程的科学。
+* c. 机器学习是一个研究领域，它使计算机无需明确编程即可学习。
+* d. 机器学习从标记数据中学习。
 
 
 <details>

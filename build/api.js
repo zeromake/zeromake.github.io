@@ -9,7 +9,8 @@ const { Feed } = require('feed')
 
 
 const { postDir, aloneDir } = require('./config')
-const marked = require('./renderer')()
+// const marked = require('./renderer')()
+const marked = require('./markdown-it-renderer')()
 const router = new KoaRuoter()
 const isProd = process.env.NODE_ENV === 'production'
 
