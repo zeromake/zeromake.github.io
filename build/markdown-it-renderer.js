@@ -2,6 +2,7 @@ const markdownIt = require('markdown-it');
 const katex = require('@iktakahiro/markdown-it-katex');
 const highlight = require('./highlight');
 const lineNumbers = require('./highlight-line-numbers');
+const anchor = require('./markdown-it-anchor');
 
 const util = require("hexo-util");
 const stripHTML = util.stripHTML;
@@ -49,6 +50,7 @@ module.exports = () => {
     });
 
     md.enable(['table']);
+    md.use(anchor);
     md.use(katex);
     md.renderer.rules.heading_close = (tokens, idx) => {
         const token = tokens[idx];
@@ -56,7 +58,12 @@ module.exports = () => {
         let index = idx - 1;
         let t = tokens[index];
         while(t && t.type !== 'heading_open') {
-            content.push(t.content);
+            content.push(t.children.reduce((c, i) => {
+                if(i.type === 'text' || i.type === 'code_inline') {
+                    c += i.content;
+                }
+                return c;
+            }, ''));
             index--;
             t = tokens[index];
         }
