@@ -1,17 +1,13 @@
 const fs = require('fs')
 const fse = require('fs-extra')
-const co = require('co')
 const pify = require('pify')
 const path = require('path')
 const Koa = require('koa')
 const { createBundleRenderer } = require('vue-server-renderer')
 const LRU = require('lru-cache')
 const fetch = require('node-fetch')
-// const { minify } = require('html-minifier')
 const router = require('./api.js')
 const { generateConfig, port } = require('./config')
-
-//
 
 process.on('unhandledRejection', (reason, promise) => {
     console.error(reason, promise)
@@ -22,26 +18,6 @@ const fileSystem = {
     mkdir: pify(fs.mkdir),
     writeFile: pify(fs.writeFile),
     unlink: pify(fs.unlink)
-}
-const minifyOpt = {
-    collapseBooleanAttributes: true,
-    collapseWhitespace: true,
-    decodeEntities: true,
-    minifyCSS: true,
-    minifyJS: true,
-    processConditionalComments: true,
-    removeAttributeQuotes: false,
-    removeComments: false,
-    removeEmptyAttributes: true,
-    removeOptionalTags: true,
-    removeRedundantAttributes: true,
-    removeScriptTypeAttributes: false,
-    removeStyleLinkTypeAttributes: false,
-    removeTagWhitespace: false,
-    sortAttributes: true,
-    sortClassName: true,
-    trimCustomFragments: true,
-    useShortDoctype: true
 }
 
 const resolve = file => path.resolve(__dirname, file)
@@ -96,11 +72,11 @@ function render (url) {
 }
 app.use(router.routes()).use(router.allowedMethods())
 
-const generate = (config) => co(function * () {
+async function generate(config) {
     let urls = {}
     const docsPath = config.docsPath
     if (typeof config.urls === 'function') {
-        urls  = yield config.urls(config.baseUrl)
+        urls  = await config.urls(config.baseUrl)
     } else {
         urls = config.urls
     }
@@ -110,29 +86,30 @@ const generate = (config) => co(function * () {
         const lastIndex = decode.lastIndexOf('/')
         const dirPath = decode.substring(0, lastIndex)
         if (!fs.existsSync(`${docsPath}${dirPath}`)) {
-            yield fse.mkdirs(`${docsPath}${dirPath}`)
+            await fse.mkdirs(`${docsPath}${dirPath}`)
         }
-        const res = yield fetch(`${config.baseUrl}${url}`).then(res => res.text())
+        const res = await fetch(`${config.baseUrl}${url}`).then(res => res.text())
         console.info('generate static file: ' + decode)
-        yield fileSystem.writeFile(`${docsPath}${decode}`, res)
+        await fileSystem.writeFile(`${docsPath}${decode}`, res)
     }
     for (let i = 0, len = urls.renderUrls.length; i < len; i++) {
         const url = urls.renderUrls[i]
         const decode = url === '/' ? '' : decodeURIComponent(url)
         if (!fs.existsSync(`${docsPath}/${decode}`)) {
-            yield fse.mkdirs(`${docsPath}/${decode}`)
+            await fse.mkdirs(`${docsPath}/${decode}`)
         }
-        let html = yield render(url)
+        let html = await render(url)
         console.info('generate render: ' + decode)
-        yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, html)
+        await fileSystem.writeFile(`${docsPath}/${decode}/index.html`, html)
     }
-    yield fse.copy(resolve('../dist/'), `${docsPath}/dist`)
-    yield fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
-    yield fse.copy(resolve('../public'), `${docsPath}/public`)
-    yield fse.copy(resolve('../manifest.json'), `${docsPath}/manifest.json`)
-    yield fse.copy(resolve('../baidu-verify-03770132C2.txt'), `${docsPath}/baidu-verify-03770132C2.txt`)
-    yield fse.copy(resolve('../googled4005bfa29260c00.html'), `${docsPath}/googled4005bfa29260c00.html`)
-})
+    await fse.copy(resolve('../dist/'), `${docsPath}/dist`)
+    await fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
+    await fse.copy(resolve('../public'), `${docsPath}/public`)
+    await fse.copy(resolve('../manifest.json'), `${docsPath}/manifest.json`)
+    await fse.copy(resolve('../baidu-verify-03770132C2.txt'), `${docsPath}/baidu-verify-03770132C2.txt`)
+    await fse.copy(resolve('../googled4005bfa29260c00.html'), `${docsPath}/googled4005bfa29260c00.html`)
+}
+
 const listens = app.listen(port, '0.0.0.0', () => {
     console.log(`server started at localhost:${port}`)
     const s = Date.now()

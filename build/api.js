@@ -1,5 +1,4 @@
 const KoaRuoter = require('koa-router')
-const co = require('co')
 const fs = require('fs')
 const path = require('path')
 const pify = require('pify')
@@ -74,9 +73,6 @@ const readMarkdown = function (fileDir, fileName, end) {
     })
 }
 
-const convert = function (fun) {
-    return (ctx, next) => co(fun, ctx, next)
-}
 function dictToArray(obj) {
     const tmp = []
     for (const key in obj) {
@@ -148,9 +144,9 @@ router.get('/api/pages/:page.json', async function (ctx) {
 for(const alone of fs.readdirSync(aloneDir)) {
     if(alone.endsWith('.md')) {
         const p = alone.substr(0, alone.length - 3)
-        router.get(`/api/${p}.json`, convert(function * (ctx) {
+        router.get(`/api/${p}.json`, async function (ctx) {
             if (fs.existsSync(path.join(aloneDir, alone))) {
-                const { yaml, markdown } = yield readMarkdown(aloneDir, alone)
+                const { yaml, markdown } = await readMarkdown(aloneDir, alone)
                 let pageBody = markdown
                 let toc = null
                 if(markdown) {
@@ -163,7 +159,7 @@ for(const alone of fs.readdirSync(aloneDir)) {
                 ctx.status = 404
                 ctx.body = '404|Not blog alone page'
             }
-        }))
+        })
     }
 }
 

@@ -1,14 +1,20 @@
-import Axios from 'axios'
+import fetch from 'cross-fetch'
 
 export function createAPI ({ config, version }) {
     return {
         // url: 'https://hacker-news.firebaseio.com/v0/'
         url: '/api/',
         '$get': function (url) {
-            return Axios.get(url).then(res => Promise.resolve(res.data))
+            return fetch(url).then(resp => resp.json());
         },
         '$post': function (url, data) {
-            return Axios.post(url, data).then(res => Promise.resolve(res.data))
+            return fetch('/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                },
+                body: JSON.stringify(data)
+            }).then(resp => resp.json());
         }
     }
 }

@@ -1,6 +1,5 @@
 import LRU from 'lru-cache'
-// import Axios from 'axios'
-import fetch from 'node-fetch'
+import fetch from 'cross-fetch'
 
 const isProduction = process.env.NODE_ENV === 'production'
 export function createAPI ({ config, version }) {

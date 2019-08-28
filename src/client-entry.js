@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import 'es6-promise/auto'
-import 'unfetch/polyfill'
 // import 'font-awesome/css/font-awesome.min.css'
 import { createApp } from './app.js'
 import ProgressBar from 'components/ProgressBar.vue'
