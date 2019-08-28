@@ -48,14 +48,11 @@ $em-color = #7f8c8d
     h1, h2, h3, h4, h5, h6
         border-bottom 1px solid #d3d3d3
         .anchor
-            display inline-block
-            &::after
-                content '¶'
-                visibility hidden
+            display none
 
         &:hover, &:focus, &:active
-            .anchor::after
-                visibility visible
+            .anchor
+                display inline
 
     h1, h2, h3, h4, strong
         color $title-color
