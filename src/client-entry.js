@@ -4,7 +4,7 @@ import 'es6-promise/auto'
 import { createApp } from './app.js'
 import ProgressBar from 'components/ProgressBar.vue'
 import ZeroLayer from 'components/zero-layer'
-import Gitment from 'gitalk'
+import Gitment from '@zeromake/gitalk'
 import 'katex/dist/katex.min.css';
 // import 'prismjs/themes/prism-tomorrow.css'
 // import 'prismjs/themes/prism-solarizedlight.css'
