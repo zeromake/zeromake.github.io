@@ -3,7 +3,7 @@ title: 机器学习第一周
 date: 2019-08-18 13:53:00+08:00
 type: machine-learning
 tags: [machine-learning]
-last_date: 2019-08-23 15:39:00+08:00
+last_date: 2019-09-01 22:39:00+08:00
 private: true
 ---
 
@@ -233,16 +233,139 @@ When the target variable that we’re trying to predict is continuous, such as i
 
 为了更加正式地描述监督学习问题，我们的目标是，在给定训练集的情况下，学习函数 `h : X → Y`，使得 `h(x)` 是 `y` 的对应值的 `good` 预测器。由于历史原因，该函数 `h` 被称为假设。从图中可以看出，这个过程是这样的：
 
-当我们试图预测的目标变量是连续的时，例如在我们的住房示例中，我们将学习问题称为回归问题。当y只能承受少量离散值时（例如，如果给定生活区域，我们想要预测住宅是房屋还是公寓，请说），我们将其称为分类问题。
+![h(x)](/public/img/machine-learn/2016-10-23-20.14.58.svg)
+
+$$h_θ(x) = θ_0 + θ_1x$$
+
+当我们试图预测的目标变量是连续的时，例如在我们的住房示例中，我们将学习问题称为回归问题。当 `y` 只能承受少量离散值时（例如，如果给定生活区域，比如说我们想要预测住宅是房屋还是公寓），我们将其称为分类问题。
 
 
-## 六、成本函数
+## 六、代价函数定义
+<details>
+<summary>原文</summary>
 
-## 七、梯度下降
+We can measure the accuracy of our hypothesis function by using a **cost function**. This takes an average difference (actually a fancier version of an average) of all the results of the hypothesis with inputs from x's and the actual output y's.
 
-## 八、练习2
+$$J(θ_0, θ_1) = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m ( \hat{y}_{i}- y_{i})^2 = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m (h_θ (x_{i}) - y_{i})^2$$
 
-## 九、专有词
+To break it apart, it is $\frac{1}{2}\bar{x}$ where $\bar{x}$ is the mean of the squares of $h_\theta (x_{i}) - y_{i}$, or the difference between the predicted value and the actual value.
+
+This function is otherwise called the `Squared error function`, or `Mean squared error`. The mean is halved $(\frac{1}{2})$ as a convenience for the computation of the gradient descent, as the derivative term of the square function will cancel out the $\frac{1}{2}$ term. The following image summarizes what the cost function does:
+
+![Cost Function](/public/img/machine-learn/2016-12-02-17.23.31.png)
+
+</details>
+
+我们可以使用 `代价函数` 来衡量我们的假设函数的准确性。 这需要假设的所有结果与来自 `x's` 和实际输出 `y's` 的输入的平均差异（实际上是平均值的更高版本）。
+
+$$J(θ_0, θ_1) = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left ( \hat{y}_{i}- y_{i} \right)^2 = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left (h_θ (x_{i}) - y_{i} \right)^2$$
+
+为了打破它，它是 $\frac{1}{2}\bar{x}$ 其中 $\bar{x}$ 是 $h_\theta (x_{i}) - y_{i}$ 的平方的平均值，或者是预测值之间的差值 和实际价值。
+
+此函数另外称为 `平方误差函数` 或 `均方误差`。 平均值减半 $(\frac{1}{2})$ 为了便于计算梯度下降，因为平方函数的导数项将抵消 $\frac{1}{2}$ 该项。 下图总结了成本函数的作用：
+
+![Cost Function](/public/img/machine-learn/2016-12-02-17.23.31.png)
+
+## 七、代价函数 - 说明1
+
+<details>
+<summary>原文</summary>
+
+If we try to think of it in visual terms, our training data set is scattered on the x-y plane. We are trying to make a straight line (defined by $h_θ(x)$) which passes through these scattered data points.
+
+Our objective is to get the best possible line. The best possible line will be such so that the average squared vertical distances of the scattered points from the line will be the least. Ideally, the line should pass through all the points of our training data set. In such a case, the value of $J(θ_0,θ_1)$ will be 0. The following example shows the ideal situation where we have a cost function of 0.
+
+![θ_1=1](/public/img/machine-learn/2016-10-26-00.57.56.png)
+
+When $θ_1=1$, we get a slope of 1 which goes through every single data point in our model. Conversely, when $θ_1=0.5$, we see the vertical distance from our fit to the data points increase.
+
+![θ_1=0.5](/public/img/machine-learn/2016-10-26-01.03.07.png)
+
+This increases our cost function to 0.58. Plotting several other points yields to the following graph:
+
+![cost-fun](/public/img/machine-learn/2016-10-26-01.09.05.png)
+
+Thus as a goal, we should try to minimize the cost function. In this case, $θ_1=1$ is our global minimum.
+</details>
+
+如果我们试图用视觉术语来思考它，我们的训练数据集就会分散在 `x-y` 平面上。我们试图通过这些分散的数据点建立一条直线（由 $h_θ(x)$ 定义）。
+
+我们的目标是获得最佳线路。最好的线将是这样的，使得来自线的散射点的平均垂直距离将是最小的。理想情况下，该线应该通过我们的训练数据集的所有点。在这种情况下，$J(θ_0,θ_1)$ 的值将为`0`. 以下示例显示了我们的成本函数为 `0` 的理想情况。
+
+![θ_1=1](/public/img/machine-learn/2016-10-26-00.57.56.png)
+
+当$θ_1 =1$ 时，我们得到的斜率为1，它遍历模型中的每个数据点。相反，当 $θ_1=0.5$ 时，我们看到从拟合到数据点的垂直距离增加。
+
+![θ_1=0.5](/public/img/machine-learn/2016-10-26-01.03.07.png)
+
+这使我们的成本函数增加到 `0.58`。绘制其他几个点会产生如下图：
+
+![cost-fun](/public/img/machine-learn/2016-10-26-01.09.05.png)
+
+因此，作为目标，我们应该尽量减少成本函数。在这种情况下，$θ_1=1$ 是我们的全球最低要求。
+
+**例子：**
+训练集数据为：
+
+``` json
+[
+    {
+        "x": 1,
+        "y": 1,
+    },
+    {
+        "x": 2,
+        "y": 2,
+    },
+    {
+        "x": 3,
+        "y": 3,
+    }
+]
+```
+
+设定 $θ_0 = 0$，$θ_1 = 1$, 函数 `h` 为 $h_θ(x) = 0 + x$ 所以代价函数的公式会简化为：
+
+$$J(θ_1) = \dfrac {1}{6} \displaystyle \sum _{i=1}^6 (h_θ (x_{i}) - y_{i})^2$$
+
+用代码表述为：
+
+``` py
+import math
+
+data = [
+    {
+        "x": 1,
+        "y": 1,
+    },
+    {
+        "x": 2,
+        "y": 2,
+    },
+    {
+        "x": 3,
+        "y": 3,
+    }
+]
+def θ(θ0, θ1):
+    def h(x):
+        return θ0 + θ1 * x
+
+    def cost():
+        sum = 0
+        for i in data:
+            sum += math.pow(h(i['x']) - i['y'], 2)
+        return sum / (len(data) * 2)
+    return h, cost
+
+h, cost = θ(0, 1)
+```
+
+## 八、梯度下降
+
+## 九、练习2
+
+## 十、专有词
 
 **机器学习定义**
 
@@ -270,3 +393,27 @@ When the target variable that we’re trying to predict is continuous, such as i
 | $y$ | `output` variable / `target` variable | 输出变量 / 目标变量 |
 | $(x, y)$ | - | 一个训练集样本 |
 | $(x(i), y(i))$ | - | 第 $i$ 个训练集样本，$(i)$ 为下标 |
+
+
+## 十、数学补课
+### 10.1 ∑ 的意义
+在很多算法的文章书籍中能够见到很多 $\displaystyle \sum_{i=0}^{100}(h(i))$ 这样的数学表达式，但是我因为数学没好好学各种符号根本不认识。
+
+`∑` 代表求和的意思，和 `math.Sum` 类似但是不仅限于求和，它的下标代表了变量的起始，上标代表的声明的结束。
+
+例如 $\displaystyle \sum_{i=0}^{100}(h(i))$ 可以转换为代码:
+
+``` c
+int h(i) {
+    return i;
+}
+int sum() {
+    int sum = 0;
+    for(int i = 0; i <= 100; i++) {
+        sum += h(i);
+    }
+    return sum;
+}
+```
+
+自然上面的 $\displaystyle \sum _{i=1}^m$ 代表的是样本下标从 `1` 开始到 $m$ 结束，也就是遍历所有样本，注意数学公式的下标 $i$ 与编程的起始定义不同，数学的下标 $i$ 起始为 `1`。
