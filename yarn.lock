@@ -906,10 +906,10 @@
   resolved "https://registry.npm.taobao.org/@xtuc/long/download/@xtuc/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha1-0pHGpOl5ibXGHZrPOWrk/hM6cY0=
 
-"@zeromake/gitalk@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.npm.taobao.org/@zeromake/gitalk/download/@zeromake/gitalk-1.5.1.tgz?cache=0&sync_timestamp=1567094853165&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40zeromake%2Fgitalk%2Fdownload%2F%40zeromake%2Fgitalk-1.5.1.tgz#13f0379f6972e689a1fd18cc8e8e53d70a8e2650"
-  integrity sha1-E/A3n2ly5omh/RjMjo5T1wqOJlA=
+"@zeromake/gitalk@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.npm.taobao.org/@zeromake/gitalk/download/@zeromake/gitalk-1.5.2.tgz#9514edf7bacadb2609770134acb497fa50ccc071"
+  integrity sha1-lRTt97rK2yYJdwE0rLSX+lDMwHE=
   dependencies:
     autosize "4.0.2"
     axios "0.19.0"

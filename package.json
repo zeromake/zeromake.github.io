@@ -19,7 +19,7 @@
   "dependencies": {
     "@emotion/hash": "^0.7.2",
     "@iktakahiro/markdown-it-katex": "^3.1.0",
-    "@zeromake/gitalk": "^1.5.1",
+    "@zeromake/gitalk": "^1.5.2",
     "cross-env": "^5.2.1",
     "cross-fetch": "^3.0.4",
     "es6-promise": "^4.2.8",
