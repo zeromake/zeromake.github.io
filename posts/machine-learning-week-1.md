@@ -330,21 +330,21 @@ $$J(θ_1) = \dfrac {1}{6} \displaystyle \sum _{i=1}^6 (h_θ (x_{i}) - y_{i})^2$$
 
 用代码表述为：
 
-``` py
+``` python
 import math
 
 data = [
     {
-        "x": 1,
-        "y": 1,
+        'x': 1,
+        'y': 1,
     },
     {
-        "x": 2,
-        "y": 2,
+        'x': 2,
+        'y': 2,
     },
     {
-        "x": 3,
-        "y": 3,
+        'x': 3,
+        'y': 3,
     }
 ]
 def θ(θ0, θ1):
@@ -357,9 +357,31 @@ def θ(θ0, θ1):
             sum += math.pow(h(i['x']) - i['y'], 2)
         return sum / (len(data) * 2)
     return h, cost
-
 h, cost = θ(0, 1)
 ```
+
+## 八、代价函数 - 说明2
+
+<details>
+<summary>原文</summary>
+
+A contour plot is a graph that contains many contour lines. A contour line of a two variable function has a constant value at all points of the same line. An example of such a graph is the one to the right below.
+
+Taking any color and going along the `circle`, one would expect to get the same value of the cost function. For example, the three green points found on the green line above have the same value for $J(θ_0, θ_1)$ and as a result, they are found along the same line. The circled x displays the value of the cost function for the graph on the left when $θ_0 = 800$ and $θ_1 = -0.15$. Taking another $h(x)$ and plotting its contour plot, one gets the following graphs:
+
+When $θ_0 = 360$ and $θ_1 = 0$, the value of $J(θ_0, θ_1)$ in the contour plot gets closer to the center thus reducing the cost function error. Now giving our hypothesis function a slightly positive slope results in a better fit of the data.
+
+The graph above minimizes the cost function as much as possible and consequently, the result of $θ_1$​ and $θ_0$​ tend to be around `0.12` and `250` respectively. Plotting those values on our graph to the right seems to put our point in the center of the inner most `circle`.
+
+</details>
+
+等高线图是包含许多等高线的图形。双变量函数的等高线在同一行的所有点处具有恒定值。这种图表的一个例子是下面的图表。
+
+采用任何颜色并沿着 `circle`，人们可以期望得到相同的成本函数值。例如，上面绿线上的三个绿点对于 $J(θ_0, θ_1)$ 具有相同的值，因此，它们沿着同一条线找到。当 $θ_0 = 800$ 和 $θ_1 = -0.15$ 时，带圆圈的x显示左侧图形的成本函数的值。取另一个 $h(x)$ 并绘制其等高线图，可以得到以下图表：
+
+当 $θ_0 = 360$ 和 $θ_1 = 0$ 时，等高线图中 $J(θ_0, θ_1)$ 的值越接近中心，从而降低了成本函数误差。现在给出我们的假设函数略微正斜率可以更好地拟合数据。
+
+上图最大限度地降低了成本函数，因此，$θ_1$ 和 $θ_0$ 的结果分别约为 `0.12` 和 `250`。在我们的图表右侧绘制这些值似乎将我们的观点置于最内部 `圆` 的中心。
 
 ## 八、梯度下降
 
