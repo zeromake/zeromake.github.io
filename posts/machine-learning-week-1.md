@@ -538,7 +538,7 @@ $$θ_1 := θ_1-\alpha * 0$$
 
 When specifically applied to the case of linear regression, a new form of the gradient descent equation can be derived. We can substitute our actual cost function and our actual hypothesis function and modify the equation to:
 
-$$\text{repeat until convergence: } \lbrace \newline \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \newline \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \newline \rbrace$$
+$$\text{repeat until convergence: } \lbrace \\ \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \\ \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \\ \rbrace$$
 
 where $m$ is the size of the training set, $θ_0$ a constant that will be changing simultaneously with $θ_1$ and $x_i, y_i$ are values of the given training set (data).
 
@@ -558,7 +558,7 @@ The ellipses shown above are the contours of a quadratic function. Also shown is
 
 当特别应用于线性回归的情况时，可以导出梯度下降方程的新形式。 我们可以用我们的实际成本函数和我们的实际假设函数代替并修改方程式
 
-$$\text{重复直到收敛: } \lbrace \newline \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \newline \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \newline \rbrace$$
+$$\text{重复直到收敛: } \lbrace \\ \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \\ \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \\ \rbrace$$
 
 其中 $m$ 是训练集的大小，$θ_0$ 一个与 $θ_1$ 同时变化的常数， 和 $x_i, y_i$ 是给定训练集（数据）的值。
 
