@@ -3,8 +3,8 @@ title: 机器学习第一周
 date: 2019-08-18 13:53:00+08:00
 type: machine-learning
 tags: [machine-learning]
-last_date: 2019-09-01 22:39:00+08:00
-private: true
+last_date: 2019-09-08 17:04:00+08:00
+private: false
 ---
 
 ## 前言
@@ -172,7 +172,7 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 -   c. Given a large dataset of medical records from patients suffering from heart disease, try to learn whether there might be different clusters of such patients for which we might tailor separate treatments.
 -   d. Have a computer examine an audio clip of a piece of music, and classify whether or not there are vocals (i.e., a human voice singing) in that audio clip, or if it is a clip of only musical instruments (and no vocals).
 
-------
+---
 
 5. Which of these is a reasonable definition of machine learning?
     >
@@ -182,10 +182,9 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 -   c. Machine learning is the field of study that gives computers the ability to learn without being explicitly programmed.
 -   d. Machine learning learns from labeled data.
 
-
 </details>
 
-------
+---
 
 1. 一个计算机程序据说可以从经验 `E` 中学习一些任务 `T` 和一些绩效测量 `P`，如果它在 `T` 上的表现，用 `P` 来衡量，随着经验的提高而提高 `E`。假设我们为学习算法提供了大量的历史天气数据，让它学会预测天气。在这种情况下，什么是 `T`？
     >
@@ -195,7 +194,7 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 -   c. 天气预报任务。
 -   d. 都不是。
 
-------
+---
 
 2. 一天中下降的雨量通常以毫米（mm）或英寸为单位。假设您使用学习算法来预测明天将下降多少雨。您会将此视为分类还是回归问题？
     >
@@ -211,7 +210,7 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 -   a. 分类
 -   b. 回归
 
-------
+---
 
 4. (hasMany)下面的一些问题最好使用监督学习算法解决，其他问题使用无监督学习算法。您将以下哪项应用监督学习？ （选择所有适用的选项。）在每种情况下，假设您的算法可以使用一些适当的数据集来学习。
     >
@@ -221,7 +220,7 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 -   c. 根据患有心脏病的患者的医疗记录的大量数据集，尝试了解**是否**可能存在不同的这类患者群体，我们可以针对这些患者量身定制单独的治疗方案。
 -   d. 让计算机检查一段音乐的音频片段，并分类该音频片段中是否存在人声（即，人声唱歌），或者它是否仅是乐器（并且没有人声）的片段。
 
-------
+---
 
 5. 这些是机器学习的合理定义？
     >
@@ -239,7 +238,8 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 3. `a` 目标要求明确为是否赢得专利侵权诉讼，所以是分类算法。
 4. `b, c` 主要问题是 `c` 选项中语言陷阱明明是一个是否有其它分类的说法，如果不注意会以为应该用无监督算法。
 5. `c` 这个没啥好说的，自己去翻定义。
-    </details>
+
+</details>
 
 ## 五、线性回归算法
 
@@ -531,78 +531,212 @@ $$θ_1 := θ_1-\alpha * 0$$
 
 ![](/public/img/machine-learn/2016-11-03-00.06.00.png)
 
-## 十、练习 2
+## 十、在线性回归中使用梯度下降
 
--------
+<details>
+<summary>原文</summary>
+
+When specifically applied to the case of linear regression, a new form of the gradient descent equation can be derived. We can substitute our actual cost function and our actual hypothesis function and modify the equation to:
+
+$$\text{repeat until convergence: } \lbrace \newline \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \newline \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \newline \rbrace$$
+
+where $m$ is the size of the training set, $θ_0$ a constant that will be changing simultaneously with $θ_1$ and $x_i, y_i$ are values of the given training set (data).
+
+Note that we have separated out the two cases for $θ_j$ into separate equations for $θ_0$ and $θ_1$; and that for $θ_1$ we are multiplying $x_i$ at the end due to the derivative. The following is a derivation of $\frac {\partial}{\partial \theta_j}J(\theta)$ for a single example:
+
+![](/public/img/machine-learn/2016-11-09-08.30.54.png)
+
+The point of all this is that if we start with a guess for our hypothesis and then repeatedly apply these gradient descent equations, our hypothesis will become more and more accurate.
+
+So, this is simply gradient descent on the original cost function J. This method looks at every example in the entire training set on every step, and is called **batch gradient descent**. Note that, while gradient descent can be susceptible to local minima in general, the optimization problem we have posed here for linear regression has only one global, and no other local, optima; thus gradient descent always converges (assuming the learning rate α is not too large) to the global minimum. Indeed, J is a convex quadratic function. Here is an example of gradient descent as it is run to minimize a quadratic function.
+
+![](/public/img/machine-learn/2016-11-09-08.36.49.png)
+
+The ellipses shown above are the contours of a quadratic function. Also shown is the trajectory taken by gradient descent, which was initialized at (48,30). The x’s in the figure (joined by straight lines) mark the successive values of θ that gradient descent went through as it converged to its minimum.
+
+</details>
+
+当特别应用于线性回归的情况时，可以导出梯度下降方程的新形式。 我们可以用我们的实际成本函数和我们的实际假设函数代替并修改方程式
+
+$$\text{重复直到收敛: } \lbrace \newline \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \newline \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \newline \rbrace$$
+
+其中 $m$ 是训练集的大小，$θ_0$ 一个与 $θ_1$ 同时变化的常数， 和 $x_i, y_i$ 是给定训练集（数据）的值。
+
+请注意，我们已将 $θ_j$ 的两个案例分离为 $θ_0, θ_1$ 的单独等式; 并且对于 $θ_1$ 我们由于微分乘以 $x_i$ 结尾。以下是 $\frac {\partial}{\partial \theta_j}J(\theta)$ 的推导，用于单个示例：
+
+![](/public/img/machine-learn/2016-11-09-08.30.54.png)
+
+所有这一切的要点是，如果我们开始猜测我们的假设，然后重复应用这些梯度下降方程，我们的假设将变得越来越准确。
+
+因此，这只是原始成本函数 `J` 的梯度下降。该方法在每个步骤中查看整个训练集中的每个示例，并称为 **批量梯度下降**。 请注意，虽然梯度下降一般可以容易受到局部最小值的影响，但我们在这里为线性回归提出的优化问题只有一个全局，而没有其他局部最优; 因此，梯度下降总是收敛（假设学习率 `α` 不是太大）到全局最小值。 实际上，`J` 是凸二次函数。 下面是梯度下降的示例，因为它是为了最小化二次函数而运行的。
+
+![](/public/img/machine-learn/2016-11-09-08.36.49.png)
+
+上面显示的椭圆是二次函数的轮廓。 还示出了梯度下降所采用的轨迹，其在 `(48,30)` 处初始化。 图中的 `x`（由直线连接）标记了渐变下降经历的 $θ$ 的连续值，当它收敛到其最小值时。
+
+## 十一、练习 2
+
+<details>
+<summary>原文</summary>
+
+---
 
 1. Consider the problem of predicting how well a student does in her second year of college/university, given how well she did in her first year.
 
-   Specifically, let x be equal to the number of `A` grades (including A-. A and A+ grades) that a student receives in their first year of college (freshmen year). We would like to predict the value of y, which we define as the number of `A` grades they get in their second year (sophomore year).
+    Specifically, let x be equal to the number of `A` grades (including A-. A and A+ grades) that a student receives in their first year of college (freshmen year). We would like to predict the value of y, which we define as the number of `A` grades they get in their second year (sophomore year).
 
-   Here each row is one training example. Recall that in linear regression, our hypothesis is $h_\theta(x) = \theta_0 + \theta_1x$, and we use mmm to denote the number of training examples.
+    Here each row is one training example. Recall that in linear regression, our hypothesis is $h_\theta(x) = \theta_0 + \theta_1x$, and we use $m$ to denote the number of training examples.
 
-   |  x  |  y  |
-   | :-: | :-: |
-   |  3  |  2  |
-   |  1  |  2  |
-   |  0  |  1  |
-   |  4  |  3  |
+    |  x  |  y  |
+    | :-: | :-: |
+    |  3  |  2  |
+    |  1  |  2  |
+    |  0  |  1  |
+    |  4  |  3  |
 
-   For the training set given above (note that this training set may also be referenced in other questions in this quiz), what is the value of mmm? In the box below, please enter your answer (which should be a number between `0` and `10`).
+    For the training set given above (note that this training set may also be referenced in other questions in this quiz), what is the value of $m$? In the box below, please enter your answer (which should be a number between `0` and `10`).
 
--------
+---
 
 2. Consider the following training set of $m = 4$ training examples:
 
-   |  x  |  y  |
-   | :-: | :-: |
-   |  1  | 0.5 |
-   |  2  |  1  |
-   |  4  |  2  |
-   |  0  |  0  |
+    |  x  |  y  |
+    | :-: | :-: |
+    |  1  | 0.5 |
+    |  2  |  1  |
+    |  4  |  2  |
+    |  0  |  0  |
 
-   Consider the linear regression model $h_θ(x) = θ_0 + θ_1x$. What are the values of $θ_0$ and $θ_1$ that you would expect to obtain upon running gradient descent on this model? (Linear regression will be able to fit this data perfectly.)
-   >
+    Consider the linear regression model $h_θ(x) = θ_0 + θ_1x$. What are the values of $θ_0$ and $θ_1$ that you would expect to obtain upon running gradient descent on this model? (Linear regression will be able to fit this data perfectly.)
 
--   $θ_0 = 0, θ_1 = 0.5$
--   $θ_0 = 1, θ_1 = 0.5$
--   $θ_0 = 1, θ_1 = 1$
--   $θ_0 = 0.5, θ_1 = 0.5$
--   $θ_0 = 0.5, θ_1 = 0$
+    >
 
--------
+-   a. $θ_0 = 0, θ_1 = 0.5$
+-   b. $θ_0 = 1, θ_1 = 0.5$
+-   c. $θ_0 = 1, θ_1 = 1$
+-   d. $θ_0 = 0.5, θ_1 = 0.5$
+-   e. $θ_0 = 0.5, θ_1 = 0$
+
+---
 
 3. Suppose we set $θ_0 = -1, θ_1 = 0.5$. What is $h_θ(4)$?
 
--------
+---
 
 4. Let $f$ be some function so that $f(θ_0, θ_1)$ outputs a number.
 
-   For this problem, $f$ is some arbitrary/unknown smooth function (not necessarily the cost function of linear regression, so fff may have local optima).
+    For this problem, $f$ is some arbitrary/unknown smooth function (not necessarily the cost function of linear regression, so $f$ may have local optima).
 
-   Suppose we use gradient descent to try to minimize $f(θ_0, θ_1)$ as a function of $θ_0$ and $θ_1$.
+    Suppose we use gradient descent to try to minimize $f(θ_0, θ_1)$ as a function of $θ_0$ and $θ_1$.
 
-   Which of the following statements are true? (Check all that apply.)
-   >
+    Which of the following statements are true? (Check all that apply.)
 
--   If the learning rate is too small, then gradient descent may take a very long time to converge.
--   Even if the learning rate $\alpha$ is very large, every iteration of gradient descent will decrease the value of $f(\theta_0, \theta_1)$.
--   If $\theta_0$ and $\theta_1$ are initialized so that $\theta_0 = \theta_1$, then by symmetry (because we do simultaneous updates to the two parameters), after one iteration of gradient descent, we will still have $\theta_0 = \theta_1$.
--   If $\theta_0$ and $\theta_1$ are initialized at a local minimum, then one iteration will not change their values.
+    >
 
--------
+-   a. If the learning rate is too small, then gradient descent may take a very long time to converge.
+-   b. Even if the learning rate $\alpha$ is very large, every iteration of gradient descent will decrease the value of $f(\theta_0, \theta_1)$.
+-   c. If $\theta_0$ and $\theta_1$ are initialized so that $\theta_0 = \theta_1$, then by symmetry (because we do simultaneous updates to the two parameters), after one iteration of gradient descent, we will still have $\theta_0 = \theta_1$.
+-   d. If $\theta_0$ and $\theta_1$ are initialized at a local minimum, then one iteration will not change their values.
+
+---
 
 5. Suppose that for some linear regression problem (say, predicting housing prices as in the lecture), we have some training set, and for our training set we managed to find some $θ_0, θ_1$ such that $J(θ_0, θ_1) = 0$.
 
-   Which of the statements below must then be true? (Check all that apply.)
-   >
+    Which of the statements below must then be true? (Check all that apply.)
 
--   Gradient descent is likely to get stuck at a local minimum and fail to find the global minimum.
--   For this to be true, we must have $\theta_0 = 0$ and $\theta_1 = 0$ so that $h_\theta(x) = 0$
--   Our training set can be fit perfectly by a straight line, i.e., all of our training examples lie perfectly on some straight line.
--   For this to be true, we must have $y^{(i)} = 0$ for every value of $i = 1, 2, \ldots, m$.
+    >
 
-## 十、专有词
+-   a. Gradient descent is likely to get stuck at a local minimum and fail to find the global minimum.
+-   b. For this to be true, we must have $\theta_0 = 0$ and $\theta_1 = 0$ so that $h_\theta(x) = 0$
+-   c. Our training set can be fit perfectly by a straight line, i.e., all of our training examples lie perfectly on some straight line.
+-   d. For this to be true, we must have $y^{(i)} = 0$ for every value of $i = 1, 2, …, $m\$.
+
+</details>
+
+---
+
+1. 考虑一下学生在大学二年级学习成绩的问题，考虑到她在第一年的表现如何。
+
+    具体来说，让 x 等于学生在大学第一年（新生年）收到的 `A` 等级（包括 `A-` , `A` 和 `A+` 等级）的数量。 我们想预测 `y` 的值，我们将其定义为他们在第二年（大二）获得的 `A` 等级的数量。
+
+    这里每行都是一个训练示例。 回想一下，在线性回归中，我们的假设是 $h_\theta(x) = \theta_0 + \theta_1x$，我们使用 $m$ 来表示训练样例的数量。
+
+    |  x  |  y  |
+    | :-: | :-: |
+    |  3  |  2  |
+    |  1  |  2  |
+    |  0  |  1  |
+    |  4  |  3  |
+
+    对于上面给出的训练集（请注意，此训练集也可以在本测验中的其他问题中引用），$m$ 的值是多少？ 在下面的框中，请输入您的答案（应该是 `0` 和 `10` 之间的数字）。
+
+---
+
+2. 考虑以下 $m = 4$ 训练示例的训练集：
+
+    |  x  |  y  |
+    | :-: | :-: |
+    |  1  | 0.5 |
+    |  2  |  1  |
+    |  4  |  2  |
+    |  0  |  0  |
+
+    考虑线性回归模型 $h_θ(x) = θ_0 + θ_1 x$。在此模型上运行梯度下降时，您期望得到的 $θ_0$ 和 $θ_1$ 的值是多少？ （线性回归将能够完美地拟合这些数据。）
+
+    >
+
+-   a. $θ_0 = 0, θ_1 = 0.5$
+-   b. $θ_0 = 1, θ_1 = 0.5$
+-   c. $θ_0 = 1, θ_1 = 1$
+-   d. $θ_0 = 0.5, θ_1 = 0.5$
+-   e. $θ_0 = 0.5, θ_1 = 0$
+
+---
+
+3. 假设我们设置 $θ_0 = -1, θ_1 = 0.5$。 什么是 $h_θ(4)$？
+
+---
+
+4. 让 $f$ 成为某个函数，以便 $f(θ_0, θ_1)$ 输出一个数字。
+
+    对于这个问题，$f$ 是一些任意/未知的平滑函数（不一定是线性回归的代价函数，因此 $f$ 可能具有局部最优）。
+
+    假设我们使用梯度下降来尝试最小化 $f(θ_0, θ_1)$ 作为 $θ_0$ 和 $θ_1$ 的函数。
+
+    以下哪项陈述属实？ （选择所有正确的选项。）
+
+    >
+
+-   a. 如果学习速率太小，则梯度下降可能需要很长时间才能收敛。
+-   b .即使学习率 $\alpha$ 非常大，每次梯度下降迭代都会减少 $f(\theta_0, \theta_1)$ 的值。
+-   c. 如果 $\theta_0$ 和 $\theta_1$ 被初始化以便 $\theta_0 = \theta_1$，那么通过对称（因为我们同时更新这两个参数），经过一次梯度下降迭代后，我们仍然会有 $\theta_0 = \theta_1$。
+-   d. 如果 $\theta_0$ 和 $\theta_1$ 初始化为局部最小值，则下一次迭代不会更改其值。
+
+---
+
+5. 假设对于一些线性回归问题（比如在讲座中预测住房价格），我们有一些训练集，对于我们的训练集，我们设法找到一些 $θ_0, θ_1$，使得 $J(θ_0, θ_1) = 0$。
+
+    那么下面哪个陈述必须是真的？（选择所有正确的选项）
+
+    >
+
+-   a. 梯度下降可能会陷入局部最小值并且无法找到全局最小值。
+-   b. 为此，我们必须要 $\theta_0 = 0$ 和 $\theta_1 = 0$ 以便 $h_\theta(x) = 0$
+-   c. 我们的训练组可以通过直线完美贴合，即我们所有的训练样例都完美地位于某条直线上。
+-   d. 为此，对于 $i = 1, 2, …, $m$ 的每个值，我们必须有 $y^{(i)} = 0\$。
+
+<details>
+<summary>答案</summary>
+
+-   1. `4` $m = 4$ 即为样本数量。
+-   2. `a` 代入公式 $h_θ(x) = θ_0 + θ_1x$ 即可。
+-   3. `1` 把 $θ_0 = -1, θ_1 = 0.5, x = 4$ 代入公式 $h_θ(4) = -1 + 0.5 * 4 = 1$。
+-   4. `a, d`
+-   5. `c` $J(θ_0, θ_1) = 0$ 代表所有的样本都能与该线性函数上的点完美贴合。
+
+</details>
+
+## 十二、专有词
 
 **机器学习定义**
 
@@ -631,7 +765,7 @@ $$θ_1 := θ_1-\alpha * 0$$
 | $(x, y)$       | -                                     | 一个训练集样本                    |
 | $(x(i), y(i))$ | -                                     | 第 $i$ 个训练集样本，$(i)$ 为下标 |
 
-## 十、数学补课
+## 十三、数学补课
 
 ### 10.1 ∑ 的意义
 
