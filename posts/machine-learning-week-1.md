@@ -283,7 +283,7 @@ This function is otherwise called the `Squared error function`, or `Mean squared
 
 我们可以使用 `代价函数` 来衡量我们的假设函数的准确性。 这需要假设的所有结果与来自 `x's` 和实际输出 `y's` 的输入的平均差异（实际上是平均值的更高版本）。
 
-$$J(θ_0, θ_1) = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left ( \hat{y}_{i}- y_{i} \right)^2 = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left (h_θ (x_{i}) - y_{i} \right)^2$$
+$$J(θ_0, θ_1) = \\ \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left ( \hat{y}_{i}- y_{i} \right)^2 = \\ \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left (h_θ (x_{i}) - y_{i} \right)^2$$
 
 为了打破它，它是 $\frac{1}{2}\bar{x}$ 其中 $\bar{x}$ 是 $h_\theta (x_{i}) - y_{i}$ 的平方的平均值，或者是预测值之间的差值 和实际价值。
 
