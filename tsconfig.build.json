@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["app/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "compilerOptions": {
+    "types": []
+  }
+}

@@ -2,8 +2,11 @@
 node_modules/
 /dist/
 /docs/
+/out/
 npm-debug.log
 .idea
 *.iml
 /.vscode/settings.json
 *.log
+database.js
+*.db
