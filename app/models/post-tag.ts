@@ -6,12 +6,12 @@ import {
     DataType,
     CreatedAt,
     UpdatedAt,
-} from "sequelize-typescript";
-import Post from "./post";
-import Tag from "./tag";
+} from 'sequelize-typescript';
+import Post from './post';
+import Tag from './tag';
 
 @Table({
-    tableName: 'post_tags'
+    tableName: 'post_tags',
 })
 export default class PostTag extends Model<PostTag> {
     @Column({
@@ -33,19 +33,27 @@ export default class PostTag extends Model<PostTag> {
     @Column({
         type: DataType.INTEGER.UNSIGNED,
         allowNull: false,
+        field: 'post_id',
     })
-    public post_id!: number;
+    public postId!: number;
 
     @BelongsTo(() => Tag)
     @Column({
         type: DataType.INTEGER.UNSIGNED,
         allowNull: false,
+        field: 'tag_id',
     })
-    public tag_id!: number;
+    public tagId!: number;
 
     @CreatedAt
-    public created_at!: Date;
+    @Column({
+        field: 'created_at',
+    })
+    public createdAt!: Date;
 
     @UpdatedAt
-    public updated_at!: Date;
+    @Column({
+        field: 'updated_at',
+    })
+    public updatedAt!: Date;
 }

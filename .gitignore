@@ -10,3 +10,6 @@ npm-debug.log
 *.log
 database.js
 *.db
+/app/config/config.*.ts
+!/app/config/config.default.ts
+!/app/config/config.unittest.ts

@@ -5,10 +5,10 @@ import {
     Column,
     CreatedAt,
     UpdatedAt,
-} from "sequelize-typescript";
+} from 'sequelize-typescript';
 
 @Table({
-    tableName: 'tags'
+    tableName: 'tags',
 })
 export default class Tag extends Model<Tag> {
     @Column({
@@ -30,8 +30,14 @@ export default class Tag extends Model<Tag> {
     public name!: string;
 
     @CreatedAt
-    public created_at!: Date;
+    @Column({
+        field: 'created_at',
+    })
+    public createdAt!: Date;
 
     @UpdatedAt
-    public updated_at!: Date;
+    @Column({
+        field: 'updated_at',
+    })
+    public updatedAt!: Date;
 }

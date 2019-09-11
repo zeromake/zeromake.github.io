@@ -5,10 +5,10 @@ import {
     DataType,
     CreatedAt,
     UpdatedAt,
-} from "sequelize-typescript";
+} from 'sequelize-typescript';
 
 @Table({
-    tableName: 'contents'
+    tableName: 'contents',
 })
 export default class Content extends Model<Content> {
     @Column({
@@ -35,8 +35,14 @@ export default class Content extends Model<Content> {
     public content: string;
 
     @CreatedAt
-    public created_at!: Date;
+    @Column({
+        field: 'created_at',
+    })
+    public createdAt!: Date;
 
     @UpdatedAt
-    public updated_at!: Date;
+    @Column({
+        field: 'updated_at',
+    })
+    public updatedAt!: Date;
 }

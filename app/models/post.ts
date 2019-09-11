@@ -11,7 +11,7 @@ import Tag from './tag';
 import PostTag from './post-tag';
 
 @Table({
-    tableName: 'posts'
+    tableName: 'posts',
 })
 export default class Post extends Model<Post> {
     @Column({
@@ -49,8 +49,14 @@ export default class Post extends Model<Post> {
     public preview: string;
 
     @CreatedAt
-    public created_at!: Date;
+    @Column({
+        field: 'created_at',
+    })
+    public createdAt!: Date;
 
     @UpdatedAt
-    public updated_at!: Date;
+    @Column({
+        field: 'updated_at',
+    })
+    public updatedAt!: Date;
 }
