@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as util from 'util';
 
-import defaultConfig from './config.default';
+import { config as defaultConfig } from './config.default';
 
 export default async function config() {
     const env = process.env.NODE_ENV || 'development';
@@ -9,7 +9,7 @@ export default async function config() {
         return {};
     };
     try {
-        envConfig = await import(`./config.${env}`).then(m => m && m.default);
+        envConfig = await import(`./config.${env}`).then(m => m && m.config);
     } catch (err) {
         // tslint:disable-next-line: no-console
         console.error(err);
@@ -36,7 +36,7 @@ if (typeof require !== 'undefined' && require.main === module) {
                 return {};
             };
             try {
-                envConfig = await import(`./config.${env}`).then(m => m && m.default);
+                envConfig = await import(`./config.${env}`).then(m => m && m.config);
             } catch (err) {
                 // tslint:disable-next-line: no-console
                 console.error(err);

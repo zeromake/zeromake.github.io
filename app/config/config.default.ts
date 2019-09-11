@@ -1,4 +1,4 @@
-export default async function() {
+export async function config() {
     return {
         database: {
             storage: './blog.db',
