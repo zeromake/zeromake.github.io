@@ -3126,10 +3126,10 @@ eslint-visitor-keys@^1.0.0, eslint-visitor-keys@^1.1.0:
   resolved "https://registry.npm.taobao.org/eslint-visitor-keys/download/eslint-visitor-keys-1.1.0.tgz?cache=0&sync_timestamp=1565705511122&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-visitor-keys%2Fdownload%2Feslint-visitor-keys-1.1.0.tgz#e2a82cea84ff246ad6fb57f9bde5b46621459ec2"
   integrity sha1-4qgs6oT/JGrW+1f5veW0ZiFFnsI=
 
-eslint@^6.3.0:
-  version "6.3.0"
-  resolved "https://registry.npm.taobao.org/eslint/download/eslint-6.3.0.tgz#1f1a902f67bfd4c354e7288b81e40654d927eb6a"
-  integrity sha1-HxqQL2e/1MNU5yiLgeQGVNkn62o=
+eslint@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.npm.taobao.org/eslint/download/eslint-6.4.0.tgz#5aa9227c3fbe921982b2eda94ba0d7fae858611a"
+  integrity sha1-WqkifD++khmCsu2pS6DX+uhYYRo=
   dependencies:
     "@babel/code-frame" "^7.0.0"
     ajv "^6.10.0"
@@ -4084,10 +4084,10 @@ he@1.2.x, he@^1.1.0:
   resolved "https://registry.npm.taobao.org/he/download/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha1-hK5l+n6vsWX922FWauFLrwVmTw8=
 
-hexo-util@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npm.taobao.org/hexo-util/download/hexo-util-1.1.0.tgz#de25f78636012e46b240e73dded045356166cf75"
-  integrity sha1-3iX3hjYBLkayQOc93tBFNWFmz3U=
+hexo-util@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npm.taobao.org/hexo-util/download/hexo-util-1.2.0.tgz#4a62368fb2315c21531cc22d543fed40f6692dba"
+  integrity sha1-SmI2j7IxXCFTHMItVD/tQPZpLbo=
   dependencies:
     bluebird "^3.5.2"
     camel-case "^3.0.0"
@@ -8477,10 +8477,10 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^4.39.3:
-  version "4.39.3"
-  resolved "https://registry.npm.taobao.org/webpack/download/webpack-4.39.3.tgz#a02179d1032156b713b6ec2da7e0df9d037def50"
-  integrity sha1-oCF50QMhVrcTtuwtp+DfnQN971A=
+webpack@^4.40.2:
+  version "4.40.2"
+  resolved "https://registry.npm.taobao.org/webpack/download/webpack-4.40.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwebpack%2Fdownload%2Fwebpack-4.40.2.tgz#d21433d250f900bf0facbabe8f50d585b2dc30a7"
+  integrity sha1-0hQz0lD5AL8PrLq+j1DVhbLcMKc=
   dependencies:
     "@webassemblyjs/ast" "1.8.5"
     "@webassemblyjs/helper-module-context" "1.8.5"
