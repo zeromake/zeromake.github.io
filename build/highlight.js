@@ -30,6 +30,9 @@ function loadLanguage(lang) {
 }
 
 function highlight(code, lang) {
+    if(lang === 'text') {
+        return code;
+    }
     const language = loadLanguage(lang) || Prism.languages.autoit;
     return prismjs.highlight(stripIndent(code), language, lang);
 }
