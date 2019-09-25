@@ -1,5 +1,6 @@
 const markdownIt = require('markdown-it');
-const katex = require('@iktakahiro/markdown-it-katex');
+const { renderToString } = require('katex');
+const katex = require('./markdown-it-katex');
 const highlight = require('./highlight');
 const lineNumbers = require('./highlight-line-numbers');
 const anchor = require('./markdown-it-anchor');
@@ -45,7 +46,12 @@ module.exports = () => {
         after: true,
         inject: true,
     });
-    md.use(katex);
+    md.use(katex, {
+        render(latex, isBlock) {
+            const html = renderToString(latex);
+            return isBlock ? `<span class="katex-display">${html}</span>` : html;
+        }
+    });
     return {
         render(text) {
             return md.render(text);
