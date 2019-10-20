@@ -629,3 +629,51 @@ Which of the following are true? Check all that apply.
 5. `b` 如果是 $\theta_0 = - 6, \theta_1 = 0, \theta_2 = 1$ 需要选 `d`。
 
 </details>
+
+
+## 测验2
+
+---
+
+1.  You are training a classification model with logistic regression. Which of the following statements are true? Check all that apply.
+>
+- a. Adding a new feature to the model always results in equal or better performance on the training set.
+- b. Introducing regularization to the model always results in equal or better performance on the training set.
+- c. Introducing regularization to the model always results in equal or better performance on examples not in the training set.
+- d. Adding many new features to the model helps prevent overfitting on the training set.
+
+---
+
+2. Suppose you ran logistic regression twice, once with $\lambda = 0$, and once with $\lambda = 1$ .<br/>
+One of the times, you got parameters $\theta = \begin{bmatrix} 81.47 \\ 12.69 \end{bmatrix}$, and the other time you got $\theta = \begin{bmatrix} 13.01 \\ 0.91 \end{bmatrix}$.<br/>
+However, you forgot which value of $\lambda$ corresponds to which value of $\theta$. Which one do you think corresponds to $\lambda = 1$?
+>
+- a. $\theta = \begin{bmatrix}  81.47 \\ 12.69 \end{bmatrix}$
+- b. $\theta = \begin{bmatrix} 13.01 \\ 0.91 \end{bmatrix}$
+
+---
+
+3. Which of the following statements about regularization are true? Check all that apply.
+>
+- a. Because logistic regression outputs values $0 \leq h_\theta(x) \leq 1$, its range of output values can only be "shrunk" slightly by regularization anyway, so regularization is generally not helpful for it.
+- b. Using too large a value of $\lambda$ can cause your hypothesis to overfit the data; this can be avoided by reducing $\lambda$.
+- c. Using a very large value of $\lambda$ cannot hurt the performance of your hypothesis; the only reason we do not set $\lambda$ to be too large is to avoid numerical problems.
+- d.   Consider a classification problem.  Adding regularization may cause your classifier to incorrectly classify some training examples (which it had correctly classified when not using regularization, i.e. when $\lambda = 0$).
+
+---
+
+4. In which one of the following figures do you think the hypothesis has overfit the training set?
+>
+- a. Figure: ![](/public/img/machine-learn/2015-02-27-17.24.59.png)
+- b. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.16.png)
+- c. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.39.png)
+- d. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.45.png)
+
+---
+
+5. In which one of the following figures do you think the hypothesis has underfit the training set?
+>
+- a. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.45.png)
+- b. Figure: ![](/public/img/machine-learn/2015-02-27-17.30.56.png)
+- c. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.16.png)
+- d. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.39.png)

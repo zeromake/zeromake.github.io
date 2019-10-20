@@ -65,8 +65,9 @@ export default {
         return this.post.title || '';
     },
     data() {
+        const path = this.$route.path;
         return {
-            href: 'https://blog.zeromake.com' + this.$route.path,
+            href: 'https://blog.zeromake.com' + (path.endsWith('/') ? path.substr(0, path.length - 1): path),
             post: this.$store.getters.activePage || {},
             page: this.$store.state.activePage,
         }
