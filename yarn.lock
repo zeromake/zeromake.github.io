@@ -862,10 +862,10 @@
   dependencies:
     "@hapi/hoek" "8.x.x"
 
-"@nestjs/cli@^6.10.2":
-  version "6.10.2"
-  resolved "https://registry.npm.taobao.org/@nestjs/cli/download/@nestjs/cli-6.10.2.tgz#77855d250f95608582f2fc58148d53be1fac4d35"
-  integrity sha1-d4VdJQ+VYIWC8vxYFI1Tvh+sTTU=
+"@nestjs/cli@^6.10.5":
+  version "6.10.5"
+  resolved "https://registry.npm.taobao.org/@nestjs/cli/download/@nestjs/cli-6.10.5.tgz#1fbedd739d48e78f26e00e204be126bca3447c54"
+  integrity sha1-H77dc51I548m4A4gS+EmvKNEfFQ=
   dependencies:
     "@angular-devkit/core" "8.3.8"
     "@angular-devkit/schematics" "8.3.8"
@@ -972,10 +972,10 @@
   resolved "https://registry.npm.taobao.org/@types/anymatch/download/@types/anymatch-1.3.1.tgz#336badc1beecb9dacc38bea2cf32adf627a8421a"
   integrity sha1-M2utwb7sudrMOL6izzKt9ieoQho=
 
-"@types/bluebird@^3.5.27":
-  version "3.5.27"
-  resolved "https://registry.npm.taobao.org/@types/bluebird/download/@types/bluebird-3.5.27.tgz#61eb4d75dc6bfbce51cf49ee9bbebe941b2cb5d0"
-  integrity sha1-YetNddxr+85Rz0num76+lBsstdA=
+"@types/bluebird@^3.5.28":
+  version "3.5.28"
+  resolved "https://registry.npm.taobao.org/@types/bluebird/download/@types/bluebird-3.5.28.tgz#04c1a520ff076649236bc8ca21198542ce2bdb09"
+  integrity sha1-BMGlIP8HZkkja8jKIRmFQs4r2wk=
 
 "@types/events@*":
   version "3.0.0"
@@ -1023,10 +1023,10 @@
   resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-12.7.2.tgz?cache=0&sync_timestamp=1566325318079&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-12.7.2.tgz#c4e63af5e8823ce9cc3f0b34f7b998c2171f0c44"
   integrity sha1-xOY69eiCPOnMPws097mYwhcfDEQ=
 
-"@types/node@^12.7.12":
-  version "12.7.12"
-  resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-12.7.12.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-12.7.12.tgz#7c6c571cc2f3f3ac4a59a5f2bd48f5bdbc8653cc"
-  integrity sha1-fGxXHMLz86xKWaXyvUj1vbyGU8w=
+"@types/node@^12.11.1":
+  version "12.11.1"
+  resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-12.11.1.tgz?cache=0&sync_timestamp=1571184062736&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-12.11.1.tgz#1fd7b821f798b7fa29f667a1be8f3442bb8922a3"
+  integrity sha1-H9e4IfeYt/op9mehvo80QruJIqM=
 
 "@types/source-list-map@*":
   version "0.1.2"
@@ -1501,13 +1501,13 @@ atob@^2.1.1:
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
 
-autoprefixer@^9.6.4:
-  version "9.6.4"
-  resolved "https://registry.npm.taobao.org/autoprefixer/download/autoprefixer-9.6.4.tgz?cache=0&sync_timestamp=1570294713985&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fautoprefixer%2Fdownload%2Fautoprefixer-9.6.4.tgz#e6453be47af316b2923eaeaed87860f52ad4b7eb"
-  integrity sha1-5kU75HrzFrKSPq6u2Hhg9SrUt+s=
+autoprefixer@^9.6.5:
+  version "9.6.5"
+  resolved "https://registry.npm.taobao.org/autoprefixer/download/autoprefixer-9.6.5.tgz?cache=0&sync_timestamp=1571040005147&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fautoprefixer%2Fdownload%2Fautoprefixer-9.6.5.tgz#98f4afe7e93cccf323287515d426019619775e5e"
+  integrity sha1-mPSv5+k8zPMjKHUV1CYBlhl3Xl4=
   dependencies:
     browserslist "^4.7.0"
-    caniuse-lite "^1.0.30000998"
+    caniuse-lite "^1.0.30000999"
     chalk "^2.4.2"
     normalize-range "^0.1.2"
     num2fraction "^1.2.2"
@@ -1915,7 +1915,7 @@ caniuse-lite@^1.0.30000984:
   resolved "https://registry.npm.taobao.org/caniuse-lite/download/caniuse-lite-1.0.30000989.tgz#b9193e293ccf7e4426c5245134b8f2a56c0ac4b9"
   integrity sha1-uRk+KTzPfkQmxSRRNLjypWwKxLk=
 
-caniuse-lite@^1.0.30000989, caniuse-lite@^1.0.30000998:
+caniuse-lite@^1.0.30000989, caniuse-lite@^1.0.30000999:
   version "1.0.30000999"
   resolved "https://registry.npm.taobao.org/caniuse-lite/download/caniuse-lite-1.0.30000999.tgz#427253a69ad7bea4aa8d8345687b8eec51ca0e43"
   integrity sha1-QnJTpprXvqSqjYNFaHuO7FHKDkM=
@@ -6870,10 +6870,10 @@ sequelize-typescript@^1.0.0:
   dependencies:
     glob "7.1.2"
 
-sequelize@^5.19.6:
-  version "5.19.6"
-  resolved "https://registry.npm.taobao.org/sequelize/download/sequelize-5.19.6.tgz#4d72bb17e3e96d51bdd33a3afa0d5b0bc14fc8a4"
-  integrity sha1-TXK7F+PpbVG90zo6+g1bC8FPyKQ=
+sequelize@^5.21.1:
+  version "5.21.1"
+  resolved "https://registry.npm.taobao.org/sequelize/download/sequelize-5.21.1.tgz#202beb1265ad183904e63478f6e01e3253a75d01"
+  integrity sha1-ICvrEmWtGDkE5jR49uAeMlOnXQE=
   dependencies:
     bluebird "^3.5.0"
     cls-bluebird "^2.1.0"
@@ -8158,10 +8158,10 @@ webpack@4.41.0:
     watchpack "^1.6.0"
     webpack-sources "^1.4.1"
 
-webpack@^4.41.1:
-  version "4.41.1"
-  resolved "https://registry.npm.taobao.org/webpack/download/webpack-4.41.1.tgz#5388dd3047d680d5d382a84249fd4750e87372fd"
-  integrity sha1-U4jdMEfWgNXTgqhCSf1HUOhzcv0=
+webpack@^4.41.2:
+  version "4.41.2"
+  resolved "https://registry.npm.taobao.org/webpack/download/webpack-4.41.2.tgz#c34ec76daa3a8468c9b61a50336d8e3303dce74e"
+  integrity sha1-w07Hbao6hGjJthpQM22OMwPc504=
   dependencies:
     "@webassemblyjs/ast" "1.8.5"
     "@webassemblyjs/helper-module-context" "1.8.5"
