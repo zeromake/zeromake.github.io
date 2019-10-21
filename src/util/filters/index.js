@@ -26,7 +26,7 @@ function fullNumber(num, size) {
     let str = '';
     for(let i = size - 1; i >= 1; i--) {
         const max = Math.pow(10, i);
-        if(num > max) {
+        if(num >= max) {
             break;
         }
         str += '0';

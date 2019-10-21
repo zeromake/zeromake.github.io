@@ -9,8 +9,7 @@ private: false
 
 ## 前言
 
--   继续上一篇的的学习，但是明显发现我的进度完全不够快，拖延症还是泛滥了。
--   这一篇继续第二周的学习进度。
+继续上一篇的的学习，这一篇继续第二周的学习进度, 主要内容为多特征，Octave 使用。
 
 <!--more-->
 
@@ -321,7 +320,7 @@ With the normal equation, computing the inversion has complexity $\mathcal{O}(n^
 
 </details>
 
-Note: 在示例中给出的设计矩阵 X（在幻灯片的右下角）应具有元素 x，其下标 1 和上标的范围从 1 到 m，因为对于所有 m 个训练集，只有 2 个特征 $x_0$ 和 $ x_1$; X 矩阵的 m 乘 (n + 1)，而不是 n \* n。
+Note: 在示例中给出的设计矩阵 X（在幻灯片的右下角）应具有元素 x，其下标 1 和上标的范围从 1 到 m，因为对于所有 m 个训练集，只有 2 个特征 $x_0$ 和 $x_1$; X 矩阵的 m 乘 (n + 1)，而不是 n \* n。
 
 梯度下降提供了一种最小化 J 的方法。让我们讨论这样做的第二种方法，这一次显式地执行最小化，而不求助于迭代算法。 在 `正态方程` 方法中，我们将通过显式地将其关于 θj 的导数并将其设置为零来最小化 J。 这使我们无需迭代即可找到最佳 θ。 正态方程公式如下：
 
@@ -348,3 +347,203 @@ pinv(X' * X) * X' * y
 
 
 利用正规方程，计算反演的复杂度为 $\mathcal{O}(n^3)$。 因此，如果我们具有大量特征，则正常方程将变慢。 在实践中，当 n 超过 10,000 时，可能是从常规解转到迭代过程的好时机。
+
+## 七、测验
+
+<details>
+<summary>原文</summary>
+
+---
+
+1. Suppose m=4 students have taken some class, and the class had a midterm exam and a final exam. You have collected a dataset of their scores on the two exams, which is as follows:
+>
+| midterm exam | (midterm exam)^2 | final exam |
+| -- | -- | -- |
+| 89 | 7921 | 96 |
+| 72 | 5184 | 74 |
+| 94 | 8836 | 87 |
+| 69 | 4761 | 78 |
+>
+You'd like to use polynomial regression to predict a student's final exam score from their midterm exam score. Concretely, suppose you want to fit a model of the form $h_θ(x)=θ_0 + θ_1x1 + θ_2x2$, where $x_1$ is the midterm score and $x_2$ is (midterm score)^2. Further, you plan to use both feature scaling (dividing by the "max-min", or range, of a feature) and mean normalization.
+What is the normalized feature $x_2^{(4)}$? (Hint: midterm = 69, final = 78 is training example 4.) Please round off your answer to two decimal places and enter in the text box below.
+
+---
+
+2. You run gradient descent for 15 iterations
+with $α = 0.3$ and compute
+$J(θ)$ after each iteration. You find that the
+value of $J(θ)$ decreases quickly then levels
+off. Based on this, which of the following conclusions seems
+most plausible?
+>
+- a. $α = 0.3$ is an effective choice of learning rate.
+- b. Rather than use the current value of $α$, it'd be more promising to try a smaller value of $α$ (say $α = 0.1$).
+- c. Rather than use the current value of $α$, it'd be more promising to try a smaller value of $α$ (say $α = 1.0$).
+
+---
+
+3. Suppose you have $m = 23$ training examples with $n = 5$ features (excluding the additional all-ones feature for the intercept term, which you should add). The normal equation is $\theta = (X^TX)^{-1}X^Ty$. For the given values of $m$ and $n$, what are the dimensions of $θ$, $X$, and $y$ in this equation?
+>
+- a. $X$ is $23\times6$, $y$ is $23\times1$, $θ$ is $6\times1$
+- b. $X$ is $23\times5$, $y$ is $23\times1$, $θ$ is $5\times5$
+- c. $X$ is $23\times6$, $y$ is $23\times6$, $θ$ is $6\times6$
+- d. $X$ is $23\times5$, $y$ is $23\times1$, $θ$ is $5\times1$
+
+---
+
+4. Suppose you have a dataset with $m=50$ examples and $n=15$ features for each example. You want to use multivariate linear regression to fit the parameters $θ$ to our data. Should you prefer gradient descent or the normal equation?
+>
+- a. Gradient descent, since it will always converge to the optimal $α$.
+- b. Gradient descent, since $(X^TX)^{-1}$ will be very slow to compute in the normal equation.
+- c. The normal equation, since it provides an efficient way to directly find the solution.
+- d. The normal equation, since gradient descent might be unable to find the optimal $θ$.
+
+---
+
+5. Which of the following are reasons for using feature scaling?(many select)
+>
+- a. It prevents the matrix $X^TX$ (used in the normal equation) from being non-invertable (singular/degenerate).
+- b. It speeds up gradient descent by making it require fewer iterations to get to a good solution.
+- c. It speeds up solving for $\theta$ using the normal equation.
+- d. It is necessary to prevent gradient descent from getting stuck in local optima.
+
+</details>
+
+---
+
+1. 假设 $m = 4$ 个学生参加了某堂课，并且该班进行了期中考试和期末考试。 您已经收集了两次考试的分数数据集，如下所示：
+>
+| 期中考试 | $\text{期中考试}^2$ | 期末考试 |
+| -- | -- | -- |
+| 89 | 7921 | 96 |
+| 72 | 5184 | 74 |
+| 94 | 8836 | 87 |
+| 69 | 4761 | 78 |
+>
+您想使用多项式回归来根据学生的期中考试成绩来预测学生的期末考试成绩。 具体来说，假设您要拟合 $h_θ(x)=θ_0+θ_1x1+θ_2x2$ 形式的模型，其中 $x_1$ 是期中分数，$x_2$ 是 $\text{期中分数}^2$。 此外，您计划同时使用特征缩放（除以特征的 `max - min` 或范围）和均值归一化。
+什么是标准化特征 $x_2^{(4)}$？ （提示：期中 = 69，期末 = 78是训练示例4。）请四舍五入到小数点后两位，然后在下面的文本框中输入。
+
+---
+
+2. 您运行梯度下降 15 次迭代
+$α=0.3$ 并计算
+每次迭代后的 $J(θ)$。 您发现
+$J(θ)$ 的值迅速下降，然后下降
+关闭。 基于此，以下哪个结论似乎
+最合理？
+>
+- a. $α = 0.3$ 是学习率的有效选择。
+- b. 与其使用 $α$ 的当前值，不如尝试使用较小的 $α$ 值（例如 $α=0.1$）。
+- c. 与其使用 $α$ 的当前值，不如尝试使用较大的 $α$ 值（例如 $α=1.0$）。
+
+---
+
+3. 假设您有 $m=23$ 个训练示例，其中包含 $n=5$ 个特征（不包括用于拦截项的附加全一功能，您应该添加该功能）。 正规方程为 $\theta = (X ^ TX)^{-1}X ^ Ty$。 对于给定的 $m$ 和 $n$ 值，方程中 $θ$，$X$ 和 $y$ 的尺寸分别是多少？
+>
+- a. $X$ 是 $23\times6$, $y$ 是 $23\times1$, $θ$ 是 $6\times1$
+- b. $X$ 是 $23\times5$, $y$ 是 $23\times1$, $θ$ 是 $5\times5$
+- c. $X$ 是 $23\times6$, $y$ 是 $23\times6$, $θ$ 是 $6\times6$
+- d. $X$ 是 $23\times5$, $y$ 是 $23\times1$, $θ$ 是 $5\times1$
+
+---
+
+4. 假设您有一个包含 $m = 50$ 个示例和每个示例 $n = 15$ 个特征的数据集。 您想使用多元线性回归将参数 $θ$ 拟合到我们的数据中。 您应该选择 `梯度下降` 还是 `正规方程`？
+>
+- a. 梯度下降，因为它将始终收敛到最佳 $α$。
+- b. 梯度下降，因为在正规方程中 $(X ^ TX)^{-1}$ 的计算将非常缓慢。
+- c. 正规方程，因为它提供了直接找到解的有效方法。
+- d. 正规方程，因为梯度下降可能无法找到最佳的 $θ$。
+
+---
+
+5. 以下哪些是使用特征缩放的原因？（多选）
+>
+- a. 这样可以防止矩阵 $X^TX$（在正常方程式中使用）不可逆（奇异/简并）。
+- b. 它通过减少迭代次数来获得良好的解决方案，从而加快了梯度下降的速度。
+- c. 它可以使用法线方程加快求解 $\theta$ 的速度。
+- d. 有必要防止梯度下降陷入局部最优状态。
+
+
+<details>
+<summary>答案</summary>
+
+1. `0.47` $(7921 + 5184 + 8836 + 4761) / 4 = 6675.5$, $8836 - 4761 = 4075$, $\dfrac{4761 - 6675.5}{4075} = 0.4698159509202454$.
+2. `a`, 刚好匹配就是快速计算出正确的值，太大 $\theta$ 可能会出现增大，太小会出现 $\theta$ 值的下降缓慢。
+3. `a`
+4. `c`
+5. `b`, a: 特征缩放仅对梯度下降方程有效，c: 并不会加快线性方程，d: 特征缩放无法处理局部最优解。
+</details>
+
+## 八、Octave 使用
+
+python 环境下需要导入以下库
+``` py
+import numpy as np
+import matplotlib.pyplot as plt
+```
+
+| 说明 | Octave | Python + Numpy + Matplotlib |
+|:----:|:----:|:----:|
+| 加 | `1 + 2` | `1 + 2` |
+| 减 | `1 - 2` | `1 - 2` |
+| 乘 | `1 * 2` | `1 * 2` |
+| 除 | `1 / 2` | `1 / 2` |
+| 幂 | `1 ^ 2` | `1 ** 2` |
+| 抑制结果打印 | `${表达式};` | - |
+| 逻辑或 | `a \|\| b` | `a or b` |
+| 逻辑与 | `a && b` | `a and b` |
+| 位异或 | `XOR(a, b)` | `a ^ b` |
+| 等于 | `a == b` | `a == \|\| is b` |
+| 不等于 | `a ~= b` | `a != \|\| not is b` |
+| 大于 | `a > b` | `a > b` |
+| 小于 | `a < b` | `a < b` |
+| 大于等于 | `a >= b` | `a >= b` |
+| 小于等于 | `a <= b` | `a <= b` |
+| 打印变量 | `disp(a)` | `print(a)` |
+| 字符串格式化 | `sprintf('%0.2f', a)` | `'%0.2f' % a` |
+| 创建矩阵 | `a = [1 2; 3 4; 5 6]` | `a = np.array([(1, 2), (3, 4), (5, 6)]` |
+| 递进创建向量 | `a = [1:0.1:2]` | `a = np.arange(1, 2 + 0.1, 0.1)` |
+| 填充创建矩阵 | `a = 2 * ones(2, 3)` | `a = 2 * np.ones((2, 3), dtype=np.uint32)` |
+| 创建随机填充的矩阵 | `a = rand(2, 3)` | `a = np.random.rand(2, 3)` |
+| 高斯分布矩阵 | `a = randn(2, 3)` | `a = np.random.randn(2, 3)` |
+| 对角矩阵 | `a = eye(3)` | `a = np.eye(3)` |
+| 矩阵大小 | `sz = size(a)` | `sz = np.shape(a)` |
+| 加载磁盘上的数据 | `load('file')` | `a = numpy.load('file')` |
+| 保存变量 | `save 'file' a` | `numpy.save('file', a)` |
+| 保存变量到纯文本 | `save 'file' a -ascii` | `numpy.savetxt('file', a)` |
+| 查看全部变量 | `who` | - |
+| 查看全部变量详情 | `whos` | - |
+| 清理变量 | `clear a` | - |
+| 矩阵元素访问 | `a(1, 1)` | `a[0][0]` or `a[0, 0]` |
+| 矩阵行访问 | `a(1, :)` | `a[0]` or `a[0, :]` |
+| 矩阵列访问 | `a(:, 1)` | `a[:, 0]` |
+| 矩阵限制列或行 | `a(:, [1 2])` | `a[:, (0, 1)]` |
+| 增加一列(合并列) | `a = [a [8; 9]]` | `np.c_(a, np.array([[8, 9]]).T)` |
+| 增加一行(合并行) | `a = [a; [8 9 10]]` | `np.r_(a, np.array([[8, 9, 10]]))` |
+| 矩阵转行向量 | `a(:)` | `a.flatten()` or `a.ravel()` |
+| 矩阵乘法 | `a .* b` | `a * b` |
+| 矩阵转置 | `a'` | `a.T` |
+| 矩阵绝对值 | `abs(a)` | `np.abs(a)` |
+| 矩阵平方根 | `sqrt(a)` | `np.sqrt(a)` |
+| 矩阵对数 | `log(a)` | `np.log(a)` |
+| 矩阵最大值 | `max(a)` | `np.max(a)` |
+| 矩阵最小值 | `min(a)` | `np.min(a)` |
+| 矩阵求和 | `sum(a)` | `np.sum(a)` |
+| 矩阵求乘积 | `prod(a)` | `np.prod(a)` |
+| 矩阵向下取整 | `floor(a)` | `np.floor(a)` |
+| 矩阵向上取整 | `ceil(a)` | `np.ceil(a)` |
+| 矩阵元素比较 | `a > 1` | `a > 1` |
+| 矩阵根据比较结果矩阵过滤 | `find(a >1)` | `a[a > 1]` |
+| 幻方矩阵 | `magic(3)` | 可自行实现 |
+| 矩阵求逆 | `pinv(a)` | `np.linalg.pinv(a)` |
+| 矩阵正弦函数 | `sin(a)` | `np.sin(a)` |
+| 绘制线性函数 | `polt(t, y1)` | `plt.polt(t, y1)` |
+| 绘制分布柱型图 | `w = -6 + sqrt(10) * randn(1, 100);hist(w, 10)` | `w = -6 + math.sqrt(10) * np.random.randn(1, 100);plt.hist(w[0], 10)` |
+
+
+## 八、参考
+
+1. [c-printf](http://www.cplusplus.com/reference/cstdio/printf/): c字符串格式化说明。
+2. [numpy手册](https://www.numpy.org.cn/reference/)
+3. [matplotlib手册](https://www.matplotlib.org.cn/)
+4. [scipy手册](https://docs.scipy.org/doc/scipy/reference/)
