@@ -108,3 +108,6 @@ SELECT `Book`.`id`, `Book`.`name`, `Book`.`createdAt`, `Book`.`updatedAt`, `Tags
 以上对于单条数据是没有问题，但是如果我使用多个 `Tags.id` 来查询 `Book` 的话就有可能出现 `Book` 列表的数据重复。
 
 
+## 更新的 query-was-empty 错误
+
+https://stackoverflow.com/questions/48061748/query-was-empty-nodejs-sequlize/48075383
