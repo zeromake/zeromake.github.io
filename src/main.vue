@@ -60,7 +60,12 @@ export default {
                 {
                     title: "Rss",
                     href: "/api/atom.xml",
-                    target: "_blank"
+                    target: "_blank",
+                },
+                {
+                    title: 'Plan',
+                    href: '/plan',
+                    route: true,
                 }
             ],
         };

@@ -4,6 +4,7 @@ const path = require('path')
 const alone = [
     'about',
     'resume',
+    'plan',
 ];
 
 module.exports = {
