@@ -91,11 +91,14 @@ async function readPosts(render=false) {
             return true
         }
     }).map(filename => readMarkdown(postDir, filename, end).then(({ yaml, more, markdown }) => {
-        yaml.tags.forEach(function(tag) {
-            if (tag) {
-                tags[tag] = true
-            }
-        });
+        if(Array.isArray(yaml.tags)) {
+            yaml.tags.forEach(function(tag) {
+                if (tag) {
+                    tags[tag] = true
+                }
+            });
+        }
+
         // 私有文章仅在本地开发模式显示
         if(yaml.private && isProd) {
             return Promise.resolve(null);

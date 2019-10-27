@@ -2,6 +2,7 @@
 title: 离职总结
 date: 2019-10-26 13:23:44+08:00
 type: resignation
+tags: [resignation, summary]
 last_date: 2019-10-26 23:29:30+08:00
 ---
 

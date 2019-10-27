@@ -4,6 +4,7 @@ const katex = require('./markdown-it-katex');
 const highlight = require('./highlight');
 const lineNumbers = require('./highlight-line-numbers');
 const anchor = require('./markdown-it-anchor');
+const taskLists = require('markdown-it-task-lists');
 const langPrefix = 'language-';
 
 module.exports = () => {
@@ -52,6 +53,8 @@ module.exports = () => {
             return isBlock ? `<span class="katex-display">${html}</span>` : html;
         }
     });
+    // add task
+    md.use(taskLists);
     return {
         render(text) {
             return md.render(text);

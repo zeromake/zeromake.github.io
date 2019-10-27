@@ -71,6 +71,10 @@ export function createRouter () {
             {
                 path: '/about',
                 component: createAlone('about')
+            },
+            {
+                path: '/plan',
+                component: createAlone('plan')
             }
         ]
     })

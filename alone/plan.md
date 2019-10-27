@@ -2,6 +2,7 @@
 title: 计划
 date: 2019-10-25 09:52:22+08:00
 type: plan
+tags: [plan]
 last_date: 2019-10-26 23:29:49+08:00
 ---
 
