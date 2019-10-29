@@ -862,10 +862,10 @@
   dependencies:
     "@hapi/hoek" "8.x.x"
 
-"@nestjs/cli@^6.11.0":
-  version "6.11.0"
-  resolved "https://registry.npm.taobao.org/@nestjs/cli/download/@nestjs/cli-6.11.0.tgz#c15faf5425abd9ce535404c4863ff0c1b7bfb721"
-  integrity sha1-wV+vVCWr2c5TVATEhj/wwbe/tyE=
+"@nestjs/cli@^6.11.1":
+  version "6.11.1"
+  resolved "https://registry.npm.taobao.org/@nestjs/cli/download/@nestjs/cli-6.11.1.tgz#d6b6b2e32ebc55ce6f3e9f4d3a34e0ed326fdc54"
+  integrity sha1-1ray4y68Vc5vPp9NOjTg7TJv3FQ=
   dependencies:
     "@angular-devkit/core" "8.3.14"
     "@angular-devkit/schematics" "8.3.14"
@@ -888,19 +888,19 @@
     webpack "4.41.2"
     webpack-node-externals "1.7.2"
 
-"@nestjs/common@^6.8.4":
-  version "6.8.4"
-  resolved "https://registry.npm.taobao.org/@nestjs/common/download/@nestjs/common-6.8.4.tgz#1aac37f154462fc833e1411883a61121fb9b8ab2"
-  integrity sha1-Gqw38VRGL8gz4UEYg6YRIfubirI=
+"@nestjs/common@^6.8.5":
+  version "6.8.5"
+  resolved "https://registry.npm.taobao.org/@nestjs/common/download/@nestjs/common-6.8.5.tgz#5ee5cd68c3e0bfca6c6ae8069026dae15438f0bd"
+  integrity sha1-XuXNaMPgv8psaugGkCba4VQ48L0=
   dependencies:
     axios "0.19.0"
     cli-color "2.0.0"
     uuid "3.3.3"
 
-"@nestjs/core@^6.8.4":
-  version "6.8.4"
-  resolved "https://registry.npm.taobao.org/@nestjs/core/download/@nestjs/core-6.8.4.tgz#a583f9b4fb38ad0e663c0b478902c7b7390d8b8d"
-  integrity sha1-pYP5tPs4rQ5mPAtHiQLHtzkNi40=
+"@nestjs/core@^6.8.5":
+  version "6.8.5"
+  resolved "https://registry.npm.taobao.org/@nestjs/core/download/@nestjs/core-6.8.5.tgz#38e6700f0e954f15892758688748969b3dab24af"
+  integrity sha1-OOZwDw6VTxWJJ1hoh0iWmz2rJK8=
   dependencies:
     "@nuxtjs/opencollective" "0.2.2"
     fast-safe-stringify "2.0.7"
@@ -908,10 +908,10 @@
     object-hash "2.0.0"
     uuid "3.3.3"
 
-"@nestjs/platform-fastify@^6.8.4":
-  version "6.8.4"
-  resolved "https://registry.npm.taobao.org/@nestjs/platform-fastify/download/@nestjs/platform-fastify-6.8.4.tgz#23ecf023bc05be59dc97e6405c8ca36abd54fb26"
-  integrity sha1-I+zwI7wFvlncl+ZAXIyjar1U+yY=
+"@nestjs/platform-fastify@^6.8.5":
+  version "6.8.5"
+  resolved "https://registry.npm.taobao.org/@nestjs/platform-fastify/download/@nestjs/platform-fastify-6.8.5.tgz#f2ac66b5be9cbadd4267effce999a60a046788a7"
+  integrity sha1-8qxmtb6cut1CZ+/86ZmmCgRniKc=
   dependencies:
     fastify "2.10.0"
     fastify-cors "2.1.3"
@@ -4750,11 +4750,6 @@ koa-convert@^1.2.0:
     co "^4.6.0"
     koa-compose "^3.0.0"
 
-koa-is-json@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npm.taobao.org/koa-is-json/download/koa-is-json-1.0.0.tgz#273c07edcdcb8df6a2c1ab7d59ee76491451ec14"
-  integrity sha1-JzwH7c3Ljfaiwat9We52SRRR7BQ=
-
 koa-router@7.4.0:
   version "7.4.0"
   resolved "https://registry.npm.taobao.org/koa-router/download/koa-router-7.4.0.tgz#aee1f7adc02d5cb31d7d67465c9eacc825e8c5e0"
@@ -4782,10 +4777,10 @@ koa-webpack-middleware-zm@^0.0.4:
   resolved "https://registry.npm.taobao.org/koa-webpack-middleware-zm/download/koa-webpack-middleware-zm-0.0.4.tgz#be45aa2904aea55ff3300982106854ae33091af8"
   integrity sha1-vkWqKQSupV/zMAmCEGhUrjMJGvg=
 
-koa@^2.10.0:
-  version "2.10.0"
-  resolved "https://registry.npm.taobao.org/koa/download/koa-2.10.0.tgz#86a583ff280896dce3a36b0b6dae80f9559240d3"
-  integrity sha1-hqWD/ygIltzjo2sLba6A+VWSQNM=
+koa@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.npm.taobao.org/koa/download/koa-2.11.0.tgz?cache=0&sync_timestamp=1572232411139&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fkoa%2Fdownload%2Fkoa-2.11.0.tgz#fe5a51c46f566d27632dd5dc8fd5d7dd44f935a4"
+  integrity sha1-/lpRxG9WbSdjLdXcj9XX3UT5NaQ=
   dependencies:
     accepts "^1.3.5"
     cache-content-type "^1.0.0"
@@ -4805,7 +4800,6 @@ koa@^2.10.0:
     is-generator-function "^1.0.7"
     koa-compose "^4.1.0"
     koa-convert "^1.2.0"
-    koa-is-json "^1.0.0"
     on-finished "^2.3.0"
     only "~0.0.2"
     parseurl "^1.3.2"
