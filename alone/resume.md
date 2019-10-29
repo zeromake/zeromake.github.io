@@ -88,9 +88,9 @@ last_date: 2019-10-25 09:46:22+08:00
 
 ### 技术文章
 
--   [sequelize 的一些陷阱](https://blog.zeromake.com/pages/sequelize-trap/)
--   [使用 vue-ssr 制作一个静态博客](https://blog.zeromake.com/pages/vue-ssr-static-blog)
--   [docker 容器调试新姿势](https://blog.zeromake.com/pages/docker-debug)
+-   sequelize 的一些陷阱：https://blog.zeromake.com/pages/sequelize-trap
+-   使用 vue-ssr 制作一个静态博客：https://blog.zeromake.com/pages/vue-ssr-static-blog
+-   docker 容器调试新姿势：https://blog.zeromake.com/pages/docker-debug
 
 ## 技能清单
 
