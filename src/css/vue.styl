@@ -1,6 +1,6 @@
 // copy to https://github.com/docsifyjs/docsify/blob/develop/src/themes/vue.styl
 // 导入谷歌字体
-@import url('https://fonts.loli.net/css?family=Roboto+Mono|Source+Sans+Pro:300,400,600');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono|Source+Sans+Pro:300,400,600');
 
 // 链接颜色
 $color-primary = #42b983
@@ -172,3 +172,37 @@ $em-color = #7f8c8d
         top 0
     img
         max-width 100%
+
+
+
+    .admonition
+        padding 0.75em
+        margin-bottom 1.5em
+        background #e7f2fa
+        p\:last-child, ul\:last-child, ol\:last-child
+            margin-bottom 0
+        &.warning
+            background: #ffedcc !important;
+            .admonition-title
+                background #f0b37e !important
+                &::before
+                    content "\f071" !important
+        &.tip .admonition-title::before
+                content "\f0eb" !important
+    .admonition-title
+        color #fff
+        font-weight bold
+        display block
+        background #6ab0de
+        margin -0.75em
+        padding 0.5em 0.75em
+        margin-bottom 0.75em
+        &::before
+            margin-right 0.25em
+            font-family "FontAwesome"
+            display inline-block
+            font-style normal
+            font-weight normal
+            text-decoration inherit
+            content "\f040"
+

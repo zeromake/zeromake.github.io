@@ -5,6 +5,8 @@ const highlight = require('./highlight');
 const lineNumbers = require('./highlight-line-numbers');
 const anchor = require('./markdown-it-anchor');
 const taskLists = require('markdown-it-task-lists');
+const attrs = require('markdown-it-attrs');
+const admonition = require('markdown-it-admonition');
 const langPrefix = 'language-';
 
 module.exports = () => {
@@ -42,11 +44,16 @@ module.exports = () => {
     });
 
     md.enable(['table']);
+
+    // add attrs
+    md.use(attrs);
+
     md.use(anchor, {
         class: 'headerlink anchor',
         after: true,
         inject: true,
     });
+
     md.use(katex, {
         render(latex, isBlock) {
             const html = renderToString(latex);
@@ -55,6 +62,10 @@ module.exports = () => {
     });
     // add task
     md.use(taskLists);
+
+    // add admonition
+    md.use(admonition);
+
     return {
         render(text) {
             return md.render(text);

@@ -125,5 +125,5 @@ app.use(router.routes()).use(router.allowedMethods())
 
 const port = process.env.PORT || 8089
 app.listen(port, '0.0.0.0', () => {
-    console.log(`server started at localhost:${port}`)
+    console.log(`server started at http://localhost:${port}`)
 })
