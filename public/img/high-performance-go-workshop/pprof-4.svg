@@ -1,0 +1,896 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%px" height="100%px">
+<g id="viewport" transform="scale(0.5,0.5) translate(0,0)"><g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1715)">
+<title>unnamed</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-1715 606,-1715 606,4 -4,4"></polygon>
+<g id="clust1" class="cluster">
+<title>cluster_L</title>
+<polygon fill="none" stroke="#000000" points="18,-1607 18,-1703 418,-1703 418,-1607 18,-1607"></polygon>
+</g>
+<!-- Type: delay -->
+<g id="node1" class="node">
+<title>Type: delay</title>
+<polygon fill="#f8f8f8" stroke="#000000" points="409.5,-1695 26.5,-1695 26.5,-1615 409.5,-1615 409.5,-1695"></polygon>
+<text text-anchor="start" x="34.5" y="-1678.2" font-family="Times,serif" font-size="16.00" fill="#000000">Type: delay</text>
+<text text-anchor="start" x="34.5" y="-1660.2" font-family="Times,serif" font-size="16.00" fill="#000000">Time: Mar 23, 2019 at 6:05pm (CET)</text>
+<text text-anchor="start" x="34.5" y="-1642.2" font-family="Times,serif" font-size="16.00" fill="#000000">Showing nodes accounting for 7.82s, 100% of 7.82s total</text>
+<text text-anchor="start" x="34.5" y="-1624.2" font-family="Times,serif" font-size="16.00" fill="#000000">Dropped 39 nodes (cum &lt;= 0.04s)</text>
+</g>
+<!-- N1 -->
+<g id="node1" class="node">
+<title>N1</title>
+<g id="a_node1"><a xlink:title="runtime.selectgo (4.55s)">
+<polygon fill="#edd8d5" stroke="#b21a00" points="164,-86 0,-86 0,0 164,0 164,-86"></polygon>
+<text text-anchor="middle" x="82" y="-62.8" font-family="Times,serif" font-size="24.00" fill="#000000">runtime</text>
+<text text-anchor="middle" x="82" y="-36.8" font-family="Times,serif" font-size="24.00" fill="#000000">selectgo</text>
+<text text-anchor="middle" x="82" y="-10.8" font-family="Times,serif" font-size="24.00" fill="#000000">4.55s (58.18%)</text>
+</a>
+</g>
+</g>
+<!-- N2 -->
+<g id="node2" class="node">
+<title>N2</title>
+<g id="a_node2"><a xlink:title="testing.(*B).runN (5.06s)">
+<polygon fill="#edd8d5" stroke="#b21500" points="508,-1176 428,-1176 428,-1132 508,-1132 508,-1176"></polygon>
+<text text-anchor="middle" x="468" y="-1165.6" font-family="Times,serif" font-size="8.00" fill="#000000">testing</text>
+<text text-anchor="middle" x="468" y="-1156.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*B)</text>
+<text text-anchor="middle" x="468" y="-1147.6" font-family="Times,serif" font-size="8.00" fill="#000000">runN</text>
+<text text-anchor="middle" x="468" y="-1138.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 5.06s (64.63%)</text>
+</a>
+</g>
+</g>
+<!-- N7 -->
+<g id="node7" class="node">
+<title>N7</title>
+<g id="a_node7"><a xlink:title="net/http_test.BenchmarkClientServer (1.94s)">
+<polygon fill="#edddd5" stroke="#b23c00" points="410,-1077 316,-1077 316,-1041 410,-1041 410,-1077"></polygon>
+<text text-anchor="middle" x="363" y="-1066.1" font-family="Times,serif" font-size="8.00" fill="#000000">http_test</text>
+<text text-anchor="middle" x="363" y="-1057.1" font-family="Times,serif" font-size="8.00" fill="#000000">BenchmarkClientServer</text>
+<text text-anchor="middle" x="363" y="-1048.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.94s (24.83%)</text>
+</a>
+</g>
+</g>
+<!-- N2&#45;&gt;N7 -->
+<g id="edge13" class="edge">
+<title>N2-&gt;N7</title>
+<g id="a_edge13"><a xlink:title="testing.(*B).runN -> net/http_test.BenchmarkClientServer (1.94s)">
+<path fill="none" stroke="#b23c00" stroke-width="2" d="M443.647,-1131.9663C427.8199,-1117.6466 407.1473,-1098.9428 390.6948,-1084.0572"></path>
+<polygon fill="#b23c00" stroke="#b23c00" stroke-width="2" points="392.7604,-1081.2062 382.9968,-1077.0924 388.064,-1086.3969 392.7604,-1081.2062"></polygon>
+</a>
+</g>
+<g id="a_edge13-label"><a xlink:title="testing.(*B).runN -> net/http_test.BenchmarkClientServer (1.94s)">
+<text text-anchor="middle" x="439" y="-1102.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.94s</text>
+</a>
+</g>
+</g>
+<!-- N36 -->
+<g id="node36" class="node">
+<title>N36</title>
+<g id="a_node36"><a xlink:title="testing.runBenchmarks.func1 (3.11s)">
+<polygon fill="#eddbd5" stroke="#b22b00" points="508,-1081 428,-1081 428,-1037 508,-1037 508,-1081"></polygon>
+<text text-anchor="middle" x="468" y="-1070.6" font-family="Times,serif" font-size="8.00" fill="#000000">testing</text>
+<text text-anchor="middle" x="468" y="-1061.6" font-family="Times,serif" font-size="8.00" fill="#000000">runBenchmarks</text>
+<text text-anchor="middle" x="468" y="-1052.6" font-family="Times,serif" font-size="8.00" fill="#000000">func1</text>
+<text text-anchor="middle" x="468" y="-1043.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 3.11s (39.80%)</text>
+</a>
+</g>
+</g>
+<!-- N2&#45;&gt;N36 -->
+<g id="edge4" class="edge">
+<title>N2-&gt;N36</title>
+<g id="a_edge4"><a xlink:title="testing.(*B).runN -> testing.runBenchmarks.func1 (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-1131.9663C468,-1119.9427 468,-1104.8283 468,-1091.4785"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-1091.2433 468,-1081.2433 464.5001,-1091.2433 471.5001,-1091.2433"></polygon>
+</a>
+</g>
+<g id="a_edge4-label"><a xlink:title="testing.(*B).runN -> testing.runBenchmarks.func1 (3.11s)">
+<text text-anchor="middle" x="485" y="-1102.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+<!-- N3 -->
+<g id="node3" class="node">
+<title>N3</title>
+<g id="a_node3"><a xlink:title="runtime.chanrecv1 (3.23s)">
+<polygon fill="#eddad5" stroke="#b22900" points="544,-407 392,-407 392,-327 544,-327 544,-407"></polygon>
+<text text-anchor="middle" x="468" y="-385.4" font-family="Times,serif" font-size="22.00" fill="#000000">runtime</text>
+<text text-anchor="middle" x="468" y="-361.4" font-family="Times,serif" font-size="22.00" fill="#000000">chanrecv1</text>
+<text text-anchor="middle" x="468" y="-337.4" font-family="Times,serif" font-size="22.00" fill="#000000">3.23s (41.25%)</text>
+</a>
+</g>
+</g>
+<!-- N4 -->
+<g id="node4" class="node">
+<title>N4</title>
+<g id="a_node4"><a xlink:title="runtime.main (3.11s)">
+<polygon fill="#eddbd5" stroke="#b22b00" points="508,-1673 428,-1673 428,-1637 508,-1637 508,-1673"></polygon>
+<text text-anchor="middle" x="468" y="-1662.1" font-family="Times,serif" font-size="8.00" fill="#000000">runtime</text>
+<text text-anchor="middle" x="468" y="-1653.1" font-family="Times,serif" font-size="8.00" fill="#000000">main</text>
+<text text-anchor="middle" x="468" y="-1644.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 3.11s (39.80%)</text>
+</a>
+</g>
+</g>
+<!-- N16 -->
+<g id="node16" class="node">
+<title>N16</title>
+<g id="a_node16"><a xlink:title="main.main (3.11s)">
+<polygon fill="#eddbd5" stroke="#b22b00" points="508,-1560 428,-1560 428,-1524 508,-1524 508,-1560"></polygon>
+<text text-anchor="middle" x="468" y="-1549.1" font-family="Times,serif" font-size="8.00" fill="#000000">main</text>
+<text text-anchor="middle" x="468" y="-1540.1" font-family="Times,serif" font-size="8.00" fill="#000000">main</text>
+<text text-anchor="middle" x="468" y="-1531.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 3.11s (39.80%)</text>
+</a>
+</g>
+</g>
+<!-- N4&#45;&gt;N16 -->
+<g id="edge3" class="edge">
+<title>N4-&gt;N16</title>
+<g id="a_edge3"><a xlink:title="runtime.main -> main.main (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-1636.8446C468,-1618.8877 468,-1591.1466 468,-1570.2969"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-1570.1103 468,-1560.1103 464.5001,-1570.1104 471.5001,-1570.1103"></polygon>
+</a>
+</g>
+<g id="a_edge3-label"><a xlink:title="runtime.main -> main.main (3.11s)">
+<text text-anchor="middle" x="485" y="-1585.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+<!-- N5 -->
+<g id="node5" class="node">
+<title>N5</title>
+<g id="a_node5"><a xlink:title="net/http.(*persistConn).writeLoop (2.54s)">
+<polygon fill="#eddcd5" stroke="#b23300" points="122,-181 42,-181 42,-137 122,-137 122,-181"></polygon>
+<text text-anchor="middle" x="82" y="-170.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="82" y="-161.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*persistConn)</text>
+<text text-anchor="middle" x="82" y="-152.6" font-family="Times,serif" font-size="8.00" fill="#000000">writeLoop</text>
+<text text-anchor="middle" x="82" y="-143.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 2.54s (32.44%)</text>
+</a>
+</g>
+</g>
+<!-- N5&#45;&gt;N1 -->
+<g id="edge12" class="edge">
+<title>N5-&gt;N1</title>
+<g id="a_edge12"><a xlink:title="net/http.(*persistConn).writeLoop -> runtime.selectgo (2.54s)">
+<path fill="none" stroke="#b23300" stroke-width="2" d="M82,-136.9082C82,-125.3769 82,-110.7235 82,-96.4411"></path>
+<polygon fill="#b23300" stroke="#b23300" stroke-width="2" points="85.5001,-96.1567 82,-86.1568 78.5001,-96.1568 85.5001,-96.1567"></polygon>
+</a>
+</g>
+<g id="a_edge12-label"><a xlink:title="net/http.(*persistConn).writeLoop -> runtime.selectgo (2.54s)">
+<text text-anchor="middle" x="99" y="-107.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 2.54s</text>
+</a>
+</g>
+</g>
+<!-- N6 -->
+<g id="node6" class="node">
+<title>N6</title>
+<g id="a_node6"><a xlink:title="testing.(*B).launch (1.94s)">
+<polygon fill="#edddd5" stroke="#b23c00" points="410,-1271 330,-1271 330,-1227 410,-1227 410,-1271"></polygon>
+<text text-anchor="middle" x="370" y="-1260.6" font-family="Times,serif" font-size="8.00" fill="#000000">testing</text>
+<text text-anchor="middle" x="370" y="-1251.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*B)</text>
+<text text-anchor="middle" x="370" y="-1242.6" font-family="Times,serif" font-size="8.00" fill="#000000">launch</text>
+<text text-anchor="middle" x="370" y="-1233.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.94s (24.82%)</text>
+</a>
+</g>
+</g>
+<!-- N6&#45;&gt;N2 -->
+<g id="edge14" class="edge">
+<title>N6-&gt;N2</title>
+<g id="a_edge14"><a xlink:title="testing.(*B).launch -> testing.(*B).runN (1.94s)">
+<path fill="none" stroke="#b23c00" stroke-width="2" d="M392.7295,-1226.9663C406.1152,-1213.9903 423.2145,-1197.4145 437.7315,-1183.3419"></path>
+<polygon fill="#b23c00" stroke="#b23c00" stroke-width="2" points="440.3103,-1185.7167 445.0543,-1176.2433 435.438,-1180.6906 440.3103,-1185.7167"></polygon>
+</a>
+</g>
+<g id="a_edge14-label"><a xlink:title="testing.(*B).launch -> testing.(*B).runN (1.94s)">
+<text text-anchor="middle" x="442" y="-1197.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.94s</text>
+</a>
+</g>
+</g>
+<!-- N14 -->
+<g id="node14" class="node">
+<title>N14</title>
+<g id="a_node14"><a xlink:title="io/ioutil.ReadAll (0.11s)">
+<polygon fill="#edeceb" stroke="#b2aea5" points="409,-982 333,-982 333,-946 409,-946 409,-982"></polygon>
+<text text-anchor="middle" x="371" y="-971.1" font-family="Times,serif" font-size="8.00" fill="#000000">ioutil</text>
+<text text-anchor="middle" x="371" y="-962.1" font-family="Times,serif" font-size="8.00" fill="#000000">ReadAll</text>
+<text text-anchor="middle" x="371" y="-953.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 0.11s (1.46%)</text>
+</a>
+</g>
+</g>
+<!-- N7&#45;&gt;N14 -->
+<g id="edge32" class="edge">
+<title>N7-&gt;N14</title>
+<g id="a_edge32"><a xlink:title="net/http_test.BenchmarkClientServer -> io/ioutil.ReadAll (0.11s)">
+<path fill="none" stroke="#b2aea5" d="M364.5425,-1040.683C365.6935,-1027.0149 367.2877,-1008.0833 368.6041,-992.4508"></path>
+<polygon fill="#b2aea5" stroke="#b2aea5" points="372.1107,-992.5192 369.4623,-982.2607 365.1354,-991.9317 372.1107,-992.5192"></polygon>
+</a>
+</g>
+<g id="a_edge32-label"><a xlink:title="net/http_test.BenchmarkClientServer -> io/ioutil.ReadAll (0.11s)">
+<text text-anchor="middle" x="385" y="-1007.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.11s</text>
+</a>
+</g>
+</g>
+<!-- N28 -->
+<g id="node28" class="node">
+<title>N28</title>
+<g id="a_node28"><a xlink:title="net/http.Get (1.83s)">
+<polygon fill="#edddd5" stroke="#b23f00" points="315,-982 235,-982 235,-946 315,-946 315,-982"></polygon>
+<text text-anchor="middle" x="275" y="-971.1" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="275" y="-962.1" font-family="Times,serif" font-size="8.00" fill="#000000">Get</text>
+<text text-anchor="middle" x="275" y="-953.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.83s (23.37%)</text>
+</a>
+</g>
+</g>
+<!-- N7&#45;&gt;N28 -->
+<g id="edge22" class="edge">
+<title>N7-&gt;N28</title>
+<g id="a_edge22"><a xlink:title="net/http_test.BenchmarkClientServer -> net/http.Get (1.83s)">
+<path fill="none" stroke="#b23f00" stroke-width="2" d="M346.0327,-1040.683C332.6412,-1026.2263 313.7953,-1005.8813 298.8802,-989.7798"></path>
+<polygon fill="#b23f00" stroke="#b23f00" stroke-width="2" points="301.2785,-987.2185 291.9152,-982.2607 296.1432,-991.9754 301.2785,-987.2185"></polygon>
+</a>
+</g>
+<g id="a_edge22-label"><a xlink:title="net/http_test.BenchmarkClientServer -> net/http.Get (1.83s)">
+<text text-anchor="middle" x="342" y="-1007.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.83s</text>
+</a>
+</g>
+</g>
+<!-- N8 -->
+<g id="node8" class="node">
+<title>N8</title>
+<g id="a_node8"><a xlink:title="net/http.(*persistConn).readLoop (0.18s)">
+<polygon fill="#edecea" stroke="#b2ab9d" points="216,-181 140,-181 140,-137 216,-137 216,-181"></polygon>
+<text text-anchor="middle" x="178" y="-170.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="178" y="-161.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*persistConn)</text>
+<text text-anchor="middle" x="178" y="-152.6" font-family="Times,serif" font-size="8.00" fill="#000000">readLoop</text>
+<text text-anchor="middle" x="178" y="-143.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 0.18s (2.36%)</text>
+</a>
+</g>
+</g>
+<!-- N8&#45;&gt;N1 -->
+<g id="edge25" class="edge">
+<title>N8-&gt;N1</title>
+<g id="a_edge25"><a xlink:title="net/http.(*persistConn).readLoop -> runtime.selectgo (0.18s)">
+<path fill="none" stroke="#b2ab9d" d="M159.7172,-136.9082C149.6181,-124.7052 136.6254,-109.0057 124.1652,-93.9496"></path>
+<polygon fill="#b2ab9d" stroke="#b2ab9d" points="126.788,-91.6292 117.7159,-86.1568 121.3953,-96.0922 126.788,-91.6292"></polygon>
+</a>
+</g>
+<g id="a_edge25-label"><a xlink:title="net/http.(*persistConn).readLoop -> runtime.selectgo (0.18s)">
+<text text-anchor="middle" x="162" y="-107.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.18s</text>
+</a>
+</g>
+</g>
+<!-- N9 -->
+<g id="node9" class="node">
+<title>N9</title>
+<g id="a_node9"><a xlink:title="sync.(*Cond).Wait (0.04s)">
+<polygon fill="#ededec" stroke="#b2b1ad" points="600.5,-1374 527.5,-1374 527.5,-1322 600.5,-1322 600.5,-1374"></polygon>
+<text text-anchor="middle" x="564" y="-1362" font-family="Times,serif" font-size="10.00" fill="#000000">sync</text>
+<text text-anchor="middle" x="564" y="-1351" font-family="Times,serif" font-size="10.00" fill="#000000">(*Cond)</text>
+<text text-anchor="middle" x="564" y="-1340" font-family="Times,serif" font-size="10.00" fill="#000000">Wait</text>
+<text text-anchor="middle" x="564" y="-1329" font-family="Times,serif" font-size="10.00" fill="#000000">0.04s (0.57%)</text>
+</a>
+</g>
+</g>
+<!-- N10 -->
+<g id="node10" class="node">
+<title>N10</title>
+<g id="a_node10"><a xlink:title="net/http.(*conn).serve (0.04s)">
+<polygon fill="#ededec" stroke="#b2b1ad" points="602,-1677 526,-1677 526,-1633 602,-1633 602,-1677"></polygon>
+<text text-anchor="middle" x="564" y="-1666.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="564" y="-1657.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*conn)</text>
+<text text-anchor="middle" x="564" y="-1648.6" font-family="Times,serif" font-size="8.00" fill="#000000">serve</text>
+<text text-anchor="middle" x="564" y="-1639.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 0.04s (0.57%)</text>
+</a>
+</g>
+</g>
+<!-- N27 -->
+<g id="node27" class="node">
+<title>N27</title>
+<g id="a_node27"><a xlink:title="net/http.(*response).finishRequest (0.04s)">
+<polygon fill="#ededec" stroke="#b2b1ad" points="602,-1564 526,-1564 526,-1520 602,-1520 602,-1564"></polygon>
+<text text-anchor="middle" x="564" y="-1553.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="564" y="-1544.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*response)</text>
+<text text-anchor="middle" x="564" y="-1535.6" font-family="Times,serif" font-size="8.00" fill="#000000">finishRequest</text>
+<text text-anchor="middle" x="564" y="-1526.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 0.04s (0.57%)</text>
+</a>
+</g>
+</g>
+<!-- N10&#45;&gt;N27 -->
+<g id="edge33" class="edge">
+<title>N10-&gt;N27</title>
+<g id="a_edge33"><a xlink:title="net/http.(*conn).serve -> net/http.(*response).finishRequest (0.04s)">
+<path fill="none" stroke="#b2b1ad" d="M564,-1632.9442C564,-1616.2222 564,-1592.9909 564,-1574.194"></path>
+<polygon fill="#b2b1ad" stroke="#b2b1ad" points="567.5001,-1574.0001 564,-1564.0002 560.5001,-1574.0002 567.5001,-1574.0001"></polygon>
+</a>
+</g>
+<g id="a_edge33-label"><a xlink:title="net/http.(*conn).serve -> net/http.(*response).finishRequest (0.04s)">
+<text text-anchor="middle" x="581" y="-1585.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.04s</text>
+</a>
+</g>
+</g>
+<!-- N11 -->
+<g id="node11" class="node">
+<title>N11</title>
+<g id="a_node11"><a xlink:title="testing.(*B).Run (3.11s)">
+<polygon fill="#eddbd5" stroke="#b22b00" points="508,-986 428,-986 428,-942 508,-942 508,-986"></polygon>
+<text text-anchor="middle" x="468" y="-975.6" font-family="Times,serif" font-size="8.00" fill="#000000">testing</text>
+<text text-anchor="middle" x="468" y="-966.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*B)</text>
+<text text-anchor="middle" x="468" y="-957.6" font-family="Times,serif" font-size="8.00" fill="#000000">Run</text>
+<text text-anchor="middle" x="468" y="-948.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 3.11s (39.80%)</text>
+</a>
+</g>
+</g>
+<!-- N32 -->
+<g id="node32" class="node">
+<title>N32</title>
+<g id="a_node32"><a xlink:title="testing.(*B).run (3.11s)">
+<polygon fill="#eddbd5" stroke="#b22b00" points="508,-891 428,-891 428,-847 508,-847 508,-891"></polygon>
+<text text-anchor="middle" x="468" y="-880.6" font-family="Times,serif" font-size="8.00" fill="#000000">testing</text>
+<text text-anchor="middle" x="468" y="-871.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*B)</text>
+<text text-anchor="middle" x="468" y="-862.6" font-family="Times,serif" font-size="8.00" fill="#000000">run</text>
+<text text-anchor="middle" x="468" y="-853.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 3.11s (39.77%)</text>
+</a>
+</g>
+</g>
+<!-- N11&#45;&gt;N32 -->
+<g id="edge8" class="edge">
+<title>N11-&gt;N32</title>
+<g id="a_edge8"><a xlink:title="testing.(*B).Run -> testing.(*B).run (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-941.9663C468,-929.9427 468,-914.8283 468,-901.4785"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-901.2433 468,-891.2433 464.5001,-901.2433 471.5001,-901.2433"></polygon>
+</a>
+</g>
+<g id="a_edge8-label"><a xlink:title="testing.(*B).Run -> testing.(*B).run (3.11s)">
+<text text-anchor="middle" x="485" y="-912.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+<!-- N12 -->
+<g id="node12" class="node">
+<title>N12</title>
+<g id="a_node12"><a xlink:title="net/http.(*Transport).roundTrip (1.83s)">
+<polygon fill="#edddd5" stroke="#b23f00" points="314,-276 234,-276 234,-232 314,-232 314,-276"></polygon>
+<text text-anchor="middle" x="274" y="-265.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="274" y="-256.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*Transport)</text>
+<text text-anchor="middle" x="274" y="-247.6" font-family="Times,serif" font-size="8.00" fill="#000000">roundTrip</text>
+<text text-anchor="middle" x="274" y="-238.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.83s (23.37%)</text>
+</a>
+</g>
+</g>
+<!-- N26 -->
+<g id="node26" class="node">
+<title>N26</title>
+<g id="a_node26"><a xlink:title="net/http.(*persistConn).roundTrip (1.83s)">
+<polygon fill="#edddd5" stroke="#b23f00" points="314,-181 234,-181 234,-137 314,-137 314,-181"></polygon>
+<text text-anchor="middle" x="274" y="-170.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="274" y="-161.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*persistConn)</text>
+<text text-anchor="middle" x="274" y="-152.6" font-family="Times,serif" font-size="8.00" fill="#000000">roundTrip</text>
+<text text-anchor="middle" x="274" y="-143.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.83s (23.36%)</text>
+</a>
+</g>
+</g>
+<!-- N12&#45;&gt;N26 -->
+<g id="edge23" class="edge">
+<title>N12-&gt;N26</title>
+<g id="a_edge23"><a xlink:title="net/http.(*Transport).roundTrip -> net/http.(*persistConn).roundTrip (1.83s)">
+<path fill="none" stroke="#b23f00" stroke-width="2" d="M274,-231.9663C274,-219.9427 274,-204.8283 274,-191.4785"></path>
+<polygon fill="#b23f00" stroke="#b23f00" stroke-width="2" points="277.5001,-191.2433 274,-181.2433 270.5001,-191.2433 277.5001,-191.2433"></polygon>
+</a>
+</g>
+<g id="a_edge23-label"><a xlink:title="net/http.(*Transport).roundTrip -> net/http.(*persistConn).roundTrip (1.83s)">
+<text text-anchor="middle" x="291" y="-202.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.83s</text>
+</a>
+</g>
+</g>
+<!-- N13 -->
+<g id="node13" class="node">
+<title>N13</title>
+<g id="a_node13"><a xlink:title="bytes.(*Buffer).ReadFrom (0.11s)">
+<polygon fill="#edeceb" stroke="#b2aea5" points="409,-796 333,-796 333,-752 409,-752 409,-796"></polygon>
+<text text-anchor="middle" x="371" y="-785.6" font-family="Times,serif" font-size="8.00" fill="#000000">bytes</text>
+<text text-anchor="middle" x="371" y="-776.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*Buffer)</text>
+<text text-anchor="middle" x="371" y="-767.6" font-family="Times,serif" font-size="8.00" fill="#000000">ReadFrom</text>
+<text text-anchor="middle" x="371" y="-758.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 0.11s (1.46%)</text>
+</a>
+</g>
+</g>
+<!-- N22 -->
+<g id="node22" class="node">
+<title>N22</title>
+<g id="a_node22"><a xlink:title="net/http.(*bodyEOFSignal).Read (0.11s)">
+<polygon fill="#edeceb" stroke="#b2aea5" points="409.5,-701 332.5,-701 332.5,-657 409.5,-657 409.5,-701"></polygon>
+<text text-anchor="middle" x="371" y="-690.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="371" y="-681.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*bodyEOFSignal)</text>
+<text text-anchor="middle" x="371" y="-672.6" font-family="Times,serif" font-size="8.00" fill="#000000">Read</text>
+<text text-anchor="middle" x="371" y="-663.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 0.11s (1.46%)</text>
+</a>
+</g>
+</g>
+<!-- N13&#45;&gt;N22 -->
+<g id="edge26" class="edge">
+<title>N13-&gt;N22</title>
+<g id="a_edge26"><a xlink:title="bytes.(*Buffer).ReadFrom -> net/http.(*bodyEOFSignal).Read (0.11s)">
+<path fill="none" stroke="#b2aea5" d="M371,-751.9663C371,-739.9427 371,-724.8283 371,-711.4785"></path>
+<polygon fill="#b2aea5" stroke="#b2aea5" points="374.5001,-711.2433 371,-701.2433 367.5001,-711.2433 374.5001,-711.2433"></polygon>
+</a>
+</g>
+<g id="a_edge26-label"><a xlink:title="bytes.(*Buffer).ReadFrom -> net/http.(*bodyEOFSignal).Read (0.11s)">
+<text text-anchor="middle" x="388" y="-722.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.11s</text>
+</a>
+</g>
+</g>
+<!-- N15 -->
+<g id="node15" class="node">
+<title>N15</title>
+<g id="a_node15"><a xlink:title="io/ioutil.readAll (0.11s)">
+<polygon fill="#edeceb" stroke="#b2aea5" points="409,-887 333,-887 333,-851 409,-851 409,-887"></polygon>
+<text text-anchor="middle" x="371" y="-876.1" font-family="Times,serif" font-size="8.00" fill="#000000">ioutil</text>
+<text text-anchor="middle" x="371" y="-867.1" font-family="Times,serif" font-size="8.00" fill="#000000">readAll</text>
+<text text-anchor="middle" x="371" y="-858.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 0.11s (1.46%)</text>
+</a>
+</g>
+</g>
+<!-- N14&#45;&gt;N15 -->
+<g id="edge27" class="edge">
+<title>N14-&gt;N15</title>
+<g id="a_edge27"><a xlink:title="io/ioutil.ReadAll -> io/ioutil.readAll (0.11s)">
+<path fill="none" stroke="#b2aea5" d="M371,-945.683C371,-932.0149 371,-913.0833 371,-897.4508"></path>
+<polygon fill="#b2aea5" stroke="#b2aea5" points="374.5001,-897.2607 371,-887.2607 367.5001,-897.2608 374.5001,-897.2607"></polygon>
+</a>
+</g>
+<g id="a_edge27-label"><a xlink:title="io/ioutil.ReadAll -> io/ioutil.readAll (0.11s)">
+<text text-anchor="middle" x="388" y="-912.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.11s</text>
+</a>
+</g>
+</g>
+<!-- N15&#45;&gt;N13 -->
+<g id="edge28" class="edge">
+<title>N15-&gt;N13</title>
+<g id="a_edge28"><a xlink:title="io/ioutil.readAll -> bytes.(*Buffer).ReadFrom (0.11s)">
+<path fill="none" stroke="#b2aea5" d="M371,-850.683C371,-838.1876 371,-821.2931 371,-806.542"></path>
+<polygon fill="#b2aea5" stroke="#b2aea5" points="374.5001,-806.2732 371,-796.2733 367.5001,-806.2733 374.5001,-806.2732"></polygon>
+</a>
+</g>
+<g id="a_edge28-label"><a xlink:title="io/ioutil.readAll -> bytes.(*Buffer).ReadFrom (0.11s)">
+<text text-anchor="middle" x="388" y="-817.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.11s</text>
+</a>
+</g>
+</g>
+<!-- N30 -->
+<g id="node30" class="node">
+<title>N30</title>
+<g id="a_node30"><a xlink:title="net/http_test.TestMain (3.11s)">
+<polygon fill="#eddbd5" stroke="#b22b00" points="508,-1465 428,-1465 428,-1429 508,-1429 508,-1465"></polygon>
+<text text-anchor="middle" x="468" y="-1454.1" font-family="Times,serif" font-size="8.00" fill="#000000">http_test</text>
+<text text-anchor="middle" x="468" y="-1445.1" font-family="Times,serif" font-size="8.00" fill="#000000">TestMain</text>
+<text text-anchor="middle" x="468" y="-1436.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 3.11s (39.80%)</text>
+</a>
+</g>
+</g>
+<!-- N16&#45;&gt;N30 -->
+<g id="edge1" class="edge">
+<title>N16-&gt;N30</title>
+<g id="a_edge1"><a xlink:title="main.main -> net/http_test.TestMain (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-1523.683C468,-1510.0149 468,-1491.0833 468,-1475.4508"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-1475.2607 468,-1465.2607 464.5001,-1475.2608 471.5001,-1475.2607"></polygon>
+</a>
+</g>
+<g id="a_edge1-label"><a xlink:title="main.main -> net/http_test.TestMain (3.11s)">
+<text text-anchor="middle" x="485" y="-1490.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+<!-- N17 -->
+<g id="node17" class="node">
+<title>N17</title>
+<g id="a_node17"><a xlink:title="net/http.(*Client).Do (1.83s)">
+<polygon fill="#edddd5" stroke="#b23f00" points="314,-796 234,-796 234,-752 314,-752 314,-796"></polygon>
+<text text-anchor="middle" x="274" y="-785.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="274" y="-776.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*Client)</text>
+<text text-anchor="middle" x="274" y="-767.6" font-family="Times,serif" font-size="8.00" fill="#000000">Do</text>
+<text text-anchor="middle" x="274" y="-758.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.83s (23.37%)</text>
+</a>
+</g>
+</g>
+<!-- N19 -->
+<g id="node19" class="node">
+<title>N19</title>
+<g id="a_node19"><a xlink:title="net/http.(*Client).do (1.83s)">
+<polygon fill="#edddd5" stroke="#b23f00" points="314,-701 234,-701 234,-657 314,-657 314,-701"></polygon>
+<text text-anchor="middle" x="274" y="-690.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="274" y="-681.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*Client)</text>
+<text text-anchor="middle" x="274" y="-672.6" font-family="Times,serif" font-size="8.00" fill="#000000">do</text>
+<text text-anchor="middle" x="274" y="-663.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.83s (23.37%)</text>
+</a>
+</g>
+</g>
+<!-- N17&#45;&gt;N19 -->
+<g id="edge15" class="edge">
+<title>N17-&gt;N19</title>
+<g id="a_edge15"><a xlink:title="net/http.(*Client).Do -> net/http.(*Client).do (1.83s)">
+<path fill="none" stroke="#b23f00" stroke-width="2" d="M274,-751.9663C274,-739.9427 274,-724.8283 274,-711.4785"></path>
+<polygon fill="#b23f00" stroke="#b23f00" stroke-width="2" points="277.5001,-711.2433 274,-701.2433 270.5001,-711.2433 277.5001,-711.2433"></polygon>
+</a>
+</g>
+<g id="a_edge15-label"><a xlink:title="net/http.(*Client).Do -> net/http.(*Client).do (1.83s)">
+<text text-anchor="middle" x="291" y="-722.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.83s</text>
+</a>
+</g>
+</g>
+<!-- N18 -->
+<g id="node18" class="node">
+<title>N18</title>
+<g id="a_node18"><a xlink:title="net/http.(*Client).Get (1.83s)">
+<polygon fill="#edddd5" stroke="#b23f00" points="314,-891 234,-891 234,-847 314,-847 314,-891"></polygon>
+<text text-anchor="middle" x="274" y="-880.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="274" y="-871.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*Client)</text>
+<text text-anchor="middle" x="274" y="-862.6" font-family="Times,serif" font-size="8.00" fill="#000000">Get</text>
+<text text-anchor="middle" x="274" y="-853.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.83s (23.37%)</text>
+</a>
+</g>
+</g>
+<!-- N18&#45;&gt;N17 -->
+<g id="edge16" class="edge">
+<title>N18-&gt;N17</title>
+<g id="a_edge16"><a xlink:title="net/http.(*Client).Get -> net/http.(*Client).Do (1.83s)">
+<path fill="none" stroke="#b23f00" stroke-width="2" d="M274,-846.9663C274,-834.9427 274,-819.8283 274,-806.4785"></path>
+<polygon fill="#b23f00" stroke="#b23f00" stroke-width="2" points="277.5001,-806.2433 274,-796.2433 270.5001,-806.2433 277.5001,-806.2433"></polygon>
+</a>
+</g>
+<g id="a_edge16-label"><a xlink:title="net/http.(*Client).Get -> net/http.(*Client).Do (1.83s)">
+<text text-anchor="middle" x="291" y="-817.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.83s</text>
+</a>
+</g>
+</g>
+<!-- N20 -->
+<g id="node20" class="node">
+<title>N20</title>
+<g id="a_node20"><a xlink:title="net/http.(*Client).send (1.83s)">
+<polygon fill="#edddd5" stroke="#b23f00" points="314,-606 234,-606 234,-562 314,-562 314,-606"></polygon>
+<text text-anchor="middle" x="274" y="-595.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="274" y="-586.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*Client)</text>
+<text text-anchor="middle" x="274" y="-577.6" font-family="Times,serif" font-size="8.00" fill="#000000">send</text>
+<text text-anchor="middle" x="274" y="-568.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.83s (23.37%)</text>
+</a>
+</g>
+</g>
+<!-- N19&#45;&gt;N20 -->
+<g id="edge17" class="edge">
+<title>N19-&gt;N20</title>
+<g id="a_edge17"><a xlink:title="net/http.(*Client).do -> net/http.(*Client).send (1.83s)">
+<path fill="none" stroke="#b23f00" stroke-width="2" d="M274,-656.9663C274,-644.9427 274,-629.8283 274,-616.4785"></path>
+<polygon fill="#b23f00" stroke="#b23f00" stroke-width="2" points="277.5001,-616.2433 274,-606.2433 270.5001,-616.2433 277.5001,-616.2433"></polygon>
+</a>
+</g>
+<g id="a_edge17-label"><a xlink:title="net/http.(*Client).do -> net/http.(*Client).send (1.83s)">
+<text text-anchor="middle" x="291" y="-627.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.83s</text>
+</a>
+</g>
+</g>
+<!-- N29 -->
+<g id="node29" class="node">
+<title>N29</title>
+<g id="a_node29"><a xlink:title="net/http.send (1.83s)">
+<polygon fill="#edddd5" stroke="#b23f00" points="314,-502.5 234,-502.5 234,-466.5 314,-466.5 314,-502.5"></polygon>
+<text text-anchor="middle" x="274" y="-491.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="274" y="-482.6" font-family="Times,serif" font-size="8.00" fill="#000000">send</text>
+<text text-anchor="middle" x="274" y="-473.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.83s (23.37%)</text>
+</a>
+</g>
+</g>
+<!-- N20&#45;&gt;N29 -->
+<g id="edge18" class="edge">
+<title>N20-&gt;N29</title>
+<g id="a_edge18"><a xlink:title="net/http.(*Client).send -> net/http.send (1.83s)">
+<path fill="none" stroke="#b23f00" stroke-width="2" d="M274,-561.9177C274,-547.4041 274,-528.2841 274,-512.677"></path>
+<polygon fill="#b23f00" stroke="#b23f00" stroke-width="2" points="277.5001,-512.5331 274,-502.5331 270.5001,-512.5331 277.5001,-512.5331"></polygon>
+</a>
+</g>
+<g id="a_edge18-label"><a xlink:title="net/http.(*Client).send -> net/http.send (1.83s)">
+<text text-anchor="middle" x="291" y="-532.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.83s</text>
+</a>
+</g>
+</g>
+<!-- N21 -->
+<g id="node21" class="node">
+<title>N21</title>
+<g id="a_node21"><a xlink:title="net/http.(*Transport).RoundTrip (1.83s)">
+<polygon fill="#edddd5" stroke="#b23f00" points="314,-389 234,-389 234,-345 314,-345 314,-389"></polygon>
+<text text-anchor="middle" x="274" y="-378.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="274" y="-369.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*Transport)</text>
+<text text-anchor="middle" x="274" y="-360.6" font-family="Times,serif" font-size="8.00" fill="#000000">RoundTrip</text>
+<text text-anchor="middle" x="274" y="-351.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 1.83s (23.37%)</text>
+</a>
+</g>
+</g>
+<!-- N21&#45;&gt;N12 -->
+<g id="edge19" class="edge">
+<title>N21-&gt;N12</title>
+<g id="a_edge19"><a xlink:title="net/http.(*Transport).RoundTrip -> net/http.(*Transport).roundTrip (1.83s)">
+<path fill="none" stroke="#b23f00" stroke-width="2" d="M274,-344.9442C274,-328.2222 274,-304.9909 274,-286.194"></path>
+<polygon fill="#b23f00" stroke="#b23f00" stroke-width="2" points="277.5001,-286.0001 274,-276.0002 270.5001,-286.0002 277.5001,-286.0001"></polygon>
+</a>
+</g>
+<g id="a_edge19-label"><a xlink:title="net/http.(*Transport).RoundTrip -> net/http.(*Transport).roundTrip (1.83s)">
+<text text-anchor="middle" x="291" y="-297.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.83s</text>
+</a>
+</g>
+</g>
+<!-- N23 -->
+<g id="node23" class="node">
+<title>N23</title>
+<g id="a_node23"><a xlink:title="net/http.(*bodyEOFSignal).condfn (0.11s)">
+<polygon fill="#edeceb" stroke="#b2aea5" points="424.5,-606 347.5,-606 347.5,-562 424.5,-562 424.5,-606"></polygon>
+<text text-anchor="middle" x="386" y="-595.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="386" y="-586.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*bodyEOFSignal)</text>
+<text text-anchor="middle" x="386" y="-577.6" font-family="Times,serif" font-size="8.00" fill="#000000">condfn</text>
+<text text-anchor="middle" x="386" y="-568.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 0.11s (1.46%)</text>
+</a>
+</g>
+</g>
+<!-- N22&#45;&gt;N23 -->
+<g id="edge29" class="edge">
+<title>N22-&gt;N23</title>
+<g id="a_edge29"><a xlink:title="net/http.(*bodyEOFSignal).Read -> net/http.(*bodyEOFSignal).condfn (0.11s)">
+<path fill="none" stroke="#b2aea5" d="M374.479,-656.9663C376.3775,-644.9427 378.764,-629.8283 380.8718,-616.4785"></path>
+<polygon fill="#b2aea5" stroke="#b2aea5" points="384.3854,-616.6668 382.4879,-606.2433 377.471,-615.575 384.3854,-616.6668"></polygon>
+</a>
+</g>
+<g id="a_edge29-label"><a xlink:title="net/http.(*bodyEOFSignal).Read -> net/http.(*bodyEOFSignal).condfn (0.11s)">
+<text text-anchor="middle" x="397" y="-627.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.11s</text>
+</a>
+</g>
+</g>
+<!-- N25 -->
+<g id="node25" class="node">
+<title>N25</title>
+<g id="a_node25"><a xlink:title="net/http.(*persistConn).readLoop.func4 (0.11s)">
+<polygon fill="#edeceb" stroke="#b2aea5" points="440,-511 364,-511 364,-458 440,-458 440,-511"></polygon>
+<text text-anchor="middle" x="402" y="-500.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="402" y="-491.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*persistConn)</text>
+<text text-anchor="middle" x="402" y="-482.6" font-family="Times,serif" font-size="8.00" fill="#000000">readLoop</text>
+<text text-anchor="middle" x="402" y="-473.6" font-family="Times,serif" font-size="8.00" fill="#000000">func4</text>
+<text text-anchor="middle" x="402" y="-464.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 0.11s (1.46%)</text>
+</a>
+</g>
+</g>
+<!-- N23&#45;&gt;N25 -->
+<g id="edge30" class="edge">
+<title>N23-&gt;N25</title>
+<g id="a_edge30"><a xlink:title="net/http.(*bodyEOFSignal).condfn -> net/http.(*persistConn).readLoop.func4 (0.11s)">
+<path fill="none" stroke="#b2aea5" d="M389.5509,-561.9177C391.4731,-549.9644 393.8976,-534.8865 396.0953,-521.2199"></path>
+<polygon fill="#b2aea5" stroke="#b2aea5" points="399.5874,-521.5481 397.7195,-511.1192 392.6762,-520.4367 399.5874,-521.5481"></polygon>
+</a>
+</g>
+<g id="a_edge30-label"><a xlink:title="net/http.(*bodyEOFSignal).condfn -> net/http.(*persistConn).readLoop.func4 (0.11s)">
+<text text-anchor="middle" x="412" y="-532.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.11s</text>
+</a>
+</g>
+</g>
+<!-- N24 -->
+<g id="node24" class="node">
+<title>N24</title>
+<g id="a_node24"><a xlink:title="net/http.(*connReader).abortPendingRead (0.04s)">
+<polygon fill="#ededec" stroke="#b2b1ad" points="602,-1469 526,-1469 526,-1425 602,-1425 602,-1469"></polygon>
+<text text-anchor="middle" x="564" y="-1458.6" font-family="Times,serif" font-size="8.00" fill="#000000">http</text>
+<text text-anchor="middle" x="564" y="-1449.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*connReader)</text>
+<text text-anchor="middle" x="564" y="-1440.6" font-family="Times,serif" font-size="8.00" fill="#000000">abortPendingRead</text>
+<text text-anchor="middle" x="564" y="-1431.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 0.04s (0.57%)</text>
+</a>
+</g>
+</g>
+<!-- N24&#45;&gt;N9 -->
+<g id="edge34" class="edge">
+<title>N24-&gt;N9</title>
+<g id="a_edge34"><a xlink:title="net/http.(*connReader).abortPendingRead -> sync.(*Cond).Wait (0.04s)">
+<path fill="none" stroke="#b2b1ad" d="M564,-1424.5354C564,-1412.7414 564,-1397.9936 564,-1384.6003"></path>
+<polygon fill="#b2b1ad" stroke="#b2b1ad" points="567.5001,-1384.2317 564,-1374.2317 560.5001,-1384.2318 567.5001,-1384.2317"></polygon>
+</a>
+</g>
+<g id="a_edge34-label"><a xlink:title="net/http.(*connReader).abortPendingRead -> sync.(*Cond).Wait (0.04s)">
+<text text-anchor="middle" x="581" y="-1395.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.04s</text>
+</a>
+</g>
+</g>
+<!-- N25&#45;&gt;N3 -->
+<g id="edge31" class="edge">
+<title>N25-&gt;N3</title>
+<g id="a_edge31"><a xlink:title="net/http.(*persistConn).readLoop.func4 -> runtime.chanrecv1 (0.11s)">
+<path fill="none" stroke="#b2aea5" d="M407.6455,-457.835C410.4989,-447.2388 414.5394,-435.175 420,-425 421.7403,-421.7573 423.6784,-418.5263 425.7497,-415.3436"></path>
+<polygon fill="#b2aea5" stroke="#b2aea5" points="428.6744,-417.2682 431.4997,-407.057 422.9232,-413.2776 428.6744,-417.2682"></polygon>
+</a>
+</g>
+<g id="a_edge31-label"><a xlink:title="net/http.(*persistConn).readLoop.func4 -> runtime.chanrecv1 (0.11s)">
+<text text-anchor="middle" x="437" y="-428.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.11s</text>
+</a>
+</g>
+</g>
+<!-- N26&#45;&gt;N1 -->
+<g id="edge24" class="edge">
+<title>N26-&gt;N1</title>
+<g id="a_edge24"><a xlink:title="net/http.(*persistConn).roundTrip -> runtime.selectgo (1.83s)">
+<path fill="none" stroke="#b23f00" stroke-width="2" d="M237.2515,-136.7857C220.6768,-126.7674 200.8542,-114.7871 183,-104 176.2813,-99.9407 169.3109,-95.7299 162.3148,-91.5038"></path>
+<polygon fill="#b23f00" stroke="#b23f00" stroke-width="2" points="163.8256,-88.3274 153.4563,-86.1529 160.2063,-94.3192 163.8256,-88.3274"></polygon>
+</a>
+</g>
+<g id="a_edge24-label"><a xlink:title="net/http.(*persistConn).roundTrip -> runtime.selectgo (1.83s)">
+<text text-anchor="middle" x="223" y="-107.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.83s</text>
+</a>
+</g>
+</g>
+<!-- N27&#45;&gt;N24 -->
+<g id="edge35" class="edge">
+<title>N27-&gt;N24</title>
+<g id="a_edge35"><a xlink:title="net/http.(*response).finishRequest -> net/http.(*connReader).abortPendingRead (0.04s)">
+<path fill="none" stroke="#b2b1ad" d="M564,-1519.9663C564,-1507.9427 564,-1492.8283 564,-1479.4785"></path>
+<polygon fill="#b2b1ad" stroke="#b2b1ad" points="567.5001,-1479.2433 564,-1469.2433 560.5001,-1479.2433 567.5001,-1479.2433"></polygon>
+</a>
+</g>
+<g id="a_edge35-label"><a xlink:title="net/http.(*response).finishRequest -> net/http.(*connReader).abortPendingRead (0.04s)">
+<text text-anchor="middle" x="581" y="-1490.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 0.04s</text>
+</a>
+</g>
+</g>
+<!-- N28&#45;&gt;N18 -->
+<g id="edge20" class="edge">
+<title>N28-&gt;N18</title>
+<g id="a_edge20"><a xlink:title="net/http.Get -> net/http.(*Client).Get (1.83s)">
+<path fill="none" stroke="#b23f00" stroke-width="2" d="M274.8072,-945.683C274.6757,-933.1876 274.4978,-916.2931 274.3425,-901.542"></path>
+<polygon fill="#b23f00" stroke="#b23f00" stroke-width="2" points="277.8396,-901.2359 274.2345,-891.2733 270.84,-901.3096 277.8396,-901.2359"></polygon>
+</a>
+</g>
+<g id="a_edge20-label"><a xlink:title="net/http.Get -> net/http.(*Client).Get (1.83s)">
+<text text-anchor="middle" x="292" y="-912.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.83s</text>
+</a>
+</g>
+</g>
+<!-- N29&#45;&gt;N21 -->
+<g id="edge21" class="edge">
+<title>N29-&gt;N21</title>
+<g id="a_edge21"><a xlink:title="net/http.send -> net/http.(*Transport).RoundTrip (1.83s)">
+<path fill="none" stroke="#b23f00" stroke-width="2" d="M274,-466.3981C274,-448.5845 274,-420.9917 274,-399.3937"></path>
+<polygon fill="#b23f00" stroke="#b23f00" stroke-width="2" points="277.5001,-399.3417 274,-389.3417 270.5001,-399.3417 277.5001,-399.3417"></polygon>
+</a>
+</g>
+<g id="a_edge21-label"><a xlink:title="net/http.send -> net/http.(*Transport).RoundTrip (1.83s)">
+<text text-anchor="middle" x="291" y="-428.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 1.83s</text>
+</a>
+</g>
+</g>
+<!-- N33 -->
+<g id="node33" class="node">
+<title>N33</title>
+<g id="a_node33"><a xlink:title="testing.(*M).Run (3.11s)">
+<polygon fill="#eddbd5" stroke="#b22b00" points="508,-1370 428,-1370 428,-1326 508,-1326 508,-1370"></polygon>
+<text text-anchor="middle" x="468" y="-1359.6" font-family="Times,serif" font-size="8.00" fill="#000000">testing</text>
+<text text-anchor="middle" x="468" y="-1350.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*M)</text>
+<text text-anchor="middle" x="468" y="-1341.6" font-family="Times,serif" font-size="8.00" fill="#000000">Run</text>
+<text text-anchor="middle" x="468" y="-1332.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 3.11s (39.80%)</text>
+</a>
+</g>
+</g>
+<!-- N30&#45;&gt;N33 -->
+<g id="edge2" class="edge">
+<title>N30-&gt;N33</title>
+<g id="a_edge2"><a xlink:title="net/http_test.TestMain -> testing.(*M).Run (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-1428.8419C468,-1415.2878 468,-1396.4077 468,-1380.3016"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-1380.2021 468,-1370.2021 464.5001,-1380.2022 471.5001,-1380.2021"></polygon>
+</a>
+</g>
+<g id="a_edge2-label"><a xlink:title="net/http_test.TestMain -> testing.(*M).Run (3.11s)">
+<text text-anchor="middle" x="485" y="-1395.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+<!-- N31 -->
+<g id="node31" class="node">
+<title>N31</title>
+<g id="a_node31"><a xlink:title="testing.(*B).doBench (3.11s)">
+<polygon fill="#eddbd5" stroke="#b22b00" points="508,-701 428,-701 428,-657 508,-657 508,-701"></polygon>
+<text text-anchor="middle" x="468" y="-690.6" font-family="Times,serif" font-size="8.00" fill="#000000">testing</text>
+<text text-anchor="middle" x="468" y="-681.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*B)</text>
+<text text-anchor="middle" x="468" y="-672.6" font-family="Times,serif" font-size="8.00" fill="#000000">doBench</text>
+<text text-anchor="middle" x="468" y="-663.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 3.11s (39.77%)</text>
+</a>
+</g>
+</g>
+<!-- N31&#45;&gt;N3 -->
+<g id="edge9" class="edge">
+<title>N31-&gt;N3</title>
+<g id="a_edge9"><a xlink:title="testing.(*B).doBench -> runtime.chanrecv1 (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-656.5617C468,-606.79 468,-486.1141 468,-417.2858"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-417.1125 468,-407.1125 464.5001,-417.1125 471.5001,-417.1125"></polygon>
+</a>
+</g>
+<g id="a_edge9-label"><a xlink:title="testing.(*B).doBench -> runtime.chanrecv1 (3.11s)">
+<text text-anchor="middle" x="485" y="-532.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+<!-- N34 -->
+<g id="node34" class="node">
+<title>N34</title>
+<g id="a_node34"><a xlink:title="testing.(*benchContext).processBench (3.11s)">
+<polygon fill="#eddbd5" stroke="#b22b00" points="508,-796 428,-796 428,-752 508,-752 508,-796"></polygon>
+<text text-anchor="middle" x="468" y="-785.6" font-family="Times,serif" font-size="8.00" fill="#000000">testing</text>
+<text text-anchor="middle" x="468" y="-776.6" font-family="Times,serif" font-size="8.00" fill="#000000">(*benchContext)</text>
+<text text-anchor="middle" x="468" y="-767.6" font-family="Times,serif" font-size="8.00" fill="#000000">processBench</text>
+<text text-anchor="middle" x="468" y="-758.6" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 3.11s (39.77%)</text>
+</a>
+</g>
+</g>
+<!-- N32&#45;&gt;N34 -->
+<g id="edge10" class="edge">
+<title>N32-&gt;N34</title>
+<g id="a_edge10"><a xlink:title="testing.(*B).run -> testing.(*benchContext).processBench (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-846.9663C468,-834.9427 468,-819.8283 468,-806.4785"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-806.2433 468,-796.2433 464.5001,-806.2433 471.5001,-806.2433"></polygon>
+</a>
+</g>
+<g id="a_edge10-label"><a xlink:title="testing.(*B).run -> testing.(*benchContext).processBench (3.11s)">
+<text text-anchor="middle" x="485" y="-817.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+<!-- N35 -->
+<g id="node35" class="node">
+<title>N35</title>
+<g id="a_node35"><a xlink:title="testing.runBenchmarks (3.11s)">
+<polygon fill="#eddbd5" stroke="#b22b00" points="508,-1267 428,-1267 428,-1231 508,-1231 508,-1267"></polygon>
+<text text-anchor="middle" x="468" y="-1256.1" font-family="Times,serif" font-size="8.00" fill="#000000">testing</text>
+<text text-anchor="middle" x="468" y="-1247.1" font-family="Times,serif" font-size="8.00" fill="#000000">runBenchmarks</text>
+<text text-anchor="middle" x="468" y="-1238.1" font-family="Times,serif" font-size="8.00" fill="#000000">0 of 3.11s (39.80%)</text>
+</a>
+</g>
+</g>
+<!-- N33&#45;&gt;N35 -->
+<g id="edge5" class="edge">
+<title>N33-&gt;N35</title>
+<g id="a_edge5"><a xlink:title="testing.(*M).Run -> testing.runBenchmarks (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-1325.5354C468,-1311.3043 468,-1292.7726 468,-1277.5091"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-1277.0807 468,-1267.0808 464.5001,-1277.0808 471.5001,-1277.0807"></polygon>
+</a>
+</g>
+<g id="a_edge5-label"><a xlink:title="testing.(*M).Run -> testing.runBenchmarks (3.11s)">
+<text text-anchor="middle" x="485" y="-1292.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+<!-- N34&#45;&gt;N31 -->
+<g id="edge11" class="edge">
+<title>N34-&gt;N31</title>
+<g id="a_edge11"><a xlink:title="testing.(*benchContext).processBench -> testing.(*B).doBench (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-751.9663C468,-739.9427 468,-724.8283 468,-711.4785"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-711.2433 468,-701.2433 464.5001,-711.2433 471.5001,-711.2433"></polygon>
+</a>
+</g>
+<g id="a_edge11-label"><a xlink:title="testing.(*benchContext).processBench -> testing.(*B).doBench (3.11s)">
+<text text-anchor="middle" x="485" y="-722.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+<!-- N35&#45;&gt;N2 -->
+<g id="edge6" class="edge">
+<title>N35-&gt;N2</title>
+<g id="a_edge6"><a xlink:title="testing.runBenchmarks -> testing.(*B).runN (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-1230.683C468,-1218.1876 468,-1201.2931 468,-1186.542"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-1186.2732 468,-1176.2733 464.5001,-1186.2733 471.5001,-1186.2732"></polygon>
+</a>
+</g>
+<g id="a_edge6-label"><a xlink:title="testing.runBenchmarks -> testing.(*B).runN (3.11s)">
+<text text-anchor="middle" x="485" y="-1197.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+<!-- N36&#45;&gt;N11 -->
+<g id="edge7" class="edge">
+<title>N36-&gt;N11</title>
+<g id="a_edge7"><a xlink:title="testing.runBenchmarks.func1 -> testing.(*B).Run (3.11s)">
+<path fill="none" stroke="#b22b00" stroke-width="2" d="M468,-1036.9663C468,-1024.9427 468,-1009.8283 468,-996.4785"></path>
+<polygon fill="#b22b00" stroke="#b22b00" stroke-width="2" points="471.5001,-996.2433 468,-986.2433 464.5001,-996.2433 471.5001,-996.2433"></polygon>
+</a>
+</g>
+<g id="a_edge7-label"><a xlink:title="testing.runBenchmarks.func1 -> testing.(*B).Run (3.11s)">
+<text text-anchor="middle" x="485" y="-1007.8" font-family="Times,serif" font-size="14.00" fill="#000000"> 3.11s</text>
+</a>
+</g>
+</g>
+</g>
+</g></svg>

@@ -53,7 +53,32 @@
 <script>
 import PassageMeta from 'components/passage-meta.vue';
 import ZeroComment from './zero-comment';
+import scroll from '../util/scroll';
+
+function scrollHash(hash) {
+    if(hash) {
+        let h = document.querySelector(hash);
+        if(h) {
+            let top = h.offsetTop;
+            while(top == 0) {
+                h = h.parentElement
+                top = h.offsetTop;
+            }
+            scroll(top, 1, 1);
+        }
+    }
+}
+
 export default {
+    beforeRouteEnter(to, from, next) {
+        next(scrollHash.bind(null, to.hash));
+    },
+    beforeRouteUpdate(to, from, next) {
+        next();
+        if(from.hash !== to.hash) {
+            scrollHash(to.hash);
+        }
+    },
     components: {
         PassageMeta,
         ZeroComment,

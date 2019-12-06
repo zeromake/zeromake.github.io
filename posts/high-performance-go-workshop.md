@@ -250,7 +250,7 @@ CPU 并没有变得越来越快，但是随着超线程和多核它们变得越�
 
 但是，任何一段代码固有的并行性数量是有限的。它也非常耗电。大多数现代 CPU 在每个内核上都部署了六个执行单元，因为在流水线的每个阶段将每个执行单元连接到所有其他执行单元的成本为 n 平方。
 
-#### 1.9.2\. Speculative execution
+#### 1.9.2. 预测执行
 
 除最小的微控制器外，所有 CPU 均使用 _指令管道_ 来重叠指令 获取/解码/执行/提交 周期中的部分。
 
@@ -357,7 +357,7 @@ Cliff Click 的 [精彩演讲](https://www.youtube.com/watch?v=OFgxAFdxYAQ) 认�
 -   [The Future of Computing, John Hennessy](https://web.stanford.edu/~hennessy/Future%20of%20Computing.pdf)
 -   [The future of computing: a conversation with John Hennessy](https://www.youtube.com/watch?v=Azt8Nc-mtKM) (Google I/O '18)
 
-## 2\. Benchmarking
+## 2. Benchmarking {#benchmarking}
 
 > 测量两次，取一次。 — Ancient proverb
 
@@ -439,17 +439,18 @@ go test -run=^$
 
 #### 2.2.2. 基准如何运作
 
-Each benchmark function is called with different value for `b.N`, this is the number of iterations the benchmark should run for.
+每个基准函数调用的 `b.N` 值都不同，这是基准应运行的迭代次数。
 
-`b.N` starts at 1, if the benchmark function completes in under 1 second—​the default—​then `b.N` is increased and the benchmark function run again.
+如果基准功能在 1 秒内（默认值）在 1 秒内完成，则 `b.N` 从 1 开始，然后 `b.N` 增加，基准功能再次运行。
 
 `b.N` increases in the approximate sequence; 1, 2, 3, 5, 10, 20, 30, 50, 100, and so on. The benchmark framework tries to be smart and if it sees small values of `b.N` are completing relatively quickly, it will increase the the iteration count faster.
 
-Looking at the example above, `BenchmarkFib20-8` found that around 30,000 iterations of the loop took just over a second. From there the benchmark framework computed that the average time per operation was 40865ns.
+`b.N` 以近似顺序增加；1, 2, 3, 5, 10, 20, 30, 50, 100 等。基准框架试图变得聪明，如果看到较小的 `b.N` 值相对较快地完成，它将更快地增加迭代次数。
 
-| |
+查看上面的示例，`BenchmarkFib20-8` 发现循环的大约 30,000 次迭代花费了超过一秒钟的时间。从那里基准框架计算得出，每次操作的平均时间为 40865ns。
 
-The `-8` suffix relates to the value of `GOMAXPROCS` that was used to run this test. This number, like `GOMAXPROCS`, defaults to the number of CPUs visible to the Go process on startup. You can change this value with the `-cpu` flag which takes a list of values to run the benchmark with.
+!!! note
+后缀 `-8` 与用于运行此测试的 `GOMAXPROCS` 的值有关。 该数字 `GOMAXPROCS` 默认为启动时 Go 进程可见的CPU数。 您可以使用 `-cpu` 标志来更改此值，该标志带有一个值列表以运行基准测试。
 
 ```bash
 % go test -bench=. -cpu=1,2,4 ./examples/fib/
@@ -462,15 +463,17 @@ PASS
 ok      _/Users/dfc/devel/high-performance-go-workshop/examples/fib     5.531s
 ```
 
-This shows running the benchmark with 1, 2, and 4 cores. In this case the flag has little effect on the outcome because this benchmark is entirely sequential.
+这显示了以 1、2 和 4 核运行基准测试。 在这种情况下，该标志对结果几乎没有影响，因为该基准是完全顺序的。
 
-#### 2.2.3\. Improving benchmark accuracy
+!!!
 
-The `fib` function is a slightly contrived example—​unless your writing a TechPower web server benchmark—​it’s unlikely your business is going to be gated on how quickly you can compute the 20th number in the Fibonaci sequence. But, the benchmark does provide a faithful example of a valid benchmark.
+#### 2.2.3. 提高基准精度
 
-Specifically you want your benchmark to run for several tens of thousand iterations so you get a good average per operation. If your benchmark runs for only 100’s or 10’s of iterations, the average of those runs may have a high standard deviation. If your benchmark runs for millions or billions of iterations, the average may be very accurate, but subject to the vaguaries of code layout and alignment.
+`fib` 功能是一个稍作设计的示例-除非您编写 TechPower Web 服务器基准测试-否则您的业务不太可能会因您能够快速计算出斐波那契序列中的第 20 个数字而受到限制。但是，基准确实提供了有效基准的忠实示例。
 
-To increase the number of iterations, the benchmark time can be increased with the `-benchtime` flag. For example:
+具体来说，您希望基准测试可以运行数万次迭代，以便每个操作获得良好的平均值。如果您的基准测试仅运行 100 或 10 次迭代，则这些运行的平均值可能会有较高的标准偏差。如果您的基准测试运行了数百万或数十亿次迭代，则平均值可能非常准确，但会受到代码布局和对齐方式的影响。
+
+为了增加迭代次数，可以使用 `-benchtime` 标志来增加基准时间。 例如：
 
 ```bash
 % go test -bench=. -benchtime=10s ./examples/fib/
@@ -481,15 +484,17 @@ PASS
 ok      _/Users/dfc/devel/high-performance-go-workshop/examples/fib     20.066s
 ```
 
-Ran the same benchmark until it reached a value of `b.N` that took longer than 10 seconds to return. As we’re running for 10x longer, the total number of iterations is 10x larger. The result hasn’t changed much, which is what we expected.
+运行相同的基准，直到达到 `b.N` 的值，并花费了超过 10 秒的时间才能返回。由于我们的运行时间增加了 10 倍，因此迭代的总数也增加了 10 倍。 结果并没有太大变化，这就是我们所期望的。
 
-Why is the total time reporteded to be 20 seconds, not 10?
+```
+为什么报告的总时间是 20 秒，而不是 10 秒？
+```
 
-If you have a benchmark which runs for millons or billions of iterations resulting in a time per operation in the micro or nano second range, you may find that your benchmark numbers are unstable because thermal scaling, memory locality, background processing, gc activity, etc.
+如果您有一个基准运行数百万或数十亿次迭代，导致每次操作的时间在微秒或纳秒范围内，则您可能会发现基准值不稳定，因为热缩放，内存局部性，后台处理，gc 活动等。
 
-For times measured in 10 or single digit nanoseconds per operation the relativistic effects of instruction reordering and code alignment will have an impact on your benchmark times.
+对于每次操作以 10 纳秒或一位数纳秒为单位的时间，指令重新排序和代码对齐的相对论效应将对基准时间产生影响。
 
-To address this run benchmarks multiple times with the `-count` flag:
+要使用 `-count` 标志来多次运行基准测试：
 
 ```bash
 % go test -bench=Fib1 -count=10 ./examples/fib/
@@ -507,25 +512,31 @@ BenchmarkFib1-8         2000000000               1.99 ns/op
 BenchmarkFib1-8         1000000000               2.00 ns/op
 ```
 
-A benchmark of `Fib(1)` takes around 2 nano seconds with a variance of +/- 2%.
+`Fib(1)` 基准测试大约需要 2 纳秒，方差为 +/- 2％。
 
-New in Go 1.12 is the `-benchtime` flag now takes a number of iterations, eg. `-benchtime=20x` which will run your code exactly `benchtime` times.
+Go 1.12中的新增功能是 `-benchtime` 标志，现在需要进行多次迭代，例如。`-benchtime=20x`，它将准确地运行您的代码 `benchtime` 的时间。
 
-Try running the fib bench above with a `-benchtime` of 10x, 20x, 50x, 100x, and 300x. What do you see?
+```
+尝试以10倍，20倍，50倍，100倍和300倍的 `-benchtime` 运行上面的 fib 测试。 你看到了什么？
+```
 
-| | If you find that the defaults that `go test` applies need to be tweaked for a particular package, I suggest codifying those settings in a `Makefile` so everyone who wants to run your benchmarks can do so with the same settings. |
+!!! tip
+If you find that the defaults that `go test` applies need to be tweaked for a particular package, I suggest codifying those settings in a `Makefile` so everyone who wants to run your benchmarks can do so with the same settings.
 
-### 2.3\. Comparing benchmarks with benchstat
+如果您发现需要针对特定的软件包调整 `go test` 的默认设置，我建议将这些设置编入 `Makefile` 中，这样，每个想要运行基准测试的人都可以使用相同的设置。
+!!!
 
-In the previous section I suggested running benchmarks more than once to get more data to average. This is good advice for any benchmark because of the effects of power management, background processes, and thermal management that I mentioned at the start of the chapter.
+### 2.3. 将基准与 Benchstat 进行比较
 
-I’m going to introduce a tool by Russ Cox called [benchstat](https://godoc.org/golang.org/x/perf/cmd/benchstat).
+在上一节中，我建议多次运行基准测试以使更多数据平均。由于本章开头提到的电源管理，后台过程和热管理的影响，这对于任何基准测试都是很好的建议。
+
+我将介绍 Russ Cox 的一个工具 [benchstat](https://godoc.org/golang.org/x/perf/cmd/benchstat).
 
 ```bash
 % go get golang.org/x/perf/cmd/benchstat
 ```
 
-Benchstat can take a set of benchmark runs and tell you how stable they are. Here is an example of `Fib(20)` on battery power.
+Benchstat可以进行一系列基准测试，并告诉您它们的稳定性。 这是有关电池供电的 `Fib(20)` 示例。
 
 ```bash
 % go test -bench=Fib20 -count=10 ./examples/fib/ | tee old.txt
@@ -548,30 +559,32 @@ name     time/op
 Fib20-8  38.4µs ± 1%
 ```
 
-`benchstat` tells us the mean is 38.8 microseconds with a +/- 2% variation across the samples. This is pretty good for battery power.
 
--   The first run is the slowest of all because the operating system had the CPU clocked down to save power.
+`benchstat` 告诉我们平均值为 38.8 微秒，样本之间的变化为 +/- 2％。这对于电池供电来说相当不错。
 
--   The next two runs are the fastest, because the operating system as decided that this isn’t a transient spike of work and it has boosted up the clock speed to get through the work as quick as possible in the hope of being able to go back to sleep.
+-   第一次运行是最慢的，因为操作系统已降低CPU时钟以节省电量。
+-   接下来的两次运行是最快的，因为操作系统确定这不是工作的短暂高峰，并且提高了时钟速度以尽快完成工作，从而希望能够返回睡觉。
+-   其余运行是操作系统和供热生产的 BIOS 交互功耗。
 
--   The remaining runs are the operating system and the bios trading power consumption for heat production.
+#### 2.3.1. Improve `Fib` {#improve_fib}
 
-#### 2.3.1\. Improve `Fib` {#improve_fib}
+确定两组基准之间的性能差异可能是乏味且容易出错的。`benchstat` 可以帮助我们。
 
-Determining the performance delta between two sets of benchmarks can be tedious and error prone. Benchstat can help us with this.
-
-| |
+!!! tip
 
 Saving the output from a benchmark run is useful, but you can also save the _binary_ that produced it. This lets you rerun benchmark previous iterations. To do this, use the `-c` flag to save the test binary—​I often rename this binary from `.test` to `.golden`.
 
-<pre>% go test -c
-% mv fib.test fib.golden</pre>
+保存来自基准运行的输出很有用，但是您也可以保存产生它的 _二进制文件_。 这使您可以重新运行基准测试以前的迭代。 为此，请使用 `-c `标志保存测试二进制文件我经常将此二进制文件从 `.test` 重命名为 `.golden`。
 
-|
+``` bash
+% go test -c
+% mv fib.test fib.golden
+```
+!!!
 
-The previous `Fib` fuction had hard coded values for the 0th and 1st numbers in the fibonaci series. After that the code calls itself recursively. We’ll talk about the cost of recursion later today, but for the moment, assume it has a cost, especially as our algorithm uses exponential time.
+先前的 `Fib` 功能具有斐波那契系列中第 0 和第 1 个数字的硬编码值。之后，代码以递归方式调用自身。今天晚些时候，我们将讨论递归的成本，但是目前，假设递归的成本是很高的，尤其是因为我们的算法使用的是指数时间。
 
-As simple fix to this would be to hard code another number from the fibonacci series, reducing the depth of each recusive call by one.
+对此的简单解决方法是对斐波那契数列中的另一个数字进行硬编码，从而将每个可回溯调用的深度减少一个。
 
 ```go
 func Fib(n int) int {
@@ -588,9 +601,11 @@ func Fib(n int) int {
 }
 ```
 
-| | This file also includes a comprehensive test for `Fib`. Don’t try to improve your benchmarks without a test that verifies the current behaviour. |
+!!! tip
+该文件还包含对 `Fib` 的综合测试。如果没有通过验证当前行为的测试，请勿尝试提高基准。
+!!!
 
-To compare our new version, we compile a new test binary and benchmark both of them and use `benchstat` to compare the outputs.
+为了比较我们的新版本，我们编译了一个新的测试二进制文件并对其进行了基准测试，并使用 `benchstat` 来比较输出。
 
 ```bash
 % go test -c
@@ -601,49 +616,47 @@ name     old time/op  new time/op  delta
 Fib20-8  44.3µs ± 6%  25.6µs ± 2%  -42.31%  (p=0.000 n=10+10)
 ```
 
-There are three things to check when comparing benchmarks
+比较基准时需要检查三件事
 
--   The variance ± in the old and new times. 1-2% is good, 3-5% is ok, greater than 5% and some of your samples will be considered unreliable. Be careful when comparing benchmarks where one side has a high variance, you may not be seeing an improvement.
+-   旧时代和新时期的方差 ±。 1-2％ 是好的，3-5％ 是可以的，大于 5％，并且您的某些样本将被认为不可靠。 比较一侧差异较大的基准时，请注意不要有所改善。
+-   p 值。 p 值小于 0.05 表示良好，大于 0.05 表示基准可能没有统计学意义。
+-   缺少样本。`benchstat` 将报告它认为有效的旧样本和新样本中的多少个，有时即使您执行了 `-count=10`，也可能只报告了 9 个。 10％ 或更低的拒绝率是可以的，高于 10％ 可能表明您的设置不稳定，并且您可能比较的样本太少。
 
--   p value. p values lower than 0.05 are good, greater than 0.05 means the benchmark may not be statistically significant.
+### 2.4. 避免基准化启动成本
 
--   Missing samples. benchstat will report how many of the old and new samples it considered to be valid, sometimes you may find only, say, 9 reported, even though you did `-count=10`. A 10% or lower rejection rate is ok, higher than 10% may indicate your setup is unstable and you may be comparing too few samples.
-
-### 2.4\. Avoiding benchmarking start up costs
-
-Sometimes your benchmark has a once per run setup cost. `b.ResetTimer()` will can be used to ignore the time accrued in setup.
+有时，您的基准测试具有一次运行设置成本。`b.ResetTimer()` 将用于忽略设置中的时间。
 
 ```go
 func BenchmarkExpensive(b *testing.B) {
         boringAndExpensiveSetup()
-        b.ResetTimer() (1)
+        b.ResetTimer() // (1)
         for n := 0; n < b.N; n++ {
                 // function under test
         }
 }
 ```
 
-| **1** | Reset the benchmark timer |
+| **1** | 重置基准计时器 |
 
-If you have some expensive setup logic _per loop_ iteration, use `b.StopTimer()` and `b.StartTimer()` to pause the benchmark timer.
+如果 _每个循环_ 迭代都有一些昂贵的设置逻辑，请使用 `b.StopTimer()` 和 `b.StartTimer()` 暂停基准计时器。
 
 ```go
 func BenchmarkComplicated(b *testing.B) {
         for n := 0; n < b.N; n++ {
-                b.StopTimer() (1)
+                b.StopTimer() // (1)
                 complicatedSetup()
-                b.StartTimer() (2)
+                b.StartTimer() // (2)
                 // function under test
         }
 }
 ```
 
-| **1** | Pause benchmark timer |
-| **2** | Resume timer |
+| **1** | 暂停基准测试计时器 |
+| **2** | 恢复计时器 |
 
-### 2.5\. Benchmarking allocations
+### 2.5. 基准分配
 
-Allocation count and size is strongly correlated with benchmark time. You can tell the `testing` framework to record the number of allocations made by code under test.
+分配数量和大小与基准时间密切相关。 您可以告诉 `testing` 框架记录被测代码分配的数量。
 
 ```go
 func BenchmarkRead(b *testing.B) {
@@ -654,7 +667,7 @@ func BenchmarkRead(b *testing.B) {
 }
 ```
 
-Here is an example using the `bufio` package’s benchmarks.
+这是一个使用 `bufio` 软件包基准测试的示例。
 
 ```bash
 % go test -run=^$ -bench=. bufio
@@ -673,7 +686,7 @@ BenchmarkWriterEmpty-8                   2000000               683 ns/op        
 BenchmarkWriterFlush-8                  100000000               17.0 ns/op             0 B/op          0 allocs/op
 ```
 
-| |
+!!! tip
 
 You can also use the `go test -benchmem` flag to force the testing framework to report allocation statistics for all benchmarks run.
 
@@ -696,9 +709,11 @@ PASS
 ok      bufio   20.366s
 ```
 
-### 2.6\. Watch out for compiler optimisations
+!!!
 
-This example comes from [issue 14813](https://github.com/golang/go/issues/14813#issue-140603392).
+### 2.6. 注意编译器的优化
+
+这个例子来自 [issue 14813](https://github.com/golang/go/issues/14813#issue-140603392).
 
 ```go
 const m1 = 0x5555555555555555
@@ -720,7 +735,7 @@ func BenchmarkPopcnt(b *testing.B) {
 }
 ```
 
-How fast do you think this function will benchmark? Let’s find out.
+您认为该功能将以多快的速度进行基准测试？ 让我们找出答案。
 
 ```bash
 % go test -bench=. ./examples/popcnt/
@@ -730,11 +745,13 @@ BenchmarkPopcnt-8       2000000000               0.30 ns/op
 PASS</pre>
 ```
 
-0.3 of a nano second; that’s basically one clock cycle. Even assuming that the CPU may have a few instructions in flight per clock tick, this number seems unreasonably low. What happened?
+0.3纳秒；这基本上是一个时钟周期。即使假设每个时钟周期中CPU可能正在运行一些指令，该数字似乎也过低。发生了什么？
 
 To understand what happened, we have to look at the function under benchmake, `popcnt`. `popcnt` is a leaf function — it does not call any other functions — so the compiler can inline it.
 
-Because the function is inlined, the compiler now can see it has no side effects. `popcnt` does not affect the state of any global variable. Thus, the call is eliminated. This is what the compiler sees:
+要了解发生了什么，我们必须查看 benchmake 下的函数 `popcnt`。`popcnt` 是 `叶函数(它不调用任何其他函数)` 因此编译器可以内联它。
+
+因为该函数是内联的，所以编译器现在可以看到它没有副作用。 popcnt不会影响任何全局变量的状态。 因此，消除了该调用。这是编译器看到的：
 
 ```go
 func BenchmarkPopcnt(b *testing.B) {
@@ -744,27 +761,30 @@ func BenchmarkPopcnt(b *testing.B) {
 }
 ```
 
-On all versions of the Go compiler that i’ve tested, the loop is still generated. But Intel CPUs are really good at optimising loops, especially empty ones.
+在我测试过的所有 `Go` 编译器版本中，仍然会生成循环。 但是英特尔 `CPU` 确实擅长优化循环，尤其是空循环。
 
-#### 2.6.1\. Exercise, look at the assembly {#exercise_look_at_the_assembly}
+#### 2.6.1\. 练习，实践 {#exercise_look_at_the_assembly}
 
-Before we go on, lets look at the assembly to confirm what we saw
+在继续之前，让我们实践一下以确认我们所看到的
 
 ```
 % go test -gcflags=-S
 ```
 
-Use `gcflags="-l -S"` to disable inlining, how does that affect the assembly output
+```
+使用 `gcflags="-l -S"` 禁用内联，这可以影响程序输出
+```
 
-> Optimisation is a good thing
-> The thing to take away is the same optimisations that _make real code fast_, by removing unnecessary computation, are the same ones that remove benchmarks that have no observable side effects.
-> This is only going to get more common as the Go compiler improves.
+!!! note 优化是一件好事
+要消除的事情是与通过消除不必要的计算来使实际代码相同的优化，即消除了没有可观察到的副作用的基准测试。
+随着Go编译器的改进，这只会变得越来越普遍。
+!!!
 
-#### 2.6.2\. Fixing the benchmark
+#### 2.6.2. 修复基准
 
-Disabling inlining to make the benchmark work is unrealistic; we want to build our code with optimisations on.
+禁用内联以使基准测试有效是不现实的；我们希望在优化的基础上构建代码。
 
-To fix this benchmark we must ensure that the compiler cannot _prove_ that the body of `BenchmarkPopcnt` does not cause global state to change.
+为了修正这个基准，我们必须确保编译器无法 _证明_ `BenchmarkPopcnt` 的主体不会引起全局状态的改变。
 
 ```go
 var Result uint64
@@ -778,29 +798,35 @@ func BenchmarkPopcnt(b *testing.B) {
 }
 ```
 
-This is the recommended way to ensure the compiler cannot optimise away body of the loop.
+这是确保编译器无法优化循环主体的推荐方法。
 
-First we _use_ the result of calling `popcnt` by storing it in `r`. Second, because `r` is declared locally inside the scope of `BenchmarkPopcnt` once the benchmark is over, the result of `r` is never visible to another part of the program, so as the final act we assign the value of `r` to the package public variable `Result`.
+首先，我们通过将其存储在 `r` 中来使用调用 `popcnt` 的结果。其次，由于一旦基准测试结束，`r` 就在 `BenchmarkPopcnt` 的范围内局部声明，所以 `r` 的结果对于程序的另一部分永远是不可见的，因此作为最后的动作，我们将 `r` 的值赋值储存到包公共变量 `Result`。
 
 Because `Result` is public the compiler cannot prove that another package importing this one will not be able to see the value of `Result` changing over time, hence it cannot optimise away any of the operations leading to its assignment.
 
 What happens if we assign to `Result` directly? Does this affect the benchmark time? What about if we assign the result of `popcnt` to `_`?
 
-> In our earlier `Fib` benchmark we didn’t take these precautions, should we have done so?
+由于 `Result` 是公开的，因此编译器无法证明导入该软件包的另一个包将无法看到 `Result` 的值随时间变化，因此它无法优化导致其赋值的任何操作。
 
-### 2.7\. Benchmark mistakes
+如果直接分配给 `Result` 会怎样？这会影响基准时间吗？如果将 `popcnt` 的结果赋给 `_` 会怎么样？
 
-The `for` loop is crucial to the operation of the benchmark.
+!!! warning
+在我们之前的 `Fib` 基准测试中，我们没有采取这些预防措施，应该这样做吗？
+!!!
 
-Here are two incorrect benchmarks, can you explain what is wrong with them?
+### 2.7. 基准误差
 
-```
+`for` 循环对于基准测试的运行至关重要。
+
+这是两个不正确的基准，您能解释一下它们有什么问题吗？
+
+``` go
 func BenchmarkFibWrong(b *testing.B) {
 	Fib(b.N)
 }
 ```
 
-```
+``` go
 func BenchmarkFibWrong2(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		Fib(n)
@@ -808,125 +834,120 @@ func BenchmarkFibWrong2(b *testing.B) {
 }
 ```
 
-Run these benchmarks, what do you see?
+运行这些基准测试，您会看到什么？
 
-### 2.8\. Profiling benchmarks
+### 2.8. 分析基准
 
-The `testing` package has built in support for generating CPU, memory, and block profiles.
+`testing` 包内置了对生成 `CPU`，内存和块配置文件的支持。
 
--   `-cpuprofile=$FILE` writes a CPU profile to `$FILE`.
+-   `-cpuprofile=$FILE` 将 `CPU` 分析写入 `$FILE`.
+-   `-memprofile=$FILE`, 将内存分析写入 `$FILE`, `-memprofilerate=N` 将配置文件速率调整为 `1/N`.
+-   `-blockprofile=$FILE`, 将块分析写入 `$FILE`.
 
--   `-memprofile=$FILE`, writes a memory profile to `$FILE`, `-memprofilerate=N` adjusts the profile rate to `1/N`.
+使用这些标志中的任何一个也会保留二进制文件。
 
--   `-blockprofile=$FILE`, writes a block profile to `$FILE`.
-
-Using any of these flags also preserves the binary.
-
-```
+``` bash
 % go test -run=XXX -bench=. -cpuprofile=c.p bytes
 % go tool pprof c.p
 ```
 
-### 2.9\. Discussion
+### 2.9. 讨论
 
-Are there any questions?
+有没有问题？
 
-Perhaps it is time for a break.
+也许是时候休息一下了。
 
-## 3\. Performance measurement and profiling
+## 3. 性能评估和性能分析 {#profiling}
 
-In the previous section we looked at benchmarking individual functions which is useful when you know ahead of time where the bottlekneck is. However, often you will find yourself in the position of asking
+在上一节中，我们研究了对单个函数进行基准测试，这对您提前知道瓶颈在哪里很有用。但是，通常您会发现自己有一个问题
 
-> Why is this program taking so long to run?
+> 为什么该程序需要这么长时间才能运行？
 
-Profiling _whole_ programs which is useful for answering high level questions like. In this section we’ll use profiling tools built into Go to investigate the operation of the program from the inside.
+对 _整个_ 程序进行概要分析，对于回答诸如此类的高级问题很有用。在本部分中，我们将使用 `Go` 内置的性能分析工具从内部调查程序的运行情况。
 
-### 3.1\. pprof
+### 3.1. pprof
 
-The first tool we’re going to be talking about today is _pprof_. [pprof](https://github.com/google/pprof) descends from the [Google Perf Tools](https://github.com/gperftools/gperftools) suite of tools and has been integrated into the Go runtime since the earliest public releases.
+今天我们要讨论的第一个工具是 _pprof_. [pprof](https://github.com/google/pprof) 来自 [Google Perf Tools](https://github.com/gperftools/gperftools) 这套工具套件，自最早的公开发布以来已集成到Go运行时中。
 
-`pprof` consists of two parts:
+`pprof` 由两部分组成:
 
--   `runtime/pprof` package built into every Go program
+-   `runtime/pprof` 每个 Go 程序内置的软件包
+-   `go tool pprof` 用于调查性能分析。
 
--   `go tool pprof` for investigating profiles.
+### 3.2\. 性能分析文件类型
 
-### 3.2\. Types of profiles
-
-pprof supports several types of profiling, we’ll discuss three of these today:
+pprof 支持多种类型的性能分析，今天我们将讨论其中的三种:
 
 -   CPU profiling.
-
 -   Memory profiling.
-
 -   Block (or blocking) profiling.
-
 -   Mutex contention profiling.
 
-#### 3.2.1\. CPU profiling
+#### 3.2.1. CPU 分析
 
-CPU profiling is the most common type of profile, and the most obvious.
+CPU 分析文件是最常见的配置文件类型，也是最明显的配置文件。
 
-When CPU profiling is enabled the runtime will interrupt itself every 10ms and record the stack trace of the currently running goroutines.
+启用 CPU 性能分析后，运行时将每 10 毫秒中断一次，并记录当前正在运行的 goroutine 的堆栈跟踪。
 
-Once the profile is complete we can analyse it to determine the hottest code paths.
+分析文件完成后，我们可以对其进行分析以确定最热门的代码路径。
 
-The more times a function appears in the profile, the more time that code path is taking as a percentage of the total runtime.
+函数在分析文件中出现的次数越多，代码路径花费的时间就越多。
 
-#### 3.2.2\. Memory profiling
+#### 3.2.2. 内存分析
 
-Memory profiling records the stack trace when a _heap_ allocation is made.
+进行 _堆_ 分配时，内存分析记录堆栈跟踪。
 
-Stack allocations are assumed to be free and are _not_tracked_ in the memory profile.
+堆栈分配假定为空闲，并且在内存性能分析文件中 _未跟踪_。
 
-Memory profiling, like CPU profiling is sample based, by default memory profiling samples 1 in every 1000 allocations. This rate can be changed.
+像 CPU 分析一样，内存分析都是基于样本的，默认情况下，每 1000 个分配中的内存分析样本为 1。 此速率可以更改。
 
-Because of memory profiling is sample based and because it tracks _allocations_ not _use_, using memory profiling to determine your application’s overall memory usage is difficult.
+由于内存分析是基于样本的，并且由于它跟踪未 _使用_ 的 _分配_，因此很难使用内存分析来确定应用程序的整体内存使用情况。
 
-_Personal Opinion:_ I do not find memory profiling useful for finding memory leaks. There are better ways to determine how much memory your application is using. We will discuss these later in the presentation.
+_个人想法:_ 我发现内存分析对发现内存泄漏没有帮助。有更好的方法来确定您的应用程序正在使用多少内存。 我们将在演示文稿的后面讨论这些。
 
-#### 3.2.3\. Block profiling
+#### 3.2.3. 块性能分析
 
-Block profiling is quite unique to Go.
+块分析是 `Go` 特有的。
 
-A block profile is similar to a CPU profile, but it records the amount of time a goroutine spent waiting for a shared resource.
+块概要文件类似于 `CPU` 概要文件，但是它记录 `goroutine` 等待共享资源所花费的时间。
 
-This can be useful for determining _concurrency_ bottlenecks in your application.
+这对于确定应用程序中的 _并发_ 瓶颈很有用。
 
-Block profiling can show you when a large number of goroutines _could_ make progress, but were _blocked_. Blocking includes:
+块性能分析可以向您显示何时有大量 `goroutine` _可以_ 取得进展，但被 _阻塞_ 了。包括阻止
 
--   Sending or receiving on a unbuffered channel.
+-   在无缓冲的通道上发送或接收。
+-   正在发送到完整频道，从空频道接收。
+-   试图 `锁定` 被另一个 `goroutine` 锁定的 `sync.Mutex`。
 
--   Sending to a full channel, receiving from an empty one.
+块分析是一种非常专业的工具，在您确信消除了所有 `CPU` 和内存使用瓶颈之后，才应该使用它。
 
--   Trying to `Lock` a `sync.Mutex` that is locked by another goroutine.
+#### 3.2.4. Mutex profiling
 
-Block profiling is a very specialised tool, it should not be used until you believe you have eliminated all your CPU and memory usage bottlenecks.
+互斥锁概要分析与块概要分析类似，但专门针对导致互斥锁争用导致延迟的操作。
 
-#### 3.2.4\. Mutex profiling
+我对这种类型的个人资料没有很多经验，但是我建立了一个示例来演示它。我们将很快看一下该示例。
 
-Mutex profiling is simlar to Block profiling, but is focused exclusively on operations that lead to delays caused by mutex contention.
+### 3.3. 同一时间只使用一种性能分析
 
-I don’t have a lot of experience with this type of profile but I have built an example to demonstrate it. We’ll look at that example shortly.
+性能分析不是免费的。
 
-### 3.3\. One profile at at time
+分析对程序性能有中等但可测量的影响，尤其是如果您增加内存配置文件采样率。
 
-Profiling is not free.
+大多数工具不会阻止您一次启用多个性能分析。
 
-Profiling has a moderate, but measurable impact on program performance—especially if you increase the memory profile sample rate.
+!!! warning
+一次不要启用多种性能分析。
 
-Most tools will not stop you from enabling multiple profiles at once.
+如果您同时启用多个个人资料，他们将观察自己的互动并放弃您的结果。
+!!!
 
-> Do not enable more than one kind of profile at a time.
-> If you enable multiple profile’s at the same time, they will observe their own interactions and throw off your results.
+### 3.4. 收集性能分析
 
-### 3.4\. Collecting a profile
+Go运行时的配置文件界面位于 `runtime/pprof` 包中。`runtime/pprof` 是一个非常基础的工具，由于历史原因，与各种配置文件的接口并不统一。
 
-The Go runtime’s profiling interface lives in the `runtime/pprof` package. `runtime/pprof` is a very low level tool, and for historic reasons the interfaces to the different kinds of profile are not uniform.
+正如我们在上一节中看到的那样，pprof概要分析内置于 `testing` 包中，但是有时将您要分析的代码放在 `testing.B` 基准测试环境中是不便或困难的，并且必须使用直接使用 `runtime/pprof` API。
 
-As we saw in the previous section, pprof profiling is built into the `testing` package, but sometimes its inconvenient, or difficult, to place the code you want to profile in the context of at `testing.B` benchmark and must use the `runtime/pprof` API directly.
-
-A few years ago I wrote a [small package][0], to make it easier to profile an existing application.
+几年前，我写了一个 [small package](https://github.com/pkg/profile)，以便更轻松地描述现有应用程序。
 
 ```go
 import "github.com/pkg/profile"
@@ -937,29 +958,32 @@ func main() {
 }
 ```
 
-We’ll use the profile package throughout this section. Later in the day we’ll touch on using the `runtime/pprof` interface directly.
+在本节中，我们将使用 `profile` 包。 稍后，我们将直接使用 `runtime/pprof` 接口。
 
-### 3.5\. Analysing a profile with pprof
+### 3.5. Analysing a profile with pprof
 
-Now that we’ve talked about what pprof can measure, and how to generate a profile, let’s talk about how to use pprof to analyse a profile.
+既然我们已经讨论了 `pprof` 可以测量的内容以及如何生成配置文件，那么我们就来讨论如何使用 `pprof` 分析配置文件。
 
-The analysis is driven by the `go pprof` subcommand
+分析由 `go pprof` 子命令驱动
 
-<pre>go tool pprof /path/to/your/profile</pre>
+``` bash
+% go tool pprof /path/to/your/profile
+```
 
-This tool provides several different representations of the profiling data; textual, graphical, even flame graphs.
+该工具提供了概要数据的几种不同表示形式。文字，图形甚至火焰图。
 
-> If you’ve been using Go for a while, you might have been told that `pprof` takes two arguments. Since Go 1.9 the profile file contains all the information needed to render the profile. You do no longer need the binary which produced the profile. 🎉
+!!! note
+如果您使用 `Go` 已有一段时间，则可能会被告知 `pprof` 有两个参数。从Go 1.9开始，配置文件包含渲染配置文件所需的所有信息。您不再需要生成性能分析的二进制文件。🎉
+!!!
 
-#### 3.5.1\. Further reading
+#### 3.5.1. 进一步阅读
 
 -   [Profiling Go programs](http://blog.golang.org/profiling-go-programs) (Go Blog)
-
 -   [Debugging performance issues in Go programs](https://software.intel.com/en-us/blogs/2014/05/10/debugging-performance-issues-in-go-programs)
 
-#### 3.5.2\. CPU profiling (exercise) {#cpu_profiling_exercise}
+#### 3.5.2. CPU profiling (exercise) {#cpu_profiling_exercise}
 
-Let’s write a program to count words:
+让我们编写一个计算单词数的程序:
 
 ```go
 package main
@@ -1004,7 +1028,7 @@ func main() {
 }
 ```
 
-Let’s see how many words there are in Herman Melville’s classic [Moby Dick](https://www.gutenberg.org/ebooks/2701) (sourced from Project Gutenberg)
+让我们看看赫尔曼·梅尔维尔经典小说中有多少个单词 [Moby Dick](https://www.gutenberg.org/ebooks/2701) (来自古腾堡计划)
 
 ```bash
 % go build && time ./words moby.txt
@@ -1015,7 +1039,7 @@ user    0m1.264s
 sys     0m0.944s
 ```
 
-Let’s compare that to unix’s `wc -w`
+让我们将其与 `unix` 的 `wc -w` 进行比较
 
 ```bash
 % time wc -w moby.txt
@@ -1026,13 +1050,13 @@ user    0m0.009s
 sys     0m0.002s
 ```
 
-So the numbers aren’t the same. `wc` is about 19% higher because what it considers a word is different to what my simple program does. That’s not important—​both programs take the whole file as input and in a single pass count the number of transitions from word to non word.
+所以数字不一样。 `wc` 大约高出 `19％`，因为它认为单词与我的简单程序不同。这并不重要-两个程序都将整个文件作为输入，并在一次通过中计算从单词到非单词的过渡次数。
 
-Let’s investigate why these programs have different run times using pprof.
+让我们研究一下为什么使用 `pprof` 这些程序的运行时间不同。
 
-#### 3.5.3\. Add CPU profiling
+#### 3.5.3. 添加 CPU 分析
 
-First, edit `main.go` and enable profiling
+首先，编辑 `main.go` 并启用分析
 
 ```go
 import (
@@ -1044,7 +1068,7 @@ func main() {
         // ...
 ```
 
-Now when we run the program a `cpu.pprof` file is created.
+现在，当我们运行程序时，将创建一个 `cpu.pprof` 文件。
 
 ```bash
 % go run main.go moby.txt
@@ -1053,7 +1077,7 @@ Now when we run the program a `cpu.pprof` file is created.
 2018/08/25 14:09:03 profile: cpu profiling disabled, /var/folders/by/3gf34_z95zg05cyj744_vhx40000gn/T/profile239941020/cpu.pprof
 ```
 
-Now we have the profile we can analyse it with `go tool pprof`
+现在我们有了配置文件，可以使用 `go pprof` 工具对其进行分析。
 
 ```bash
 % go tool pprof /var/folders/by/3gf34_z95zg05cyj744_vhx40000gn/T/profile239941020/cpu.pprof
@@ -1075,31 +1099,31 @@ Showing nodes accounting for 1.42s, 100% of 1.42s total
          0     0%   100%      1.41s 99.30%  syscall.read
 ```
 
-The `top` command is one you’ll use the most. We can see that 99% of the time this program spends in `syscall.Syscall`, and a small part in `main.readbyte`.
+`top` 命令是您最常使用的命令。 我们可以看到该程序有 99％ 的时间花费在 `syscall.Syscall` 中，而一小部分花费在`main.readbyte` 中。
 
-We can also visualise this call the with the `web` command. This will generate a directed graph from the profile data. Under the hood this uses the `dot` command from Graphviz.
+我们还可以使用 `web` 命令来可视化此调用。这将从配置文件数据生成有向图。 在后台，这使用了 Graphviz 的 `dot` 命令。
 
-However, in Go 1.10 (possibly 1.11) Go ships with a version of pprof that natively supports a http sever
+但是，在Go 1.10(也可能是1.11)中，Go 附带了本身支持 `HTTP` 服务器的 `pprof` 版本
 
 ```bash
 % go tool pprof -http=:8080 /var/folders/by/3gf34_z95zg05cyj744_vhx40000gn/T/profile239941020/cpu.pprof
 ```
 
-Will open a web browser;
+将会打开网络浏览器;
 
--   Graph mode
+-   图形模式
+-   火焰图模式
 
--   Flame graph mode
 
-On the graph the box that consumes the _most_ CPU time is the largest — we see `sys call.Syscall` at 99.3% of the total time spent in the program. The string of boxes leading to `syscall.Syscall` represent the immediate callers — there can be more than one if multiple code paths converge on the same function. The size of the arrow represents how much time was spent in children of a box, we see that from `main.readbyte` onwards they account for near 0 of the 1.41 second spent in this arm of the graph.
+在图形上，占用 _最多_ CPU 时间的框是最大的框，我们看到 `syscall.Syscall` 占程序总时间的 99.3％。导致 `syscall.Syscall` 的字符串表示立即调用者，如果多个代码路径在同一函数上收敛，则可以有多个。箭头的大小代表在一个盒子的子元素上花费了多少时间，我们可以看到，从 `main.readbyte` 开始，它们占了该图分支中 1.41 秒所用时间的接近 0。
 
-_Question_: Can anyone guess why our version is so much slower than `wc`?
+_问题_: 谁能猜出为什么我们的版本比 `wc` 慢得多?
 
-#### 3.5.4\. Improving our version
+#### 3.5.4\. 改进
 
-The reason our program is slow is not because Go’s `syscall.Syscall` is slow. It is because syscalls in general are expensive operations (and getting more expensive as more Spectre family vulnerabilities are discovered).
+我们的程序运行缓慢的原因不是因为 `Go` 的 `syscall.Syscall` 运行缓慢。 这是因为系统调用通常是昂贵的操作（并且随着发现更多 Spectre 系列漏洞而变得越来越昂贵）。
 
-Each call to `readbyte` results in a syscall.Read with a buffer size of 1. So the number of syscalls executed by our program is equal to the size of the input. We can see that in the pprof graph that reading the input dominates everything else.
+每次对 `readbyte` 的调用都会导致一个 `syscall.Read` 的缓冲区大小为1。因此，我们的程序执行的 `syscall` 数量等于输入的大小。我们可以看到，在 `pprof` 图中，读取输入的内容占主导地位。
 
 ```go
 func main() {
@@ -1132,19 +1156,21 @@ func main() {
 }
 ```
 
-By inserting a `bufio.Reader` between the input file and `readbyte` will
+通过在 `readbyte` 之前使用 `bufio.Reader` 包装输入文件
 
-Compare the times of this revised program to `wc`. How close is it? Take a profile and see what remains.
+```
+将此修订程序的时间与 `wc` 比较。有多少差距？进行性能分析，看看还剩下什么。
+```
 
-#### 3.5.5\. Memory profiling
+#### 3.5.5. 内存分析
 
-The new `words` profile suggests that something is allocating inside the `readbyte` function. We can use pprof to investigate.
+新的单词配置文件表明在 `readbyte` 函数内部分配了一些东西。我们可以使用 `pprof` 进行调查。
 
 ```go
 defer profile.Start(profile.MemProfile).Stop()
 ```
 
-Then run the program as usual
+然后照常运行程序
 
 ```go
 % go run main2.go moby.txt
@@ -1155,33 +1181,34 @@ Then run the program as usual
 
 ![](/public/img/high-performance-go-workshop/pprof-1.svg)
 
-As we suspected the allocation was coming from `readbyte` — this wasn’t that complicated, readbyte is three lines long:
+由于我们怀疑分配来自 `readbyte`，这不是那么复杂，`readbyte` 只有三行:
 
-Use pprof to determine where the allocation is coming from.
+```
+使用 `pprof` 确定分配来自何处。
+```
 
 ```go
 func readbyte(r io.Reader) (rune, error) {
-        var buf [1]byte (1)
+        var buf [1]byte // (1)
         _, err := r.Read(buf[:])
         return rune(buf[0]), err
 }
 ```
 
-**1.** Allocation is here
+| 1 | 分配在这里 |
 
-We’ll talk about why this is happening in more detail in the next section, but for the moment what we see is every call to readbyte is allocating a new one byte long _array_ and that array is being allocated on the heap.
+在下一节中，我们将详细讨论为什么会发生这种情况，但是目前，我们看到对 `readbyte` 的每个调用都在分配一个新的一字节长的 _array_ ，并且该数组正在堆上分配。
 
-What are some ways we can avoid this? Try them and use CPU and memory profiling to prove it.
+有什么方法可以避免这种情况？试试看，并使用 CPU 和内存性能分析进行验证。
 
-##### Alloc objects vs. inuse objects
+##### Alloc 对象与 inuse 对象
 
-Memory profiles come in two varieties, named after their `go tool pprof` flags
+内存性能分析有两种，分别以 `go tool pprof` 标志区分。
 
--   `-alloc_objects` reports the call site where each allocation was made.
+-   `-alloc_objects` 报告进行分配的呼叫站点。
+-   `-inuse_objects` 报告在性能分析末尾可以访问的呼叫站点。
 
--   `-inuse_objects` reports the call site where an allocation was made _iff_ it was reachable at the end of the profile.
-
-To demonstrate this, here is a contrived program which will allocate a bunch of memory in a controlled manner.
+为了演示这一点，这是一个人为设计的程序，它将以受控方式分配一堆内存。
 
 ```go
 const count = 100000
@@ -1209,7 +1236,7 @@ func makeByteSlice() []byte {
 }
 ```
 
-The program is annotation with the `profile` package, and we set the memory profile rate to `1` --that is, record a stack trace for every allocation. This is slows down the program a lot, but you’ll see why in a minute.
+该程序是带有 `profile` 包的注释，我们将内存配置文件速率设置为 `1`，也就是说，记录每次分配的堆栈跟踪。这会大大减慢该程序的速度，但是您很快就会知道原因。
 
 ```bash
 % go run main.go
@@ -1217,7 +1244,7 @@ The program is annotation with the `profile` package, and we set the memory prof
 2018/08/25 15:22:05 profile: memory profiling disabled, /var/folders/by/3gf34_z95zg05cyj744_vhx40000gn/T/profile730812803/mem.pprof
 ```
 
-Lets look at the graph of allocated objects, this is the default, and shows the call graphs that lead to the allocation of every object during the profile.
+让我们看一下已分配对象的图，这是默认设置，并显示导致在概要文件期间分配每个对象的调用图。
 
 ```bash
 % go tool pprof -http=:8080 /var/folders/by/3gf34_z95zg05cyj744_vhx40000gn/T/profile891268605/mem.pprof
@@ -1225,19 +1252,19 @@ Lets look at the graph of allocated objects, this is the default, and shows the 
 
 ![](/public/img/high-performance-go-workshop/pprof-2.svg)
 
-Not surprisingly more than 99% of the allocations were inside `makeByteSlice`. Now lets look at the same profile using `-inuse_objects`
+不足为奇的是，超过 99％ 的分配位于 `makeByteSlice` 内部。 现在让我们使用 `-inuse_objects` 查看相同的配置文件
 
 ```bash
 % go tool pprof -http=:8080 /var/folders/by/3gf34_z95zg05cyj744_vhx40000gn/T/profile891268605/mem.pprof
 ```
 
-!()[/public/img/high-performance-go-workshop/pprof-3.svg]
+![](/public/img/high-performance-go-workshop/pprof-3.svg)
 
-What we see is not the objects that were _allocated_ during the profile, but the objects that remain _in use_, at the time the profile was taken — this ignores the stack trace for objects which have been reclaimed by the garbage collector.
+我们看到的不是在概要文件期间 _分配_ 的对象，而是在获取概要文件时 _仍在使用_ 的对象，这将忽略已由垃圾收集器回收的对象的堆栈跟踪。
 
-#### 3.5.6\. Block profiling
+#### 3.5.6. Block profiling
 
-The last profile type we’ll look at is block profiling. We’ll use the `ClientServer` benchmark from the `net/http` package
+我们要查看的最后一个配置文件类型是区块分析。 我们将使用来自 `net/http` 包的 `ClientServer` 基准测试
 
 ```
 % go test -run=XXX -bench=ClientServer$ -blockprofile=/tmp/block.p net/http
@@ -1246,77 +1273,73 @@ The last profile type we’ll look at is block profiling. We’ll use the `Clien
 
 ![](/public/img/high-performance-go-workshop/pprof-4.svg)
 
-#### 3.5.7\. Thread creation profiling
+#### 3.5.7. 线程创建分析
 
-Go 1.11 (?) added support for profiling the creation of operating system threads.
+Go 1.11 (?) 增加了对操作系统线程创建的分析支持。
 
-Add thread creation profiling to `godoc` and observe the results of profiling `godoc -http=:8080 -index`.
+```
+将线程创建分析添加到 `godoc` 中，并观察分析 `godoc -http =：8080 -index` 的结果。
+```
 
-#### 3.5.8\. Framepointers
+#### 3.5.8. Framepointers
 
-Go 1.7 has been released and along with a new compiler for amd64, the compiler now enables frame pointers by default.
+Go 1.7 已发布，并且与用于 amd64 的新编译器一起，现在默认情况下编译器启用了帧指针。
 
-The frame pointer is a register that always points to the top of the current stack frame.
+帧指针是一个始终指向当前堆栈帧顶部的寄存器。
 
-Framepointers enable tools like `gdb(1)`, and `perf(1)` to understand the Go call stack.
+帧指针使诸如 `gdb(1)` 和 `perf(1)` 之类的工具能够理解 Go 调用堆栈。
 
-We won’t cover these tools in this workshop, but you can read and watch a presentation I gave on seven different ways to profile Go programs.
+在本研讨会中，我们不会介绍这些工具，但是您可以阅读和观看我的演讲，该演讲以七种不同的方式介绍Go程序。
 
--   [Seven ways to profile a Go program](https://talks.godoc.org/github.com/davecheney/presentations/seven.slide) (slides)
+-   [分析Go程序的七种方法](https://talks.godoc.org/github.com/davecheney/presentations/seven.slide) (slides)
+-   [分析Go程序的七种方法](https://www.youtube.com/watch?v=2h_NFBFrciI) (video, 30 mins)
+-   [分析Go程序的七种方法](https://www.bigmarker.com/remote-meetup-go/Seven-ways-to-profile-a-Go-program) (webcast, 60 mins)
 
--   [Seven ways to profile a Go program](https://www.youtube.com/watch?v=2h_NFBFrciI) (video, 30 mins)
+#### 3.5.9. 练习
 
--   [Seven ways to profile a Go program](https://www.bigmarker.com/remote-meetup-go/Seven-ways-to-profile-a-Go-program) (webcast, 60 mins)
-
-#### 3.5.9\. Exercise
-
--   Generate a profile from a piece of code you know well. If you don’t have a code sample, try profiling `godoc`.
-
+-   根据您熟悉的一段代码生成一个性能分析。如果您没有代码示例，请尝试对 `godoc` 进行分析。
     ```
     % go get golang.org/x/tools/cmd/godoc
     % cd $GOPATH/src/golang.org/x/tools/cmd/godoc
     % vim main.go
     ```
+-   如果要在一台计算机上生成性能分析，然后在另一台计算机上检查性能分析，您将如何处理？
 
--   If you were to generate a profile on one machine and inspect it on another, how would you do it?
+## 4. 编译优化 {#compiler-optimisation}
 
-## [](#compiler-optimisation)[4\. Compiler optimisations](#compiler-optimisation)
+本节介绍了 Go 编译器执行的一些优化。
 
-This section covers some of the optimisations that the Go compiler performs.
+例如;
 
-For example;
+-   逃逸分析
+-   内联
+-   消除死代码
 
--   Escape analysis
-
--   Inlining
-
--   Dead code elimination
-
-are all handled in the front end of the compiler, while the code is still in its AST form; then the code is passed to the SSA compiler for further optimisation.
+全部在编译器的前端处理，而代码仍为 `AST` 形式； 然后将代码传递给 `SSA` 编译器进行进一步优化。
 
 ### 4.1\. History of the Go compiler
 
-The Go compiler started as a fork of the Plan9 compiler tool chain circa 2007\. The compiler at that time bore a strong resemblance to Aho and Ullman’s [_Dragon Book_](https://www.goodreads.com/book/show/112269.Principles_of_Compiler_Design).
+Go 编译器大约在 2007 时作为 Plan9 编译器工具链的分支而开始的。当时的编译器与 Aho 和 Ullman 的 _[Dragon Book](https://www.goodreads.com/book/show/112269.Principles_of_Compiler_Design)_ 非常相似。
 
-In 2015 the then Go 1.5 compiler was mechanically translated from [C into Go](https://golang.org/doc/go1.5#c).
+在2015年，当时的 Go 1.5 编译器为 [C转换为Go](https://golang.org/doc/go1.5#c)。
 
-A year later, Go 1.7 introduced a [new compiler backend](https://blog.golang.org/go1.7) based on [SSA](https://en.wikipedia.org/wiki/Static_single_assignment_form) techniques replaced the previous Plan 9 style code generation. This new backend introduced many opportunities for generic and architecture specific optimistions.
+一年后，Go 1.7 引入了一种基于 [SSA](https://en.wikipedia.org/wiki/Static_single_assignment_form) 技术的 [new compiler backend](https://blog.golang.org/go1.7) 以前的 Plan9 样式代码生成。这个新的后端为通用和特定于架构的优化引入了许多机会。
 
-### 4.2\. Escape analysis
+### 4.2. 逃逸优化
 
-The first optimisation we’re doing to discuss is _escape analysis_.
+我们正在讨论的第一个优化是 _逃逸优化_。
 
-To illustrate what escape analysis does recall that the [Go spec](https://golang.org/ref/spec) does not mention the heap or the stack. It only mentions that the language is garbage collected in the introduction, and gives no hints as to how this is to be achieved.
+为了说明逃逸分析的作用，我们回想起 [Go spec](https://golang.org/ref/spec) 并未提及堆或堆栈。它仅提及该语言是在引言中被垃圾收集的，并没有提示如何实现该语言。
 
-A compliant Go implementation of the Go spec _could_ store every allocation on the heap. That would put a lot of pressure on the the garbage collector, but it is in no way incorrect — for several years, gccgo had very limited support for escape analysis so could effectively be considered to be operating in this mode.
+Go 规范的兼容 Go 实现 _可以_ 将每个分配存储在堆上。这将对垃圾收集器施加很大压力，但是这绝不是不正确的。多年来，gccgo 对逃逸分析的支持非常有限，因此可以有效地认为它在这种模式下运行。
 
-However, a goroutine’s stack exists as a cheap place to store local variables; there is no need to garbage collect things on the stack. Therefore, where it is safe to do so, an allocation placed on the stack will be more efficient.
+但是，goroutine 的堆栈作为存储局部变量的廉价场所而存在。无需在堆栈上进行垃圾收集。因此，在安全的情况下，放置在堆栈上的分配将更有效。
 
-In some languages, for example C and C++, the choice of allocating on the stack or on the heap is a manual exercise for the programmer—​heap allocations are made with `malloc` and `free`, stack allocation is via `alloca`. Mistakes using these mechanisms are a common cause of memory corruption bugs.
+在某些语言中，例如 `C` 和 `C++`，选择在堆栈上还是在堆上分配是程序员的手动操作。堆分配是通过 `malloc` 和 `free` 进行的，栈分配是通过 `alloca` 进行的。使用这些机制的错误是导致内存损坏错误的常见原因。
 
-In Go, the compiler automatically moves a value to the heap if it lives beyond the lifetime of the function call. It is said that the value _escapes_ to the heap.
+在 Go 中，如果值的寿命超出了函数调用的寿命，则编译器会自动将其移动到堆中。 说明该值 _逃逸_ 到堆。
 
-```
+```go
 type Foo struct {
 	a, b, c, d int
 }
@@ -1326,15 +1349,15 @@ func NewFoo() *Foo {
 }
 ```
 
-In this example the `Foo` allocated in `NewFoo` will be moved to the heap so its contents remain valid after `NewFoo` has returned.
+在这个例子中，在 `NewFoo` 中分配的 `Foo` 将被移到堆中，因此在 `NewFoo` 返回后其内容仍然有效。
 
-This has been present since the earliest days of Go. It isn’t so much an optimisation as an automatic correctness feature. Accidentally returning the address of a stack allocated variable is not possible in Go.
+自 Go 成立以来，这种情况就一直存在。与其说是自动纠正功能，还不如说是一种优化。在 Go 中意外返回堆栈分配变量的地址是不可能的。
 
-But the compiler can also do the opposite; it can find things which would be assumed to be allocated on the heap, and move them to stack.
+但是编译器也可以做相反的事情。它可以找到假定在堆上分配的东西，并将它们移到堆栈中。
 
-Let’s have a look at an example
+让我们看一个例子
 
-```
+```go
 func Sum() int {
 	const count = 100
 	numbers := make([]int, count)
@@ -1355,13 +1378,13 @@ func main() {
 }
 ```
 
-`Sum` adds the `int`s between 1 and 100 and returns the result.
+`sum` 将 1 与 100 之间的 `int` 相加并返回结果。
 
-Because the `numbers` slice is only referenced inside `Sum`, the compiler will arrange to store the 100 integers for that slice on the stack, rather than the heap. There is no need to garbage collect `numbers`, it is automatically freed when `Sum` returns.
+由于 `numbers` 切片仅在 `Sum` 内部引用，因此编译器将安排将该切片的 100 个整数存储在堆栈中，而不是堆中。无需垃圾回收 `numbers`，它会在 `Sum` 返回时自动释放。
 
-#### 4.2.1\. Prove it! {#prove_it}
+#### 4.2.1. 证明它! {#prove_it}
 
-To print the compilers escape analysis decisions, use the `-m` flag.
+要打印编译器的逃逸分析结果，请使用 `-m` 标志。
 
 ```
 % go build -gcflags=-m examples/esc/sum.go
@@ -1374,18 +1397,18 @@ examples/esc/sum.go:22:13: main []interface {} literal does not escape
 <autogenerated>:1: os.(*File).close .this does not escape
 ```
 
-Line 8 shows the compiler has correctly deduced that the result of `make([]int, 100)` does not escape to the heap. The reason it did no
+第 8 行显示编译器已正确推断出 `make([]int, 100)` 的结果不会逸出到堆中。没有的原因
 
-The reason line 22 reports that `answer` escapes to the heap is `fmt.Println` is a _variadic_ function. The parameters to a variadic function are _boxed_ into a slice, in this case a `[]interface{}`, so `answer` is placed into a interface value because it is referenced by the call to `fmt.Println`. Since Go 1.6 the garbage collector requires _all_ values passed via an interface to be pointers, what the compiler sees is _approximately_:
+第 22 行报告 `answer` 转储到堆中是 `fmt.Println` 是一个可变函数。可变参数函数的参数装在切片中，在本例中为 `[]interface {}`，因此将 `answer` 放入接口值中，因为它是由对 `fmt.Println` 的调用引用的。由于 Go 1.6 的垃圾回收器要求通过接口传递的所有值都是指针，因此编译器优化后的代码的大致是：
 
-```
+``` go
 var answer = Sum()
 fmt.Println([]interface{&answer}...)
 ```
 
-We can confirm this using the `-gcflags="-m -m"` flag. Which returns
+我们可以使用 `-gcflags="-m -m"` 标志来确认。在哪返回了
 
-```
+``` bash
 % go build -gcflags='-m -m' examples/esc/sum.go 2>&1 | grep sum.go:22
 examples/esc/sum.go:22:13: inlining call to fmt.Println func(...interface {}) (int, error) { return fmt.Fprintln(io.Writer(os.Stdout), fmt.a...) }
 examples/esc/sum.go:22:13: answer escapes to heap
@@ -1395,21 +1418,19 @@ examples/esc/sum.go:22:13:      from io.Writer(os.Stdout) (passed to call[argume
 examples/esc/sum.go:22:13: main []interface {} literal does not escape
 ```
 
-In short, don’t worry about line 22, its not important to this discussion.
+简而言之，不必担心第 22 行的逃逸，这对本次讨论并不重要。
 
-#### 4.2.2\. Exercises
+#### 4.2.2. 练习
 
--   Does this optimisation hold true for all values of `count`?
+-   这种优化对所有 `count` 的值都适用吗？
+-   如果 `count` 是变量而不是常量，此优化是否成立？
+-   如果 `count` 是 `Sum` 的参数，此优化是否成立？
 
--   Does this optimisation hold true if `count` is a variable, not a constant?
+#### 4.2.3. Escape analysis (continued) {#escape_analysis_continued}
 
--   Does this optimisation hold true if `count` is a parameter to `Sum`?
+这个例子是人为造的。它不旨在成为真实的代码，仅是示例。
 
-#### 4.2.3\. Escape analysis (continued) {#escape_analysis_continued}
-
-This example is a little contrived. It is not intended to be real code, just an example.
-
-```
+```go
 type Point struct{ X, Y int }
 
 const Width = 640
@@ -1429,7 +1450,9 @@ func NewPoint() {
 
 `NewPoint` creates a new `*Point` value, `p`. We pass `p` to the `Center` function which moves the point to a position in the center of the screen. Finally we print the values of `p.X` and `p.Y`.
 
-```
+`NewPoint` 创建一个新的 `*Point` 值 `p`。 我们将 `p` 传递给 `Center` 函数，该函数将点移动到屏幕中心的位置。 最后，我们输出 `p.X` 和 `p.Y` 的值。
+
+``` bash
 % go build -gcflags=-m examples/esc/center.go
 # command-line-arguments
 examples/esc/center.go:11:6: can inline Center
@@ -1444,31 +1467,33 @@ examples/esc/center.go:19:13: NewPoint []interface {} literal does not escape
 <autogenerated>:1: os.(*File).close .this does not escape
 ```
 
-Even though `p` was allocated with the `new` function, it will not be stored on the heap, because no reference `p` escapes the `Center` function.
+即使使用新函数分配了 `p`，也不会将其存储在堆中，因为没有引用 `p` 会逸出 `Center` 函数。
 
-_Question_: What about line 19, if `p` doesn’t escape, what is escaping to the heap?
 
-Write a benchmark to provide that `Sum` does not allocate.
-
-### 4.3\. Inlining
-
-In Go function calls in have a fixed overhead; stack and preemption checks.
-
-Some of this is ameliorated by hardware branch predictors, but it’s still a cost in terms of function size and clock cycles.
-
-Inlining is the classical optimisation that avoids these costs.
-
-Until Go 1.11 inlining only worked on _leaf functions_, a function that does not call another. The justification for this is:
-
--   If your function does a lot of work, then the preamble overhead will be negligible. That’s why functions over a certain size (currently some count of instructions, plus a few operations which prevent inlining all together (eg. switch before Go 1.7)
-
--   Small functions on the other hand pay a fixed overhead for a relatively small amount of useful work performed. These are the functions that inlining targets as they benefit the most.
-
-The other reason is that heavy inlining makes stack traces harder to follow.
-
-#### 4.3.1\. Inlining (example) {#inlining_example}
+_问题_: 那第19行，如果 `p` 不逃逸，那是什么逃逸到了堆呢？
 
 ```
+编写一个基准，以规定 `Sum` 不分配。
+```
+
+### 4.3. 内联
+
+在 Go 函数中，调用具有固定的开销；堆栈和抢占检查。
+
+硬件分支预测器可以改善其中的一些功能，但是就功能大小和时钟周期而言，这仍然是一个代价。
+
+内联是避免这些成本的经典优化方法。
+
+直到 Go 1.11 内联仅在 _叶函数_ 上起作用，该函数不会调用另一个函数。这样做的理由是:
+
+-   如果您的函数做了很多工作，那么前导开销将可以忽略不计。这就是为什么功能要达到一定的大小（目前有一些指令，加上一些阻止全部内联的操作，例如，在Go 1.7之前进行切换）
+-   另一方面，小的功能为执行的相对少量的有用工作支付固定的开销。这些是内联目标的功能，因为它们最大程度地受益。
+
+另一个原因是过多的内联使堆栈跟踪更难遵循。
+
+#### 4.3.1. Inlining (example) {#inlining_example}
+
+```go
 func Max(a, b int) int {
 	if a > b {
 		return a
@@ -1484,7 +1509,7 @@ func F() {
 }
 ```
 
-Again we use the `-gcflags=-m` flag to view the compilers optimisation decision.
+同样，我们使用 `-gcflags=-m` 标志来查看编译器的优化决策。
 
 ```
 % go build -gcflags=-m examples/inl/max.go
@@ -1497,17 +1522,20 @@ examples/inl/max.go:21:3: inlining call to F
 examples/inl/max.go:21:3: inlining call to Max
 ```
 
-The compiler printed two lines.
+编译器打印了两行。
 
--   The first at line 3, the declaration of `Max`, telling us that it can be inlined.
-
--   The second is reporting that the body of `Max` has been inlined into the caller at line 12.
-
-#### 4.3.2\. What does inlining look like? {#what_does_inlining_look_like}
-
-Compile `max.go` and see what the optimised version of `F()` became.
+-   第 3 行中的第一个是 `Max` 的声明，告诉我们可以内联。
+-   第二个报告说，`Max` 的主体已在第 12 行内联到调用方中。
 
 ```
+在不使用 `//go:noinline comment` 的情况下，重写 `Max` 使得它仍然返回正确的答案，但是编译器不再认为它是可内联的。
+```
+
+#### 4.3.2. 内联是什么样的？ {#what_does_inlining_look_like}
+
+编译 `max.go`，看看 `F()` 的优化版本是什么。
+
+```bash
 % go build -gcflags=-S examples/inl/max.go 2>&1 | grep -A5 '"".F STEXT'
 "".F STEXT nosplit size=2 args=0x0 locals=0x0
         0x0000 00000 (/Users/dfc/devel/high-performance-go-workshop/examples/inl/max.go:11)     TEXT    "".F(SB), NOSPLIT|ABIInternal, $0-0
@@ -1517,105 +1545,57 @@ Compile `max.go` and see what the optimised version of `F()` became.
         0x0000 00000 (/Users/dfc/devel/high-performance-go-workshop/examples/inl/max.go:13)     PCDATA  $2, $0
 ```
 
-This is the body of `F` once `Max` has been inlined into it — there’s nothing happening in this function. I know there’s a lot of text on the screen for nothing, but take my word for it, the only thing happening is the `RET`. In effect `F` became:
+一旦将 `Max` 内联到其中，它就是 `F` 的主体, 此功能没有任何反应。 我知道屏幕上有很多文本，但是什么也没说，但请您相信，唯一发生的是 `RET`。 实际上，F变为：
 
-```
+```go
 func F() {
-        return
+    return
 }
 ```
 
-| | What are FUNCDATA and PCDATA?
+!!! note 什么是 FUNCDATA 和 PCDATA？
+`-S` 的输出不是二进制文件中的最终机器代码。链接器在最终链接阶段进行一些处理。像 `FUNCDATA` 和 `PCDATA` 这样的行是垃圾收集器的元数据，它们在链接时会移到其他位置。如果您正在读取 `-S` 的输出，则只需忽略 `FUNCDATA` 和 `PCDATA` 行；它们不是最终二进制文件的一部分。
+!!!
 
-The output from `-S` is not the final machine code that goes into your binary. The linker does some processing during the final link stage. Lines like `FUNCDATA` and `PCDATA` are metadata for the garbage collector which are moved elsewhere when linking. If you’re reading the output of `-S`, just ignore `FUNCDATA` and `PCDATA` lines; they’re not part of the final binary.
+#### 4.3.3. 讨论
 
-For the rest of the presentation I’ll be using a small shell script to reduce the clutter in the assembly output.
+为什么在 `F()` 中声明 `a` 和 `b` 为常数？
 
-```
-asm() {
-        go build -gcflags=-S 2>&1 $@ | grep -v PCDATA | grep -v FUNCDATA | less
-}
-```
+实验输出以下内容：如果将a和b声明为变量，会发生什么？ 如果 `a` 和 `b` 作为参数传递给 `F()` 会怎样？
 
-|
+!!! note
+`-gcflags=-S` 不会阻止在您的工作目录中构建最终的二进制文件。如果发现随后的 `go build …` 运行没有输出，请删除工作目录中的 `./max` 二进制文件。
+!!!
 
-_Without_ using the `//go:noinline` comment, rewrite `Max` such that it still returns the right answer, but is no longer considered inlineable by the compiler.
+#### 4.3.4. 调整内联级别
 
-Here’s one way to do it
+调整 _内联级别_ 是通过 `-gcflags = -l` 标志执行的。有些令人困惑的传递单个 `-l` 将禁用内联，而两个或多个将启用更激进的设置的内联。
 
-```
-include::../examples/inl/max_noinline.go
-```
+-   `-gcflags=-l`, 禁用内联.
+-   没有，正常内联。
+-   `-gcflags='-l -l'` 内联级别 2，更具攻击性，可能更快，可能会生成更大的二进制文件。
+-   `-gcflags='-l -l -l'` 内联3级，再次更具攻击性，二进制文件肯定更大，也许再次更快，但也可能有问题。
+-   `-gcflags=-l=4` Go 1.11 中的（四个 `-l`）将启用实验性 [mid stack inlining optimisation](https://github.com/golang/go/issues/19348#issuecomment-393654429)。我相信从 Go 1.12 开始它没有任何作用。
 
-Let’s see what the compiler thinks of it
+#### 4.3.5. 中栈内联
 
-```
-% go build -gcflags=-m max_noinline.go
-# command-line-arguments
-./max_noinline.go:16:6: can inline F (1)
-./max_noinline.go:25:6: can inline main
-./max_noinline.go:26:3: inlining call to F
-```
+由于 Go 1.12 已启用所谓的 _中栈_ 内联（以前在 Go 1.11 中的预览中带有 `-gcflags ='-l -l -l -l'` 标志）。
 
-| **1** | The `can inline Max` line is now missing |
+我们可以在前面的示例中看到中栈内联的示例。在 Go 1.11 和更早的版本中，`F` 不会是叶子函数，它称为 `max`。但是由于内联的改进，现在将 `F` 内联到其调用方中。这有两个原因。当将 `max` 内联到 `F` 中时，`F` 不包含其他函数调用，因此，如果未超过其复杂性预算，它将成为潜在的 `叶函数`。由于 `F` 是一个简单的函数，内联和消除死代码消除了许多复杂性预算-它有资格进行 _中栈_ 内联，而与调用`max`无关。
 
-We can double check this with two `-m` flags
+!!! tip
+中栈内联可用于内联函数的快速路径，从而消除了快速路径中的函数调用开销。[最近进入 Go 1.13 的CL](https://go-review.googlesource.com/c/go/+/152698) 显示了此技术应用于 `sync.RWMutex.Unlock()`。
+!!!
 
-```
-% go build -gcflags=-m=2 max_noinline.go
-# command-line-arguments
-./max_noinline.go:6:6: cannot inline Max: unhandled op SELECT (1)
-./max_noinline.go:16:6: can inline F as: func() { <node DCLCONST>; <node DCLCONST>; if Max(a, b) == b { panic(b) } } (2)
-./max_noinline.go:25:6: can inline main as: func() { F() }
-./max_noinline.go:26:3: inlining call to F func() { <node DCLCONST>; <node DCLCONST>; if Max(a, b) == b { panic(b) } }
-```
+### 4.4. 消除无效代码
 
-| **1** | `Max` is no longer inlinable because it contains a `select` statement |
-| **2** | Note this is the code that the compiler sees, this is why `Max is inline twice` |
+为什么 `a` 和 `b` 是常量很重要？
 
-#### 4.3.3\. Discussion
-
-Why did I declare `a` and `b` in `F()` to be constants?
-
-Experiment with the output of What happens if `a` and `b` are declared as are variables? What happens if `a` and `b` are passing into `F()` as parameters?
-
-| | `-gcflags=-S` doesn’t prevent the final binary being build in your working directory. If you find that subsequent runs of `go build …​` produce no output, delete the `./max` binary in your working directory. |
-
-#### 4.3.4\. Adjusting the level of inlining
-
-Adjusting the _inlining level_ is performed with the `-gcflags=-l` flag. Somewhat confusingly passing a single `-l` will disable inlining, and two or more will enable inlining at more aggressive settings.
-
--   `-gcflags=-l`, inlining disabled.
-
--   nothing, regular inlining.
-
--   `-gcflags='-l -l'` inlining level 2, more aggressive, might be faster, may make bigger binaries.
-
--   `-gcflags='-l -l -l'` inlining level 3, more aggressive again, binaries definitely bigger, maybe faster again, but might also be buggy.
-
--   `-gcflags=-l=4` (four `-l`s) in Go 1.11 will enable the experimental [_mid stack_ inlining optimisation](https://github.com/golang/go/issues/19348#issuecomment-393654429). I believe as of Go 1.12 it has no effect.
-
-#### 4.3.5\. Mid Stack inlining
-
-Since Go 1.12 so called _mid stack_ inlining has been enabled (it was previously available in preview in Go 1.11 with the `-gcflags='-l -l -l -l'` flag).
-
-We can see an example of mid stack inlining in the previous example. In Go 1.11 and earlier `F` would not have been a leaf function — it called `max`. However because of inlining improvements `F` is now inlined into its caller. This is for two reasons; . When `max` is inlined into `F`, `F` contains no other function calls thus it becomes a potential _leaf function_, assuming its complexity budget has not been exceeded. . Because `F` is a simple function—​inlining and dead code elimination has eliminated much of its complexity budget—​it is eligable for _mid stack_ inlining irrispective of calling `max`.
-
-| |
-
-Mid stack inlining can be used to inline the fast path of a function, eliminating the function call overhead in the fast path. [This recent CL which landed in for Go 1.13](https://go-review.googlesource.com/c/go/+/152698) shows this technique applied to `sync.RWMutex.Unlock()`.
-
-|
-
-### 4.4\. Dead code elimination
-
-Why is it important that `a` and `b` are constants?
-
-To understand what happened lets look at what the compiler sees once its inlined `Max` into `F`. We can’t get this from the compiler easily, but it’s straight forward to do it by hand.
+要了解发生了什么，让我们看一下编译器将其 `Max` 内联到 `F` 中后看到的内容。我们很难从编译器中获得此信息，但是直接手动完成是很简单的。
 
 Before:
 
-```
+```go
 func Max(a, b int) int {
 	if a > b {
 		return a
@@ -1633,7 +1613,7 @@ func F() {
 
 After:
 
-```
+```go
 func F() {
 	const a, b = 100, 20
 	var result int
@@ -1647,10 +1627,9 @@ func F() {
 	}
 }
 ```
+因为 `a` 和 `b` 是常量，所以编译器可以在编译时证明该分支永远不会为假。`100` 始终大于 `20`。 因此，编译器可以进一步优化 `F` 以
 
-Because `a` and `b` are constants the compiler can prove at compile time that the branch will never be false; `100` is always greater than `20`. So the compiler can further optimise `F` to
-
-```
+```go
 func F() {
 	const a, b = 100, 20
 	var result int
@@ -1665,9 +1644,9 @@ func F() {
 }
 ```
 
-Now that the result of the branch is know then then the contents of `result` are also known. This is call _branch elimination_.
+现在已经知道了分支的结果，那么 `result` 的内容也就知道了。这就是 _消除分支_.
 
-```
+```go
 func F() {
         const a, b = 100, 20
         const result = a
@@ -1677,9 +1656,9 @@ func F() {
 }
 ```
 
-Now the branch is eliminated we know that `result` is always equal to `a`, and because `a` was a constant, we know that `result` is a constant. The compiler applies this proof to the second branch
+现在消除了分支，我们知道 `result` 总是等于 `a`，并且因为 `a` 是常数，所以我们知道 `result` 是常数。编译器将此证明应用于第二个分支
 
-```
+```go
 func F() {
         const a, b = 100, 20
         const result = a
@@ -1689,258 +1668,142 @@ func F() {
 }
 ```
 
-And using branch elimination again the final form of `F` is reduced to.
+再次使用分支消除，最终形式为 `F`。
 
-```
+```go
 func F() {
         const a, b = 100, 20
         const result = a
 }
 ```
 
-And finally just
+最后就是
 
-```
+```go
 func F() {
 }
 ```
 
-#### 4.4.1\. Dead code elimination (cont.) {#dead_code_elimination_cont}
+#### 4.4.1. 消除无效代码（续）{#dead_code_elimination_cont}
 
-Branch elimination is one of a category of optimisations known as _dead code elimination_. In effect, using static proofs to show that a piece of code is never reachable, colloquially known as _dead_, therefore it need not be compiled, optimised, or emitted in the final binary.
+分支消除是称为 _无效代码消除_ 的优化类别之一。实际上，使用静态证明来显示，段代码是永远无法访问的，俗称 _无效_，因此不需要在最终二进制文件中对其进行编译，优化或发出。
 
-We saw how dead code elimination works together with inlining to reduce the amount of code generated by removing loops and branches that are proven unreachable.
+我们看到了无效代码消除如何与内联一起工作，以减少通过删除证明无法访问的循环和分支而减少的代码量。
 
-You can take advantage of this to implement expensive debugging, and hide it behind
+您可以利用此优势实施昂贵的调试，并将其隐藏
 
-```
+```go
 const debug = false
 ```
 
-Combined with build tags this can be very useful.
+与构建标签结合使用，这可能非常有用。
 
-#### 4.4.2\. Further reading
+#### 4.4.2. 进一步阅读
 
 -   [Using // +build to switch between debug and release builds](http://dave.cheney.net/2014/09/28/using-build-to-switch-between-debug-and-release)
-
 -   [How to use conditional compilation with the go build tool](http://dave.cheney.net/2013/10/12/how-to-use-conditional-compilation-with-the-go-build-tool)
 
-### 4.5\. Prove pass
+### 4.5. 编译器标识练习
 
-A few releases ago the SSA backend gained a, so called, prove pass. Prove, the verb form of Proof, establishes the relationship between variables.
-
-Let’s look at an example to explain what prove is doing.
-
-```
-package main
-
-func foo(x int) bool {
-	if x > 5 { (1)
-		if x > 3 { (2)
-			return true
-		}
-		panic("x less than 3")
-	}
-	return false
-}
-
-func main() {
-	foo(-1)
-}
+```bash
+% go build -gcflags=$FLAGS
 ```
 
-| **1** | At this point the compiler knows that x is greater than 5 |
-| **2** | Therefore x is _also_ greater than 3, this the branch is always taken. |
+研究以下编译器功能的操作：
 
-#### 4.5.1\. Prove it (ha!) {#prove_it_ha}
+- `-S` 打印正在编译的程序包的 (Go 风格) 程序集。
+- `-l` 控制内联的行为； `-l` 禁用内联，`-l -l` 增加内联（更多 `-l` 增加编译器对内联代码的需求）。尝试编译时间，程序大小和运行时间的差异。
+- `-m` 控制诸如内联，转义分析之类的优化决策的打印。`-m -m` 打印有关编译器思想的更多详细信息。
+- `-l -N` 禁用所有优化。
 
-Just as with inining and escape analysis we can ask the compiler to show us the working of the prove pass. We do this with the `-d` flag passed to `go tool compile` via `-gcflags`
+!!! note
+如果发现随后的 `go build …​` 运行没有输出，请删除工作目录中的 `./max` 二进制文件。
+!!!
 
-```
-% go build -gcflags=-d=ssa/prove/debug=on foo.go
-# command-line-arguments
-./foo.go:5:10: Proved Greater64
-```
+#### 4.5.1  进一步阅读
 
-Line 5 is `if x > 3`. The compiler is saying that is has proven that the branch will always be true.
+- [Codegen Inspection by Jaana Burcu Dogan](http://go-talks.appspot.com/github.com/rakyll/talks/gcinspect/talk.slide#1)
 
-Experiment with the output of What happens if `a` and `b` are declared as are variables? What happens if `a` and `b` are passing into `F()` as parameters?
+### 4.6. 边界检查消除 {#bounds_check_elimination}
 
-### 4.6\. Compiler intrinsics
+Go 是一种边界检查语言。这意味着将检查数组和切片下标操作，以确保它们在相应类型的范围内。
 
-Go allows you to write functions in assembly if required. The technique involves a forwarding declared function—​a function without a body—​and a corresponding assembly function.
+对于数组，这可以在编译时完成。对于切片，这必须在运行时完成。
 
-decl.go
+``` go
+var v = make([]int, 9)
 
-```
-package asm
+var A, B, C, D, E, F, G, H, I int
 
-// Add returns the sum of a and b.
-func Add(a int64, b int64) int64
-```
-
-Here we’re declaring an `Add` function which takes two `int64’s and returns a third. Note the`Add` function has no body. If we were to compile it we would see something like this
-
-```
-% go build
-# high-performance-go-workshop/examples/asm [high-performance-go-workshop/examples/asm.test]
-./decl.go:4:6: missing function body
-```
-
-To satisfy the compiler we must supply the assembly for this function, which we can do via a `.s` file in the same package.
-
-add.s
-
-```
-TEXT ·Add(SB),$0
-	MOVQ a+0(FP), AX
-	ADDQ b+8(FP), AX
-	MOVQ AX, ret+16(FP)
-	RET
-```
-
-Now we can build, test, and use our `asm.Add` function just like normal Go code.
-
-But there’s a problem, assembly functions **cannot be inlined**. This has long been a complaint by Go developers who need to use assembly either for performance, or for operations which are not exposed in the language; vector instructions, atomic primatives and so on, which when written as assembly functions pay a high overhead cost because they cannot be inlined.
-
-There have been various proposals for an inline assembly syntax for Go, similar to GCC’s `asm(…​)` directive, but they have not been accepted by the Go developers. Instead, Go has added _intrinsic functions_.
-
-An intrinsic function is regular Go code written in regular Go, however the compiler contains specific drop in replacements for the functions.
-
-The two packages that make use of this this are
-
--   `math/bits`
-
--   `sync/atomic`
-
-These replacements are implemented in the compiler backend; if your architecture supports a faster way of doing an operation it will be transparently replaced with the comparable instruction during compilation.
-
-As well as generating more efficient code, because intrinsic functions are just normal Go code, the rules of inlining, and mid stack inlining apply to them.
-
-#### 4.6.1\. Atomic counter example
-
-```
-package main
-
-import (
-	"sync/atomic"
-)
-
-type counter uint64
-
-func (c *counter) get() uint64 {
-	return atomic.LoadUint64((*uint64)(c))
-}
-func (c *counter) inc() uint64 {
-	return atomic.AddUint64((*uint64)(c), 1)
-}
-func (c *counter) reset() uint64 {
-	return atomic.SwapUint64((*uint64)(c), 0)
-}
-
-var c counter
-
-func f() uint64 {
-	c.inc()
-	c.get()
-	return c.reset()
-}
-
-func main() {
-	f()
+func BenchmarkBoundsCheckInOrder(b *testing.B) {
+    for n := 0; n < b.N; n++ {
+        A = v[0]
+        B = v[1]
+        C = v[2]
+        D = v[3]
+        E = v[4]
+        F = v[5]
+        G = v[6]
+        H = v[7]
+        I = v[8]
+    }
 }
 ```
 
-This means examples like the one above compile to efficient native code on most platforms.
-
 ```
-"".f STEXT nosplit size=36 args=0x8 locals=0x0
-        0x0000 00000 (/tmp/counter.go:21)       TEXT    "".f(SB), NOSPLIT|ABIInternal, $0-8
-        0x0000 00000 (<unknown line number>)    NOP
-        0x0000 00000 (/tmp/counter.go:22)       MOVL    $1, AX
-        0x0005 00005 (/tmp/counter.go:13)       LEAQ    "".c(SB), CX
-        0x000c 00012 (/tmp/counter.go:13)       LOCK
-        0x000d 00013 (/tmp/counter.go:13)       XADDQ   AX, (CX) (1)
-        0x0011 00017 (/tmp/counter.go:23)       XCHGL   AX, AX
-        0x0012 00018 (/tmp/counter.go:10)       MOVQ    "".c(SB), AX (2)
-        0x0019 00025 (<unknown line number>)    NOP
-        0x0019 00025 (/tmp/counter.go:16)       XORL    AX, AX
-        0x001b 00027 (/tmp/counter.go:16)       XCHGQ   AX, (CX) (3)
-        0x001e 00030 (/tmp/counter.go:24)       MOVQ    AX, "".~r0+8(SP)
-        0x0023 00035 (/tmp/counter.go:24)       RET
-        0x0000 b8 01 00 00 00 48 8d 0d 00 00 00 00 f0 48 0f c1  .....H.......H..
-        0x0010 01 90 48 8b 05 00 00 00 00 31 c0 48 87 01 48 89  ..H......1.H..H.
-        0x0020 44 24 08 c3                                      D$..
-        rel 8+4 t=15 "".c+0
-        rel 21+4 t=15 "".c+0
+使用 `-gcflags=-S` 来拆解 `BenchmarkBoundsCheckInOrder`。每个循环执行多少个边界检查操作？
 ```
 
-| **1** | `c.inc()` |
-| **2** | `c.get()` |
-| **3** | `c.reset()` |
-
-##### Further reading
-
--   [Mid-stack inlining in the Go compiler presentation by David Lazar](https://docs.google.com/presentation/d/1Wcblp3jpfeKwA0Y4FOmj63PW52M_qmNqlQkNaLj0P5o/edit#slide=id.p)
-
--   [Proposal: Mid-stack inlining in the Go compiler](https://github.com/golang/proposal/blob/master/design/19348-midstack-inlining.md)
-
-<mark>TODO: double check</mark>
-
-### 4.7\. Compiler flags Exercises
-
-Compiler flags are provided with:
-
-```
-go build -gcflags=$FLAGS
+```go
+func BenchmarkBoundsCheckOutOfOrder(b *testing.B) {
+    for n := 0; n < b.N; n++ {
+        I = v[8]
+        A = v[0]
+        B = v[1]
+        C = v[2]
+        D = v[3]
+        E = v[4]
+        F = v[5]
+        G = v[6]
+        H = v[7]
+    }
+}
 ```
 
-Investigate the operation of the following compiler functions:
+重新安排我们通过 `I` 分配 `A` 的顺序是否会影响装配。分解 `BenchmarkBoundsCheckOutOfOrder` 并找出。
 
--   `-S` prints the (Go flavoured) assembly of the _package_ being compiled.
+#### 4.6.1. 练习
 
--   `-l` controls the behaviour of the inliner; `-l` disables inlining, `-l -l` increases it (more `-l` 's increases the compiler’s appetite for inlining code). Experiment with the difference in compile time, program size, and run time.
+*   重新排列下标操作的顺序是否会影响函数的大小？它会影响功能的速度吗？
+*   如果将 `v` 移入 `基准` 函数内部会怎样？
+*   如果 `v` 被声明为数组，`var v [9] int` 会发生什么？
 
--   `-m` controls printing of optimisation decision like inlining, escape analysis. `-m`-m` prints more details about what the compiler was thinking.
+## 5. 执行追踪器 {#execution-tracer}
 
--   `-l -N` disables all optimisations.
+执行跟踪程序是由 [Dmitry Vyukov](https://github.com/dvyukov) 为 Go 1.5 开发的，并且仍处于记录和使用状态，已有好几年了。
 
--   `-d=ssa/prove/debug=on`, this also takes values of 2 and above, see what prints
+与基于样本的分析不同，执行跟踪器集成到 `Go` 运行时中，因此它只知道 Go程 序在特定时间点正在做什么，但是 _为什么_。
 
--   The `-d` flag takes other values, you can find out what they are with the command `go tool compile -d help`. Experiment and see what you can discovrer.
+### 5.1. 什么是执行跟踪器，为什么需要它？
 
-| | If you find that subsequent runs of `go build …​` produce no output, delete the output binary in your working directory. |
+我认为，通过查看一段代码 `go tool pprof` 的效果不好，可以最容易地解释执行跟踪器的功能，以及为什么这样做很重要。
 
-#### 4.7.1\. Further reading
+`examples/mandelbrot` 目录包含一个简单的 `mandelbrot` 生成器。该代码来自 [Francesc Campoy’s mandelbrot package](https://github.com/campoy/mandelbrot)。
 
--   [Codegen Inspection by Jaana Burcu Dogan](http://go-talks.appspot.com/github.com/rakyll/talks/gcinspect/talk.slide#1)
-
-## [](#execution-tracer)[5\. Execution Tracer](#execution-tracer)
-
-The execution tracer was developed by [Dmitry Vyukov](https://github.com/dvyukov) for Go 1.5 and remained under documented, and under utilised, for several years.
-
-Unlike sample based profiling, the execution tracer is integrated into the Go runtime, so it does just know what a Go program is doing at a particular point in time, but _why_.
-
-### 5.1\. What is the execution tracer, why do we need it? {#what_is_the_execution_tracer_why_do_we_need_it}
-
-I think its easiest to explain what the execution tracer does, and why it’s important by looking at a piece of code where the pprof, `go tool pprof` performs poorly.
-
-The `examples/mandelbrot` directory contains a simple mandelbrot generator. This code is derived from [Francesc Campoy’s mandelbrot package](https://github.com/campoy/mandelbrot).
-
-```
-cd examples/mandelbrot
-go build && ./mandelbrot
+``` bash
+% cd examples/mandelbrot
+% go build && ./mandelbrot
 ```
 
-If we build it, then run it, it generates something like this
+如果我们构建它，然后运行它，它将生成如下内容
 
 ![](https://dave.cheney.net/high-performance-go-workshop/images/mandelbrot.png)
 
-#### 5.1.1\. How long does it take? {#how_long_does_it_take}
+#### 5.1.1. 多久时间？
 
-So, how long does this program take to generate a 1024 x 1024 pixel image?
+那么，此程序需要多长时间才能生成 `1024 * 1024` 像素的图像？
 
-The simplest way I know how to do this is to use something like `time(1)`.
+我知道如何执行此操作的最简单方法是使用 `time(1)` 之类的东西。
 
 ```
 % time ./mandelbrot
@@ -1949,31 +1812,32 @@ user    0m1.630s
 sys     0m0.015s
 ```
 
-| | Don’t use `time go run mandebrot.go` or you’ll time how long it takes to _compile_ the program as well as run it. |
+!!! note
+不要使用 `time go run mandebrot.go`，否则您将花费 _编译_ 程序以及运行该程序所需的时间。
+!!!
 
-#### 5.1.2\. What is the program doing? {#what_is_the_program_doing}
+#### 5.1.2. 该程序在做什么？
 
-So, in this example the program took 1.6 seconds to generate the mandelbrot and write to to a png.
+在此示例中，程序花费了 `1.6` 秒来生成 `mandelbrot` 并写入 `png`。
 
-Is that good? Could we make it faster?
+这样好吗？我们可以加快速度吗？
 
-One way to answer that question would be to use Go’s built in pprof support to profile the program.
+回答该问题的一种方法是使用 `Go` 内置的 `pprof` 来分析程序。
 
-Let’s try that.
+让我们尝试一下。
 
-### 5.2\. Generating the profile
+### 5.2. 生成性能分析
 
-To turn generate a profile we need to either
+要生成性能分析，我们需要
 
-1.  Use the `runtime/pprof` package directly.
+1.  直接使用 `runtime/pprof` 软件包。
+2.  使用类似 `github.com/pkg/profile` 的包装器自动执行此操作。
 
-2.  Use a wrapper like `github.com/pkg/profile` to automate this.
+### 5.3. 使用 runtime/pprof 生成性能分析
 
-### 5.3\. Generating a profile with runtime/pprof {#generating_a_profile_with_runtimepprof}
+为了告诉您我没有使用黑科技(魔法)，让我们修改程序以将 `CPU` 性能分析写入 `os.Stdout`。
 
-To show you that there’s no magic, let’s modify the program to write a CPU profile to `os.Stdout`.
-
-```
+```go
 
 import "runtime/pprof"
 
@@ -1984,26 +1848,29 @@ func main() {
 
 By adding this code to the top of the `main` function, this program will write a profile to `os.Stdout`.
 
+通过将此代码添加到 `main` 函数的顶部，该程序会将配置文件写入 `os.Stdout`。
+
+```bash
+% cd examples/mandelbrot-runtime-pprof
+% go run mandelbrot.go > cpu.pprof
 ```
-cd examples/mandelbrot-runtime-pprof
-go run mandelbrot.go > cpu.pprof
-```
 
-| | We can use `go run` in this case because the cpu profile will only include the execution of `mandelbrot.go`, not its compilation. |
+!!! note
+在这种情况下，我们可以使用 `go run`，因为 cpu 配置文件将仅包含 `mandelbrot.go` 的执行，而不包括其编译。
+!!!
 
-#### 5.3.1\. Generating a profile with github.com/pkg/profile {#generating_a_profile_with_github_compkgprofile}
+#### 5.3.1. 使用 github.com/pkg/profile 生成性能分析
 
-The previous slide showed a super cheap way to generate a profile, but it has a few problems.
+上一张幻灯片显示了一种生成配置文件的超级简便的方法，但是存在一些问题。
 
--   If you forget to redirect the output to a file then you’ll blow up that terminal session. 😞 (hint: `reset(1)` is your friend)
+-   如果您忘记了将输出重定向到文件，则会破坏该终端会话。😞（提示：`reset(1)` 是您的朋友）
+-   如果您向 `os.Stdout` 中写入其他内容 (例如，`fmt.Println`)，则会破坏跟踪。
 
--   If you write anything else to `os.Stdout`, for example, `fmt.Println` you’ll corrupt the trace.
+推荐使用 `runtime/pprof` 的方法是 [将跟踪信息写入文件](https://godoc.org/runtime/pprof#hdr-Profiling_a_Go_program)。 但是，您必须确保跟踪已停止，并且在程序停止之前 (包括有人 `^C`) 关闭了文件。
 
-The recommended way to use `runtime/pprof` is to [write the trace to a file](https://godoc.org/runtime/pprof#hdr-Profiling_a_Go_program). But, then you have to make sure the trace is stopped, and file is closed before your program stops, including if someone `^C’s it.
+因此，几年前，我写了一个 [package](https://godoc.org/github.gom/pkg/profile) 来处理它。
 
-So, a few years ago I wrote a [package](https://godoc.org/github.gom/pkg/profile) to take care of it.
-
-```
+```go
 
 import "github.com/pkg/profile"
 
@@ -2011,31 +1878,35 @@ func main() {
 	defer profile.Start(profile.CPUProfile, profile.ProfilePath(".")).Stop()
 ```
 
-If we run this version, we get a profile written to the current working directory
+如果运行此版本，则将配置文件写入当前工作目录
 
-```
+```bash
 % go run mandelbrot.go
 2017/09/17 12:22:06 profile: cpu profiling enabled, cpu.pprof
 2017/09/17 12:22:08 profile: cpu profiling disabled, cpu.pprof
 ```
 
-| | Using `pkg/profile` is not mandatory, but it takes care of a lot of the boilerplate around collecting and recording traces, so we’ll use it for the rest of this workshop. |
+!!! note
+使用 `pkg/profile` 不是强制性的，但是它会处理收集和记录跟踪信息的许多样板，因此我们将在本讲习班的其余部分中使用它。
+!!!
 
-#### 5.3.2\. Analysing the profile
+#### 5.3.2. 分析性能
 
-Now we have a profile, we can use `go tool pprof` to analyse it.
+现在我们有了一个性能分析，我们可以使用 `go tool pprof` 对其进行分析。
 
-```
+```bash
 % go tool pprof -http=:8080 cpu.pprof
 ```
 
-In this run we see that the program ran for 1.81s seconds (profiling adds a small overhead). We can also see that pprof only captured data for 1.53 seconds, as pprof is sample based, relying on the operating system’s `SIGPROF` timer.
+在此运行中，我们看到程序运行了 1.81 秒 (分析增加了少量开销)。我们还可以看到 pprof 仅捕获了1.53秒的数据，因为 `pprof` 基于示例，它依赖于操作系统的 `SIGPROF` 计时器。
 
-| | Since Go 1.9 the `pprof` trace contains all the information you need to analyse the trace. You no longer need to also have the matching binary which produced the trace. 🎉 |
+!!! note
+从 1.9 开始，`pprof` 跟踪包含分析跟踪所需的所有信息。您不再需要生成跟踪的匹配二进制文件。🎉
+!!!
 
-We can use the `top` pprof function to sort functions recorded by the trace
+我们可以使用 `top` pprof 函数对跟踪记录的函数进行排序
 
-```
+```bash
 % go tool pprof cpu.pprof
 Type: cpu
 Time: Mar 24, 2019 at 5:18pm (CET)
@@ -2057,11 +1928,11 @@ Showing top 10 nodes out of 35
      0.01s  0.52% 99.48%      0.01s  0.52%  image/png.filter
 ```
 
-We see that the `main.fillPixel` function was on the CPU the most when pprof captured the stack.
+我们看到，当 `pprof` 捕获堆栈时，`main.fillPixel` 函数在 `CPU` 上的数量最多。
 
-Finding `main.paint` on the stack isn’t a surprise, this is what the program does; it paints pixels. But what is causing `paint` to spend so much time? We can check that with the _cummulative_ flag to `top`.
+在堆栈上找到 `main.paint` 并不奇怪，这就是程序的作用。它绘制像素。但是，是什么导致 `paint` 花费大量时间呢？ 我们可以通过将 _cummulative_ 标志设置为 `top` 来进行检查。
 
-```
+```bash
 (pprof) top --cum
 Showing nodes accounting for 1630ms, 85.34% of 1910ms total
 Showing top 10 nodes out of 35
@@ -2078,22 +1949,25 @@ Showing top 10 nodes out of 35
          0     0% 85.34%      150ms  7.85%  image/png.(*encoder).writeIDATs
 ```
 
-This is sort of suggesting that `main.fillPixed` is actually doing most of the work.
+这暗示着 `main.fillPixed` 实际上正在完成大部分工作。
 
-> You can also visualise the profile with the `web` command, which looks like this:
-> ![](/public/img/high-performance-go-workshop/pprof-5.svg)
+!!! note
+您也可以使用 `web` 命令来形象化配置文件，如下所示：
 
-### 5.4\. Tracing vs Profiling
+![](/public/img/high-performance-go-workshop/pprof-5.svg)
+!!!
 
-Hopefully this example shows the limitations of profiling. Profiling told us what the profiler saw; `fillPixel` was doing all the work. There didn’t look like there was much that could be done about that.
+### 5.4. 跟踪和性能分析
 
-So now it’s a good time to introduce the execution tracer which gives a different view of the same program.
+希望此示例显示了分析的局限性。性能分析告诉我们探查器看到的内容；`fillPixel` 正在完成所有工作。似乎没有很多事情可以做。
 
-#### 5.4.1\. Using the execution tracer
+因此，现在是引入执行跟踪程序的好时机，该跟踪程序可以为同一程序提供不同的视图。
 
-Using the tracer is as simple as asking for a `profile.TraceProfile`, nothing else changes.
+#### 5.4.1. 使用执行跟踪器
 
-```
+使用跟踪程序就只需要改变为 `profile.TraceProfile` 即可。
+
+```go
 
 import "github.com/pkg/profile"
 
@@ -2101,11 +1975,11 @@ func main() {
 	defer profile.Start(profile.TraceProfile, profile.ProfilePath(".")).Stop()
 ```
 
-When we run the program, we get a `trace.out` file in the current working directory.
+当我们运行程序时，我们在当前工作目录中得到一个 `trace.out` 文件。
 
-```
+```bash
 % go build mandelbrot.go
-% % time ./mandelbrot
+% time ./mandelbrot
 2017/09/17 13:19:10 profile: trace enabled, trace.out
 2017/09/17 13:19:12 profile: trace disabled, trace.out
 
@@ -2114,9 +1988,9 @@ user    0m1.707s
 sys     0m0.020s
 ```
 
-Just like pprof, there is a tool in the `go` command to analyse the trace.
+就像 `pprof` 一样，`go` 命令中有一个工具可以分析跟踪。
 
-```
+```bash
 % go tool trace trace.out
 2017/09/17 12:41:39 Parsing trace...
 2017/09/17 12:41:40 Serializing trace...
@@ -2124,13 +1998,13 @@ Just like pprof, there is a tool in the `go` command to analyse the trace.
 2017/09/17 12:41:40 Opening browser. Trace viewer s listening on http://127.0.0.1:57842
 ```
 
-This tool is a little bit different to `go tool pprof`. The execution tracer is reusing a lot of the profile visualisation infrastructure built into Chrome, so `go tool trace` acts as a server to translate the raw execution trace into data which Chome can display natively.
+这个工具和 `go tool pprof` 有点不同。执行跟踪器正在重用 `Chrome` 内置的许多配置文件可视化基础结构，因此 `go tool trace` 充当服务器将原始执行跟踪转换为Chome可以本地显示的数据。
 
-#### 5.4.2\. Analysing the trace
+#### 5.4.2. 分析追踪
 
-We can see from the trace that the program is only using one cpu.
+从跟踪中我们可以看到该程序仅使用一个 cpu。
 
-```
+```go
 func seqFillImg(m *img) {
 	for i, row := range m.m {
 		for j := range row {
@@ -2140,33 +2014,28 @@ func seqFillImg(m *img) {
 }
 ```
 
-This isn’t a surprise, by default `mandelbrot.go` calls `fillPixel` for each pixel in each row in sequence.
+这并不奇怪，默认情况下，`mandelbrot.go` 会按顺序为每一行中的每个像素调用 `fillPixel`。
 
-Once the image is painted, see the execution switches to writing the `.png` file. This generates garbage on the heap, and so the trace changes at that point, we can see the classic saw tooth pattern of a garbage collected heap.
+绘制完图像后，查看执行切换为写入 `.png` 文件。这会在堆上生成垃圾，因此跟踪在那时发生了变化，我们可以看到垃圾收集堆的经典锯齿模式。
 
-The trace profile offers timing resolution down to the _microsecond_ level. This is something you just can’t get with external profiling.
+跟踪性能分析可提供低至 _毫秒_ 级别的时序分辨率。 这是您使用外部性能分析无法获得的。
 
-| | go tool trace
+!!! note go tool trace
+在继续之前，我们需要谈谈跟踪工具的用法。
 
-Before we go on there are some things we should talk about the usage of the trace tool.
+-   抱歉，该工具使用 `Chrome` 内置的 `javascript` 调试支持。跟踪配置文件只能在 `Chrome` 中查看，而不能在 `Firefox, Safari, IE/Edge` 中使用。
+-   因为这是 Google 产品，所以它支持键盘快捷键。使用 `WASD` 导航，使用 `?` 获取列表。
+-   查看追踪可能会占用大量内存。 认真地说，4Gb 不会削减它，8Gb 可能是最小值，更多肯定更好。
+-   如果您是从 Fedora 之类的 OS 发行版中安装 Go 的，则跟踪查看器的支持文件可能不是主 `golang` deb/rpm 的一部分，它们可能位于某些 `-extra` 软件包中。
+!!!
 
--   The tool uses the javascript debugging support built into Chrome. Trace profiles can only be viewed in Chrome, they won’t work in Firefox, Safari, IE/Edge. Sorry.
+### 5.5. 使用多个CPU
 
--   Because this is a Google product, it supports keyboard shortcuts; use `WASD` to navigate, use `?` to get a list.
+从前面的跟踪中我们可以看到程序正在按顺序运行，并且没有利用该计算机上的其他 CPU。
 
--   Viewing traces can take a **lot** of memory. Seriously, 4Gb won’t cut it, 8Gb is probably the minimum, more is definitely better.
+Mandelbrot 的生成称为 _embarassingly\_parallel_ 。每个像素彼此独立，都可以并行计算。所以，让我们尝试一下。
 
--   If you’ve installed Go from an OS distribution like Fedora, the support files for the trace viewer may not be part of the main `golang` deb/rpm, they might be in some `-extra` package.
-
-|
-
-### 5.5\. Using more than one CPU
-
-We saw from the previous trace that the program is running sequentially and not taking advantage of the other CPUs on this machine.
-
-Mandelbrot generation is known as _embarassingly_parallel_. Each pixel is independant of any other, they could all be computed in parallel. So, let’s try that.
-
-```
+```bash
 % go build mandelbrot.go
 % time ./mandelbrot -mode px
 2017/09/17 13:19:48 profile: trace enabled, trace.out
@@ -2177,21 +2046,20 @@ user    0m4.031s
 sys     0m0.865s
 ```
 
-So the runtime was basically the same. There was more user time, which makes sense, we were using all the CPUs, but the real (wall clock) time was about the same.
+因此，运行时间基本上是相同的。我们使用了所有CPU，因此有更多的用户时间，这是有道理的，但是实 际(挂钟) 时间大致相同。
 
-Let’s look a the trace.
+让我们看一下追踪。
 
-As you can see this trace generated _much_ more data.
+如您所见，此跟踪生成了 _更多_ 的数据。
 
--   It looks like lots of work is being done, but if you zoom right in, there are gaps. This is believed to be the scheduler.
+-   似乎需要完成很多工作，但是如果您放大放大，就会发现差距。据信这是调度程序。
+-   虽然我们使用所有四个内核，但是由于每个 `fillPixel` 的工作量相对较小，因此我们在调度开销方面花费了大量时间。
 
--   While we’re using all four cores, because each `fillPixel` is a relatively small amount of work, we’re spending a lot of time in scheduling overhead.
+### 5.6. 整理工作
 
-### 5.6\. Batching up work
+每个像素使用一个 `goroutine` 太细粒度。没有足够的工作来证明 `goroutine` 的成本合理。
 
-Using one goroutine per pixel was too fine grained. There wasn’t enough work to justify the cost of the goroutine.
-
-Instead, let’s try processing one row per goroutine.
+相反，让我们尝试为每个 `goroutine` 处理一行。
 
 ```
 % go build mandelbrot.go
@@ -2204,19 +2072,18 @@ user    0m1.907s
 sys     0m0.025s
 ```
 
-This looks like a good improvement, we almost halved the runtime of the program. Let’s look at the trace.
+这看起来是一个不错的改进，我们几乎将程序的运行时间减少了一半。 让我们看一下痕迹。
 
-As you can see the trace is now smaller and easier to work with. We get to see the whole trace in span, which is a nice bonus.
+如您所见，轨迹现在更小，更易于使用。我们可以看到跨度的整个轨迹，这是一个不错的奖励。
 
--   At the start of the program we see the number of goroutines ramp up to around 1,000\. This is an improvement over the 1 << 20 that we saw in the previous trace.
+-   在程序开始时，我们看到 `goroutine` 的数量大约为 `1000` 这是对上一条跟踪中看到的 `1 << 20` 的改进。
+-   放大后，我们看到 `onePerRowFillImg` 运行时间更长，并且由于 `goroutine` _生产_ 工作尽早完成，调度程序有效地处理了其余可运行的 `goroutine`。
 
--   Zooming in we see `onePerRowFillImg` runs for longer, and as the goroutine _producing_ work is done early, the scheduler efficiently works through the remaining runnable goroutines.
+### 5.7. 使用 workers
 
-### 5.7\. Using workers
+`mandelbrot.go` 支持另一种模式，请尝试一下
 
-`mandelbrot.go` supports one other mode, let’s try it.
-
-```
+```bash
 % go build mandelbrot.go
 % time ./mandelbrot -mode workers
 2017/09/17 13:49:46 profile: trace enabled, trace.out
@@ -2227,9 +2094,9 @@ user    0m4.459s
 sys     0m1.284s
 ```
 
-So, the runtime was much worse than any previous. Let’s look at the trace and see if we can figure out what happened.
+因此，运行时比以前任何时候都差。让我们看一下追踪，看看是否可以弄清楚发生了什么。
 
-Looking at the trace you can see that with only one worker process the producer and consumer tend to alternate because there is only one worker and one consumer. Let’s increase the number of workers
+观察痕迹，您会发现只有一个 worker 处理器，生产者和消费者往往会轮换，因为只有一个 worker 处理器和一个消费者。 让我们增加 worker 处理器数量
 
 ```
 % go build mandelbrot.go
@@ -2242,23 +2109,21 @@ user    0m7.307s
 sys     0m4.311s
 ```
 
-So that made it worse! More real time, more CPU time. Let’s look at the trace to see what happened.
+这样就更糟了！ 更多实时，更多 CPU 时间。让我们看一下追踪，看看发生了什么。
 
-That trace is a mess. There were more workers available, but the seemed to spend all their time fighting over the work to do.
+那条痕迹是一团糟。 有更多的 worker 处理器可用，但是似乎所有的时间都花在处理器执行上。
 
-This is because the channel is _unbuffered_. An unbuffered channel cannot send until there is someone ready to receive.
+这是因为通道是 _无缓存的_。只有在有人准备接收之前，无缓冲的通道才能发送。
 
--   The producer cannot send work until there is a worker ready to receive it.
+-   在没有 worker 处理器准备接收之前，生产者无法发送作品。
+-   worker 处理器要等到有人准备派遣后才能接受工作，因此他们在等待时会互相竞争。
+-   发送者没有特权，它不能比已经运行的工作者享有优先权。
 
--   Workers cannot receive work until there is someone ready to send, so they compete with each other when they are waiting.
+我们在这里看到的是无缓冲通道带来的大量延迟。调度程序内部有很多停止和启动，并且在等待工作时可能会锁定和互斥，这就是为什么我们看到 sys 时间更长的原因。
 
--   The sender is not privileged, it cannot take priority over a worker that is already running.
+### 5.8. 使用缓冲通道
 
-What we see here is a lot of latency introduced by the unbuffered channel. There are lots of stops and starts inside the scheduler, and potentially locks and mutexes while waiting for work, this is why we see the `sys` time higher.
-
-### 5.8\. Using buffered channels
-
-```
+```go
 
 import "github.com/pkg/profile"
 
@@ -2277,74 +2142,75 @@ user    0m2.150s
 sys     0m0.121s
 ```
 
-Which is pretty close to the per row mode above.
+这与上面的每行模式非常接近。
 
-Using a buffered channel the trace showed us that:
+使用缓冲的通道，跟踪显示出：
 
--   The producer doesn’t have to wait for a worker to arrive, it can fill up the channel quickly.
+-   生产者不必等待 worker 处理器的到来，它可以迅速填补渠道。
+-   worker 处理器可以快速从通道中取出下一个物品，而无需休眠等待生产。
 
--   The worker can quickly take the next item from the channel without having to sleep waiting on work to be produced.
+使用这种方法，我们使用通道进行每个像素的工作传递的速度几乎与之前在每行 `goroutine` 上进行调度的速度相同。
 
-Using this method we got nearly the same speed using a channel to hand off work per pixel than we did previously scheduling on goroutine per row.
+修改 `nWorkersFillImg` 以每行工作。计时结果并分析轨迹。
 
-Modify `nWorkersFillImg` to work per row. Time the result and analyse the trace.
+### 5.9. Mandelbrot 微服务
 
-### 5.9\. Mandelbrot microservice
+在 2019 年，除非您可以将 Internet 作为无服务器微服务提供，否则生成 Mandelbrots 毫无意义。 因此，我向您介绍 _Mandelweb_
 
-It’s 2019, generating Mandelbrots is pointless unless you can offer them on the internet as a serverless microservice. Thus, I present to you, _Mandelweb_
-
-```
+```bash
 % go run examples/mandelweb/mandelweb.go
 2017/09/17 15:29:21 listening on http://127.0.0.1:8080/
 ```
 
 [http://127.0.0.1:8080/mandelbrot](http://127.0.0.1:8080/mandelbrot)
 
-#### 5.9.1\. Tracing running applications
+#### 5.9.1\. 跟踪正在运行的应用程序
 
-In the previous example we ran the trace over the whole program.
+在前面的示例中，我们对整个程序进行了跟踪。
 
-As you saw, traces can be very large, even for small amounts of time, so collecting trace data continually would generate far too much data. Also, tracing can have an impact on the speed of your program, especially if there is a lot of activity.
+如您所见，即使在很短的时间内，跟踪也可能非常大，因此，连续收集跟踪数据将产生太多的数据。同样，跟踪可能会影响程序的速度，特别是在活动很多的情况下。
 
-What we want is a way to collect a short trace from a running program.
+我们想要的是一种从正在运行的程序中收集简短跟踪的方法。
 
-Fortuntately, the `net/http/pprof` package has just such a facility.
+幸运的是，`net/http/pprof` 软件包具有这样的功能。
 
-#### 5.9.2\. Collecting traces via http
+#### 5.9.2. 通过 http 收集跟踪
 
-Hopefully everyone knows about the `net/http/pprof` package.
+希望每个人都知道 `net/http/pprof` 软件包。
 
-```
+``` go
 import _ "net/http/pprof"
 ```
 
-When imported, the `net/http/pprof` will register tracing and profiling routes with `http.DefaultServeMux`. Since Go 1.5 this includes the trace profiler.
+导入后，`net/http/pprof` 将向 `http.DefaultServeMux` 注册跟踪和分析路由。从Go 1.5开始，这包括跟踪分析器。
 
-| | `net/http/pprof` registers with `http.DefaultServeMux`. If you are using that `ServeMux` implicitly, or explicitly, you may inadvertently expose the pprof endpoints to the internet. This can lead to source code disclosure. You probably don’t want to do this. |
+!!! warning
+`net/http/pprof` 向 `http.DefaultServeMux` 注册。如果您隐式或显式地使用该 `ServeMux`，则可能会无意间将 `pprof` 端点公开到 `Internet`。这可能导致源代码泄露。您可能不想这样做。
+!!!
 
-We can grab a five second trace from mandelweb with `curl` (or `wget`)
+我们可以使用 `curl`（或`wget`）从 mandelweb 中获取五秒钟的跟踪记录
 
 ```
 % curl -o trace.out http://127.0.0.1:8080/debug/pprof/trace?seconds=5
 ```
 
-#### 5.9.3\. Generating some load
+#### 5.9.3. 产生一些负载
 
-The previous example was interesting, but an idle webserver has, by definition, no performance issues. We need to generate some load. For this I’m using [`hey` by JBD](https://github.com/rakyll/hey).
+前面的示例很有趣，但是根据定义，空闲的Web服务器没有性能问题。我们需要产生一些负载。为此，我使用的是 [`hey` by JBD](https://github.com/rakyll/hey)。
 
-```
+```bash
 % go get -u github.com/rakyll/hey
 ```
 
-Let’s start with one request per second.
+让我们从每秒一个请求开始。
 
-```
+```bash
 % hey -c 1 -n 1000 -q 1 http://127.0.0.1:8080/mandelbrot
 ```
 
-And with that running, in another window collect the trace
+然后运行，在另一个窗口中收集跟踪
 
-```
+```bash
 % curl -o trace.out http://127.0.0.1:8080/debug/pprof/trace?seconds=5
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
@@ -2357,17 +2223,18 @@ And with that running, in another window collect the trace
 Trace viewer is listening on http://127.0.0.1:60301
 ```
 
-#### 5.9.4\. Simulating overload
+#### 5.9.4. 模拟过载
 
-Let’s increase the rate to 5 requests per second.
+让我们将速率提高到每秒 5 个请求。
 
 ```
 % hey -c 5 -n 1000 -q 5 http://127.0.0.1:8080/mandelbrot
 ```
 
-And with that running, in another window collect the trace
+然后运行，在另一个窗口中收集跟踪
 
-<pre>% curl -o trace.out http://127.0.0.1:8080/debug/pprof/trace?seconds=5
+```bash
+% curl -o trace.out http://127.0.0.1:8080/debug/pprof/trace?seconds=5
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                 Dload  Upload   Total   Spent    Left  Speed
 100 66169    0 66169    0     0  13233      0 --:--:--  0:00:05 --:--:-- 17390
@@ -2375,33 +2242,28 @@ And with that running, in another window collect the trace
 2017/09/17 16:09:30 Parsing trace...
 2017/09/17 16:09:30 Serializing trace...
 2017/09/17 16:09:30 Splitting trace...
-2017/09/17 16:09:30 Opening browser. Trace viewer is listening on http://127.0.0.1:60301</pre>
+2017/09/17 16:09:30 Opening browser. Trace viewer is listening on http://127.0.0.1:60301
+```
 
-#### 5.9.5\. Extra credit, the Sieve of Eratosthenes {#extra_credit_the_sieve_of_eratosthenes}
+#### 5.9.5. 额外的信誉，Eratosthenes 的筛子
 
-The [concurrent prime sieve](https://github.com/golang/go/blob/master/doc/play/sieve.go) is one of the first Go programs written.
+[concurrent prime sieve](https://github.com/golang/go/blob/master/doc/play/sieve.go) 是最早编写的Go程序之一。
 
-Ivan Daniluk [wrote a great post on visualising](http://divan.github.io/posts/go_concurrency_visualize/) it.
+Ivan Daniluk [撰写了一篇关于可视化的很棒的文章](http://divan.github.io/posts/go_concurrency_visualize/)。
 
-Let’s take a look at its operation using the execution tracer.
+让我们看一下使用执行跟踪器的操作。
 
-#### 5.9.6\. More resources
+#### 5.9.6. 更多资源
 
 -   Rhys Hiltner, [Go’s execution tracer](https://www.youtube.com/watch?v=mmqDlbWk_XA) (dotGo 2016)
-
 -   Rhys Hiltner, [An Introduction to "go tool trace"](https://www.youtube.com/watch?v=V74JnrGTwKA) (GopherCon 2017)
-
 -   Dave Cheney, [Seven ways to profile Go programs](https://www.youtube.com/watch?v=2h_NFBFrciI) (GolangUK 2016)
-
 -   Dave Cheney, [High performance Go workshop](https://dave.cheney.net/training#high-performance-go)]
-
 -   Ivan Daniluk, [Visualizing Concurrency in Go](https://www.youtube.com/watch?v=KyuFeiG3Y60) (GopherCon 2016)
-
 -   Kavya Joshi, [Understanding Channels](https://www.youtube.com/watch?v=KBZlN0izeiY) (GopherCon 2017)
-
 -   Francesc Campoy, [Using the Go execution tracer](https://www.youtube.com/watch?v=ySy3sR1LFCQ)
 
-## [](#memory-and-gc)[6\. Memory and Garbage Collector](#memory-and-gc)
+## 6. Memory and Garbage Collector {#memory-and-gc}
 
 Go is a garbage collected language. This is a design principle, it will not change.
 
