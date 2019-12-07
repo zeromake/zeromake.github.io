@@ -3,8 +3,8 @@ title: (翻译)Go 高性能研讨讲座 - High Performance Go Workshop
 date: 2019-12-06 23:58:20+08:00
 type: performance
 tags: [go, performance, pprof]
-last_date: 2019-12-06 23:58:20+08:00
-private: true
+last_date: 2019-12-07 15:21:07+08:00
+private: false
 ---
 
 > [原文地址](https://dave.cheney.net/high-performance-go-workshop/gopherchina-2019.html)
@@ -435,6 +435,7 @@ ok      _/Users/dfc/devel/high-performance-go-workshop/examples/fib     1.671s
 ```bash
 go test -run=^$
 ```
+
 !!!
 
 #### 2.2.2. 基准如何运作
@@ -450,7 +451,7 @@ go test -run=^$
 查看上面的示例，`BenchmarkFib20-8` 发现循环的大约 30,000 次迭代花费了超过一秒钟的时间。从那里基准框架计算得出，每次操作的平均时间为 40865ns。
 
 !!! note
-后缀 `-8` 与用于运行此测试的 `GOMAXPROCS` 的值有关。 该数字 `GOMAXPROCS` 默认为启动时 Go 进程可见的CPU数。 您可以使用 `-cpu` 标志来更改此值，该标志带有一个值列表以运行基准测试。
+后缀 `-8` 与用于运行此测试的 `GOMAXPROCS` 的值有关。 该数字 `GOMAXPROCS` 默认为启动时 Go 进程可见的 CPU 数。 您可以使用 `-cpu` 标志来更改此值，该标志带有一个值列表以运行基准测试。
 
 ```bash
 % go test -bench=. -cpu=1,2,4 ./examples/fib/
@@ -514,7 +515,7 @@ BenchmarkFib1-8         1000000000               2.00 ns/op
 
 `Fib(1)` 基准测试大约需要 2 纳秒，方差为 +/- 2％。
 
-Go 1.12中的新增功能是 `-benchtime` 标志，现在需要进行多次迭代，例如。`-benchtime=20x`，它将准确地运行您的代码 `benchtime` 的时间。
+Go 1.12 中的新增功能是 `-benchtime` 标志，现在需要进行多次迭代，例如。`-benchtime=20x`，它将准确地运行您的代码 `benchtime` 的时间。
 
 ```
 尝试以10倍，20倍，50倍，100倍和300倍的 `-benchtime` 运行上面的 fib 测试。 你看到了什么？
@@ -536,7 +537,7 @@ If you find that the defaults that `go test` applies need to be tweaked for a pa
 % go get golang.org/x/perf/cmd/benchstat
 ```
 
-Benchstat可以进行一系列基准测试，并告诉您它们的稳定性。 这是有关电池供电的 `Fib(20)` 示例。
+Benchstat 可以进行一系列基准测试，并告诉您它们的稳定性。 这是有关电池供电的 `Fib(20)` 示例。
 
 ```bash
 % go test -bench=Fib20 -count=10 ./examples/fib/ | tee old.txt
@@ -559,10 +560,9 @@ name     time/op
 Fib20-8  38.4µs ± 1%
 ```
 
-
 `benchstat` 告诉我们平均值为 38.8 微秒，样本之间的变化为 +/- 2％。这对于电池供电来说相当不错。
 
--   第一次运行是最慢的，因为操作系统已降低CPU时钟以节省电量。
+-   第一次运行是最慢的，因为操作系统已降低 CPU 时钟以节省电量。
 -   接下来的两次运行是最快的，因为操作系统确定这不是工作的短暂高峰，并且提高了时钟速度以尽快完成工作，从而希望能够返回睡觉。
 -   其余运行是操作系统和供热生产的 BIOS 交互功耗。
 
@@ -574,12 +574,13 @@ Fib20-8  38.4µs ± 1%
 
 Saving the output from a benchmark run is useful, but you can also save the _binary_ that produced it. This lets you rerun benchmark previous iterations. To do this, use the `-c` flag to save the test binary—​I often rename this binary from `.test` to `.golden`.
 
-保存来自基准运行的输出很有用，但是您也可以保存产生它的 _二进制文件_。 这使您可以重新运行基准测试以前的迭代。 为此，请使用 `-c `标志保存测试二进制文件我经常将此二进制文件从 `.test` 重命名为 `.golden`。
+保存来自基准运行的输出很有用，但是您也可以保存产生它的 _二进制文件_。 这使您可以重新运行基准测试以前的迭代。 为此，请使用 `-c`标志保存测试二进制文件我经常将此二进制文件从 `.test` 重命名为 `.golden`。
 
-``` bash
+```bash
 % go test -c
 % mv fib.test fib.golden
 ```
+
 !!!
 
 先前的 `Fib` 功能具有斐波那契系列中第 0 和第 1 个数字的硬编码值。之后，代码以递归方式调用自身。今天晚些时候，我们将讨论递归的成本，但是目前，假设递归的成本是很高的，尤其是因为我们的算法使用的是指数时间。
@@ -745,13 +746,13 @@ BenchmarkPopcnt-8       2000000000               0.30 ns/op
 PASS</pre>
 ```
 
-0.3纳秒；这基本上是一个时钟周期。即使假设每个时钟周期中CPU可能正在运行一些指令，该数字似乎也过低。发生了什么？
+0.3 纳秒；这基本上是一个时钟周期。即使假设每个时钟周期中 CPU 可能正在运行一些指令，该数字似乎也过低。发生了什么？
 
 To understand what happened, we have to look at the function under benchmake, `popcnt`. `popcnt` is a leaf function — it does not call any other functions — so the compiler can inline it.
 
 要了解发生了什么，我们必须查看 benchmake 下的函数 `popcnt`。`popcnt` 是 `叶函数(它不调用任何其他函数)` 因此编译器可以内联它。
 
-因为该函数是内联的，所以编译器现在可以看到它没有副作用。 popcnt不会影响任何全局变量的状态。 因此，消除了该调用。这是编译器看到的：
+因为该函数是内联的，所以编译器现在可以看到它没有副作用。 popcnt 不会影响任何全局变量的状态。 因此，消除了该调用。这是编译器看到的：
 
 ```go
 func BenchmarkPopcnt(b *testing.B) {
@@ -777,7 +778,7 @@ func BenchmarkPopcnt(b *testing.B) {
 
 !!! note 优化是一件好事
 要消除的事情是与通过消除不必要的计算来使实际代码相同的优化，即消除了没有可观察到的副作用的基准测试。
-随着Go编译器的改进，这只会变得越来越普遍。
+随着 Go 编译器的改进，这只会变得越来越普遍。
 !!!
 
 #### 2.6.2. 修复基准
@@ -820,13 +821,13 @@ What happens if we assign to `Result` directly? Does this affect the benchmark t
 
 这是两个不正确的基准，您能解释一下它们有什么问题吗？
 
-``` go
+```go
 func BenchmarkFibWrong(b *testing.B) {
 	Fib(b.N)
 }
 ```
 
-``` go
+```go
 func BenchmarkFibWrong2(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		Fib(n)
@@ -846,7 +847,7 @@ func BenchmarkFibWrong2(b *testing.B) {
 
 使用这些标志中的任何一个也会保留二进制文件。
 
-``` bash
+```bash
 % go test -run=XXX -bench=. -cpuprofile=c.p bytes
 % go tool pprof c.p
 ```
@@ -867,7 +868,7 @@ func BenchmarkFibWrong2(b *testing.B) {
 
 ### 3.1. pprof
 
-今天我们要讨论的第一个工具是 _pprof_. [pprof](https://github.com/google/pprof) 来自 [Google Perf Tools](https://github.com/gperftools/gperftools) 这套工具套件，自最早的公开发布以来已集成到Go运行时中。
+今天我们要讨论的第一个工具是 _pprof_. [pprof](https://github.com/google/pprof) 来自 [Google Perf Tools](https://github.com/gperftools/gperftools) 这套工具套件，自最早的公开发布以来已集成到 Go 运行时中。
 
 `pprof` 由两部分组成:
 
@@ -943,9 +944,9 @@ _个人想法:_ 我发现内存分析对发现内存泄漏没有帮助。有更�
 
 ### 3.4. 收集性能分析
 
-Go运行时的配置文件界面位于 `runtime/pprof` 包中。`runtime/pprof` 是一个非常基础的工具，由于历史原因，与各种配置文件的接口并不统一。
+Go 运行时的配置文件界面位于 `runtime/pprof` 包中。`runtime/pprof` 是一个非常基础的工具，由于历史原因，与各种配置文件的接口并不统一。
 
-正如我们在上一节中看到的那样，pprof概要分析内置于 `testing` 包中，但是有时将您要分析的代码放在 `testing.B` 基准测试环境中是不便或困难的，并且必须使用直接使用 `runtime/pprof` API。
+正如我们在上一节中看到的那样，pprof 概要分析内置于 `testing` 包中，但是有时将您要分析的代码放在 `testing.B` 基准测试环境中是不便或困难的，并且必须使用直接使用 `runtime/pprof` API。
 
 几年前，我写了一个 [small package](https://github.com/pkg/profile)，以便更轻松地描述现有应用程序。
 
@@ -966,14 +967,14 @@ func main() {
 
 分析由 `go pprof` 子命令驱动
 
-``` bash
+```bash
 % go tool pprof /path/to/your/profile
 ```
 
 该工具提供了概要数据的几种不同表示形式。文字，图形甚至火焰图。
 
 !!! note
-如果您使用 `Go` 已有一段时间，则可能会被告知 `pprof` 有两个参数。从Go 1.9开始，配置文件包含渲染配置文件所需的所有信息。您不再需要生成性能分析的二进制文件。🎉
+如果您使用 `Go` 已有一段时间，则可能会被告知 `pprof` 有两个参数。从 Go 1.9 开始，配置文件包含渲染配置文件所需的所有信息。您不再需要生成性能分析的二进制文件。🎉
 !!!
 
 #### 3.5.1. 进一步阅读
@@ -1103,7 +1104,7 @@ Showing nodes accounting for 1.42s, 100% of 1.42s total
 
 我们还可以使用 `web` 命令来可视化此调用。这将从配置文件数据生成有向图。 在后台，这使用了 Graphviz 的 `dot` 命令。
 
-但是，在Go 1.10(也可能是1.11)中，Go 附带了本身支持 `HTTP` 服务器的 `pprof` 版本
+但是，在 Go 1.10(也可能是 1.11)中，Go 附带了本身支持 `HTTP` 服务器的 `pprof` 版本
 
 ```bash
 % go tool pprof -http=:8080 /var/folders/by/3gf34_z95zg05cyj744_vhx40000gn/T/profile239941020/cpu.pprof
@@ -1114,7 +1115,6 @@ Showing nodes accounting for 1.42s, 100% of 1.42s total
 -   图形模式
 -   火焰图模式
 
-
 在图形上，占用 _最多_ CPU 时间的框是最大的框，我们看到 `syscall.Syscall` 占程序总时间的 99.3％。导致 `syscall.Syscall` 的字符串表示立即调用者，如果多个代码路径在同一函数上收敛，则可以有多个。箭头的大小代表在一个盒子的子元素上花费了多少时间，我们可以看到，从 `main.readbyte` 开始，它们占了该图分支中 1.41 秒所用时间的接近 0。
 
 _问题_: 谁能猜出为什么我们的版本比 `wc` 慢得多?
@@ -1123,7 +1123,7 @@ _问题_: 谁能猜出为什么我们的版本比 `wc` 慢得多?
 
 我们的程序运行缓慢的原因不是因为 `Go` 的 `syscall.Syscall` 运行缓慢。 这是因为系统调用通常是昂贵的操作（并且随着发现更多 Spectre 系列漏洞而变得越来越昂贵）。
 
-每次对 `readbyte` 的调用都会导致一个 `syscall.Read` 的缓冲区大小为1。因此，我们的程序执行的 `syscall` 数量等于输入的大小。我们可以看到，在 `pprof` 图中，读取输入的内容占主导地位。
+每次对 `readbyte` 的调用都会导致一个 `syscall.Read` 的缓冲区大小为 1。因此，我们的程序执行的 `syscall` 数量等于输入的大小。我们可以看到，在 `pprof` 图中，读取输入的内容占主导地位。
 
 ```go
 func main() {
@@ -1289,11 +1289,11 @@ Go 1.7 已发布，并且与用于 amd64 的新编译器一起，现在默认情
 
 帧指针使诸如 `gdb(1)` 和 `perf(1)` 之类的工具能够理解 Go 调用堆栈。
 
-在本研讨会中，我们不会介绍这些工具，但是您可以阅读和观看我的演讲，该演讲以七种不同的方式介绍Go程序。
+在本研讨会中，我们不会介绍这些工具，但是您可以阅读和观看我的演讲，该演讲以七种不同的方式介绍 Go 程序。
 
--   [分析Go程序的七种方法](https://talks.godoc.org/github.com/davecheney/presentations/seven.slide) (slides)
--   [分析Go程序的七种方法](https://www.youtube.com/watch?v=2h_NFBFrciI) (video, 30 mins)
--   [分析Go程序的七种方法](https://www.bigmarker.com/remote-meetup-go/Seven-ways-to-profile-a-Go-program) (webcast, 60 mins)
+-   [分析 Go 程序的七种方法](https://talks.godoc.org/github.com/davecheney/presentations/seven.slide) (slides)
+-   [分析 Go 程序的七种方法](https://www.youtube.com/watch?v=2h_NFBFrciI) (video, 30 mins)
+-   [分析 Go 程序的七种方法](https://www.bigmarker.com/remote-meetup-go/Seven-ways-to-profile-a-Go-program) (webcast, 60 mins)
 
 #### 3.5.9. 练习
 
@@ -1321,7 +1321,7 @@ Go 1.7 已发布，并且与用于 amd64 的新编译器一起，现在默认情
 
 Go 编译器大约在 2007 时作为 Plan9 编译器工具链的分支而开始的。当时的编译器与 Aho 和 Ullman 的 _[Dragon Book](https://www.goodreads.com/book/show/112269.Principles_of_Compiler_Design)_ 非常相似。
 
-在2015年，当时的 Go 1.5 编译器为 [C转换为Go](https://golang.org/doc/go1.5#c)。
+在 2015 年，当时的 Go 1.5 编译器为 [C 转换为 Go](https://golang.org/doc/go1.5#c)。
 
 一年后，Go 1.7 引入了一种基于 [SSA](https://en.wikipedia.org/wiki/Static_single_assignment_form) 技术的 [new compiler backend](https://blog.golang.org/go1.7) 以前的 Plan9 样式代码生成。这个新的后端为通用和特定于架构的优化引入了许多机会。
 
@@ -1401,14 +1401,14 @@ examples/esc/sum.go:22:13: main []interface {} literal does not escape
 
 第 22 行报告 `answer` 转储到堆中是 `fmt.Println` 是一个可变函数。可变参数函数的参数装在切片中，在本例中为 `[]interface {}`，因此将 `answer` 放入接口值中，因为它是由对 `fmt.Println` 的调用引用的。由于 Go 1.6 的垃圾回收器要求通过接口传递的所有值都是指针，因此编译器优化后的代码的大致是：
 
-``` go
+```go
 var answer = Sum()
 fmt.Println([]interface{&answer}...)
 ```
 
 我们可以使用 `-gcflags="-m -m"` 标志来确认。在哪返回了
 
-``` bash
+```bash
 % go build -gcflags='-m -m' examples/esc/sum.go 2>&1 | grep sum.go:22
 examples/esc/sum.go:22:13: inlining call to fmt.Println func(...interface {}) (int, error) { return fmt.Fprintln(io.Writer(os.Stdout), fmt.a...) }
 examples/esc/sum.go:22:13: answer escapes to heap
@@ -1452,7 +1452,7 @@ func NewPoint() {
 
 `NewPoint` 创建一个新的 `*Point` 值 `p`。 我们将 `p` 传递给 `Center` 函数，该函数将点移动到屏幕中心的位置。 最后，我们输出 `p.X` 和 `p.Y` 的值。
 
-``` bash
+```bash
 % go build -gcflags=-m examples/esc/center.go
 # command-line-arguments
 examples/esc/center.go:11:6: can inline Center
@@ -1469,12 +1469,9 @@ examples/esc/center.go:19:13: NewPoint []interface {} literal does not escape
 
 即使使用新函数分配了 `p`，也不会将其存储在堆中，因为没有引用 `p` 会逸出 `Center` 函数。
 
+_问题_: 那第 19 行，如果 `p` 不逃逸，那是什么逃逸到了堆呢？
 
-_问题_: 那第19行，如果 `p` 不逃逸，那是什么逃逸到了堆呢？
-
-```
-编写一个基准，以规定 `Sum` 不分配。
-```
+> 编写一个基准，以规定 `Sum` 不分配。
 
 ### 4.3. 内联
 
@@ -1486,7 +1483,7 @@ _问题_: 那第19行，如果 `p` 不逃逸，那是什么逃逸到了堆呢？
 
 直到 Go 1.11 内联仅在 _叶函数_ 上起作用，该函数不会调用另一个函数。这样做的理由是:
 
--   如果您的函数做了很多工作，那么前导开销将可以忽略不计。这就是为什么功能要达到一定的大小（目前有一些指令，加上一些阻止全部内联的操作，例如，在Go 1.7之前进行切换）
+-   如果您的函数做了很多工作，那么前导开销将可以忽略不计。这就是为什么功能要达到一定的大小（目前有一些指令，加上一些阻止全部内联的操作，例如，在 Go 1.7 之前进行切换）
 -   另一方面，小的功能为执行的相对少量的有用工作支付固定的开销。这些是内联目标的功能，因为它们最大程度地受益。
 
 另一个原因是过多的内联使堆栈跟踪更难遵循。
@@ -1527,9 +1524,7 @@ examples/inl/max.go:21:3: inlining call to Max
 -   第 3 行中的第一个是 `Max` 的声明，告诉我们可以内联。
 -   第二个报告说，`Max` 的主体已在第 12 行内联到调用方中。
 
-```
-在不使用 `//go:noinline comment` 的情况下，重写 `Max` 使得它仍然返回正确的答案，但是编译器不再认为它是可内联的。
-```
+> 在不使用 `//go:noinline comment` 的情况下，重写 `Max` 使得它仍然返回正确的答案，但是编译器不再认为它是可内联的。
 
 #### 4.3.2. 内联是什么样的？ {#what_does_inlining_look_like}
 
@@ -1545,7 +1540,7 @@ examples/inl/max.go:21:3: inlining call to Max
         0x0000 00000 (/Users/dfc/devel/high-performance-go-workshop/examples/inl/max.go:13)     PCDATA  $2, $0
 ```
 
-一旦将 `Max` 内联到其中，它就是 `F` 的主体, 此功能没有任何反应。 我知道屏幕上有很多文本，但是什么也没说，但请您相信，唯一发生的是 `RET`。 实际上，F变为：
+一旦将 `Max` 内联到其中，它就是 `F` 的主体, 此功能没有任何反应。 我知道屏幕上有很多文本，但是什么也没说，但请您相信，唯一发生的是 `RET`。 实际上，F 变为：
 
 ```go
 func F() {
@@ -1561,7 +1556,7 @@ func F() {
 
 为什么在 `F()` 中声明 `a` 和 `b` 为常数？
 
-实验输出以下内容：如果将a和b声明为变量，会发生什么？ 如果 `a` 和 `b` 作为参数传递给 `F()` 会怎样？
+实验输出以下内容：如果将 a 和 b 声明为变量，会发生什么？ 如果 `a` 和 `b` 作为参数传递给 `F()` 会怎样？
 
 !!! note
 `-gcflags=-S` 不会阻止在您的工作目录中构建最终的二进制文件。如果发现随后的 `go build …` 运行没有输出，请删除工作目录中的 `./max` 二进制文件。
@@ -1574,7 +1569,7 @@ func F() {
 -   `-gcflags=-l`, 禁用内联.
 -   没有，正常内联。
 -   `-gcflags='-l -l'` 内联级别 2，更具攻击性，可能更快，可能会生成更大的二进制文件。
--   `-gcflags='-l -l -l'` 内联3级，再次更具攻击性，二进制文件肯定更大，也许再次更快，但也可能有问题。
+-   `-gcflags='-l -l -l'` 内联 3 级，再次更具攻击性，二进制文件肯定更大，也许再次更快，但也可能有问题。
 -   `-gcflags=-l=4` Go 1.11 中的（四个 `-l`）将启用实验性 [mid stack inlining optimisation](https://github.com/golang/go/issues/19348#issuecomment-393654429)。我相信从 Go 1.12 开始它没有任何作用。
 
 #### 4.3.5. 中栈内联
@@ -1584,7 +1579,7 @@ func F() {
 我们可以在前面的示例中看到中栈内联的示例。在 Go 1.11 和更早的版本中，`F` 不会是叶子函数，它称为 `max`。但是由于内联的改进，现在将 `F` 内联到其调用方中。这有两个原因。当将 `max` 内联到 `F` 中时，`F` 不包含其他函数调用，因此，如果未超过其复杂性预算，它将成为潜在的 `叶函数`。由于 `F` 是一个简单的函数，内联和消除死代码消除了许多复杂性预算-它有资格进行 _中栈_ 内联，而与调用`max`无关。
 
 !!! tip
-中栈内联可用于内联函数的快速路径，从而消除了快速路径中的函数调用开销。[最近进入 Go 1.13 的CL](https://go-review.googlesource.com/c/go/+/152698) 显示了此技术应用于 `sync.RWMutex.Unlock()`。
+中栈内联可用于内联函数的快速路径，从而消除了快速路径中的函数调用开销。[最近进入 Go 1.13 的 CL](https://go-review.googlesource.com/c/go/+/152698) 显示了此技术应用于 `sync.RWMutex.Unlock()`。
 !!!
 
 ### 4.4. 消除无效代码
@@ -1627,6 +1622,7 @@ func F() {
 	}
 }
 ```
+
 因为 `a` 和 `b` 是常量，所以编译器可以在编译时证明该分支永远不会为假。`100` 始终大于 `20`。 因此，编译器可以进一步优化 `F` 以
 
 ```go
@@ -1711,18 +1707,18 @@ const debug = false
 
 研究以下编译器功能的操作：
 
-- `-S` 打印正在编译的程序包的 (Go 风格) 程序集。
-- `-l` 控制内联的行为； `-l` 禁用内联，`-l -l` 增加内联（更多 `-l` 增加编译器对内联代码的需求）。尝试编译时间，程序大小和运行时间的差异。
-- `-m` 控制诸如内联，转义分析之类的优化决策的打印。`-m -m` 打印有关编译器思想的更多详细信息。
-- `-l -N` 禁用所有优化。
+-   `-S` 打印正在编译的程序包的 (Go 风格) 程序集。
+-   `-l` 控制内联的行为； `-l` 禁用内联，`-l -l` 增加内联（更多 `-l` 增加编译器对内联代码的需求）。尝试编译时间，程序大小和运行时间的差异。
+-   `-m` 控制诸如内联，转义分析之类的优化决策的打印。`-m -m` 打印有关编译器思想的更多详细信息。
+-   `-l -N` 禁用所有优化。
 
 !!! note
 如果发现随后的 `go build …​` 运行没有输出，请删除工作目录中的 `./max` 二进制文件。
 !!!
 
-#### 4.5.1  进一步阅读
+#### 4.5.1 进一步阅读
 
-- [Codegen Inspection by Jaana Burcu Dogan](http://go-talks.appspot.com/github.com/rakyll/talks/gcinspect/talk.slide#1)
+-   [Codegen Inspection by Jaana Burcu Dogan](http://go-talks.appspot.com/github.com/rakyll/talks/gcinspect/talk.slide#1)
 
 ### 4.6. 边界检查消除 {#bounds_check_elimination}
 
@@ -1730,7 +1726,7 @@ Go 是一种边界检查语言。这意味着将检查数组和切片下标操�
 
 对于数组，这可以在编译时完成。对于切片，这必须在运行时完成。
 
-``` go
+```go
 var v = make([]int, 9)
 
 var A, B, C, D, E, F, G, H, I int
@@ -1750,9 +1746,7 @@ func BenchmarkBoundsCheckInOrder(b *testing.B) {
 }
 ```
 
-```
-使用 `-gcflags=-S` 来拆解 `BenchmarkBoundsCheckInOrder`。每个循环执行多少个边界检查操作？
-```
+> 使用 `-gcflags=-S` 来拆解 `BenchmarkBoundsCheckInOrder`。每个循环执行多少个边界检查操作？
 
 ```go
 func BenchmarkBoundsCheckOutOfOrder(b *testing.B) {
@@ -1774,15 +1768,15 @@ func BenchmarkBoundsCheckOutOfOrder(b *testing.B) {
 
 #### 4.6.1. 练习
 
-*   重新排列下标操作的顺序是否会影响函数的大小？它会影响功能的速度吗？
-*   如果将 `v` 移入 `基准` 函数内部会怎样？
-*   如果 `v` 被声明为数组，`var v [9] int` 会发生什么？
+-   重新排列下标操作的顺序是否会影响函数的大小？它会影响功能的速度吗？
+-   如果将 `v` 移入 `基准` 函数内部会怎样？
+-   如果 `v` 被声明为数组，`var v [9] int` 会发生什么？
 
 ## 5. 执行追踪器 {#execution-tracer}
 
 执行跟踪程序是由 [Dmitry Vyukov](https://github.com/dvyukov) 为 Go 1.5 开发的，并且仍处于记录和使用状态，已有好几年了。
 
-与基于样本的分析不同，执行跟踪器集成到 `Go` 运行时中，因此它只知道 Go程 序在特定时间点正在做什么，但是 _为什么_。
+与基于样本的分析不同，执行跟踪器集成到 `Go` 运行时中，因此它只知道 Go 程 序在特定时间点正在做什么，但是 _为什么_。
 
 ### 5.1. 什么是执行跟踪器，为什么需要它？
 
@@ -1790,7 +1784,7 @@ func BenchmarkBoundsCheckOutOfOrder(b *testing.B) {
 
 `examples/mandelbrot` 目录包含一个简单的 `mandelbrot` 生成器。该代码来自 [Francesc Campoy’s mandelbrot package](https://github.com/campoy/mandelbrot)。
 
-``` bash
+```bash
 % cd examples/mandelbrot
 % go build && ./mandelbrot
 ```
@@ -1805,7 +1799,7 @@ func BenchmarkBoundsCheckOutOfOrder(b *testing.B) {
 
 我知道如何执行此操作的最简单方法是使用 `time(1)` 之类的东西。
 
-```
+```bash
 % time ./mandelbrot
 real    0m1.654s
 user    0m1.630s
@@ -1898,7 +1892,7 @@ func main() {
 % go tool pprof -http=:8080 cpu.pprof
 ```
 
-在此运行中，我们看到程序运行了 1.81 秒 (分析增加了少量开销)。我们还可以看到 pprof 仅捕获了1.53秒的数据，因为 `pprof` 基于示例，它依赖于操作系统的 `SIGPROF` 计时器。
+在此运行中，我们看到程序运行了 1.81 秒 (分析增加了少量开销)。我们还可以看到 pprof 仅捕获了 1.53 秒的数据，因为 `pprof` 基于示例，它依赖于操作系统的 `SIGPROF` 计时器。
 
 !!! note
 从 1.9 开始，`pprof` 跟踪包含分析跟踪所需的所有信息。您不再需要生成跟踪的匹配二进制文件。🎉
@@ -1998,7 +1992,7 @@ sys     0m0.020s
 2017/09/17 12:41:40 Opening browser. Trace viewer s listening on http://127.0.0.1:57842
 ```
 
-这个工具和 `go tool pprof` 有点不同。执行跟踪器正在重用 `Chrome` 内置的许多配置文件可视化基础结构，因此 `go tool trace` 充当服务器将原始执行跟踪转换为Chome可以本地显示的数据。
+这个工具和 `go tool pprof` 有点不同。执行跟踪器正在重用 `Chrome` 内置的许多配置文件可视化基础结构，因此 `go tool trace` 充当服务器将原始执行跟踪转换为 Chome 可以本地显示的数据。
 
 #### 5.4.2. 分析追踪
 
@@ -2027,13 +2021,13 @@ func seqFillImg(m *img) {
 -   因为这是 Google 产品，所以它支持键盘快捷键。使用 `WASD` 导航，使用 `?` 获取列表。
 -   查看追踪可能会占用大量内存。 认真地说，4Gb 不会削减它，8Gb 可能是最小值，更多肯定更好。
 -   如果您是从 Fedora 之类的 OS 发行版中安装 Go 的，则跟踪查看器的支持文件可能不是主 `golang` deb/rpm 的一部分，它们可能位于某些 `-extra` 软件包中。
-!!!
+    !!!
 
-### 5.5. 使用多个CPU
+### 5.5. 使用多个 CPU
 
 从前面的跟踪中我们可以看到程序正在按顺序运行，并且没有利用该计算机上的其他 CPU。
 
-Mandelbrot 的生成称为 _embarassingly\_parallel_ 。每个像素彼此独立，都可以并行计算。所以，让我们尝试一下。
+Mandelbrot 的生成称为 _embarassingly_parallel_ 。每个像素彼此独立，都可以并行计算。所以，让我们尝试一下。
 
 ```bash
 % go build mandelbrot.go
@@ -2046,7 +2040,7 @@ user    0m4.031s
 sys     0m0.865s
 ```
 
-因此，运行时间基本上是相同的。我们使用了所有CPU，因此有更多的用户时间，这是有道理的，但是实 际(挂钟) 时间大致相同。
+因此，运行时间基本上是相同的。我们使用了所有 CPU，因此有更多的用户时间，这是有道理的，但是实 际(挂钟) 时间大致相同。
 
 让我们看一下追踪。
 
@@ -2061,7 +2055,7 @@ sys     0m0.865s
 
 相反，让我们尝试为每个 `goroutine` 处理一行。
 
-```
+```bash
 % go build mandelbrot.go
 % time ./mandelbrot -mode row
 2017/09/17 13:41:55 profile: trace enabled, trace.out
@@ -2098,7 +2092,7 @@ sys     0m1.284s
 
 观察痕迹，您会发现只有一个 worker 处理器，生产者和消费者往往会轮换，因为只有一个 worker 处理器和一个消费者。 让我们增加 worker 处理器数量
 
-```
+```bash
 % go build mandelbrot.go
 % time ./mandelbrot -mode workers -workers 4
 2017/09/17 13:52:51 profile: trace enabled, trace.out
@@ -2131,7 +2125,7 @@ func main() {
 	defer profile.Start(profile.TraceProfile, profile.ProfilePath(".")).Stop()
 ```
 
-```
+```bash
 % go build mandelbrot.go
 % time ./mandelbrot -mode workers -workers 4
 2017/09/17 14:23:56 profile: trace enabled, trace.out
@@ -2178,11 +2172,11 @@ sys     0m0.121s
 
 希望每个人都知道 `net/http/pprof` 软件包。
 
-``` go
+```go
 import _ "net/http/pprof"
 ```
 
-导入后，`net/http/pprof` 将向 `http.DefaultServeMux` 注册跟踪和分析路由。从Go 1.5开始，这包括跟踪分析器。
+导入后，`net/http/pprof` 将向 `http.DefaultServeMux` 注册跟踪和分析路由。从 Go 1.5 开始，这包括跟踪分析器。
 
 !!! warning
 `net/http/pprof` 向 `http.DefaultServeMux` 注册。如果您隐式或显式地使用该 `ServeMux`，则可能会无意间将 `pprof` 端点公开到 `Internet`。这可能导致源代码泄露。您可能不想这样做。
@@ -2190,13 +2184,13 @@ import _ "net/http/pprof"
 
 我们可以使用 `curl`（或`wget`）从 mandelweb 中获取五秒钟的跟踪记录
 
-```
+```bash
 % curl -o trace.out http://127.0.0.1:8080/debug/pprof/trace?seconds=5
 ```
 
 #### 5.9.3. 产生一些负载
 
-前面的示例很有趣，但是根据定义，空闲的Web服务器没有性能问题。我们需要产生一些负载。为此，我使用的是 [`hey` by JBD](https://github.com/rakyll/hey)。
+前面的示例很有趣，但是根据定义，空闲的 Web 服务器没有性能问题。我们需要产生一些负载。为此，我使用的是 [`hey` by JBD](https://github.com/rakyll/hey)。
 
 ```bash
 % go get -u github.com/rakyll/hey
@@ -2227,7 +2221,7 @@ Trace viewer is listening on http://127.0.0.1:60301
 
 让我们将速率提高到每秒 5 个请求。
 
-```
+```bash
 % hey -c 5 -n 1000 -q 5 http://127.0.0.1:8080/mandelbrot
 ```
 
@@ -2247,7 +2241,7 @@ Trace viewer is listening on http://127.0.0.1:60301
 
 #### 5.9.5. 额外的信誉，Eratosthenes 的筛子
 
-[concurrent prime sieve](https://github.com/golang/go/blob/master/doc/play/sieve.go) 是最早编写的Go程序之一。
+[concurrent prime sieve](https://github.com/golang/go/blob/master/doc/play/sieve.go) 是最早编写的 Go 程序之一。
 
 Ivan Daniluk [撰写了一篇关于可视化的很棒的文章](http://divan.github.io/posts/go_concurrency_visualize/)。
 
@@ -2263,51 +2257,45 @@ Ivan Daniluk [撰写了一篇关于可视化的很棒的文章](http://divan.git
 -   Kavya Joshi, [Understanding Channels](https://www.youtube.com/watch?v=KBZlN0izeiY) (GopherCon 2017)
 -   Francesc Campoy, [Using the Go execution tracer](https://www.youtube.com/watch?v=ySy3sR1LFCQ)
 
-## 6. Memory and Garbage Collector {#memory-and-gc}
+## 6. 内存和垃圾收集器 {#memory-and-gc}
 
-Go is a garbage collected language. This is a design principle, it will not change.
+Go 是一种 `gc` 语言。这是设计原则，不会改变。
 
-As a garbage collected language, the performance of Go programs is often determined by their interaction with the garbage collector.
+作为 `gc` 语言，Go 程序的性能通常取决于它们与 `gc` 的交互。
 
-Next to your choice of algorithms, memory consumption is the most important factor that determines the performance and scalability of your application.
+除了选择算法之外，内存消耗是决定应用程序性能和可伸缩性的最重要因素。
 
-This section discusses the operation of the garbage collector, how to measure the memory usage of your program and strategies for lowering memory usage if garbage collector performance is a bottleneck.
+本节讨论垃圾收集器的操作，如何测量程序的内存使用情况以及在垃圾收集器性能成为瓶颈的情况下降低内存使用量的策略。
 
-### 6.1\. Garbage collector world view
+### 6.1. gc 的世界观
 
-The purpose of any garbage collector is to present the illusion that there is an infinite amount of memory available to the program.
+任何垃圾收集器的目的都是为了给程序一种幻想，即存在无限数量的可用内存。
 
-You may disagree with this statement, but this is the base assumption of how garbage collector designers work.
+您可能不同意此声明，但这是垃圾收集器设计者如何工作的基本假设。
 
-A stop the world, mark sweep GC is the most efficient in terms of total run time; good for batch processing, simulation, etc. However, over time the Go GC has moved from a pure stop the world collector to a concurrent, non compacting, collector. This is because the Go GC is designed for low latency servers and interactive applications.
+令人震惊的是，就总运行时间而言，标记扫描 `GC` 是最有效的；很好，适用于批处理，模拟等。但是，随着时间的流逝，Go GC 已从纯粹的停止世界收集器转变为并发的非压缩收集器。这是因为 Go GC 专为低延迟服务器和交互式应用程序而设计。
 
-The design of the Go GC favors _lower_latency_ over _maximum_throughput_; it moves some of the allocation cost to the mutator to reduce the cost of cleanup later.
+Go GC 的设计倾向于在 _最大吞吐量_ 上 _降低延迟_。它将一些分配成本移到了 mutator 上，以减少以后的清理成本。
 
-### 6.2\. Garbage collector design
+### 6.2. 垃圾收集器设计
 
-The design of the Go GC has changed over the years
+多年来，Go GC 的设计发生了变化
 
--   Go 1.0, stop the world mark sweep collector based heavily on tcmalloc.
+-   Go 1.0, 停止大量基于 `tcmalloc` 的世界标记清除收集器。
+-   Go 1.3, 完全精确的收集器，不会将堆上的大数字误认为是指针，从而不会浪费内存。
+-   Go 1.5, 新的 GC 设计，着重于 _吞吐量_ _延迟_。
+-   Go 1.6, GC 的改进，以较低的延迟处理较大的堆。
+-   Go 1.7, 较小的 GC 改进，主要是重构。
+-   Go 1.8, 进一步工作以减少 `STW` 时间，现在已降至 `100` 微秒范围。
+-   Go 1.10+, [摆脱纯粹的合作 Goroutine 调度](https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md) 以降低触发整个GC周期时的延迟。
 
--   Go 1.3, fully precise collector, wouldn’t mistake big numbers on the heap for pointers, thus leaking memory.
+### 6.3. 垃圾收集器监控
 
--   Go 1.5, new GC design, focusing on _latency_ over _throughput_.
+一种获得垃圾收集器工作量的总体思路的简单方法是启用 GC 日志记录的输出。
 
--   Go 1.6, GC improvements, handling larger heaps with lower latency.
+这些统计信息始终会收集，但通常会被禁止显示，您可以通过设置环境变量 `GODEBUG` 启用它们。
 
--   Go 1.7, small GC improvements, mainly refactoring.
-
--   Go 1.8, further work to reduce STW times, now down to the 100 microsecond range.
-
--   Go 1.10+, [move away from pure cooprerative goroutine scheduling](https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md) to lower the latency when triggering a full GC cycle.
-
-### 6.3\. Garbage collector monitoring
-
-A simple way to obtain a general idea of how hard the garbage collector is working is to enable the output of GC logging.
-
-These stats are always collected, but normally suppressed, you can enable their display by setting the `GODEBUG` environment variable.
-
-```
+```bash
 % env GODEBUG=gctrace=1 godoc -http=:8080
 gc 1 @0.012s 2%: 0.026+0.39+0.10 ms clock, 0.21+0.88/0.52/0+0.84 ms cpu, 4->4->0 MB, 5 MB goal, 8 P
 gc 2 @0.016s 3%: 0.038+0.41+0.042 ms clock, 0.30+1.2/0.59/0+0.33 ms cpu, 4->4->1 MB, 5 MB goal, 8 P
@@ -2320,155 +2308,153 @@ gc 8 @0.041s 6%: 0.049+0.42+0.057 ms clock, 0.39+1.1/0.57/0+0.46 ms cpu, 4->4->1
 gc 9 @0.045s 6%: 0.047+0.38+0.042 ms clock, 0.37+0.94/0.61/0+0.33 ms cpu, 4->4->1 MB, 5 MB goal, 8 P
 ```
 
-The trace output gives a general measure of GC activity. The output format of `gctrace=1` is described in [the `runtime` package documentation](https://golang.org/pkg/runtime/#hdr-Environment_Variables).
+跟踪输出给出了GC活性的一般度量。[the `runtime` package documentation](https://golang.org/pkg/runtime/#hdr-Environment_Variables) 中描述了 `gctrace=1` 的输出格式。
 
-DEMO: Show `godoc` with `GODEBUG=gctrace=1` enabled
+DEMO: 显示启用了 `GODEBUG=gctrace=1` 的 `godoc`
 
-| | Use this env var in production, it has no performance impact. |
+!!! tip
+在生产环境中使用此环境变量，不会对性能产生影响。
+!!!
 
-Using `GODEBUG=gctrace=1` is good when you _know_ there is a problem, but for general telemetry on your Go application I recommend the `net/http/pprof` interface.
+当您知道有问题时，使用 `GODEBUG=gctrace=1` 很好，但是对于Go应用程序上的常规遥测，我建议使用 `net/http/pprof` 接口。
 
-```
+```go
 import _ "net/http/pprof"
 ```
 
-Importing the `net/http/pprof` package will register a handler at `/debug/pprof` with various runtime metrics, including:
+导入 `net/http/pprof` 软件包将在 `/debug/pprof` 注册一个具有各种运行时指标的处理程序，包括：
 
 -   A list of all the running goroutines, `/debug/pprof/heap?debug=1`.
-
 -   A report on the memory allocation statistics, `/debug/pprof/heap?debug=1`.
 
-| |
+!!! note
+`net/http/pprof` 将使用默认的 `http.ServeMux` 注册自己。
 
-`net/http/pprof` will register itself with your default `http.ServeMux`.
+请小心，因为如果您使用 `http.ListenAndServe(address, nil)`，这将是可见的。
+!!!
 
-Be careful as this will be visible if you use `http.ListenAndServe(address, nil)`.
+DEMO: `godoc -http=:8080`, 会显示 `/debug/pprof`。
 
-|
+#### 6.3.1. 垃圾收集器调整
 
-DEMO: `godoc -http=:8080`, show `/debug/pprof`.
+Go 运行时提供了一个用于调整 GC 的环境变量 `GOGC`。
 
-#### 6.3.1\. Garbage collector tuning
+GOGC 的公式是
 
-The Go runtime provides one environment variable to tune the GC, `GOGC`.
+$$
+goal = reachabl\e * (1 + (GOGC)/100)
+$$
 
-The formula for GOGC is
+例如，如果我们当前有一个256MB的堆，并且 `GOGC=100` (默认值)，当堆填满时，它将增长到
 
-```mathjax
-\$goal = reachabl\e * (1 + (GOGC)/100)\$
-```
+$$
+512MB = 256MB * (1 + 100/100)
+$$
 
-For example, if we currently have a 256MB heap, and `GOGC=100` (the default), when the heap fills up it will grow to
+-   `GOGC` 的值大于100会使堆增长更快，从而减轻了 GC 的压力。
+-   小于 100 的 `GOGC` 值会导致堆缓慢增长，从而增加了 GC 的压力。
 
-```mathjax
-\$512MB = 256MB * (1 + 100/100)\$
-```
+默认值 100 _仅作为参考_。 在使用生产负载对应用程序进行性能分析 _之后，您应该选择自己的值_。
 
--   Values of `GOGC` greater than 100 causes the heap to grow faster, reducing the pressure on the GC.
+### 6.4. 减少分配
 
--   Values of `GOGC` less than 100 cause the heap to grow slowly, increasing the pressure on the GC.
+确保您的 API 允许调用方减少生成的垃圾量。
 
-The default value of 100 is _just_a_guide_. you should choose your own value _after profiling your application with production loads_.
+考虑这两种读取方法
 
-### 6.4\. Reducing allocations
-
-Make sure your APIs allow the caller to reduce the amount of garbage generated.
-
-Consider these two Read methods
-
-```
+```go
 func (r *Reader) Read() ([]byte, error)
 func (r *Reader) Read(buf []byte) (int, error)
 ```
 
-The first Read method takes no arguments and returns some data as a `[]byte`. The second takes a `[]byte` buffer and returns the amount of bytes read.
+第一个 `Read` 方法不带任何参数，并以 `[]byte` 的形式返回一些数据。第二个接收一个 `[]byte` 缓冲区，并返回读取的字节数。
 
-The first Read method will _always_ allocate a buffer, putting pressure on the GC. The second fills the buffer it was given.
+第一个 `Read` 方法将 _始终_ 分配缓冲区，从而给GC带来压力。第二个填充它给定的缓冲区。
 
-Can you name examples in the std lib which follow this pattern?
+您可以在标准库中命名遵循此模式的示例吗？
 
-### [6.5\. strings and []bytes](#strings_and_bytes)
+### 6.5. strings 和 []bytes
 
-In Go `string` values are immutable, `[]byte` are mutable.
+在 Go 中，`string` 的值是不可变的，`[]byte` 是可变的。
 
-Most programs prefer to work `string`, but most IO is done with `[]byte`.
+大多数程序都喜欢使用 `string`，但是大多数 IO 是使用 `[]byte` 来完成的。
 
-Avoid `[]byte` to string conversions wherever possible, this normally means picking one representation, either a `string` or a `[]byte` for a value. Often this will be `[]byte` if you read the data from the network or disk.
+尽可能避免将 `[]byte` 转换为字符串，这通常意味着选择一种表示形式，即 `string` 或 `[]byte` 作为值。如果您从网络或磁盘读取数据，通常为 `[]byte`。
 
-The [`bytes`](https://golang.org/pkg/bytes/) package contains many of the same operations — `Split`, `Compare`, `HasPrefix`, `Trim`, etc — as the [`strings`](https://golang.org/pkg/strings/) package.
+[`bytes`](https://golang.org/pkg/bytes/) 包包含许多与 [`strings`](https://golang.org/pkg/strings/) 软件包相同的操作 - `Split`, `Compare`, `HasPrefix`，`Trim` 等。
 
-Under the hood `strings` uses same assembly primitives as the `bytes` package.
+在底层，`strings` 与 `bytes`包使用相同的汇编原语。
 
-### [6.6\. Using `[]byte` as a map key](#using_byte_as_a_map_key)
+### 6.6\. 使用 `[]byte` 作为 map 的 key
 
-It is very common to use a `string` as a map key, but often you have a `[]byte`.
+使用 `string` 作为映射键是很常见的，但是通常您会使用 `[]byte`。
 
-The compiler implements a specific optimisation for this case
+编译器针对这种情况实现了特定的优化
 
-```
+```go
 var m map[string]string
 v, ok := m[string(bytes)]
 ```
 
-This will avoid the conversion of the byte slice to a string for the map lookup. This is very specific, it won’t work if you do something like
+这将避免将字节切片转换为用于映射查找的字符串。这是非常具体的操作，如果您执行以下操作将无法正常工作
 
-```
+```go
 key := string(bytes)
 val, ok := m[key]
 ```
 
-Let’s see if this is still true. Write a benchmark comparing these two methods of using a `[]byte` as a `string` map key.
+让我们看看这是否仍然正确。编写一个基准，比较使用 `[]byte` 作为 `string` 映射键的这两种方法。
 
-### 6.7\. Avoid string concatenation
+### 6.7. 避免字符串连接
 
-Go strings are immutable. Concatenating two strings generates a third. Which of the following is fastest?
+转到字符串是不可变的。连接两个字符串会生成第三个字符串。 以下哪项是最快的？
 
-```
-		s := request.ID
-		s += " " + client.Addr().String()
-		s += " " + time.Now().String()
-		r = s
-```
-
-```
-		var b bytes.Buffer
-		fmt.Fprintf(&b, "%s %v %v", request.ID, client.Addr(), time.Now())
-		r = b.String()
+```go
+s := request.ID
+s += " " + client.Addr().String()
+s += " " + time.Now().String()
+r = s
 ```
 
-```
-		r = fmt.Sprintf("%s %v %v", request.ID, client.Addr(), time.Now())
-```
-
-```
-		b := make([]byte, 0, 40)
-		b = append(b, request.ID...)
-		b = append(b, ' ')
-		b = append(b, client.Addr().String()...)
-		b = append(b, ' ')
-		b = time.Now().AppendFormat(b, "2006-01-02 15:04:05.999999999 -0700 MST")
-		r = string(b)
+```go
+var b bytes.Buffer
+fmt.Fprintf(&b, "%s %v %v", request.ID, client.Addr(), time.Now())
+r = b.String()
 ```
 
+```go
+r = fmt.Sprintf("%s %v %v", request.ID, client.Addr(), time.Now())
 ```
-		var b strings.Builder
-		b.WriteString(request.ID)
-		b.WriteString(" ")
-		b.WriteString(client.Addr().String())
-		b.WriteString(" ")
-		b.WriteString(time.Now().String())
-		r = b.String()
+
+```go
+b := make([]byte, 0, 40)
+b = append(b, request.ID...)
+b = append(b, ' ')
+b = append(b, client.Addr().String()...)
+b = append(b, ' ')
+b = time.Now().AppendFormat(b, "2006-01-02 15:04:05.999999999 -0700 MST")
+r = string(b)
+```
+
+```go
+var b strings.Builder
+b.WriteString(request.ID)
+b.WriteString(" ")
+b.WriteString(client.Addr().String())
+b.WriteString(" ")
+b.WriteString(time.Now().String())
+r = b.String()
 ```
 
 DEMO: `go test -bench=. ./examples/concat`
 
-### 6.8\. Preallocate slices if the length is known
+### 6.8. 如果长度已知，则预分配片
 
-Append is convenient, but wasteful.
+追加很方便，但是很浪费。
 
-Slices grow by doubling up to 1024 elements, then by approximately 25% after that. What is the capacity of `b` after we append one more item to it?
+切片通过将多达 1024 个元素加倍而增长，然后增加约 25％。我们再追加一项后，`b` 的容量是多少？
 
-```
+```go
 func main() {
 	b := make([]int, 1024)
 	b = append(b, 99)
@@ -2476,13 +2462,13 @@ func main() {
 }
 ```
 
-If you use the append pattern you could be copying a lot of data and creating a lot of garbage.
+如果使用 `append` 模式，则可能会复制大量数据并创建大量垃圾。
 
-If know know the length of the slice beforehand, then pre-allocate the target to avoid copying and to make sure the target is exactly the right size.
+如果知道事先知道切片的长度，则可以预先分配目标，以避免复制并确保目标大小正确。
 
 Before
 
-```
+```go
 var s []string
 for _, v := range fn() {
         s = append(s, v)
@@ -2492,7 +2478,7 @@ return s
 
 After
 
-```
+```go
 vals := fn()
 s := make([]string, len(vals))
 for i, v := range vals {
@@ -2501,18 +2487,22 @@ for i, v := range vals {
 return s
 ```
 
-### 6.9\. Using sync.Pool
+### 6.9. 使用 sync.Pool
 
-The `sync` package comes with a `sync.Pool` type which is used to reuse common objects.
+`sync` 软件包带有 `sync.Pool` 类型，用于重用公共对象。
 
-`sync.Pool` has no fixed size or maximum capacity. You add to it and take from it until a GC happens, then it is emptied unconditionally. This is [by design](https://groups.google.com/forum/#!searchin/golang-dev/gc-aware/golang-dev/kJ_R6vYVYHU/LjoGriFTYxMJ):
+`sync.Pool` 没有固定大小或最大容量。您添加到它并从中取出直到发生 `GC`，然后将其无条件清空。这是 [by design](https://groups.google.com/forum/#!searchin/golang-dev/gc-aware/golang-dev/kJ_R6vYVYHU/LjoGriFTYxMJ):
 
-> If before garbage collection is too early and after garbage collection too late, then the right time to drain the pool must be during garbage collection. That is, the semantics of the Pool type must be that it drains at each garbage collection. — Russ Cox
+> 如果在垃圾回收之前为时过早而在垃圾回收之后为时过晚，则排空池的正确时间必须在垃圾回收期间。也就是说，池类型的语义必须是它在每个垃圾回收时都消耗掉。— Russ Cox
 
-sync.Pool in action
+使用 `sync.Pool`
 
-```
-var pool = sync.Pool{New: func() interface{} { return make([]byte, 4096) }}
+```go
+var pool = sync.Pool{
+    New: func() interface{} {
+        return make([]byte, 4096)
+    },
+}
 
 func fn() {
 	buf := pool.Get().([]byte) // takes from pool or calls New
@@ -2521,87 +2511,82 @@ func fn() {
 }
 ```
 
-| |
+!!! warning
+`sync.Pool` 不是缓存。它可以并且将在任何时间清空。
 
-`sync.Pool` is not a cache. It can and will be emptied _at_any_time_.
+不要将重要项目放在 `sync.Pool` 中，它们将被丢弃。
+!!!
 
-Do not place important items in a `sync.Pool`, they will be discarded.
+!!! tip
+Go 1.13 中可能会更改在每个 GC 上清空的 `sync.Pool` 的设计，这将有助于提高其实用性。
 
-|
-
-| |
-
-The design of sync.Pool emptying itself on each GC may change in Go 1.13 which will help improve its utility.
-
-> This CL fixes this by introducing a victim cache mechanism. Instead of clearing Pools, the victim cache is dropped and the primary cache is moved to the victim cache. As a result, in steady-state, there are (roughly) no new allocations, but if Pool usage drops, objects will still be collected within two GCs (as opposed to one). — Austin Clements
+> 此 CL 通过引入受害者缓存机制来解决此问题。代替清除池，将删除受害缓存，并将主缓存移至受害缓存。 结果，在稳定状态下，（几乎）没有新分配，但是如果 Pool 使用率下降，对象仍将在两个 GC（而不是一个）中收集。— Austin Clements
 
 [https://go-review.googlesource.com/c/go/+/166961/](https://go-review.googlesource.com/c/go/+/166961/)
+!!!
 
-|
+### 6.10. 练习
 
-### 6.10\. Exercises
+-   使用 `godoc`（或其他程序）观察使用 `GODEBUG=gctrace=1` 改变 `GOGC` 的结果。
+-   使用 bytes, string 作为 map key 并检查基准。
+-   不同字符串连接策略的基准分配。
 
--   Using `godoc` (or another program) observe the results of changing `GOGC` using `GODEBUG=gctrace=1`.
+## 7. 提示和旅行 {#tips-and-tricks}
 
--   Benchmark byte’s string(byte) map keys
+随机获取提示和建议
 
--   Benchmark allocs from different concat strategies.
+最后一部分包含一些微优化 Go 代码的技巧。
 
-## [](#tips-and-tricks)[7\. Tips and trips](#tips-and-tricks)
+### 7.1. Goroutines
 
-A random grab back of tips and suggestions
+`Goroutines` 是使其非常适合现代硬件的关键功能。
 
-This final section contains a number of tips to micro optimise Go code.
+`Goroutines` 易于使用，而且创建成本低廉，您可以将它们视为 _几乎_ 免费。
 
-### 7.1\. Goroutines
+Go 运行时已针对具有成千上万个 `goroutine` 作为标准的程序而编写，数十万个并不意外。
 
-The key feature of Go that makes it a great fit for modern hardware are goroutines.
+但是，每个 `goroutine` 确实消耗了 `goroutine` 堆栈的最小内存量，目前至少为2k。
 
-Goroutines are so easy to use, and so cheap to create, you could think of them as _almost_ free.
+2048 * 1,000,000 个 `goroutines` == 2GB 的内存，他们还没有做任何事情。
 
-The Go runtime has been written for programs with tens of thousands of goroutines as the norm, hundreds of thousands are not unexpected.
+可能很多，但未提供应用程序的其他用法。
 
-However, each goroutine does consume a minimum amount of memory for the goroutine’s stack which is currently at least 2k.
+#### 7.1.1. 知道何时停止 goroutine
 
-2048 \* 1,000,000 goroutines == 2GB of memory, and they haven’t done anything yet.
+Goroutine 的启动方便，运行也很方便，但是在内存占用方面确实有一定的成本。您不能创建无限数量的它们。
 
-Maybe this is a lot, maybe it isn’t given the other usages of your application.
+每次您在程序中使用`go`关键字启动 `goroutine` 时，您都必须 **知道** 该 `goroutine` 如何以及何时退出。
 
-#### 7.1.1\. Know when to stop a goroutine
+在您的设计中，某些 `goroutine` 可能会运行直到程序退出。这些 `goroutine` 非常罕见，不会成为规则的例外。
 
-Goroutines are cheap to start and cheap to run, but they do have a finite cost in terms of memory footprint; you cannot create an infinite number of them.
+如果您不知道答案，那将是潜在的内存泄漏，因为 `goroutine` 会将其堆栈的内存以及可从堆栈访问的所有堆分配变量固定在堆栈上。
 
-Every time you use the `go` keyword in your program to launch a goroutine, you must **know** how, and when, that goroutine will exit.
+!!! tip
+切勿在不知道如何停止 `goroutine` 的情况下启动它。
+!!!
 
-In your design, some goroutines may run until the program exits. These goroutines are rare enough to not become an exception to the rule.
-
-If you don’t know the answer, that’s a potential memory leak as the goroutine will pin its stack’s memory on the heap, as well as any heap allocated variables reachable from the stack.
-
-| | Never start a goroutine without knowing how it will stop. |
-
-#### 7.1.2\. Further reading
+#### 7.1.2. 进一步阅读
 
 -   [Concurrency Made Easy](https://www.youtube.com/watch?v=yKQOunhhf4A&index=16&list=PLq2Nv-Sh8EbZEjZdPLaQt1qh_ohZFMDj8) (video)
-
 -   [Concurrency Made Easy](https://dave.cheney.net/paste/concurrency-made-easy.pdf) (slides)
-
 -   [Never start a goroutine without knowning when it will stop](https://dave.cheney.net/practical-go/presentations/qcon-china.html#_never_start_a_goroutine_without_knowning_when_it_will_stop) (Practical Go, QCon Shanghai 2018)
 
-### 7.2\. Go uses efficient network polling for some requests
+### 7.2. Go 对某些请求使用有效的网络轮询
 
-The Go runtime handles network IO using an efficient operating system polling mechanism (kqueue, epoll, windows IOCP, etc). Many waiting goroutines will be serviced by a single operating system thread.
+Go 运行时使用有效的操作系统轮询机制（kqueue，epoll，windows IOCP等）处理网络IO。一个单一的操作系统线程将为许多等待的 goroutine 提供服务。
 
-However, for local file IO, Go does not implement any IO polling. Each operation on a `*os.File` consumes one operating system thread while in progress.
+但是，对于本地文件 `IO`，Go 不会实现任何 `IO` 轮询。 `*os.File` 上的每个操作在进行中都会消耗一个操作系统线程。
 
-Heavy use of local file IO can cause your program to spawn hundreds or thousands of threads; possibly more than your operating system allows.
+大量使用本地文件 `IO` 可能会导致您的程序产生数百或数千个线程。可能超出您的操作系统所允许的范围。
 
-Your disk subsystem does not expect to be able to handle hundreds or thousands of concurrent IO requests.
+您的磁盘子系统不希望能够处理成百上千的并发 `IO` 请求。
 
-| |
 
-To limit the amount of concurrent blocking IO, use a pool of worker goroutines, or a buffered channel as a semaphore.
+!!! tip
 
-```
+要限制并发阻塞 `IO` 的数量，请使用工作程序 `goroutine` 池或缓冲通道作为信号灯。
+
+```go
 var semaphore = make(chan struct{}, 10)
 
 func processRequest(work *Work) {
@@ -2610,164 +2595,157 @@ func processRequest(work *Work) {
 	<-semaphore // release semaphore
 }
 ```
+!!!
 
-|
+### 7.3. 注意您的应用程序中的 IO multipliers
 
-### 7.3\. Watch out for IO multipliers in your application
+如果您正在编写服务器进程，那么它的主要工作是多路复用通过网络连接的客户端和存储在应用程序中的数据。
 
-If you’re writing a server process, its primary job is to multiplex clients connected over the network, and data stored in your application.
+大多数服务器程序接受请求，进行一些处理，然后返回结果。这听起来很简单，但是根据结果，它可能会使客户端消耗服务器上大量（可能是无限制的）资源。 这里有一些注意事项:
 
-Most server programs take a request, do some processing, then return a result. This sounds simple, but depending on the result it can let the client consume a large (possibly unbounded) amount of resources on your server. Here are some things to pay attention to:
+-   每个传入请求的 IO 请求数量；单个客户端请求生成多少个IO事件？它可能平均为 1，或者如果从缓存中提供了许多请求，则可能小于一个。
+-   服务查询所需的读取量；它是固定的，N + 1还是线性的（读取整个表以生成结果的最后一页）。
 
--   The amount of IO requests per incoming request; how many IO events does a single client request generate? It might be on average 1, or possibly less than one if many requests are served out of a cache.
+相对而言，如果内存很慢，那么IO太慢了，您应该不惜一切代价避免这样做。最重要的是，避免在请求的上下文中进行IO，不要让用户等待您的磁盘子系统写入磁盘甚至读取磁盘。
 
--   The amount of reads required to service a query; is it fixed, N+1, or linear (reading the whole table to generate the last page of results).
+### 7.4. 使用流式 IO 接口
 
-If memory is slow, relatively speaking, then IO is so slow that you should avoid doing it at all costs. Most importantly avoid doing IO in the context of a request—don’t make the user wait for your disk subsystem to write to disk, or even read.
+尽可能避免将数据读取到 `[]byte` 中并将其传递。
 
-### 7.4\. Use streaming IO interfaces
+根据请求，您可能最终将兆字节（或更多！）的数据读取到内存中。这给 GC 带来了巨大压力，这将增加应用程序的平均延迟。
 
-Where-ever possible avoid reading data into a `[]byte` and passing it around.
+而是使用 `io.Reader` 和 `io.Writer` 来构造处理管道，以限制每个请求使用的内存量。
 
-Depending on the request you may end up reading megabytes (or more!) of data into memory. This places huge pressure on the GC, which will increase the average latency of your application.
+为了提高效率，如果您使用大量的 `io.Copy`，请考虑实现 `io.ReaderFrom`/`io.WriterTo`。 这些接口效率更高，并且避免将内存复制到临时缓冲区中。
 
-Instead use `io.Reader` and `io.Writer` to construct processing pipelines to cap the amount of memory in use per request.
+### 7.5. 超时, 超时, 超时
 
-For efficiency, consider implementing `io.ReaderFrom` / `io.WriterTo` if you use a lot of `io.Copy`. These interface are more efficient and avoid copying memory into a temporary buffer.
+在不知道所需的最长时间之前，切勿启动 IO 操作。
 
-### 7.5\. Timeouts, timeouts, timeouts {#timeouts_timeouts_timeouts}
+您需要使用 `SetDeadline`, `SetReadDeadline`, `SetWriteDeadline` 对每个网络请求设置超时。
 
-Never start an IO operating without knowing the maximum time it will take.
+### 7.6. defer 消耗很大，还是？
 
-You need to set a timeout on every network request you make with `SetDeadline`, `SetReadDeadline`, `SetWriteDeadline`.
+`defer` 消耗很高，因为它必须记录下 `defer` 的论点。
 
-### 7.6\. Defer is expensive, or is it? {#defer_is_expensive_or_is_it}
-
-`defer` is expensive because it has to record a closure for defer’s arguments.
-
-```
+```go
 defer mu.Unlock()
 ```
 
-is equivalent to
+相当于
 
-```
+```go
 defer func() {
-        mu.Unlock()
+    mu.Unlock()
 }()
 ```
 
-`defer` is expensive if the work being done is small, the classic example is `defer` ing a mutex unlock around a struct variable or map lookup. You may choose to avoid `defer` in those situations.
+如果完成的工作量很小，则 `defer` 会很昂贵，经典的例子是 `defer` 围绕结构变量或映射查找进行互斥解锁。在这种情况下，您可以选择避免 `defer`。
 
-This is a case where readability and maintenance is sacrificed for a performance win.
+在这种情况下，为了获得性能而牺牲了可读性和维护性。
 
-Always revisit these decisions.
+始终重新审视这些决定。
 
-### 7.7\. Avoid Finalisers
+### 7.7. 避免 Finalisers
 
-Finalisation is a technique to attach behaviour to an object which is just about to be garbage collected.
+Finalisation 是一种将行为附加到即将被垃圾回收的对象的技术。
 
-Thus, finalisation is non deterministic.
+因此，最终确定是不确定的。
 
-For a finaliser to run, the object must not be reachable by _anything_. If you accidentally keep a reference to the object in the map, it won’t be finalised.
+要运行 `finalizer`，该对象不得通过任何物体到达。 如果您不小心在地图上保留了对该对象的引用，则该对象不会被最终确定。
 
-Finalisers run as part of the gc cycle, which means it is unpredictable when they will run and puts them at odds with the goal of reducing gc operation.
+`finalizer` 是 gc 周期的一部分，这意味着它们何时运行将是不可预测的，并且与减少 gc 操作的目标相矛盾。
 
-A finaliser may not run for a long time if you have a large heap and have tuned your appliation to create minimal garbage.
+如果堆很大并且已调整应用程序以创建最少的垃圾，则 `finalizer` 可能不会运行很长时间。
 
-### 7.8\. Minimise cgo
+### 7.8. 减少 cgo
 
-cgo allows Go programs to call into C libraries.
+cgo 允许 Go 程序调用 C 库。
 
-C code and Go code live in two different universes, cgo traverses the boundary between them.
+C 代码和 Go 代码生活在两个不同的世界中，cgo 穿越了它们之间的边界。
 
-This transition is not free and depending on where it exists in your code, the cost could be substantial.
+这种转换不是免费的，并且取决于它在代码中的位置，其成本可能很高。
 
-cgo calls are similar to blocking IO, they consume a thread during operation.
+cgo 调用类似于阻塞 IO，它们在操作期间消耗线程。
 
-Do not call out to C code in the middle of a tight loop.
+不要在紧密循环中调用 C 代码。
 
-#### 7.8.1\. Actually, maybe avoid cgo {#actually_maybe_avoid_cgo}
+#### 7.8.1. 其实，也许避免 cgo
 
-cgo has a high overhead.
+cgo 的开销很高。
 
-For best performance I recommend avoiding cgo in your applications.
+为了获得最佳性能，我建议您在应用程序中避免使用 cgo。
 
--   If the C code takes a long time, cgo overhead is not as important.
+-   如果C代码花费很长时间，则 cgo 开销并不重要。
+-   如果您使用 cgo 调用非常短的 C 函数（其开销最明显），请在 Go 中重写该代码 - 根据定义，这很短。
+-   如果您在紧密的循环中使用了大量昂贵的 C 代码，那么为什么要使用 Go？
 
--   If you’re using cgo to call a very short C function, where the overhead is the most noticeable, rewrite that code in Go — by definition it’s short.
+是否有人使用 cgo 频繁调用昂贵的 C 代码？
 
--   If you’re using a large piece of expensive C code is called in a tight loop, why are you using Go?
-
-Is there anyone who’s using cgo to call expensive C code frequently?
-
-##### Further reading
+##### 进一步阅读
 
 -   [cgo is not Go](http://dave.cheney.net/2016/01/18/cgo-is-not-go)
 
-### 7.9\. Always use the latest released version of Go
+### 7.9. 始终使用最新发布的Go版本
 
-Old versions of Go will never get better. They will never get bug fixes or optimisations.
+旧版本的 Go 永远不会变得更好。他们将永远不会得到错误修复或优化。
 
--   Go 1.4 should not be used.
+-   Go 1.4 不应该使用。
+-   Go 1.5 和 1.6 编译器速度较慢，但生成的代码更快，GC更快。
+-   Go 1.7 与 1.6 相比，编译速度提高了约 30％，链接速度提高了 2 倍（比任何以前的Go版本都要好）。
+-   Go 1.8 （此时）将提供较小的编译速度改进，但非英特尔架构的代码质量将得到显着改进。
+-   Go 1.9-1.12 继续提高所生成代码的性能，修复错误，并改善内联和改进调试。
 
--   Go 1.5 and 1.6 had a slower compiler, but it produces faster code, and has a faster GC.
+!!! tip
+旧版本的Go没有更新。**请勿使用**。使用最新版本，您将获得最佳性能。
+!!!
 
--   Go 1.7 delivered roughly a 30% improvement in compilation speed over 1.6, a 2x improvement in linking speed (better than any previous version of Go).
-
--   Go 1.8 will deliver a smaller improvement in compilation speed (at this point), but a significant improvement in code quality for non Intel architectures.
-
--   Go 1.9-1.12 continue to improve the performance of generated code, fix bugs, and improve inlining and improve debuging.
-
-| | Old version of Go receive no updates. **Do not use them**. Use the latest and you will get the best performance. |
-
-#### 7.9.1\. Further reading
+#### 7.9.1. 进一步阅读
 
 -   [Go 1.7 toolchain improvements](http://dave.cheney.net/2016/04/02/go-1-7-toolchain-improvements)
-
 -   [Go 1.8 performance improvements](http://dave.cheney.net/2016/09/18/go-1-8-performance-improvements-one-month-in)
 
-#### 7.9.2\. Move hot fields to the top of the struct
+#### 7.9.2. 将热点字段移动到 struct 顶部
 
-### 7.10\. Discussion
+### 7.10. 讨论
 
 Any questions?
 
-## Final Questions and Conclusion
+## 8. 最后的问题和结论
 
-> Readable means reliable — Rob Pike
+> 可读意味着可靠 — Rob Pike
 
-Start with the simplest possible code.
+从最简单的代码开始。
 
-_Measure_. Profile your code to identify the bottlenecks, _do not guess_.
+_测量_。 分析您的代码以识别瓶颈，_请不要猜测_。
 
-If performance is good, _stop_. You don’t need to optimise everything, only the hottest parts of your code.
+如果性能良好，请 _停止_。您无需优化所有内容，只需优化代码中最热的部分。
 
-As your application grows, or your traffic pattern evolves, the performance hot spots will change.
+随着应用程序的增长或流量模式的发展，性能热点将发生变化。
 
-Don’t leave complex code that is not performance critical, rewrite it with simpler operations if the bottleneck moves elsewhere.
+不要留下对性能不重要的复杂代码，如果瓶颈转移到其他地方，请使用更简单的操作将其重写。
 
-Always write the simplest code you can, the compiler is optimised for _normal_ code.
+始终编写最简单的代码，编译器针对 _正规_ 代码进行了优化。
 
-Shorter code is faster code; Go is not C++, do not expect the compiler to unravel complicated abstractions.
+较短的代码是较快的代码； Go 不是 C++，不要指望编译器能够解开复杂的抽象。
 
-Shorter code is _smaller_ code; which is important for the CPU’s cache.
+代码越短，代码 _越小_；这对于CPU的缓存很重要。
 
-Pay very close attention to allocations, avoid unnecessary allocation where possible.
+非常注意分配，尽可能避免不必要的分配。
 
-> I can make things very fast if they don’t have to be correct. — Russ Cox
+> 如果事情不一定正确，我可以将事情做得很快。— Russ Cox
 
-Performance and reliability are equally important.
+性能和可靠性同样重要。
 
-I see little value in making a very fast server that panics, deadlocks or OOMs on a regular basis.
+我认为制作一个非常快速的服务器但是却定期 panics，死锁或 OOM 毫无价值。
 
-Don’t trade performance for reliability.
+不要为了可靠性而牺牲性能。
 
 <div id="footnotes">
 <hr/>
 <div id="_footnotedef_1">
 
-[1](#_footnoteref_1). Hennessy et al: 1.4x annual performance improvment over 40 years.
+[1](#_footnoteref_1). Hennessy et al: 40 年的年度绩效提高了 1.4 倍。
 
 </div>
 </div>
