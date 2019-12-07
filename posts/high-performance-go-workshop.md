@@ -2711,7 +2711,7 @@ cgo 的开销很高。
 
 Any questions?
 
-## 8. 最后的问题和结论
+## 8. 最后的问题和结论 {#conclusion}
 
 > 可读意味着可靠 — Rob Pike
 
