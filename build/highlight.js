@@ -9,7 +9,8 @@ const languageAlias = {
     ts: "typescript",
     dockerfile: "docker",
     text: "autoit",
-    mathjax: "autoit"
+    mathjax: "autoit",
+    py: "python"
 }
 function loadLanguage(lang) {
     if(!lang) {
