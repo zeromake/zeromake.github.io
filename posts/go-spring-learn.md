@@ -56,9 +56,9 @@ $ tree . -L 1
 6 directories, 9 files
 ```
 
-其中 `starter` 开头相关的已经被拆分到 [go-spring-boot-starter](https://github.com/go-spring/go-spring-boot-starter) 仓库里了。
+其中 `starter` 本来在 [go-spring-boot-starter](https://github.com/go-spring/go-spring-boot-starter) 仓库里，作者为减少引入包已经把这些 `starter` 移动到了 `go-spring` 仓库里。
 
-这样一看就只剩下 `spring-core` 和 `spring-boot`， `boot-starter`。
+`starter` 部分的暂时无视，这样一看就只剩下 `spring-core` 和 `spring-boot`， `boot-starter`。
 
 - `spring-core` 是用于 IoC 容器注入的核心库。
 - `spring-boot` 是使用了 `spring-core` 构建的配置自动载入，还有注入的对象的启动和关闭的统一管理。
@@ -74,8 +74,8 @@ import (
 	SpringBoot "github.com/go-spring/go-spring/spring-boot"
 	"net/http"
 
-	_ "github.com/go-spring/go-spring-boot-starter/starter-gin"
-	_ "github.com/go-spring/go-spring-boot-starter/starter-web"
+	_ "github.com/go-spring/go-spring/starter-gin"
+	_ "github.com/go-spring/go-spring/starter-web"
 )
 
 func init() {
@@ -99,22 +99,22 @@ func main() {
 - 其中 `init` 方法里我们注册了一个 `Controller` 的空实例，这个不一定要在 `init` 中注册，可以在 `SpringBoot.RunApplication` 调用前的任意地方注册，使用 `init` 的原因是可以不依赖包内部方法只需要导入即可注入。
 - `InitWebBean(wc SpringWeb.WebContainer)` 这个实例方法是 `starter-web` 库提供的路由初始化回调能力 `SpringWeb.WebContainer` 封装了各种 web 库的路由注册能力，现在支持 `gin`, `echo`。
 - `Home(ctx SpringWeb.WebContext)` 里的 `SpringWeb.WebContext` 则封装了请求响应操作。
-- `github.com/go-spring/go-spring-boot-starter/starter-gin` 导入替换为 `github.com/go-spring/go-spring-boot-starter/starter-echo` 可以直接替换为 `echo` 框架。
+- `github.com/go-spring/go-spring/starter-gin` 导入替换为 `github.com/go-spring/go-spring/starter-echo` 可以直接替换为 `echo` 框架。
 
 执行该文件会打出大量的注册初始化日志，正式版应该会能够关闭。
 
 ``` go
 $ go run main.go
-register bean "github.com/go-spring/go-spring-boot-starter/starter-web/WebStarter.WebServerStarter:*WebStarter.WebServerStarter"
+register bean "github.com/go-spring/go-spring/starter-web/WebStarter.WebServerStarter:*WebStarter.WebServerStarter"
 register bean "main/main.Controller:*main.Controller"
 register bean "github.com/go-spring/go-spring/spring-boot/SpringBoot.DefaultApplicationContext:*SpringBoot.DefaultApplicationContext"
-register bean "github.com/go-spring/go-spring-boot-starter/starter-web/WebStarter.WebServerConfig:*WebStarter.WebServerConfig"
+register bean "github.com/go-spring/go-spring/starter-web/WebStarter.WebServerConfig:*WebStarter.WebServerConfig"
 wire bean github.com/go-spring/go-spring/spring-boot/SpringBoot.DefaultApplicationContext:*SpringBoot.DefaultApplicationContext
 success wire bean "github.com/go-spring/go-spring/spring-boot/SpringBoot.DefaultApplicationContext:*SpringBoot.DefaultApplicationContext"
-wire bean github.com/go-spring/go-spring-boot-starter/starter-web/WebStarter.WebServerConfig:*WebStarter.WebServerConfig
-success wire bean "github.com/go-spring/go-spring-boot-starter/starter-web/WebStarter.WebServerConfig:*WebStarter.WebServerConfig"
-wire bean github.com/go-spring/go-spring-boot-starter/starter-web/WebStarter.WebServerStarter:*WebStarter.WebServerStarter
-success wire bean "github.com/go-spring/go-spring-boot-starter/starter-web/WebStarter.WebServerStarter:*WebStarter.WebServerStarter"
+wire bean github.com/go-spring/go-spring/starter-web/WebStarter.WebServerConfig:*WebStarter.WebServerConfig
+success wire bean "github.com/go-spring/go-spring/starter-web/WebStarter.WebServerConfig:*WebStarter.WebServerConfig"
+wire bean github.com/go-spring/go-spring/starter-web/WebStarter.WebServerStarter:*WebStarter.WebServerStarter
+success wire bean "github.com/go-spring/go-spring/starter-web/WebStarter.WebServerStarter:*WebStarter.WebServerStarter"
 wire bean main/main.Controller:*main.Controller
 success wire bean "main/main.Controller:*main.Controller"
 spring boot started
@@ -174,8 +174,8 @@ import (
 package main
 
 import (
-	_ "github.com/go-spring/go-spring-boot-starter/starter-gin"
-	_ "github.com/go-spring/go-spring-boot-starter/starter-web"
+	_ "github.com/go-spring/go-spring/starter-gin"
+	_ "github.com/go-spring/go-spring/starter-web"
 	SpringBoot "github.com/go-spring/go-spring/spring-boot"
 	_ "github.com/zeromake/spring-web-demo/controllers"
 )
