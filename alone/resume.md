@@ -19,13 +19,14 @@ last_date: 2019-10-25 09:46:22+08:00
 -   技术博客：https://blog.zeromake.com
 -   Github：https://github.com/zeromake
 
--   期望职位: Golang，Python，Node 后端开发
--   期望薪资：税前月薪 20k~25k
--   期望城市：厦门
+-   期望职位: Golang，Node 后端开发
+-   期望薪资：月薪 20k~25k
 
 ## 工作经历
 
 ### 稿定（厦门）科技有限公司（ 2018 年 9 月 ~ 2019 年 10 月 ）
+
+在该公司的主要工作语言为 `NodeJs`，主要业务为后台与站点后端逻辑。
 
 #### 稿定设计
 
@@ -41,6 +42,8 @@ last_date: 2019-10-25 09:46:22+08:00
 3. 最近上的一个比较大的内容为接入了权限系统，把接口和导航转到了内部的权限系统上。
 
 ### 厦门点触科技股份有限公司 ( 2016 年 3 月 ~ 2018 年 8 月 )
+
+在该公司的主要工作编程语言为 `Go`, `Python` 主要业务为高并发微服务，后台后端逻辑开发。
 
 #### HTTP2 转发器
 
@@ -81,21 +84,16 @@ last_date: 2019-10-25 09:46:22+08:00
 -   github 地址: [https://github.com/zeromake/zreact](https://github.com/zeromake/zreact)
 -   制作理由:为了理解 `preact` 使用 `ts` 抄写了一遍 `preact`，并加上了新功能。
 
-### aiosqlite3
-
--   github 地址: [https://github.com/zeromake/aiosqlite3](https://github.com/zeromake/aiosqlite3)
--   制作理由:对 `python3` 的 `asyncio` 的包装保证与其它数据库操作 `api` 一样。
-
 ### 技术文章
 
--   sequelize 的一些陷阱：https://blog.zeromake.com/pages/sequelize-trap
--   使用 vue-ssr 制作一个静态博客：https://blog.zeromake.com/pages/vue-ssr-static-blog
--   docker 容器调试新姿势：https://blog.zeromake.com/pages/docker-debug
+-   (翻译)Go 高性能研讨讲座：[]()
+-   sequelize 的一些陷阱：[https://blog.zeromake.com/pages/sequelize-trap]https://blog.zeromake.com/pages/sequelize-trap
+-   docker 容器调试新姿势：[https://blog.zeromake.com/pages/docker-debug](https://blog.zeromake.com/pages/docker-debug)
 
 ## 技能清单
 
--   Web 开发: Node/Golang/Python
--   Web 框架: Koa/gin/Flask
+-   Web 开发: Golang/Node
+-   Web 框架: gin/go-spring/koa/
 -   前端框架: Vue
 -   前端工具: webpack/sass
 -   数据库相关: MySQL/PgSQL/SQLite
