@@ -79,14 +79,12 @@ import (
 )
 
 func init() {
-	SpringBoot.RegisterBean(new(Controller))
+	SpringBoot.RegisterBean(new(Controller)).InitFunc(func(c *Controller) {
+		SpringBoot.GetMapping("/", c.Home)
+	})
 }
 
 type Controller struct{}
-
-func (c *Controller) InitWebBean(wc SpringWeb.WebContainer) {
-	wc.GET("/", c.Home)
-}
 
 func (c *Controller) Home(ctx SpringWeb.WebContext) {
 	ctx.String(http.StatusOK, "OK!")
@@ -97,7 +95,7 @@ func main() {
 }
 ```
 - 其中 `init` 方法里我们注册了一个 `Controller` 的空实例，这个不一定要在 `init` 中注册，可以在 `SpringBoot.RunApplication` 调用前的任意地方注册，使用 `init` 的原因是可以不依赖包内部方法只需要导入即可注入。
-- `InitWebBean(wc SpringWeb.WebContainer)` 这个实例方法是 `starter-web` 库提供的路由初始化回调能力 `SpringWeb.WebContainer` 封装了各种 web 库的路由注册能力，现在支持 `gin`, `echo`。
+- 然后通过 `InitFunc` 注册路由，`SpringBoot.GetMapping` 是统一封装的路由挂载器
 - `Home(ctx SpringWeb.WebContext)` 里的 `SpringWeb.WebContext` 则封装了请求响应操作。
 - `github.com/go-spring/go-spring/starter-gin` 导入替换为 `github.com/go-spring/go-spring/starter-echo` 可以直接替换为 `echo` 框架。
 
@@ -144,11 +142,9 @@ import (
 type Controller struct {}
 
 func init() {
-	SpringBoot.RegisterBean(new(Controller))
-}
-
-func (c *Controller) InitWebBean(wc SpringWeb.WebContainer) {
-	wc.GET("/", c.Home)
+	SpringBoot.RegisterBean(new(Controller)).InitFunc(func(c *Controller) {
+		SpringBoot.GetMapping("/", c.Home)
+	})
 }
 
 func (c *Controller) Home(ctx SpringWeb.WebContext) {
@@ -215,11 +211,9 @@ import (
 type Controller struct{}
 
 func init() {
-	SpringBoot.RegisterBean(new(Controller))
-}
-
-func (c *Controller) InitWebBean(wc SpringWeb.WebContainer) {
-	wc.POST("/upload", c.Upload)
+	SpringBoot.RegisterBean(new(Controller))InitFunc(func(c *Controller) {
+		SpringBoot.GetMapping("/upload", c.Upload)
+	})
 }
 
 func (c *Controller) Upload(ctx SpringWeb.WebContext) {
