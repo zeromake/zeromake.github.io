@@ -88,7 +88,7 @@ last_date: 2019-10-25 09:46:22+08:00
 
 -   go-spring 使用学习：[https://blog.zeromake.com/pages/go-spring-learn](https://blog.zeromake.com/pages/go-spring-learn)
 -   (翻译)Go 高性能研讨讲座：[https://blog.zeromake.com/pages/high-performance-go-workshop](https://blog.zeromake.com/pages/high-performance-go-workshop)
--   sequelize 的一些陷阱：[https://blog.zeromake.com/pages/sequelize-trap]https://blog.zeromake.com/pages/sequelize-trap)
+-   sequelize 的一些陷阱：[https://blog.zeromake.com/pages/sequelize-trap](https://blog.zeromake.com/pages/sequelize-trap)
 -   docker 容器调试新姿势：[https://blog.zeromake.com/pages/docker-debug](https://blog.zeromake.com/pages/docker-debug)
 
 ## 技能清单
