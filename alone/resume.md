@@ -1,3 +1,10 @@
+---
+title: 简历
+date: 2019-05-04 13:54:22+08:00
+type: resume
+last_date: 2019-10-25 09:46:22+08:00
+---
+
 ## 联系方式
 
 -   Email：fly-zero@hotmail.com

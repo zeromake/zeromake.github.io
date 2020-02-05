@@ -52,25 +52,7 @@ if (process.env.NODE_ENV === 'production'){
         [srcDir]: ''
     }
     config.plugins.push(
-        new WorkboxPlugin.GenerateSW({
-            importWorkboxFrom: 'local',
-            cacheId: 'ssr-blog',
-            swDest: 'service-worker.js',
-            skipWaiting: true,
-            clientsClaim: true,
-            globPatterns: ['**/*.{html,js,css,png,jpg,woff,woff2}'], // 匹配的文件
-            globIgnores: ['service-wroker.js', '*.map', '*.json'], // 忽略的文件
-            runtimeCaching: [
-                {
-                    urlPattern: /\.com\/$/,
-                    handler: 'NetworkFirst'
-                },
-                {
-                    urlPattern: /\.com\/pages\/[\w_-]+$/,
-                    handler: 'NetworkFirst'
-                }
-            ]
-        }),
+        new WorkboxPlugin.GenerateSW(),
         // new SWPrecachePlugin({
         //     cacheId: 'ssr-blog',
         //     filename: 'service-worker.js',
