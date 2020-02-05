@@ -4,7 +4,7 @@ date: 2020-01-22 14:10:56+08:00
 type: blockchain
 tags: [blockchain, iotex, learn]
 last_date: 2020-01-22 14:10:56+08:00
-privte: true
+private: true
 ---
 
 ## 前言
