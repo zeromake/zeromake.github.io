@@ -1,26 +1,20 @@
----
-title: 简历
-date: 2019-05-04 13:54:22+08:00
-type: resume
-last_date: 2019-10-25 09:46:22+08:00
----
-
 ## 联系方式
 
 -   Email：fly-zero@hotmail.com
 -   微信：afly390
 -   qq： 390720046
+-   手机：15606050092
 
 ## 个人信息
 
 -   林建辉/男/1993
 -   大专/漳州职业技术学院
 -   工作年限：3 年
--   技术博客：https://blog.zeromake.com
--   Github：https://github.com/zeromake
+-   技术博客：[https://blog.zeromake.com](https://blog.zeromake.com)
+-   Github：[https://github.com/zeromake](https://github.com/zeromake)
 
 -   期望职位: Golang，Node 后端开发
--   期望薪资：月薪 20k~25k
+-   期望薪资：月薪 20k~24k
 
 ## 工作经历
 
@@ -73,6 +67,11 @@ last_date: 2019-10-25 09:46:22+08:00
 5. 初步学习了 `Golang` 语法以及独有的语言特性。
 
 ## 开源项目
+
+### zero-reader
+
+- git 地址：[https://code.aliyun.com/zero-reader](https://code.aliyun.com/zero-reader)
+- 制作理由：总结 `web` 开发的各个知识点，不让自己离职的空档期脱离编写代码的手感，并且希望有一个网页在线阅读书籍的服务，省去我需要多端同步。
 
 ### docker-debug
 
