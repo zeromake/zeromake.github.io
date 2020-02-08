@@ -103,7 +103,7 @@ async function generate(config) {
         await fileSystem.writeFile(`${docsPath}/${decode}/index.html`, html)
     }
     await fse.copy(resolve('../dist/'), `${docsPath}/dist`)
-    await fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
+    // await fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
     await fse.copy(resolve('../public'), `${docsPath}/public`)
     await fse.copy(resolve('../manifest.json'), `${docsPath}/manifest.json`)
     await fse.copy(resolve('../baidu-verify-03770132C2.txt'), `${docsPath}/baidu-verify-03770132C2.txt`)

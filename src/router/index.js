@@ -12,7 +12,7 @@ function createAlone (alone) {
     return {
         name: `${alone}-view`,
         asyncData ({ store }) {
-            return store.dispatch('FETCH_ALONE_DATA', { type: alone })
+            return store.dispatch('FETCH_ALONE_DATA', { type: `alone/${alone}` })
         },
         title: camelize(alone),
         render (h) {

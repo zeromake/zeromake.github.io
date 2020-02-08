@@ -52,7 +52,7 @@ if (process.env.NODE_ENV === 'production'){
         [srcDir]: ''
     }
     config.plugins.push(
-        new WorkboxPlugin.GenerateSW(),
+        // new WorkboxPlugin.GenerateSW(),
         // new SWPrecachePlugin({
         //     cacheId: 'ssr-blog',
         //     filename: 'service-worker.js',
