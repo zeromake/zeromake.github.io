@@ -1111,6 +1111,11 @@
     preact "^10.3.0"
     react-flip-move "^3.0.3"
 
+"@zeromake/markdown-it-attrs@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.npm.taobao.org/@zeromake/markdown-it-attrs/download/@zeromake/markdown-it-attrs-3.0.3.tgz?cache=0&sync_timestamp=1581408158021&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40zeromake%2Fmarkdown-it-attrs%2Fdownload%2F%40zeromake%2Fmarkdown-it-attrs-3.0.3.tgz#d7f9586ffb3a8225b58d273c52203d3a2d730ab4"
+  integrity sha1-1/lYb/s6giW1jSc8UiA9Oi1zCrQ=
+
 "@zeromake/mini-css-extract-plugin@^0.6.0":
   version "0.6.0"
   resolved "https://registry.npm.taobao.org/@zeromake/mini-css-extract-plugin/download/@zeromake/mini-css-extract-plugin-0.6.0.tgz#fbfab25f6c9bb8e866876c2fd06252c98762540d"

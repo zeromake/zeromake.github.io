@@ -24,6 +24,7 @@
   "dependencies": {
     "@emotion/hash": "^0.7.4",
     "@zeromake/gitalk": "^1.5.3",
+    "@zeromake/markdown-it-attrs": "^3.0.3",
     "cross-env": "^7.0.0",
     "cross-fetch": "^3.0.4",
     "es6-promise": "^4.2.8",

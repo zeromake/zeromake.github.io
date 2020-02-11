@@ -633,6 +633,8 @@ Which of the following are true? Check all that apply.
 
 ## 测验2
 
+<details>
+<summary>原文</summary>
 ---
 
 1.  You are training a classification model with logistic regression. Which of the following statements are true? Check all that apply.
@@ -672,6 +674,53 @@ However, you forgot which value of $\lambda$ corresponds to which value of $\the
 ---
 
 5. In which one of the following figures do you think the hypothesis has underfit the training set?
+>
+- a. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.45.png)
+- b. Figure: ![](/public/img/machine-learn/2015-02-27-17.30.56.png)
+- c. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.16.png)
+- d. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.39.png)
+
+</details>
+
+---
+
+1.  您正在使用逻辑回归训练分类模型。下列哪个陈述是正确的？选择所有对的选项。
+>
+- a. 向模型添加新特征总是可以使训练集具有相同或更好的性能。
+- b. 向模型引入正规化总是会导致训练集具有相同或更好的性能。
+- c. 向模型引入正规化总是会导致训练集中未包含的示例具有相同或更好的性能。
+- d. 向模型添加许多新特征有助于防止训练集过拟合。
+
+---
+
+2. 假设您进行了两次逻辑回归，一次使用 $\lambda = 0$，一次使用 $\lambda = 1$。<br/>
+一次，您有参数 $\theta = \begin{bmatrix} 81.47 \\ 12.69 \end{bmatrix}$，而另一次，您有 $\theta = \begin{bmatrix} 13.01 \\ 0.91 \end{bmatrix}$。<br/>
+但是，您忘记了 $\lambda$ 的哪个值对应于 $\theta$ 的哪个值。您认为哪一个对应于 $\lambda = 1$？
+>
+- a. $\theta = \begin{bmatrix} 81.47 \\ 12.69 \end{bmatrix}$
+- b. $\theta = \begin{bmatrix} 13.01 \\ 0.91 \end{bmatrix}$
+
+---
+
+3. 下列有关正规化的哪些陈述是正确的？ 选中所有适用。
+>
+- a. 由于逻辑回归输出值 $0 \leq h_\theta(x) \leq1$，无论如何，通过正则化只能稍微 `缩小` 其输出值范围，因此正规化通常对此无济于事。
+- b. 使用太大的 $\lambda$ 值可能会导致您的假设过度拟合数据。这可以通过减少 $\lambda$ 来避免。
+- c. 使用非常大的 $\lambda$ 值不会损害假设的执行；我们没有将 $\lambda$ 设置得太大的唯一原因是为了避免数值问题。
+- d. 考虑分类问题。 添加正则化可能会导致您的分类器对一些训练示例进行错误分类（当未使用正则化时，即 $\lambda = 0$ 时，它已经正确分类了）。
+
+---
+
+4. 您认为以下哪个图中的假设与训练集过度拟合？
+>
+- a. Figure: ![](/public/img/machine-learn/2015-02-27-17.24.59.png)
+- b. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.16.png)
+- c. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.39.png)
+- d. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.45.png)
+
+---
+
+5. 您认为以下哪个图中的假设不适合训练集？
 >
 - a. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.45.png)
 - b. Figure: ![](/public/img/machine-learn/2015-02-27-17.30.56.png)

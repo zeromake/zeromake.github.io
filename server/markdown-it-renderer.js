@@ -1,7 +1,7 @@
 const markdownIt = require('markdown-it')
 const { renderToString } = require('katex')
 const taskLists = require('markdown-it-task-lists')
-const attrs = require('markdown-it-attrs')
+const attrs = require('@zeromake/markdown-it-attrs')
 const admonition = require('markdown-it-admonition')
 const katex = require('./markdown-it-katex')
 const highlight = require('./highlight')
@@ -45,20 +45,25 @@ module.exports = () => {
 
     md.enable(['table'])
 
-    // add attrs
-    md.use(attrs)
-
-    md.use(anchor, {
-        class: 'headerlink anchor',
-        after: true,
-        inject: true
-    })
 
     md.use(katex, {
         render(latex, isBlock) {
             const html = renderToString(latex)
             return isBlock ? `<span class="katex-display">${html}</span>` : html
         }
+    })
+
+    // add attrs
+    md.use(attrs, {
+        ignore(token) {
+            return token.tag === 'math'
+        }
+    })
+
+    md.use(anchor, {
+        class: 'headerlink anchor',
+        after: true,
+        inject: true
     })
     // add task
     md.use(taskLists)
