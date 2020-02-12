@@ -280,8 +280,7 @@ eg. if $x_1$ has range 1 - 1000 then range of $x_1^2$ becomes 1 - 1000000 and th
 
 在三次版本中，我们创建了新特征 $x_2$ 和 $x_3$，其中 $x_2 = x_1^2$ 和 $x_3 = x_1^3$。
 
-要使它成为平方根函数，我们可以这样做：
-$h_\theta(x) = \theta_0 + \theta_1 x_1 + \theta_2 \sqrt{{x_1}}$
+要使它成为平方根函数，我们可以这样做：$h_\theta(x) = \theta_0 + \theta_1 x_1 + \theta_2 \sqrt{x_1}$
 
 要记住的一件事是，如果以这种方式选择要素，则特征缩放变得非常重要。
 
