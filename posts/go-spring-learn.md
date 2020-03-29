@@ -8,8 +8,8 @@ last_date: 2019-12-22 17:20:57+08:00
 
 ## 前言
 
-- 最近发现了 [go-spring](https://github.com/go-spring/go-spring) 并且发布了 `v1.0.0-beta` 版。
-- 看了一下感觉挺不错的，最近离职在家学习就花了一天时间学习这边记录一下
+- 最近发现了 [go-spring](https://github.com/go-spring/go-spring)
+- 看了一下比起其它的 `di` 库感觉挺不错的，写篇博文记录一下
 
 <!--more-->
 
@@ -18,18 +18,15 @@ last_date: 2019-12-22 17:20:57+08:00
 
 ``` shell
 # 拉取 go spring
-$ go get github.com/go-spring/go-spring@master
+$ go get github.com/go-spring/go-spring
 
-# 如果需要使用 go-spring 做 web 服务需要以下包
-# go-spring-boot-starter 是使用 spring-boot 包装的支持 web 以及其它的启动器
-$ go get github.com/go-spring/go-spring-boot-starter@master
-# go-spring-web 则是配合 go-spring-boot-starter 使用的各种 web 框架的封装
-$ go get github.com/go-spring/go-spring-web@master
+# 如果需要使用 go-spring 做 web 服务需要
+$ go get github.com/go-spring/go-spring-web
 ```
 
-由于 `go-spring` 现在还是 `beta` 版，每天都有可能有一些重要更新建议拉取最新的 `master`。
+~~由于 `go-spring` 现在还是 `beta` 版，每天都有可能有一些重要更新建议拉取最新的 `master`，不过到了后面 `go-spring` 正式版也许就不需要直接手动拉取 `@master` 了，请自行判断。~~
 
-不过到了后面 `go-spring` 正式版也许就不需要直接手动拉取 `@master` 了，请自行判断。
+现在 `go-spring` 已经为正式版 `v1.0.2`，可以正确食用了。
 
 
 ## 二、go-spring 项目包结构介绍
@@ -57,12 +54,10 @@ $ tree . -L 1
 ```
 
 其中 `starter` 本来在 [go-spring-boot-starter](https://github.com/go-spring/go-spring-boot-starter) 仓库里，作者为减少引入包已经把这些 `starter` 移动到了 `go-spring` 仓库里。
-
-`starter` 部分的暂时无视，这样一看就只剩下 `spring-core` 和 `spring-boot`， `boot-starter`。
+`starter` 部分的暂时无视，这样一看就只剩下 `spring-core` 和 `spring-boot`。
 
 - `spring-core` 是用于 IoC 容器注入的核心库。
 - `spring-boot` 是使用了 `spring-core` 构建的配置自动载入，还有注入的对象的启动和关闭的统一管理。
-- `boot-starter` 简单启动和监听信号包装器。
 
 ## 三、一个简单 gin web 服务
 
@@ -79,7 +74,7 @@ import (
 )
 
 func init() {
-	SpringBoot.RegisterBean(new(Controller)).InitFunc(func(c *Controller) {
+	SpringBoot.RegisterBean(new(Controller)).Init(func(c *Controller) {
 		SpringBoot.GetMapping("/", c.Home)
 	})
 }
@@ -99,33 +94,19 @@ func main() {
 - `Home(ctx SpringWeb.WebContext)` 里的 `SpringWeb.WebContext` 则封装了请求响应操作。
 - `github.com/go-spring/go-spring/starter-gin` 导入替换为 `github.com/go-spring/go-spring/starter-echo` 可以直接替换为 `echo` 框架。
 
-执行该文件会打出大量的注册初始化日志，正式版应该会能够关闭。
 
 ``` go
 $ go run main.go
-register bean "github.com/go-spring/go-spring/starter-web/WebStarter.WebServerStarter:*WebStarter.WebServerStarter"
-register bean "main/main.Controller:*main.Controller"
-register bean "github.com/go-spring/go-spring/spring-boot/SpringBoot.DefaultApplicationContext:*SpringBoot.DefaultApplicationContext"
-register bean "github.com/go-spring/go-spring/starter-web/WebStarter.WebServerConfig:*WebStarter.WebServerConfig"
-wire bean github.com/go-spring/go-spring/spring-boot/SpringBoot.DefaultApplicationContext:*SpringBoot.DefaultApplicationContext
-success wire bean "github.com/go-spring/go-spring/spring-boot/SpringBoot.DefaultApplicationContext:*SpringBoot.DefaultApplicationContext"
-wire bean github.com/go-spring/go-spring/starter-web/WebStarter.WebServerConfig:*WebStarter.WebServerConfig
-success wire bean "github.com/go-spring/go-spring/starter-web/WebStarter.WebServerConfig:*WebStarter.WebServerConfig"
-wire bean github.com/go-spring/go-spring/starter-web/WebStarter.WebServerStarter:*WebStarter.WebServerStarter
-success wire bean "github.com/go-spring/go-spring/starter-web/WebStarter.WebServerStarter:*WebStarter.WebServerStarter"
-wire bean main/main.Controller:*main.Controller
-success wire bean "main/main.Controller:*main.Controller"
-spring boot started
-⇨ http server started on :8080
+[INFO] spring-boot/spring-boot-app.go:105 spring boot started
+[INFO] spring-gin/spring-gin.go:76 ⇨ http server started on:8080
 ```
-访问 [http://127.0.0.1](http://127.0.0.1/) 可以看到上面的代码效果。
+访问 [http://127.0.0.1:8080](http://127.0.0.1:8080) 可以看到上面的代码效果。
 
 > 该章节代码见 [post-1](https://github.com/zeromake/spring-web-demo/tree/post-1) 分支。
 
 ## 四、拆分 controller 并自动注册路由
 
 现代项目都是 `controller` + `service` 外加一个实体层，这里我们试着把 `controller` 拆分出去。
-
 新建一个 `controllers` 目录下面创建一个 `controllers.go` 来导入各个独立的 `controller`。
 
 **controllers/home/home.go**
@@ -142,7 +123,7 @@ import (
 type Controller struct {}
 
 func init() {
-	SpringBoot.RegisterBean(new(Controller)).InitFunc(func(c *Controller) {
+	SpringBoot.RegisterBean(new(Controller)).Init(func(c *Controller) {
 		SpringBoot.GetMapping("/", c.Home)
 	})
 }
@@ -187,14 +168,10 @@ func main() {
 
 ## 五、构建 service 的自动注入到 controller
 
-上面说到 `controller` 的主要的能力为路由注册，参数处理复杂的逻辑应当拆分到 `service` 当中。
-
-在我使用 `go-spring` 之前都是手动的构建一个 `map[string]interface{}` 然后把 `service` 按照自定义名字挂进去。
+上面说到 `controller` 的主要的能力为路由注册，参数处理复杂的逻辑应当拆分到 `service` 当中。在我使用 `go-spring` 之前都是手动的构建一个 `map[string]interface{}` 然后把 `service` 按照自定义名字挂进去。
 
 然后在 `controller` 构建时从这个 `map` 中取出并强制转换为 `service` 类型或者抽象的接口。
-
 这个方案问题蛮大的，手动的 `service` 名称容易出错，而且注册和在 `controller` 注入都是非常麻烦的，而且错误处理也都没做。
-
 但是这一切有了 `go-spring` 就不一样了，我只需要在 `service` 注册，在 `controller` 里的结构体里声明这个 `service` 类型实例就可以使用。
 
 为了不作为一个示例而太简单让学习者觉得没有什么意义，我决定做一个上传的能力，先看未拆分 `service` 的情况
@@ -211,7 +188,7 @@ import (
 type Controller struct{}
 
 func init() {
-	SpringBoot.RegisterBean(new(Controller))InitFunc(func(c *Controller) {
+	SpringBoot.RegisterBean(new(Controller))Init(func(c *Controller) {
 		SpringBoot.GetMapping("/upload", c.Upload)
 	})
 }
@@ -484,12 +461,24 @@ type FileProvider interface {
 
 **controllers/upload/upload.go**
 
-然后把 `*file.Service` 类型替换为 `types.FileProvider` 即可，`spring-boot` 会自动匹配接口对应的实例。
+然后把 `*file.Service` 类型替换为 `types.FileProvider` 即可，~~`spring-boot` 会自动匹配接口对应的实例。~~，正式版的 `go-spring` 默认开启严格模式无法自动匹配 `interface` 了。
 
 ```go
 type Controller struct {
 	File types.FileProvider `autowire:""`
 	Dir  string             `value:"${file.dir}"`
+}
+```
+
+**services/file/file.go**
+
+```go
+type Service struct{}
+
+func init() {
+    var s = new(Service)
+    // 需要手动声明支持的接口对象，说起来我记得 (types.FileProvider)(nil) 也是能用的，但是 go-spring 没有支持呢
+	SpringBoot.RegisterBean(s).AsInterface((*types.FileProvider)(nil))
 }
 ```
 
@@ -575,7 +564,7 @@ func init() {
 
 ```go
 func init() {
-	SpringBoot.RegisterBean(new(Service)).ConditionOnMissingBean("minioClient")
+	SpringBoot.RegisterBean(new(Service)).AsInterface((*types.FileProvider)(nil)).ConditionOnMissingBean("minioClient")
 }
 ```
 **services/minio/minio.go**
@@ -591,7 +580,7 @@ type Service struct {
 
 func init() {
     // 在已注册了 minioClient 才注册
-	SpringBoot.RegisterBean(new(Service)).ConditionOnBean("minioClient")
+	SpringBoot.RegisterBean(new(Service)).AsInterface((*types.FileProvider)(nil)).ConditionOnBean("minioClient")
 }
 
 func (s *Service) PutObject(name string, r io.Reader, size int64) error {
@@ -610,14 +599,85 @@ func (s *Service) ExistsObject(name string) bool {
 
 > 本章完整代码在 [post-7](https://github.com/zeromake/spring-web-demo/tree/post-7)
 
-## 求职
 
-我是 [zeromake](https://github.com/zeromake) 现在我离职中。
+## 九、其它的 di 库体验
 
-希望能够找到一个合适的新工作。
+> 本来想直接用 `go-spring` 到项目上，但是因为 `beta` 版的默认日志输出和大量的 `panic` 暂时劝退了，找了一些其它精简的 `di` 库。
 
-目标：Golang 开发，厦门优先
+### 9.1 uber-go/dig
+> [uber-go/dig](https://github.com/uber-go/dig)
 
-我的在线简历: [zeromake的简历](https://blog.zeromake.com/resume)
+`api` 极简，一个初始化容器，两个函数支持注入和导出。
 
-顺便推广一下: [docker-debug](https://github.com/zeromake/docker-debug)
+``` go
+func main() {
+    c := dig.New()
+    // 使用 Provide 注入新的对象，可选 group, name 来使用，当然 Provide 的函数变量也是注入的对象
+    c.Provide(func (file types.FileProvider) (*upload.Controller, error){
+        return &upload.Controller{
+            File: file,
+        }
+    })
+    c.Invoke(func (controller *upload.Controller) {
+        // route init
+    })
+}
+```
+
+但是我还是不太满意，因为 `dig` 注入的对象有一些是需要关闭回收的，`dig` 只能在要结束运行时手动的 `Invoke` 取出对象来结束。
+
+还有对于多个 `Controller` 注入希望能够在注入完成后有个回调，`dig` 只能够手动的 `Invoke` 一个一个 `Controller`，而且不支持 `interface` 别名。
+
+### 9.2 defval/inject | goava/di
+
+> [defval/inject](https://github.com/defval/inject); [goava/di](https://github.com/goava/di)
+
+应该也是参考了 `dig` 的 `api` 完美覆盖了 `dig` 所拥有的功能，顺带一提 `defval/inject` 和 `goava/di` 是同一个作者的作品，`api` 完全相同。
+
+`goava/di` 是作者新开的项目，打算添加新的功能。
+
+```go
+func main() {
+    c := di.New(
+    // 使用 Provide 注入新的对象，可选 name 来使用，当然 Provide 的函数变量也是注入的对象
+        di.Provide(func (file types.FileProvider) (*upload.Controller, error){
+            return &upload.Controller{
+                File: file,
+            }
+        })
+    )
+}
+```
+然后当然也都有我想要的那些功能，请自行到 `goava/di` 查阅文档。
+
+- 接口别名支持
+- 结束清理支持
+- 多接口聚合处理
+
+但是还有一个问题那就是依赖必须通过函数参数传入，例如下面的例子。
+
+```go
+type Controller struct {
+	user   types.UserService
+	cfg    *config.Config
+	friend types.FriendService
+}
+
+func NewController(cfg *config.Config, user types.UserService, friend types.FriendService) *Controller {
+	return &Controller{
+		user:   user,
+		cfg:    cfg,
+		friend: friend,
+	}
+}
+```
+
+我已经提交的 [issues/2](https://github.com/goava/di/issues/2) 等等有空就把这个功能实现一下。
+
+### 9.3 几个 di 库的对比表
+
+| 库名 | 注入对象命名 | 接口别名支持 | 结束清理支持 | 自动注入结构体 |
+|:-|:-:|:-:|:-:|:-:|
+| [go-spring/go-spring](https://github.com/go-spring/go-spring) | √ | √ | √ | √ |
+| [goava/di](https://github.com/goava/di) | √ | √ | √ | × |
+| [uber-go/dig](https://github.com/uber-go/dig) | √ | × | × | × |
