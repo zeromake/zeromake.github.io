@@ -477,7 +477,7 @@ type Service struct{}
 
 func init() {
     var s = new(Service)
-    // 需要手动声明支持的接口对象，说起来我记得 (types.FileProvider)(nil) 也是能用的，但是 go-spring 没有支持呢
+    // 需要手动声明支持的接口对象，说起来我记得 new(types.FileProvider) 也是能用的
 	SpringBoot.RegisterBean(s).AsInterface((*types.FileProvider)(nil))
 }
 ```
