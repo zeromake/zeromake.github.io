@@ -2,7 +2,7 @@
 title: 简历
 date: 2019-05-04 13:54:22+08:00
 type: resume
-last_date: 2019-10-25 09:46:22+08:00
+last_date: 2020-03-30 20:24:26+08:00
 ---
 
 ## 联系方式
@@ -16,14 +16,28 @@ last_date: 2019-10-25 09:46:22+08:00
 
 -   林建辉/男/1993
 -   大专/漳州职业技术学院
--   工作年限：3 年
+-   工作年限：4 年
 -   技术博客：[https://blog.zeromake.com](https://blog.zeromake.com)
 -   Github：[https://github.com/zeromake](https://github.com/zeromake)
 
--   期望职位: Golang，Node 后端开发
--   期望薪资：月薪 20k~24k
+-   期望职位: Golang 后端开发
 
 ## 工作经历
+
+
+### 厦门牛冲软件有限公司 （ 2020 年 2 月 ~ 2020 年 3 月 ）
+
+主要工作为游戏中心服务，和后台，使用 `go`
+
+#### 游戏用户中心
+
+1. 主要负责集中数据中心，包括一个简单的后台。
+2. 集中各个游戏的数据到统一服务，后台可以查看用户数据，操作用户数据。
+3. 设计数据库，搭建 `http` 项目，使用开源的后台模板快速开发后台。
+4. 项目中应用许多能够简化项目代码的开源库
+5. 例如使用了 [goava/di](https://github.com/goava/di) 库做 `Service` 与 `Controller` 依赖注入。
+6. 使用了 [amacneil/dbmate](https://github.com/amacneil/dbmate) 做数据库版本管理。
+7. 使用了 [pingcap/fn](https://github.com/pingcap/fn) 做请求和响应的自动反序列化和自动序列化。
 
 ### 稿定（厦门）科技有限公司（ 2018 年 9 月 ~ 2019 年 10 月 ）
 
@@ -85,11 +99,6 @@ last_date: 2019-10-25 09:46:22+08:00
 -   github 地址: [https://github.com/zeromake/docker-debug](https://github.com/zeromake/docker-debug)
 -   制作理由: 在本地开发时时常发现很多的 `docker` 镜像服务缺少很多命令行工具，通过查阅得知可以把一个新容器和旧容器共享达到使用新容器的工具管理旧容器，然后就写了这个 `docker-debug` 的 `cli` 工具。
 
-### zreact
-
--   github 地址: [https://github.com/zeromake/zreact](https://github.com/zeromake/zreact)
--   制作理由:为了理解 `preact` 使用 `ts` 抄写了一遍 `preact`，并加上了新功能。
-
 ### 技术文章
 
 -   go-spring 使用学习：[https://blog.zeromake.com/pages/go-spring-learn](https://blog.zeromake.com/pages/go-spring-learn)
@@ -99,10 +108,8 @@ last_date: 2019-10-25 09:46:22+08:00
 
 ## 技能清单
 
--   Web 开发: Golang/Node
--   Web 框架: gin/go-spring/koa
+-   Web 开发: Golang
+-   Web 框架: gin/go-spring
 -   前端框架: Vue
--   前端工具: webpack/sass
 -   数据库相关: MySQL/PgSQL/SQLite
 -   版本管理、文档和自动化部署工具: Svn/Git/Gitlab-ci
--   单元测试: pytest/jest
