@@ -42,7 +42,6 @@ last_date: 2019-10-26 23:29:49+08:00
 - [x] 用英文介绍之前做的项目
 - [ ] 数据库主从复制
 - [ ] Go channel 实现
-- [ ] Go 线程协程调度模型
 - [ ] 微服务的服务发现
 - [ ] 微服务的有状态服务(Redis)持久化
 - [ ] Redis 除了常见的使用还有哪些能力
@@ -50,3 +49,56 @@ last_date: 2019-10-26 23:29:49+08:00
 - [ ] 为什么选择 golang， 为什么又从动态语言切换到 golang
 - [ ] 今后的目标学习定位 (云原生，分布式)
 - [ ] 为什么从之前的公司离职
+- [ ] 实现一个 `sync.Map`
+- [ ] 之前工作服务的流量和瓶颈
+- [x] 数据库引擎，一致性，锁
+- [ ] 分布式选主方案
+- [ ] 进程通信方式
+- [ ] Golang `gc` 调优
+- [ ] linux下的 `/proc` 目录
+- [x] `map`, `slice` 实现和如何查找源代码
+- [x] Go 线程协程调度模型(gpm)
+    G: goroutine (协程)
+    M: thread (线程)
+    P: Processor (调度器) 数量来自 `GOMAXPROCS` 设置
+- [ ] 如何给一个未加密的 `linux` 系统盘安装软件
+- [x] `context.Context` 实现
+    `Done() chan struct {}` 一个无缓存 `chan` 以关闭为信号来通知所有监听了该通道的方案。
+    `context.TODO()` 的 `Done` 返回的是一个 `nil` 的 `chan` 对于 `nil` 的 `chan` 发送和接收都会一直阻塞。
+- [x] http 断开信号的代理传递
+    [connReader](https://github.com/golang/go/blob/release-branch.go1.14/src/net/http/server.go#L642-L798)
+- [x] 如何检查一个 `api` 访问性能和稳定性
+    参考 `Prometheus` 的 `Histogram` 和 `Summary` [如何利用Prometheus监控你的应用](https://www.cnblogs.com/YaoDD/p/11391316.html)
+- [x] 二叉搜索树的排名查找
+    ``` go
+    type BinaryTree struct {
+        value int
+        left  *BinaryTree
+        right *BinaryTree
+    }
+
+    // 查询该树的节点数量
+    func size(node *BinaryTree) int {
+        if node == nil {
+            return 0
+        }
+        return 1 + size(node.left) + size(node.right)
+    }
+
+    func (p *BinaryTree) Rank(val int) (rank int) {
+        if p == nil {
+            // 说明没有找到
+            rank = 1
+        } else if val == p.value {
+            // 匹配的排名为左树节点数量 +1
+            rank = size(p.left) + 1
+        } else if val > p.value {
+            // 每次需要去右树查找就加上现有左树的数量
+            rank = size(p.left) + p.right.Rank(val) + 1
+        } else {
+            // 递归到左树查找
+            rank = p.left.Rank(val)
+        }
+        return
+    }
+    ```

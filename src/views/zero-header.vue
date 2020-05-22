@@ -68,7 +68,7 @@ export default {
     data() {
         return {
             title: "ZEROMAKE",
-            motto: "keep codeing and thinking!",
+            motto: "keep coding and thinking!",
             navTitle: "导航",
             navShow: false
         };
