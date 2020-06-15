@@ -25,7 +25,7 @@
                 </tr>
                 <tr>
                     <td>最后更新时间: </td>
-                    <td>{{post.last_date | formatTime}}</td>
+                    <td>{{post.lastmod | formatTime}}</td>
                 </tr>
                 <tr>
                     <td>版权声明: </td>

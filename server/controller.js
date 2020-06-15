@@ -98,11 +98,16 @@ async function readPosts(render = false) {
         }
 
         // 私有文章仅在本地开发模式显示
-        if (yaml.private && isProd) {
+        if (yaml.draft && isProd) {
             return Promise.resolve(null)
         }
         if (yaml.type) {
             types[yaml.type] = true
+        }
+        if (yaml.categories) {
+            for (const c of yaml.categories) {
+                types[c] = true
+            }
         }
         if (render) {
             yaml.content = marked.render(markdown)
@@ -189,7 +194,7 @@ async function FeedContoller(ctx) {
             id: url,
             link: url,
             content: post.content,
-            date: post.last_date
+            date: post.lastmod
         })
     }
     ctx.body = feed.atom1()

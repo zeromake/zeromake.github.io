@@ -1,0 +1,9 @@
+{{ if isset .Params "postauthor" }}
+{{ if not (eq (len .Params.postauthor) 0) }} 
+<div class="post-tags">
+    {{ range .Params.postauthor }}
+    <p>~~By: {{ . }}~~</p>
+    {{ end }}
+</div>
+{{ end }}
+{{ end }}

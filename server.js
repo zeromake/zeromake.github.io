@@ -58,7 +58,7 @@ const serve = (url, path, cache) => KoaServe(url, {
 // app.use(compression({ threshold: 0}))
 // app.use(favicon('./public/logo-48.png'))
 app.use(serve('/dist', './dist', true))
-app.use(serve('/public', './public', true))
+app.use(serve('/public', './static/public', true))
 app.use(serve('/manifest.json','./manifest.json', true))
 app.use(serve('/service-worker.js', './dist/servivce-worker.js'))
 

@@ -148,7 +148,7 @@ private: false
 2.  从 80 年代中期到 2004 年，趋势线很明显。 计算机整数性能每年平均提高 52％。 计算机能力每两年翻一番，因此人们将摩尔定律（芯片上的晶体管数量增加一倍）与计算机性能混为一谈。
 3.  然后我们进入计算机性能的第三个时代。 事情变慢了。 总变化率为每年 22％。
 
-之前的图表仅持续到 2012 年，但幸运的是在 2012 年 [Jeff Preshing](http://preshing.com/20120208/a-look-back-at-single-threaded-cpu-performance/) 写了 [tool to scrape the Spec website and build your own graph](https://github.com/preshing/analyze-spec-benchmarks).
+之前的图表仅持续到 2012 年，但幸运的是在 2012 年 [Jeff Preshing](https://preshing.com/20120208/a-look-back-at-single-threaded-cpu-performance/) 写了 [tool to scrape the Spec website and build your own graph](https://github.com/preshing/analyze-spec-benchmarks).
 
 ![](https://dave.cheney.net/high-performance-go-workshop/images/int_graph.png)
 
@@ -178,7 +178,7 @@ private: false
 
 为什么 CPU 会发热？ 这是一台固态设备，没有移动组件，因此此处的摩擦等效果并不（直接）相关。
 
-该图摘自 [data sheet produced by TI](http://www.ti.com/lit/an/scaa035b/scaa035b.pdf)。 在此模型中，N 型设备中的开关被吸引到正电压，P 型设备被正电压击退。
+该图摘自 [data sheet produced by TI](https://www.ti.com/lit/an/scaa035b/scaa035b.pdf)。 在此模型中，N 型设备中的开关被吸引到正电压，P 型设备被正电压击退。
 
 ![](https://dave.cheney.net/high-performance-go-workshop/images/cmos-inverter.png)
 
@@ -194,7 +194,7 @@ CMOS 设备的功耗是三个因素的总和，CMOS 功耗是房间，办公桌�
 
 那么，结果如何呢？
 
-![](http://semiengineering.com/wp-content/uploads/2014/04/Screen-Shot-2014-04-14-at-8.49.48-AM.png)
+![](https://semiengineering.com/wp-content/uploads/2014/04/Screen-Shot-2014-04-14-at-8.49.48-AM.png)
 
 事实并非如此。 当晶体管的栅极长度接近几个硅原子的宽度时，晶体管尺寸，电压与重要的泄漏之间的关系就破裂了。
 
@@ -311,7 +311,7 @@ Cliff Click 的 [精彩演讲](https://www.youtube.com/watch?v=OFgxAFdxYAQ) 认�
 
 ![](https://i3.wp.com/computing.llnl.gov/tutorials/linux_clusters/images/E5v4blockdiagram.png)
 
-受高速缓存限制的大小是因为它们 [physically large on the CPU die](http://www.itrs.net/Links/2000UpdateFinal/Design2000final.pdf)，会消耗大量功率。 要使缓存未命中率减半，您必须将缓存大小提高 _四倍_。
+受高速缓存限制的大小是因为它们 [physically large on the CPU die](https://www.itrs.net/Links/2000UpdateFinal/Design2000final.pdf)，会消耗大量功率。 要使缓存未命中率减半，您必须将缓存大小提高 _四倍_。
 
 ### 1.13. 免费午餐结束了
 
@@ -981,7 +981,7 @@ func main() {
 
 #### 3.5.1. 进一步阅读
 
--   [Profiling Go programs](http://blog.golang.org/profiling-go-programs) (Go Blog)
+-   [Profiling Go programs](https://blog.golang.org/profiling-go-programs) (Go Blog)
 -   [Debugging performance issues in Go programs](https://software.intel.com/en-us/blogs/2014/05/10/debugging-performance-issues-in-go-programs)
 
 #### 3.5.2. CPU profiling (exercise) {#cpu_profiling_exercise}
@@ -1698,8 +1698,8 @@ const debug = false
 
 #### 4.4.2. 进一步阅读
 
--   [Using // +build to switch between debug and release builds](http://dave.cheney.net/2014/09/28/using-build-to-switch-between-debug-and-release)
--   [How to use conditional compilation with the go build tool](http://dave.cheney.net/2013/10/12/how-to-use-conditional-compilation-with-the-go-build-tool)
+-   [Using // +build to switch between debug and release builds](https://dave.cheney.net/2014/09/28/using-build-to-switch-between-debug-and-release)
+-   [How to use conditional compilation with the go build tool](https://dave.cheney.net/2013/10/12/how-to-use-conditional-compilation-with-the-go-build-tool)
 
 ### 4.5. 编译器标识练习
 
@@ -1720,7 +1720,7 @@ const debug = false
 
 #### 4.5.1 进一步阅读
 
--   [Codegen Inspection by Jaana Burcu Dogan](http://go-talks.appspot.com/github.com/rakyll/talks/gcinspect/talk.slide#1)
+-   [Codegen Inspection by Jaana Burcu Dogan](https://go-talks.appspot.com/github.com/rakyll/talks/gcinspect/talk.slide#1)
 
 ### 4.6. 边界检查消除 {#bounds_check_elimination}
 
@@ -2245,7 +2245,7 @@ Trace viewer is listening on http://127.0.0.1:60301
 
 [concurrent prime sieve](https://github.com/golang/go/blob/master/doc/play/sieve.go) 是最早编写的 Go 程序之一。
 
-Ivan Daniluk [撰写了一篇关于可视化的很棒的文章](http://divan.github.io/posts/go_concurrency_visualize/)。
+Ivan Daniluk [撰写了一篇关于可视化的很棒的文章](https://divan.github.io/posts/go_concurrency_visualize/)。
 
 让我们看一下使用执行跟踪器的操作。
 
@@ -2686,7 +2686,7 @@ cgo 的开销很高。
 
 ##### 进一步阅读
 
--   [cgo is not Go](http://dave.cheney.net/2016/01/18/cgo-is-not-go)
+-   [cgo is not Go](https://dave.cheney.net/2016/01/18/cgo-is-not-go)
 
 ### 7.9. 始终使用最新发布的Go版本
 
@@ -2704,8 +2704,8 @@ cgo 的开销很高。
 
 #### 7.9.1. 进一步阅读
 
--   [Go 1.7 toolchain improvements](http://dave.cheney.net/2016/04/02/go-1-7-toolchain-improvements)
--   [Go 1.8 performance improvements](http://dave.cheney.net/2016/09/18/go-1-8-performance-improvements-one-month-in)
+-   [Go 1.7 toolchain improvements](https://dave.cheney.net/2016/04/02/go-1-7-toolchain-improvements)
+-   [Go 1.8 performance improvements](https://dave.cheney.net/2016/09/18/go-1-8-performance-improvements-one-month-in)
 
 #### 7.9.2. 将热点字段移动到 struct 顶部
 
