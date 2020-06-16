@@ -1,4 +1,4 @@
-baseURL = "https://zeromake.gitee.io/"
+baseURL = "https://blog.zeromake.com/"
 languageCode = "zh-cn"
 title = "zeromake'blog"
 theme = "next"
