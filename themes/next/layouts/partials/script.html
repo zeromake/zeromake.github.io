@@ -41,6 +41,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/zeromake/gitalk@master/docs/dist/gitalk.js" crossorigin="anonymous"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var all = [];
@@ -64,6 +66,19 @@
                 }
             );
         }
+
+        // gitalk
+
+        const gitment = new Gitalk({
+            // container: page,
+            id: '{{.RelPermalink}}', // 可选。默认为 location.href
+            owner: 'zeromake',
+            repo: 'zeromake.github.io',
+            clientID: '6f4e103c0af2b0629e01',
+            clientSecret: '22f0c21510acbdda03c9067ee3aa2aee0c805c9f',
+            admin: ['zeromake'],
+            labels: ['gitment']
+        });
+        gitment.render(document.querySelector("#gitalk"));
     });
 </script>
-<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>

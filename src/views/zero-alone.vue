@@ -4,7 +4,7 @@
             {{ post.title }}
         </h1>
         <article class="passage-article markdown-section" v-html="post.body"/>
-        <zero-comment :param="type"/>
+        <zero-comment :param="`/${type}/`"/>
     </div>
 </template>
 
