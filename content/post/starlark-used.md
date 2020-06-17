@@ -123,6 +123,28 @@ ctx.test()
 
 ## 四、回调支持
 
+`starlark` 支持将函数传递到函数作为变量，所以不论是在 `starlark` 中回调 `go` 函数，还是在 `go` 中回调 `starlark` 的函数都是能够做到的。
+
+```go
+func main(){
+    thread := &starlark.Thread{
+		Name: "starlark",
+		Print: func(_ *starlark.Thread, msg string) {
+            // starlark.Thread 是执行栈
+			log.Println(msg)
+		},
+    }
+    g, err := starlark.ExecFile(comp.thread, "", `
+def call(msg):
+    print(msg)
+    `, nil)
+    if err != nil {
+        log.Fatalln(err)
+    }
+    // g 是脚本的全局对象字典
+    starlark.Call(g["call"], []starlark.Value{starlark.String("call ok")})
+}
+```
 
 
 ## 五、抛出错误支持
