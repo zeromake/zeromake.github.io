@@ -9,8 +9,8 @@ const alone = [
 
 module.exports = {
     port: 8089,
-    postDir: path.resolve(__dirname, '../content/post'),
-    aloneDir: path.resolve(__dirname, '../content'),
+    postDir: path.resolve(__dirname, '../../content/post'),
+    aloneDir: path.resolve(__dirname, '../../content'),
     generateConfig: {
         baseUrl: 'http://127.0.0.1:8089',
         docsPath: path.resolve(__dirname, '../docs'),

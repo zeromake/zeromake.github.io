@@ -108,7 +108,7 @@ const readMarkdown = function (fileDir, fileName, end) {
 
 const fsReaddir = pify(fs.readdir)
 
-const postDir = "./posts"
+const postDir = "./bak/posts"
 
 async function readPosts() {
     const end = null
@@ -145,7 +145,7 @@ readPosts().then(async function (resp) {
         post.draft = !!post.private
         delete post.private
         const meta = yaml.safeDump(post)
-        const out = path.join("content", name + ".md")
+        const out = path.join("content/post", name + ".md")
         await fse.writeFile(out, `---\n${meta}---\n${text}`)
     }
 })

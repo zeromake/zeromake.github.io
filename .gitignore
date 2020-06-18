@@ -3,6 +3,8 @@ node_modules/
 /dist/
 /docs/
 /out/
+/public/
+/resources/
 npm-debug.log
 .idea
 *.iml

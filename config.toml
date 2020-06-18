@@ -32,6 +32,7 @@ Paginate = 8
   YearFormat = "2006年"
   MonthFormat = "01-02"
   Fancybox = true
+  Jsdelivr = true
 
 [Author]
   Name = "zeromake"

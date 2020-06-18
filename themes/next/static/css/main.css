@@ -2883,3 +2883,7 @@ a.search-result {
 .footer {
   bottom: auto;
 }
+
+#gitalk a {
+    border-bottom: none
+}

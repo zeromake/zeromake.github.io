@@ -9,19 +9,39 @@
 </script>{{ end}}
 {{ if .Site.Params.QQStatsId}}<script type="text/javascript" src="https://tajs.qq.com/stats?sId={{.Site.Params.QQStatsId}}" charset="UTF-8"></script> {{end}}
 <script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+  if (Object.prototype.toString.call(window.Promise) !== "[object Function]") {
     window.Promise = null;
   }
 </script>
+{{ if .Site.Params.Jsdelivr }}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/fastclick@1.0.6/lib/fastclick.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery_lazyload@1.9.3/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/julianshapiro/velocity@v1.2.2/velocity.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/julianshapiro/velocity@v1.2.2/velocity.ui.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ua-parser-js@0.7.21/dist/ua-parser.min.js"></script>
+{{ else }}
 <script type="text/javascript" src="/js/vendor/jquery/index.js?v=2.1.3"></script>
 <script type="text/javascript" src="/js/vendor/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 <script type="text/javascript" src="/js/vendor/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 <script type="text/javascript" src="/js/vendor/velocity/velocity.min.js?v=1.2.1"></script>
 <script type="text/javascript" src="/js/vendor/velocity/velocity.ui.min.js?v=1.2.1"></script>
 <script src="/js/vendor/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+{{ end }}
+
 {{ if and .Site.Params.Fancybox .IsPage}}
+{{ if .Site.Params.Jsdelivr}}
+<script src="https://cdn.jsdelivr.net/npm/fancybox@2.1.5/dist/js/jquery.fancybox.pack.js"></script>
+{{ else }}
 <script src="/js/vendor/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
-{{end }}
+{{ end }}
+{{ end }}
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+{{ if .IsPage}}
+<script defer src="https://cdn.jsdelivr.net/gh/zeromake/gitalk@master/docs/dist/gitalk.js"></script>
+{{ end }}
 <script type="text/javascript" src="/js/utils.js"></script>
 <script type="text/javascript" src="/js/motion.js"></script>
 <script type="text/javascript" src="/js/affix.js"></script>
@@ -34,15 +54,10 @@
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 {{ if .IsNode}}
 <script type="text/javascript" id="motion.page.archive">
-  $('.archive-year').velocity('transition.slideLeftIn');
+  $(".archive-year").velocity("transition.slideLeftIn");
 </script>
 {{ end }}
 <script type="text/javascript" src="/js/search.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
-<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script defer src="https://cdn.jsdelivr.net/gh/zeromake/gitalk@master/docs/dist/gitalk.js" crossorigin="anonymous"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var all = [];
@@ -66,19 +81,21 @@
                 }
             );
         }
-
+        {{ if .IsPage }}
         // gitalk
-
-        const gitment = new Gitalk({
-            // container: page,
-            id: '{{.RelPermalink}}', // 可选。默认为 location.href
-            owner: 'zeromake',
-            repo: 'zeromake.github.io',
-            clientID: '6f4e103c0af2b0629e01',
-            clientSecret: '22f0c21510acbdda03c9067ee3aa2aee0c805c9f',
-            admin: ['zeromake'],
-            labels: ['gitment']
-        });
-        gitment.render(document.querySelector("#gitalk"));
+        var container = document.querySelector("#gitalk");
+        if (container) {
+            var gitment = new Gitalk({
+                id: "{{.RelPermalink}}",
+                owner: "zeromake",
+                repo: "zeromake.github.io",
+                clientID: "6f4e103c0af2b0629e01",
+                clientSecret: "22f0c21510acbdda03c9067ee3aa2aee0c805c9f",
+                admin: ["zeromake"],
+                labels: ["gitment"]
+            });
+            gitment.render(container);
+        }
+        {{ end }}
     });
 </script>
