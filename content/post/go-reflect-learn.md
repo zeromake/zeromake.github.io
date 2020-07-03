@@ -10,7 +10,6 @@ categories:
 slug: go-reflect-learn
 draft: true
 ---
-
 ## 前言
 
 最近使用了 `gorm` 发现各种难受，单表查询还好但是多表关联查询就会出问题，感觉并不是太合适我这个习惯了使用 `knex` + `bookshelf` 和 `sequelize`。
@@ -59,27 +58,21 @@ func main () {
 
 ## 二、生成变量或者指针并设置值
 
-## 三、Array, Slice, Map 的反射使用
+## 三、Array
 
-## 四、实战
+## 四、Slice
 
-包装 `sql.Row`，`sql.Rows` 支持把值导入到结构体中，也支持切片结构体导入
+## 五、Map
 
-接口设计为以下
+## 六、Struct
 
-```go
-func ScanRow(row *sql.Row, value interface{}) error {
-    return nil
-}
+## 七、interface
 
-func ScanRows(rows *sql.Rows, value interface{}) error {
-    return nil
-}
+## 八、Function
 
-func ScanMany(rows *sql.Rows, values interface{}) error {
-    return nil
-}
-```
+## 九、反射做路由挂载
+
+## 十、反射做 http.Handle 包装
 
 ## 参考
 
