@@ -81,6 +81,8 @@ func TestReflectValue(t *testing.T)  {
 || `Elem() Value` | 对 `Interface | Ptr` 解出内部值 | |
 || `CanSet() bool` | 可以检查是否可赋值 | |
 || `Type() Type` | 去除值的类型反射 ||
+|| `Addr() Value` | 对值取引用||
+|| `CanAddr() bool` | 检查是否可以取引用 ||
 | Int | | 仅对 int, uint 类型有效||
 || `SetInt(int64)` | 对 `int64` 向下全部支持设置 |  |
 || `SetUint(uint64)` | 对 `uint64` 向下全部支持设置 ||
