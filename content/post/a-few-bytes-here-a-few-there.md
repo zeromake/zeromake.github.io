@@ -132,16 +132,8 @@ Size classes
 
 这是谜题的最后一块。Go 1.15 没有 24 字节 size classes，因此在 32 字节大小类中分配了 `ss` 的堆分配。由于 Martin Mührmann Go 1.16 的工作，它有一个 24 字节大小类，非常适合分配给接口的切片值。
 
-### Related posts:
-
-1. [I’m talking about Go at DevFest Siberia 2017](https://dave.cheney.net/2017/08/23/im-talking-about-go-at-devfest-siberia-2017)
-2. [If aligned memory writes are atomic, why do we need the sync/atomic package?](https://dave.cheney.net/2018/01/06/if-aligned-memory-writes-are-atomic-why-do-we-need-the-sync-atomic-package)
-3. [A real serial console for your Raspberry Pi](https://dave.cheney.net/2014/01/05/a-real-serial-console-for-your-raspberry-pi)
-4. [Why is a Goroutine’s stack infinite ?](https://dave.cheney.net/2013/06/02/why-is-a-goroutines-stack-infinite)
-
-
+---
 <ol id="footnotes">
-<hr/>
 <li id="easy-footnote-bottom-1-4231">
 这不是对排序函数进行基准测试的正确方法，因为在第一次迭代之后，对输入已经排序。但是这个已经超过了本篇文章的范围了
 </li>
@@ -164,3 +156,10 @@ Size classes
 这不是一个牵强的方案，字符串有各种形状和大小，并且生成以前从未见过的大小字符串可以像追加空格一样简单。
 </li>
 </ol>
+
+### Related posts:
+
+1. [I’m talking about Go at DevFest Siberia 2017](https://dave.cheney.net/2017/08/23/im-talking-about-go-at-devfest-siberia-2017)
+2. [If aligned memory writes are atomic, why do we need the sync/atomic package?](https://dave.cheney.net/2018/01/06/if-aligned-memory-writes-are-atomic-why-do-we-need-the-sync-atomic-package)
+3. [A real serial console for your Raspberry Pi](https://dave.cheney.net/2014/01/05/a-real-serial-console-for-your-raspberry-pi)
+4. [Why is a Goroutine’s stack infinite ?](https://dave.cheney.net/2013/06/02/why-is-a-goroutines-stack-infinite)
