@@ -231,12 +231,6 @@ $ brew install iterm2
 
 根据官方说明安装 [oh-my-zsh](https://ohmyz.sh/) 。
 
-``` bash
-# 可以选择使用 curl 或 wget 下载脚本。
-<span class="katex">$1$</span>(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-<span class="katex">$1$</span>(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-```
-
 **oh-my-zsh 插件**
 
 通过以下插件让日常的命令历史能够自动补全
