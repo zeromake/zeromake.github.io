@@ -5,7 +5,7 @@ tags:
   - environment
   - configuration
   - mac
-lastmod: 2019-07-30T04:04:00.000Z
+lastmod: 2021-04-18 16:20:00 +08:00
 categories:
   - mac
 slug: mac-environment-configuration
@@ -13,7 +13,10 @@ draft: false
 ---
 
 ## 前言
-最近向公司申请了新的 `19` 款 `MacBook Pro`，需要重新搭建环境，因为一些网络上的资料过时的原因，记录一下搭建流程备忘。
+
+1. ~~最近向公司申请了新的 `19` 款 `MacBook Pro`，需要重新搭建环境，因为一些网络上的资料过时的原因，记录一下搭建流程备忘。~~
+2. 最近刚买了新的 `2020` 款 `MacBook Pro`，重新更新一下这篇博文。
+3. 最近的 `github` 开始各种抽风，可以参考这个 [脚本](https://github.com/RC1844/FastGithub) 的 `README` 去使用镜像替换对应的地址。
 
 <!--more-->
 
@@ -65,6 +68,8 @@ source ~/.bash_profile
 echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles' >> ~/.zshrc
 source ~/.zshrc
 ```
+
+如果发现连安装都安装不了可以用 [HomebrewCN](https://gitee.com/cunkai/HomebrewCN)。
 
 ## 二、xcode 安装
 
@@ -134,8 +139,8 @@ $ brew install python2
 # 安装 pyenv
 $ brew install pyenv
 # 使用 sohu 源加速
-v=2.7.16|wget http://mirrors.sohu.com/python/<span class="katex">$1$</span>v.tar.xz -P ~/.pyenv/cache/;pyenv install $v
-v=3.7.4|wget http://mirrors.sohu.com/python/<span class="katex">$1$</span>v.tar.xz -P ~/.pyenv/cache/;pyenv install $v
+v=2.7.16|wget http://mirrors.sohu.com/python/$v.tar.xz -P ~/.pyenv/cache/;pyenv install $v
+v=3.7.4|wget http://mirrors.sohu.com/python/$v.tar.xz -P ~/.pyenv/cache/;pyenv install $v
 # 安装 python2
 $ pyenv install 2.7.16
 # 安装 python3
@@ -161,6 +166,18 @@ $ conda config --set show_channel_urls yes
 
 ### 3.3 Golang
 
+**`voidint/g`安装**
+
+[voidint/g](https://github.com/voidint/g) 是一个类似 `node` 的 `nvm`，的一个 `go` 环境安装和多版本切换的工具。
+
+``` bash
+curl -sSL https://raw.githubusercontent.com/voidint/g/master/install.sh | bash
+# echo "unalias g" >> ~/.bashrc # 可选。若其他程序（如'git'）使用了'g'作为别名。
+source ~/.bashrc # 或者 source ~/.zshrc
+g ls-remote
+g install 1.16.3
+```
+
 **`brew` 安装**
 
 ``` bash
@@ -178,8 +195,11 @@ brew install golang
 **go mod proxy 配置**
 
 `go` `1.11` 后自带了 `go module` 功能，可以支持代理设置。
+s
 ``` bash
-export GOPROXY=https://goproxy.io
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct
+go env -w GOSUMDB=sum.golang.google.cn
 ```
 
 ## 四、 终端配置
@@ -192,7 +212,7 @@ $ brew install zsh
 # 替换默认 shell 到 zsh
 $ sudo chsh -s /bin/zsh
 # 使用 iterm2 替换默认终端
-$ brew cask install iterm2
+$ brew install iterm2
 ```
 
 **Iterm2 配色更改**
@@ -232,6 +252,8 @@ git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zs
 git clone https://github.com/floor114/zsh-apple-touchbar $ZSH_CUSTOM/plugins/zsh-apple-touchbar
 ```
 
+~/.zshrc
+
 ```bash
 plugins=(
     zsh-syntax-highlighting
@@ -241,7 +263,22 @@ plugins=(
 )
 ```
 
-## 五、参考资料
+## 五、安装 IDE
+
+**安装 vscode**
+``` bash
+brew install visual-studio-code
+```
+
+**安装 Goland 激活**
+
+``` bash
+aria2c https://download.jetbrains.com/go/goland-2021.1.dmg
+```
+
+使用 [jetbrains-eval-reset](https://zhile.io/2020/11/18/jetbrains-eval-reset-da33a93d.html) 无限试用即可。
+
+## 六、参考资料
 
 - [Does the option "Draw bold text in bright colors" removed?](https://gitlab.com/gnachman/iterm2/issues/7854)
 - [brew](https://brew.sh/index_zh-cn)
