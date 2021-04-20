@@ -180,7 +180,7 @@ app.get('/api/item/:id.json', (req, res, next) => {
         id: id,
         score: id - 13664000,
         time: time,
-title: `测试Item:<span class="katex">$1$</span>{time}`,
+        title: `测试Item:${id} - ${time}`,
         type: 'story',
         url: `/api/item/${id}.json`
     }res.json(item)
@@ -453,7 +453,7 @@ export function watchList(type, cb) {
         if (first) {
             first = false;
         } else {
-Axios.get(`<span class="katex">$1$</span>{type}stories.json`).then(handler);
+            Axios.get(`${api.url}${type}stories.json`).then(handler);
         }
         if (isOn) {
             timeoutId = setTimeout(watchTimeout, 1000 * 60 * 15);
@@ -509,7 +509,7 @@ export function createListView (type) {
                 type: this.type
             }).then(() => {
                 if (this.page < 0 || this.page > this.maxPage) {
-this.<span class="katex">$1$</span>{this.type}/1`)
+                    this.$router.replace(`/${this.type}/1`)
                     return
                 }
                 this.transition = from === -1 ? null : to > from ? 'slide-left' : 'slide-right'

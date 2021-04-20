@@ -11,5 +11,5 @@ slug: test
 draft: true
 ---
 
-- a. <span class="katex">$1$</span>
-- b. <span class="katex">$1$</span>
+- a. $\theta = \begin{bmatrix} 81.47 \\ 12.69 \end{bmatrix}$
+- b. $\theta = \begin{bmatrix} 13.01 \\ 0.91 \end{bmatrix}$

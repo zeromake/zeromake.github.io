@@ -827,9 +827,9 @@ func BenchmarkFibWrong2(b *testing.B) {
 
 `testing` 包内置了对生成 `CPU`，内存和块配置文件的支持。
 
--   `-cpuprofile=<span class="katex">$1$</span>FILE`.
--   `-memprofile=<span class="katex">$1$</span>FILE`, `-memprofilerate=N` 将配置文件速率调整为 `1/N`.
--   `-blockprofile=<span class="katex">$1$</span>FILE`.
+-   `-cpuprofile=$FILE` 将 `CPU` 分析写入 `$FILE`.
+-   `-memprofile=$FILE`, 将内存分析写入 `$FILE`, `-memprofilerate=N` 将配置文件速率调整为 `1/N`.
+-   `-blockprofile=$FILE`, 将块分析写入 `$FILE`.
 
 使用这些标志中的任何一个也会保留二进制文件。
 
@@ -1519,7 +1519,7 @@ examples/inl/max.go:21:3: inlining call to Max
         0x0000 00000 (/Users/dfc/devel/high-performance-go-workshop/examples/inl/max.go:11)     FUNCDATA        $0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
         0x0000 00000 (/Users/dfc/devel/high-performance-go-workshop/examples/inl/max.go:11)     FUNCDATA        $1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
         0x0000 00000 (/Users/dfc/devel/high-performance-go-workshop/examples/inl/max.go:11)     FUNCDATA        $3, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-0x0000 00000 (/Users/dfc/devel/high-performance-go-workshop/examples/inl/max.go:13)     PCDATA  <span class="katex">$1$</span>0
+        0x0000 00000 (/Users/dfc/devel/high-performance-go-workshop/examples/inl/max.go:13)     PCDATA  $2, $0
 ```
 
 一旦将 `Max` 内联到其中，它就是 `F` 的主体, 此功能没有任何反应。 我知道屏幕上有很多文本，但是什么也没说，但请您相信，唯一发生的是 `RET`。 实际上，F 变为：
@@ -2297,19 +2297,15 @@ Go 运行时提供了一个用于调整 GC 的环境变量 `GOGC`。
 
 GOGC 的公式是
 
-<div class="katex-display">
 $$
 goal = reachabl\e * (1 + (GOGC)/100)
 $$
-</div>
 
 例如，如果我们当前有一个256MB的堆，并且 `GOGC=100` (默认值)，当堆填满时，它将增长到
 
-<div class="katex-display">
 $$
 512MB = 256MB * (1 + 100/100)
 $$
-</div>
 
 -   `GOGC` 的值大于100会使堆增长更快，从而减轻了 GC 的压力。
 -   小于 100 的 `GOGC` 值会导致堆缓慢增长，从而增加了 GC 的压力。

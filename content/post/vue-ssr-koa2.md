@@ -66,7 +66,7 @@ api_router.get('/api/item/:id.json', (ctx, next) => {
         id: id,
         score: id - 13664000,
         time: time,
-title: `测试Item:<span class="katex">$1$</span>{time}`,
+        title: `测试Item:${id}-${time}`,
         type: 'story',
         url: `/api/item/${id}.json`
 

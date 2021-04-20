@@ -297,7 +297,7 @@ export default {
 -   api-server
 
 ```javascript
-// server的api请求工具换成node-fetch并提供统一接口api.<span class="katex">$1$</span>post
+// server的api请求工具换成node-fetch并提供统一接口api.$get,api.$post
 import fetch from "node-fetch";
 const api = {
     // ...
@@ -388,29 +388,29 @@ const generate = (config) => co(function * () {
         const decode = decodeURIComponent(url)
         const lastIndex = decode.lastIndexOf('/')
         const dirPath = decode.substring(0, lastIndex)
-if (!fs.existsSync(`<span class="katex">$1$</span>{dirPath}`)) {
-yield fse.mkdirs(`<span class="katex">$1$</span>{dirPath}`)
+        if (!fs.existsSync(`${docsPath}${dirPath}`)) {
+            yield fse.mkdirs(`${docsPath}${dirPath}`)
         }
-const res = yield fetch(`<span class="katex">$1$</span>{url}`).then(res => res.text())
+        const res = yield fetch(`${config.baseUrl}${url}`).then(res => res.text())
         console.info('generate static file: ' + decode)
-yield fileSystem.writeFile(`<span class="katex">$1$</span>{decode}`, res)
+        yield fileSystem.writeFile(`${docsPath}${decode}`, res)
     }
     // ssr html 生成
     for (let i = 0, len = urls.renderUrls.length; i < len; i++) {
         const url = urls.renderUrls[i]
         // 处理中文和/ url处理
         const decode = url === '/' ? '' : decodeURIComponent(url)
-if (!fs.existsSync(`<span class="katex">$1$</span>{decode}`)) {
-yield fse.mkdirs(`<span class="katex">$1$</span>{decode}`)
+        if (!fs.existsSync(`${docsPath}/${decode}`)) {
+            yield fse.mkdirs(`${docsPath}/${decode}`)
         }
         const html = yield render(url)
         const minHtml = minify(html, minifyOpt)
         console.info('generate render: ' + decode)
-yield fileSystem.writeFile(`<span class="katex">$1$</span>{decode}/index.html`, minHtml)
+        yield fileSystem.writeFile(`${docsPath}/${decode}/index.html`, minHtml)
     }
     // 生成的vue代码拷贝和静态文件拷贝
     yield fse.copy(resolve('../dist'), `${docsPath}/dist`)
-yield fse.move(`<span class="katex">$1$</span>{docsPath}/service-worker.js`)
+    yield fse.move(`${docsPath}/dist/service-worker.js`, `${docsPath}/service-worker.js`)
     yield fse.copy(resolve('../public'), `${docsPath}/public`)
     yield fse.copy(resolve('../manifest.json'), `${docsPath}/manifest.json`)
 })
@@ -440,7 +440,7 @@ module.exports = {
             const beforeUrl = "/api/posts.json";
             const staticUrls = [beforeUrl];
             const renderUrls = ["/"];
-return fetch(`<span class="katex">$1$</span>{beforeUrl}`)
+            return fetch(`${baseUrl}${beforeUrl}`)
                 .then(res => res.json())
                 .then(data => {
                     for (let i = 0, len = data.length; i < len; i++) {

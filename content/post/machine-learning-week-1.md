@@ -249,7 +249,7 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 <details>
 <summary>原文</summary>
 
-To establish notation for future use, we’ll use <span class="katex">$1$</span> to denote the `input` variables (living area in this example), also called input features, and <span class="katex">$1$</span> to denote the `output` or target variable that we are trying to predict (price). A pair <span class="katex">$1$</span> is called a training example, and the dataset that we’ll be using to learn—a list of m training examples <span class="katex">$1$</span>; `i=1,...` , <span class="katex">$1$</span> is called a training set. Note that the superscript <span class="katex">$1$</span> in the notation is simply an index into the training set, and has nothing to do with exponentiation. We will also use X to denote the space of input values, and Y to denote the space of output values. In this example, `X = Y = ℝ`.
+To establish notation for future use, we’ll use $x(i)$ to denote the `input` variables (living area in this example), also called input features, and $y(i)$ to denote the `output` or target variable that we are trying to predict (price). A pair $(x(i),y(i))$ is called a training example, and the dataset that we’ll be using to learn—a list of m training examples $(x(i),y(i))$; `i=1,...` , $m$ is called a training set. Note that the superscript $(i)$ in the notation is simply an index into the training set, and has nothing to do with exponentiation. We will also use X to denote the space of input values, and Y to denote the space of output values. In this example, `X = Y = ℝ`.
 
 To describe the supervised learning problem slightly more formally, our goal is, given a training set, to learn a function `h : X → Y` so that `h(x)` is a `good` predictor for the corresponding value of y. For historical reasons, this function h is called a hypothesis. Seen pictorially, the process is therefore like this:
 
@@ -257,15 +257,13 @@ When the target variable that we’re trying to predict is continuous, such as i
 
 </details>
 
-为了建立未来使用的符号，我们将使用 <span class="katex">$1$</span> 来表示 `输入` 变量（在此示例中为生活区域），也称为输入要素，并使用 <span class="katex">$1$</span> 来表示我们试图预测的 `输出` 或目标变量（价格）。一对 <span class="katex">$1$</span> 被称为训练示例，我们将使用的数据集学习 <span class="katex">$1$</span> 个训练样例列表 <span class="katex">$1$</span>; `i=1,...` ,<span class="katex">$1$</span> 称为训练集数量。请注意，符号中的上标 <span class="katex">$1$</span> 只是训练集的索引，与取幂无关。我们还将使用 `X` 来表示输入值的空间，并使用 `Y` 来表示输出值的空间。在这个例子中，`X = Y = ℝ`。
+为了建立未来使用的符号，我们将使用 $x(i)$ 来表示 `输入` 变量（在此示例中为生活区域），也称为输入要素，并使用 $y(i)$ 来表示我们试图预测的 `输出` 或目标变量（价格）。一对 $(x(i),y(i))$ 被称为训练示例，我们将使用的数据集学习 $m$ 个训练样例列表 $(x(i),y(i))$; `i=1,...` ,$m$ 称为训练集数量。请注意，符号中的上标 $(i)$ 只是训练集的索引，与取幂无关。我们还将使用 `X` 来表示输入值的空间，并使用 `Y` 来表示输出值的空间。在这个例子中，`X = Y = ℝ`。
 
 为了更加正式地描述监督学习问题，我们的目标是，在给定训练集的情况下，学习函数 `h : X → Y`，使得 `h(x)` 是 `y` 的对应值的 `good` 预测器。由于历史原因，该函数 `h` 被称为假设。从图中可以看出，这个过程是这样的：
 
 ![h(x)](/public/img/machine-learn/2016-10-23-20.14.58.svg)
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$h_θ(x) = θ_0 + θ_1x$$
 
 当我们试图预测的目标变量是连续的时，例如在我们的住房示例中，我们将学习问题称为回归问题。当 `y` 只能承受少量离散值时（例如，如果给定生活区域，比如说我们想要预测住宅是房屋还是公寓），我们将其称为分类问题。
 
@@ -276,13 +274,11 @@ $<span class="katex">$1$</span>$
 
 We can measure the accuracy of our hypothesis function by using a **cost function**. This takes an average difference (actually a fancier version of an average) of all the results of the hypothesis with inputs from x's and the actual output y's.
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$J(θ_0, θ_1) = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m ( \hat{y}_{i}- y_{i})^2 = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m (h_θ (x_{i}) - y_{i})^2$$
 
-To break it apart, it is <span class="katex">$1$</span> where <span class="katex">$1$</span> is the mean of the squares of <span class="katex">$1$</span>, or the difference between the predicted value and the actual value.
+To break it apart, it is $\frac{1}{2}\bar{x}$ where $\bar{x}$ is the mean of the squares of $h_\theta (x_{i}) - y_{i}$, or the difference between the predicted value and the actual value.
 
-This function is otherwise called the `Squared error function`, or `Mean squared error`. The mean is halved <span class="katex">$1$</span> as a convenience for the computation of the gradient descent, as the derivative term of the square function will cancel out the <span class="katex">$1$</span> term. The following image summarizes what the cost function does:
+This function is otherwise called the `Squared error function`, or `Mean squared error`. The mean is halved $(\frac{1}{2})$ as a convenience for the computation of the gradient descent, as the derivative term of the square function will cancel out the $\frac{1}{2}$ term. The following image summarizes what the cost function does:
 
 ![Cost Function](/public/img/machine-learn/2016-12-02-17.23.31.png)
 
@@ -290,13 +286,11 @@ This function is otherwise called the `Squared error function`, or `Mean squared
 
 我们可以使用 `代价函数` 来衡量我们的假设函数的准确性。 这需要假设的所有结果与来自 `x's` 和实际输出 `y's` 的输入的平均差异（实际上是平均值的更高版本）。
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$J(θ_0, θ_1) = \\ \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left ( \hat{y}_{i}- y_{i} \right)^2 = \\ \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left (h_θ (x_{i}) - y_{i} \right)^2$$
 
-为了打破它，它是 <span class="katex">$1$</span> 其中 <span class="katex">$1$</span> 是 <span class="katex">$1$</span> 的平方的平均值，或者是预测值之间的差值 和实际价值。
+为了打破它，它是 $\frac{1}{2}\bar{x}$ 其中 $\bar{x}$ 是 $h_\theta (x_{i}) - y_{i}$ 的平方的平均值，或者是预测值之间的差值 和实际价值。
 
-此函数另外称为 `平方误差函数` 或 `均方误差`。 平均值减半 <span class="katex">$1$</span> 为了便于计算梯度下降，因为平方函数的导数项将抵消 <span class="katex">$1$</span> 该项。 下图总结了成本函数的作用：
+此函数另外称为 `平方误差函数` 或 `均方误差`。 平均值减半 $(\frac{1}{2})$ 为了便于计算梯度下降，因为平方函数的导数项将抵消 $\frac{1}{2}$ 该项。 下图总结了成本函数的作用：
 
 ![Cost Function](/public/img/machine-learn/2016-12-02-17.23.31.png)
 
@@ -305,13 +299,13 @@ $<span class="katex">$1$</span>$
 <details>
 <summary>原文</summary>
 
-If we try to think of it in visual terms, our training data set is scattered on the x-y plane. We are trying to make a straight line (defined by <span class="katex">$1$</span>) which passes through these scattered data points.
+If we try to think of it in visual terms, our training data set is scattered on the x-y plane. We are trying to make a straight line (defined by $h_θ(x)$) which passes through these scattered data points.
 
-Our objective is to get the best possible line. The best possible line will be such so that the average squared vertical distances of the scattered points from the line will be the least. Ideally, the line should pass through all the points of our training data set. In such a case, the value of <span class="katex">$1$</span> will be 0. The following example shows the ideal situation where we have a cost function of 0.
+Our objective is to get the best possible line. The best possible line will be such so that the average squared vertical distances of the scattered points from the line will be the least. Ideally, the line should pass through all the points of our training data set. In such a case, the value of $J(θ_0,θ_1)$ will be 0. The following example shows the ideal situation where we have a cost function of 0.
 
 ![θ_1=1](/public/img/machine-learn/2016-10-26-00.57.56.png)
 
-When <span class="katex">$1$</span>, we get a slope of 1 which goes through every single data point in our model. Conversely, when <span class="katex">$1$</span>, we see the vertical distance from our fit to the data points increase.
+When $θ_1=1$, we get a slope of 1 which goes through every single data point in our model. Conversely, when $θ_1=0.5$, we see the vertical distance from our fit to the data points increase.
 
 ![θ_1=0.5](/public/img/machine-learn/2016-10-26-01.03.07.png)
 
@@ -319,17 +313,17 @@ This increases our cost function to 0.58. Plotting several other points yields t
 
 ![cost-fun](/public/img/machine-learn/2016-10-26-01.09.05.png)
 
-Thus as a goal, we should try to minimize the cost function. In this case, <span class="katex">$1$</span> is our global minimum.
+Thus as a goal, we should try to minimize the cost function. In this case, $θ_1=1$ is our global minimum.
 
 </details>
 
-如果我们试图用视觉术语来思考它，我们的训练数据集就会分散在 `x-y` 平面上。我们试图通过这些分散的数据点建立一条直线（由 <span class="katex">$1$</span> 定义）。
+如果我们试图用视觉术语来思考它，我们的训练数据集就会分散在 `x-y` 平面上。我们试图通过这些分散的数据点建立一条直线（由 $h_θ(x)$ 定义）。
 
-我们的目标是获得最佳线路。最好的线将是这样的，使得来自线的散射点的平均垂直距离将是最小的。理想情况下，该线应该通过我们的训练数据集的所有点。在这种情况下，<span class="katex">$1$</span> 的值将为`0`. 以下示例显示了我们的成本函数为 `0` 的理想情况。
+我们的目标是获得最佳线路。最好的线将是这样的，使得来自线的散射点的平均垂直距离将是最小的。理想情况下，该线应该通过我们的训练数据集的所有点。在这种情况下，$J(θ_0,θ_1)$ 的值将为`0`. 以下示例显示了我们的成本函数为 `0` 的理想情况。
 
 ![θ_1=1](/public/img/machine-learn/2016-10-26-00.57.56.png)
 
-当<span class="katex">$1$</span> 时，我们得到的斜率为 1，它遍历模型中的每个数据点。相反，当 <span class="katex">$1$</span> 时，我们看到从拟合到数据点的垂直距离增加。
+当$θ_1 =1$ 时，我们得到的斜率为 1，它遍历模型中的每个数据点。相反，当 $θ_1=0.5$ 时，我们看到从拟合到数据点的垂直距离增加。
 
 ![θ_1=0.5](/public/img/machine-learn/2016-10-26-01.03.07.png)
 
@@ -337,7 +331,7 @@ Thus as a goal, we should try to minimize the cost function. In this case, <span
 
 ![cost-fun](/public/img/machine-learn/2016-10-26-01.09.05.png)
 
-因此，作为目标，我们应该尽量减少成本函数。在这种情况下，<span class="katex">$1$</span> 是我们的全球最低要求。
+因此，作为目标，我们应该尽量减少成本函数。在这种情况下，$θ_1=1$ 是我们的全球最低要求。
 
 **例子：**
 训练集数据为：
@@ -359,11 +353,9 @@ Thus as a goal, we should try to minimize the cost function. In this case, <span
 ]
 ```
 
-设定 <span class="katex">$1$</span>，<span class="katex">$1$</span>, 函数 `h` 为 <span class="katex">$1$</span> 所以代价函数的公式会简化为：
+设定 $θ_0 = 0$，$θ_1 = 1$, 函数 `h` 为 $h_θ(x) = 0 + x$ 所以代价函数的公式会简化为：
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$J(θ_1) = \dfrac {1}{6} \displaystyle \sum _{i=1}^6 (h_θ (x_{i}) - y_{i})^2$$
 
 用代码表述为：
 
@@ -406,15 +398,15 @@ A contour plot is a graph that contains many contour lines. A contour line of a 
 
 ![](/public/img/machine-learn/2016-10-29-01.14.37.png)
 
-Taking any color and going along the `circle`, one would expect to get the same value of the cost function. For example, the three green points found on the green line above have the same value for <span class="katex">$1$</span> and as a result, they are found along the same line. The circled x displays the value of the cost function for the graph on the left when <span class="katex">$1$</span> and <span class="katex">$1$</span>. Taking another <span class="katex">$1$</span> and plotting its contour plot, one gets the following graphs:
+Taking any color and going along the `circle`, one would expect to get the same value of the cost function. For example, the three green points found on the green line above have the same value for $J(θ_0, θ_1)$ and as a result, they are found along the same line. The circled x displays the value of the cost function for the graph on the left when $θ_0 = 800$ and $θ_1 = -0.15$. Taking another $h(x)$ and plotting its contour plot, one gets the following graphs:
 
 ![](/public/img/machine-learn/2016-10-29-01.14.57.png)
 
-When <span class="katex">$1$</span> and <span class="katex">$1$</span>, the value of <span class="katex">$1$</span> in the contour plot gets closer to the center thus reducing the cost function error. Now giving our hypothesis function a slightly positive slope results in a better fit of the data.
+When $θ_0 = 360$ and $θ_1 = 0$, the value of $J(θ_0, θ_1)$ in the contour plot gets closer to the center thus reducing the cost function error. Now giving our hypothesis function a slightly positive slope results in a better fit of the data.
 
 ![](/public/img/machine-learn/2016-10-29-09.59.41.png)
 
-The graph above minimizes the cost function as much as possible and consequently, the result of <span class="katex">$1$</span>​ and <span class="katex">$1$</span>​ tend to be around `0.12` and `250` respectively. Plotting those values on our graph to the right seems to put our point in the center of the inner most `circle`.
+The graph above minimizes the cost function as much as possible and consequently, the result of $θ_1$​ and $θ_0$​ tend to be around `0.12` and `250` respectively. Plotting those values on our graph to the right seems to put our point in the center of the inner most `circle`.
 
 </details>
 
@@ -422,15 +414,15 @@ The graph above minimizes the cost function as much as possible and consequently
 
 ![](/public/img/machine-learn/2016-10-29-01.14.37.png)
 
-采用任何颜色并沿着 `circle`，人们可以期望得到相同的成本函数值。例如，上面绿线上的三个绿点对于 <span class="katex">$1$</span> 具有相同的值，因此，它们沿着同一条线找到。当 <span class="katex">$1$</span> 和 <span class="katex">$1$</span> 时，带圆圈的 x 显示左侧图形的成本函数的值。取另一个 <span class="katex">$1$</span> 并绘制其等高线图，可以得到以下图表：
+采用任何颜色并沿着 `circle`，人们可以期望得到相同的成本函数值。例如，上面绿线上的三个绿点对于 $J(θ_0, θ_1)$ 具有相同的值，因此，它们沿着同一条线找到。当 $θ_0 = 800$ 和 $θ_1 = -0.15$ 时，带圆圈的 x 显示左侧图形的成本函数的值。取另一个 $h(x)$ 并绘制其等高线图，可以得到以下图表：
 
 ![](/public/img/machine-learn/2016-10-29-01.14.57.png)
 
-当 <span class="katex">$1$</span> 和 <span class="katex">$1$</span> 时，等高线图中 <span class="katex">$1$</span> 的值越接近中心，从而降低了成本函数误差。现在给出我们的假设函数略微正斜率可以更好地拟合数据。
+当 $θ_0 = 360$ 和 $θ_1 = 0$ 时，等高线图中 $J(θ_0, θ_1)$ 的值越接近中心，从而降低了成本函数误差。现在给出我们的假设函数略微正斜率可以更好地拟合数据。
 
 ![](/public/img/machine-learn/2016-10-29-09.59.41.png)
 
-上图最大限度地降低了成本函数，因此，<span class="katex">$1$</span> 和 <span class="katex">$1$</span> 的结果分别约为 `0.12` 和 `250`。在我们的图表右侧绘制这些值似乎将我们的观点置于最内部 `圆` 的中心。
+上图最大限度地降低了成本函数，因此，$θ_1$ 和 $θ_0$ 的结果分别约为 `0.12` 和 `250`。在我们的图表右侧绘制这些值似乎将我们的观点置于最内部 `圆` 的中心。
 
 ## 八、梯度下降
 
@@ -438,31 +430,29 @@ The graph above minimizes the cost function as much as possible and consequently
 <summary>原文</summary>
 So we have our hypothesis function and we have a way of measuring how well it fits into the data. Now we need to estimate the parameters in the hypothesis function. That's where gradient descent comes in.
 
-Imagine that we graph our hypothesis function based on its fields <span class="katex">$1$</span> and <span class="katex">$1$</span> (actually we are graphing the cost function as a function of the parameter estimates). We are not graphing `x` and `y` itself, but the parameter range of our hypothesis function and the cost resulting from selecting a particular set of parameters.
+Imagine that we graph our hypothesis function based on its fields $θ_0$ and $θ_1$ (actually we are graphing the cost function as a function of the parameter estimates). We are not graphing `x` and `y` itself, but the parameter range of our hypothesis function and the cost resulting from selecting a particular set of parameters.
 
-We put <span class="katex">$1$</span> on the `x` axis and <span class="katex">$1$</span> on the `y` axis, with the cost function on the vertical `z` axis. The points on our graph will be the result of the cost function using our hypothesis with those specific theta parameters. The graph below depicts such a setup.
+We put $θ_0$ on the `x` axis and $θ_1$ on the `y` axis, with the cost function on the vertical `z` axis. The points on our graph will be the result of the cost function using our hypothesis with those specific theta parameters. The graph below depicts such a setup.
 
 ![](/public/img/machine-learn/2016-11-01-23.48.26.png)
 
 We will know that we have succeeded when our cost function is at the very bottom of the pits in our graph, i.e. when its value is the minimum. The red arrows show the minimum points in the graph.
 
-The way we do this is by taking the derivative (the tangential line to a function) of our cost function. The slope of the tangent is the derivative at that point and it will give us a direction to move towards. We make steps down the cost function in the direction with the steepest descent. The size of each step is determined by the parameter <span class="katex">$1$</span>, which is called the learning rate.
+The way we do this is by taking the derivative (the tangential line to a function) of our cost function. The slope of the tangent is the derivative at that point and it will give us a direction to move towards. We make steps down the cost function in the direction with the steepest descent. The size of each step is determined by the parameter $\alpha$, which is called the learning rate.
 
-For example, the distance between each `star` in the graph above represents a step determined by our parameter <span class="katex">$1$</span>. A smaller <span class="katex">$1$</span> would result in a smaller step and a larger <span class="katex">$1$</span> results in a larger step. The direction in which the step is taken is determined by the partial derivative of <span class="katex">$1$</span>. Depending on where one starts on the graph, one could end up at different points. The image above shows us two different starting points that end up in two different places.
+For example, the distance between each `star` in the graph above represents a step determined by our parameter $\alpha$. A smaller $\alpha$ would result in a smaller step and a larger $\alpha$ results in a larger step. The direction in which the step is taken is determined by the partial derivative of $J(θ_0, θ_1)$. Depending on where one starts on the graph, one could end up at different points. The image above shows us two different starting points that end up in two different places.
 
 The gradient descent algorithm is:
 
 repeat until convergence:
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta_0, \theta_1)$$
 
 where
 
 `j=0,1` represents the feature index number.
 
-At each iteration `j`, one should simultaneously update the parameters <span class="katex">$1$</span>, <span class="katex">$1$</span>, …, <span class="katex">$1$</span>. Updating a specific parameter prior to calculating another one on the <span class="katex">$1$</span> iteration would yield to a wrong implementation.
+At each iteration `j`, one should simultaneously update the parameters $θ_1$, $θ_2$, …, $θ_n$. Updating a specific parameter prior to calculating another one on the $j^{(th)}$ iteration would yield to a wrong implementation.
 
 ![](/public/img/machine-learn/2016-11-02-00.19.56.png)
 
@@ -470,29 +460,27 @@ At each iteration `j`, one should simultaneously update the parameters <span cla
 
 所以我们有假设函数，我们有一种方法可以衡量它与数据的匹配程度。现在我们需要估计假设函数中的参数。这就是梯度下降的地方。
 
-想象一下，我们基于其字段 <span class="katex">$1$</span> 和 <span class="katex">$1$</span> 绘制我们的假设函数（实际上我们将成本函数绘制为参数估计的函数）。我们不是绘制 `x` 和 `y` 本身，而是绘制我们的假设函数的参数范围以及选择一组特定参数所产生的成本。
+想象一下，我们基于其字段 $θ_0$ 和 $θ_1$ 绘制我们的假设函数（实际上我们将成本函数绘制为参数估计的函数）。我们不是绘制 `x` 和 `y` 本身，而是绘制我们的假设函数的参数范围以及选择一组特定参数所产生的成本。
 
-我们在 `x` 轴上设置 <span class="katex">$1$</span>，在 `y` 轴上设置 <span class="katex">$1$</span>，在垂直 `z` 轴上设置成本函数。我们的图上的点将是成本函数的结果，使用我们的假设和那些特定的 <span class="katex">$1$</span> 参数。下图描绘了这样的设置。
+我们在 `x` 轴上设置 $θ_0$，在 `y` 轴上设置 $θ_1$，在垂直 `z` 轴上设置成本函数。我们的图上的点将是成本函数的结果，使用我们的假设和那些特定的 $θ$ 参数。下图描绘了这样的设置。
 
 ![](/public/img/machine-learn/2016-11-01-23.48.26.png)
 
 当我们的成本函数位于图中凹坑的最底部时，即当它的值最小时，我们就知道我们已经成功了。红色箭头显示图表中的最小点。
 
-我们这样做的方法是采用我们的成本函数的导数（一个函数的切线）。切线的斜率是该点的导数，它将为我们提供朝向的方向。我们在最陡下降的方向上降低成本函数。每个步骤的大小由参数 <span class="katex">$1$</span> 确定，该参数称为学习速率。
+我们这样做的方法是采用我们的成本函数的导数（一个函数的切线）。切线的斜率是该点的导数，它将为我们提供朝向的方向。我们在最陡下降的方向上降低成本函数。每个步骤的大小由参数 $\alpha$ 确定，该参数称为学习速率。
 
-例如，上图中每个 `star` 之间的距离表示由参数 <span class="katex">$1$</span> 确定的步长。较小的 <span class="katex">$1$</span> 将导致较小的步长，较大的 <span class="katex">$1$</span> 会产生较大的步长。采取步骤的方向由 <span class="katex">$1$</span> 的偏导数确定。根据图表的开始位置，可能会在不同的点上结束。上图显示了两个不同的起点，最终出现在两个不同的地方。
+例如，上图中每个 `star` 之间的距离表示由参数 $\alpha$ 确定的步长。较小的 $\alpha$ 将导致较小的步长，较大的 $\alpha$ 会产生较大的步长。采取步骤的方向由 $J(θ_0, θ_1)$ 的偏导数确定。根据图表的开始位置，可能会在不同的点上结束。上图显示了两个不同的起点，最终出现在两个不同的地方。
 
 梯度下降算法是：
 
 重复直到收敛：
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$θ_j := θ_j - \alpha \frac{\partial}{\partial θ_j} J(θ_0, θ_1)$$
 
 在该情况下 `j = 0,1` 表示特征索引号。
 
-在每次迭代 `j` 时，应该同时更新参数 <span class="katex">$1$</span>, <span class="katex">$1$</span>, …, <span class="katex">$1$</span>。在 <span class="katex">$1$</span> 迭代中计算另一个参数之前更新特定参数将导致错误的实现。
+在每次迭代 `j` 时，应该同时更新参数 $θ_1$, $θ_2$, …, $θ_n$。在 $j^{(th)}$ 迭代中计算另一个参数之前更新特定参数将导致错误的实现。
 
 ![](/public/img/machine-learn/2016-11-02-00.19.56.png)
 
@@ -500,57 +488,49 @@ $<span class="katex">$1$</span>$
 
 <details>
 <summary>原文</summary>
-In this video we explored the scenario where we used one parameter <span class="katex">$1$</span> and plotted its cost function to implement a gradient descent. Our formula for a single parameter was :
+In this video we explored the scenario where we used one parameter $θ_1$ and plotted its cost function to implement a gradient descent. Our formula for a single parameter was :
 
 Repeat until convergence:
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$θ_1 := θ_1 - \alpha \frac{d}{dθ_1} J(θ_1)$$
 
-Regardless of the slope's sign for <span class="katex">$1$</span>, <span class="katex">$1$</span> eventually converges to its minimum value. The following graph shows that when the slope is negative, the value of <span class="katex">$1$</span> increases and when it is positive, the value of <span class="katex">$1$</span> decreases.
+Regardless of the slope's sign for $\frac{d}{dθ_1} J(θ_1)$, $θ_1$ eventually converges to its minimum value. The following graph shows that when the slope is negative, the value of $θ_1$ increases and when it is positive, the value of $θ_1$ decreases.
 
 ![](/public/img/machine-learn/2016-11-03-00.05.06.png)
 
-On a side note, we should adjust our parameter <span class="katex">$1$</span> to ensure that the gradient descent algorithm converges in a reasonable time. Failure to converge or too much time to obtain the minimum value imply that our step size is wrong.
+On a side note, we should adjust our parameter $\alpha$ to ensure that the gradient descent algorithm converges in a reasonable time. Failure to converge or too much time to obtain the minimum value imply that our step size is wrong.
 
 ![](/public/img/machine-learn/2016-11-03-00.05.27.png)
 
-How does gradient descent converge with a fixed step size <span class="katex">$1$</span>?
+How does gradient descent converge with a fixed step size $\alpha$?
 
-The intuition behind the convergence is that <span class="katex">$1$</span> approaches 0 as we approach the bottom of our convex function. At the minimum, the derivative will always be 0 and thus we get:
+The intuition behind the convergence is that $\frac{d}{dθ_1} J(θ_1)$ approaches 0 as we approach the bottom of our convex function. At the minimum, the derivative will always be 0 and thus we get:
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$θ_1 := θ_1-\alpha * 0$$
 
 ![](/public/img/machine-learn/2016-11-03-00.06.00.png)
 
 </details>
 
-在本视频中，我们探讨了使用一个参数<span class="katex">$1$</span>并绘制其成本函数以实现梯度下降的场景。我们的单个参数公式是：
+在本视频中，我们探讨了使用一个参数$θ_1$并绘制其成本函数以实现梯度下降的场景。我们的单个参数公式是：
 
 重复直到收敛：
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$θ_1 := θ_1 - \alpha \frac{d}{dθ_1} J(θ_1)$$
 
-无论 <span class="katex">$1$</span> 的斜率符号如何，<span class="katex">$1$</span>最终会收敛到其最小值。下图显示当斜率为负时，<span class="katex">$1$</span> 的值增加，当它为正时，<span class="katex">$1$</span> 的值减小。
+无论 $\frac{d}{dθ_1} J(θ_1)$ 的斜率符号如何，$θ_1$最终会收敛到其最小值。下图显示当斜率为负时，$θ_1$ 的值增加，当它为正时，$θ_1$ 的值减小。
 
 ![](/public/img/machine-learn/2016-11-03-00.05.06.png)
 
-另外，我们应调整参数 <span class="katex">$1$</span> 以确保梯度下降算法在合理的时间内收敛。没有收敛或太多时间来获得最小值意味着我们的步长是错误的。
+另外，我们应调整参数 $\alpha$ 以确保梯度下降算法在合理的时间内收敛。没有收敛或太多时间来获得最小值意味着我们的步长是错误的。
 
 ![](/public/img/machine-learn/2016-11-03-00.05.27.png)
 
-梯度下降如何与固定步长 <span class="katex">$1$</span> 收敛？
+梯度下降如何与固定步长 $\alpha$ 收敛？
 
-收敛背后的直觉是当我们接近凸函数的底部时，<span class="katex">$1$</span> 逼近 `0`。至少，导数总是 `0`，因此我们得到：
+收敛背后的直觉是当我们接近凸函数的底部时，$\frac{d}{dθ_1} J(θ_1)$ 逼近 `0`。至少，导数总是 `0`，因此我们得到：
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$θ_1 := θ_1-\alpha * 0$$
 
 ![](/public/img/machine-learn/2016-11-03-00.06.00.png)
 
@@ -561,13 +541,11 @@ $<span class="katex">$1$</span>$
 
 When specifically applied to the case of linear regression, a new form of the gradient descent equation can be derived. We can substitute our actual cost function and our actual hypothesis function and modify the equation to:
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$\text{repeat until convergence: } \lbrace \\ \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \\ \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \\ \rbrace$$
 
-where <span class="katex">$1$</span> is the size of the training set, <span class="katex">$1$</span> a constant that will be changing simultaneously with <span class="katex">$1$</span> and <span class="katex">$1$</span> are values of the given training set (data).
+where $m$ is the size of the training set, $θ_0$ a constant that will be changing simultaneously with $θ_1$ and $x_i, y_i$ are values of the given training set (data).
 
-Note that we have separated out the two cases for <span class="katex">$1$</span> into separate equations for <span class="katex">$1$</span> and <span class="katex">$1$</span>; and that for <span class="katex">$1$</span> we are multiplying <span class="katex">$1$</span> at the end due to the derivative. The following is a derivation of <span class="katex">$1$</span> for a single example:
+Note that we have separated out the two cases for $θ_j$ into separate equations for $θ_0$ and $θ_1$; and that for $θ_1$ we are multiplying $x_i$ at the end due to the derivative. The following is a derivation of $\frac {\partial}{\partial \theta_j}J(\theta)$ for a single example:
 
 ![](/public/img/machine-learn/2016-11-09-08.30.54.png)
 
@@ -583,13 +561,11 @@ The ellipses shown above are the contours of a quadratic function. Also shown is
 
 当特别应用于线性回归的情况时，可以导出梯度下降方程的新形式。 我们可以用我们的实际成本函数和我们的实际假设函数代替并修改方程式
 
-<div class="katex-display">
-$<span class="katex">$1$</span>$
-</div>
+$$\text{重复直到收敛: } \lbrace \\ \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \\ \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \\ \rbrace$$
 
-其中 <span class="katex">$1$</span> 是训练集的大小，<span class="katex">$1$</span> 一个与 <span class="katex">$1$</span> 同时变化的常数， 和 <span class="katex">$1$</span> 是给定训练集（数据）的值。
+其中 $m$ 是训练集的大小，$θ_0$ 一个与 $θ_1$ 同时变化的常数， 和 $x_i, y_i$ 是给定训练集（数据）的值。
 
-请注意，我们已将 <span class="katex">$1$</span> 的两个案例分离为 <span class="katex">$1$</span> 的单独等式; 并且对于 <span class="katex">$1$</span> 我们由于微分乘以 <span class="katex">$1$</span> 结尾。以下是 <span class="katex">$1$</span> 的推导，用于单个示例：
+请注意，我们已将 $θ_j$ 的两个案例分离为 $θ_0, θ_1$ 的单独等式; 并且对于 $θ_1$ 我们由于微分乘以 $x_i$ 结尾。以下是 $\frac {\partial}{\partial \theta_j}J(\theta)$ 的推导，用于单个示例：
 
 ![](/public/img/machine-learn/2016-11-09-08.30.54.png)
 
@@ -599,7 +575,7 @@ $<span class="katex">$1$</span>$
 
 ![](/public/img/machine-learn/2016-11-09-08.36.49.png)
 
-上面显示的椭圆是二次函数的轮廓。 还示出了梯度下降所采用的轨迹，其在 `(48,30)` 处初始化。 图中的 `x`（由直线连接）标记了渐变下降经历的 <span class="katex">$1$</span> 的连续值，当它收敛到其最小值时。
+上面显示的椭圆是二次函数的轮廓。 还示出了梯度下降所采用的轨迹，其在 `(48,30)` 处初始化。 图中的 `x`（由直线连接）标记了渐变下降经历的 $θ$ 的连续值，当它收敛到其最小值时。
 
 ## 十一、练习 2
 
@@ -612,7 +588,7 @@ $<span class="katex">$1$</span>$
 
     Specifically, let x be equal to the number of `A` grades (including A-. A and A+ grades) that a student receives in their first year of college (freshmen year). We would like to predict the value of y, which we define as the number of `A` grades they get in their second year (sophomore year).
 
-Here each row is one training example. Recall that in linear regression, our hypothesis is <span class="katex">$1$</span>, and we use <span class="katex">$1$</span> to denote the number of training examples.
+    Here each row is one training example. Recall that in linear regression, our hypothesis is $h_\theta(x) = \theta_0 + \theta_1x$, and we use $m$ to denote the number of training examples.
 
     |  x  |  y  |
     | :-: | :-: |
@@ -621,11 +597,11 @@ Here each row is one training example. Recall that in linear regression, our hyp
     |  0  |  1  |
     |  4  |  3  |
 
-For the training set given above (note that this training set may also be referenced in other questions in this quiz), what is the value of <span class="katex">$1$</span>? In the box below, please enter your answer (which should be a number between `0` and `10`).
+    For the training set given above (note that this training set may also be referenced in other questions in this quiz), what is the value of $m$? In the box below, please enter your answer (which should be a number between `0` and `10`).
 
 ---
 
-2. Consider the following training set of <span class="katex">$1$</span> training examples:
+2. Consider the following training set of $m = 4$ training examples:
 
     |  x  |  y  |
     | :-: | :-: |
@@ -634,49 +610,49 @@ For the training set given above (note that this training set may also be refere
     |  4  |  2  |
     |  0  |  0  |
 
-Consider the linear regression model <span class="katex">$1$</span>. What are the values of <span class="katex">$1$</span> and <span class="katex">$1$</span> that you would expect to obtain upon running gradient descent on this model? (Linear regression will be able to fit this data perfectly.)
+    Consider the linear regression model $h_θ(x) = θ_0 + θ_1x$. What are the values of $θ_0$ and $θ_1$ that you would expect to obtain upon running gradient descent on this model? (Linear regression will be able to fit this data perfectly.)
 
     >
 
--   a. <span class="katex">$1$</span>
--   b. <span class="katex">$1$</span>
--   c. <span class="katex">$1$</span>
--   d. <span class="katex">$1$</span>
--   e. <span class="katex">$1$</span>
+-   a. $θ_0 = 0, θ_1 = 0.5$
+-   b. $θ_0 = 1, θ_1 = 0.5$
+-   c. $θ_0 = 1, θ_1 = 1$
+-   d. $θ_0 = 0.5, θ_1 = 0.5$
+-   e. $θ_0 = 0.5, θ_1 = 0$
 
 ---
 
-3. Suppose we set <span class="katex">$1$</span>. What is <span class="katex">$1$</span>?
+3. Suppose we set $θ_0 = -1, θ_1 = 0.5$. What is $h_θ(4)$?
 
 ---
 
-4. Let <span class="katex">$1$</span> be some function so that <span class="katex">$1$</span> outputs a number.
+4. Let $f$ be some function so that $f(θ_0, θ_1)$ outputs a number.
 
-For this problem, <span class="katex">$1$</span> is some arbitrary/unknown smooth function (not necessarily the cost function of linear regression, so <span class="katex">$1$</span> may have local optima).
+    For this problem, $f$ is some arbitrary/unknown smooth function (not necessarily the cost function of linear regression, so $f$ may have local optima).
 
-Suppose we use gradient descent to try to minimize <span class="katex">$1$</span> as a function of <span class="katex">$1$</span> and <span class="katex">$1$</span>.
+    Suppose we use gradient descent to try to minimize $f(θ_0, θ_1)$ as a function of $θ_0$ and $θ_1$.
 
     Which of the following statements are true? (Check all that apply.)
 
     >
 
 -   a. If the learning rate is too small, then gradient descent may take a very long time to converge.
--   b. Even if the learning rate <span class="katex">$1$</span> is very large, every iteration of gradient descent will decrease the value of <span class="katex">$1$</span>.
--   c. If <span class="katex">$1$</span> and <span class="katex">$1$</span> are initialized so that <span class="katex">$1$</span>, then by symmetry (because we do simultaneous updates to the two parameters), after one iteration of gradient descent, we will still have <span class="katex">$1$</span>.
--   d. If <span class="katex">$1$</span> and <span class="katex">$1$</span> are initialized at a local minimum, then one iteration will not change their values.
+-   b. Even if the learning rate $\alpha$ is very large, every iteration of gradient descent will decrease the value of $f(\theta_0, \theta_1)$.
+-   c. If $\theta_0$ and $\theta_1$ are initialized so that $\theta_0 = \theta_1$, then by symmetry (because we do simultaneous updates to the two parameters), after one iteration of gradient descent, we will still have $\theta_0 = \theta_1$.
+-   d. If $\theta_0$ and $\theta_1$ are initialized at a local minimum, then one iteration will not change their values.
 
 ---
 
-5. Suppose that for some linear regression problem (say, predicting housing prices as in the lecture), we have some training set, and for our training set we managed to find some <span class="katex">$1$</span> such that <span class="katex">$1$</span>.
+5. Suppose that for some linear regression problem (say, predicting housing prices as in the lecture), we have some training set, and for our training set we managed to find some $θ_0, θ_1$ such that $J(θ_0, θ_1) = 0$.
 
     Which of the statements below must then be true? (Check all that apply.)
 
     >
 
 -   a. Gradient descent is likely to get stuck at a local minimum and fail to find the global minimum.
--   b. For this to be true, we must have <span class="katex">$1$</span> and <span class="katex">$1$</span> so that <span class="katex">$1$</span>
+-   b. For this to be true, we must have $\theta_0 = 0$ and $\theta_1 = 0$ so that $h_\theta(x) = 0$
 -   c. Our training set can be fit perfectly by a straight line, i.e., all of our training examples lie perfectly on some straight line.
--   d. For this to be true, we must have <span class="katex">$1$</span> for every value of <span class="katex">$1$</span>m\$.
+-   d. For this to be true, we must have $y^{(i)} = 0$ for every value of $i = 1, 2, …, $m\$.
 
 </details>
 
@@ -686,7 +662,7 @@ Suppose we use gradient descent to try to minimize <span class="katex">$1$</span
 
     具体来说，让 x 等于学生在大学第一年（新生年）收到的 `A` 等级（包括 `A-` , `A` 和 `A+` 等级）的数量。 我们想预测 `y` 的值，我们将其定义为他们在第二年（大二）获得的 `A` 等级的数量。
 
-这里每行都是一个训练示例。 回想一下，在线性回归中，我们的假设是 <span class="katex">$1$</span>，我们使用 <span class="katex">$1$</span> 来表示训练样例的数量。
+    这里每行都是一个训练示例。 回想一下，在线性回归中，我们的假设是 $h_\theta(x) = \theta_0 + \theta_1x$，我们使用 $m$ 来表示训练样例的数量。
 
     |  x  |  y  |
     | :-: | :-: |
@@ -695,11 +671,11 @@ Suppose we use gradient descent to try to minimize <span class="katex">$1$</span
     |  0  |  1  |
     |  4  |  3  |
 
-对于上面给出的训练集（请注意，此训练集也可以在本测验中的其他问题中引用），<span class="katex">$1$</span> 的值是多少？ 在下面的框中，请输入您的答案（应该是 `0` 和 `10` 之间的数字）。
+    对于上面给出的训练集（请注意，此训练集也可以在本测验中的其他问题中引用），$m$ 的值是多少？ 在下面的框中，请输入您的答案（应该是 `0` 和 `10` 之间的数字）。
 
 ---
 
-2. 考虑以下 <span class="katex">$1$</span> 训练示例的训练集：
+2. 考虑以下 $m = 4$ 训练示例的训练集：
 
     |  x  |  y  |
     | :-: | :-: |
@@ -708,58 +684,58 @@ Suppose we use gradient descent to try to minimize <span class="katex">$1$</span
     |  4  |  2  |
     |  0  |  0  |
 
-考虑线性回归模型 <span class="katex">$1$</span>。在此模型上运行梯度下降时，您期望得到的 <span class="katex">$1$</span> 和 <span class="katex">$1$</span> 的值是多少？ （线性回归将能够完美地拟合这些数据。）
+    考虑线性回归模型 $h_θ(x) = θ_0 + θ_1 x$。在此模型上运行梯度下降时，您期望得到的 $θ_0$ 和 $θ_1$ 的值是多少？ （线性回归将能够完美地拟合这些数据。）
 
     >
 
--   a. <span class="katex">$1$</span>
--   b. <span class="katex">$1$</span>
--   c. <span class="katex">$1$</span>
--   d. <span class="katex">$1$</span>
--   e. <span class="katex">$1$</span>
+-   a. $θ_0 = 0, θ_1 = 0.5$
+-   b. $θ_0 = 1, θ_1 = 0.5$
+-   c. $θ_0 = 1, θ_1 = 1$
+-   d. $θ_0 = 0.5, θ_1 = 0.5$
+-   e. $θ_0 = 0.5, θ_1 = 0$
 
 ---
 
-3. 假设我们设置 <span class="katex">$1$</span>。 什么是 <span class="katex">$1$</span>？
+3. 假设我们设置 $θ_0 = -1, θ_1 = 0.5$。 什么是 $h_θ(4)$？
 
 ---
 
-4. 让 <span class="katex">$1$</span> 成为某个函数，以便 <span class="katex">$1$</span> 输出一个数字。
+4. 让 $f$ 成为某个函数，以便 $f(θ_0, θ_1)$ 输出一个数字。
 
-对于这个问题，<span class="katex">$1$</span> 是一些任意/未知的平滑函数（不一定是线性回归的代价函数，因此 <span class="katex">$1$</span> 可能具有局部最优）。
+    对于这个问题，$f$ 是一些任意/未知的平滑函数（不一定是线性回归的代价函数，因此 $f$ 可能具有局部最优）。
 
-假设我们使用梯度下降来尝试最小化 <span class="katex">$1$</span> 作为 <span class="katex">$1$</span> 和 <span class="katex">$1$</span> 的函数。
+    假设我们使用梯度下降来尝试最小化 $f(θ_0, θ_1)$ 作为 $θ_0$ 和 $θ_1$ 的函数。
 
     以下哪项陈述属实？ （选择所有正确的选项。）
 
     >
 
 -   a. 如果学习速率太小，则梯度下降可能需要很长时间才能收敛。
--   b .即使学习率 <span class="katex">$1$</span> 非常大，每次梯度下降迭代都会减少 <span class="katex">$1$</span> 的值。
--   c. 如果 <span class="katex">$1$</span> 和 <span class="katex">$1$</span> 被初始化以便 <span class="katex">$1$</span>，那么通过对称（因为我们同时更新这两个参数），经过一次梯度下降迭代后，我们仍然会有 <span class="katex">$1$</span>。
--   d. 如果 <span class="katex">$1$</span> 和 <span class="katex">$1$</span> 初始化为局部最小值，则下一次迭代不会更改其值。
+-   b .即使学习率 $\alpha$ 非常大，每次梯度下降迭代都会减少 $f(\theta_0, \theta_1)$ 的值。
+-   c. 如果 $\theta_0$ 和 $\theta_1$ 被初始化以便 $\theta_0 = \theta_1$，那么通过对称（因为我们同时更新这两个参数），经过一次梯度下降迭代后，我们仍然会有 $\theta_0 = \theta_1$。
+-   d. 如果 $\theta_0$ 和 $\theta_1$ 初始化为局部最小值，则下一次迭代不会更改其值。
 
 ---
 
-5. 假设对于一些线性回归问题（比如在讲座中预测住房价格），我们有一些训练集，对于我们的训练集，我们设法找到一些 <span class="katex">$1$</span>，使得 <span class="katex">$1$</span>。
+5. 假设对于一些线性回归问题（比如在讲座中预测住房价格），我们有一些训练集，对于我们的训练集，我们设法找到一些 $θ_0, θ_1$，使得 $J(θ_0, θ_1) = 0$。
 
     那么下面哪个陈述必须是真的？（选择所有正确的选项）
 
     >
 
 -   a. 梯度下降可能会陷入局部最小值并且无法找到全局最小值。
--   b. 为此，我们必须要 <span class="katex">$1$</span> 和 <span class="katex">$1$</span> 以便 <span class="katex">$1$</span>
+-   b. 为此，我们必须要 $\theta_0 = 0$ 和 $\theta_1 = 0$ 以便 $h_\theta(x) = 0$
 -   c. 我们的训练组可以通过直线完美贴合，即我们所有的训练样例都完美地位于某条直线上。
--   d. 为此，对于 <span class="katex">$1$</span>m<span class="katex">$1$</span>y^{(i)} = 0$。
+-   d. 为此，对于 $i = 1, 2, …, $m$ 的每个值，我们必须有 $y^{(i)} = 0$。
 
 <details>
 <summary>答案</summary>
 
--   1. `4` <span class="katex">$1$</span> 即为样本数量。
--   2. `a` 代入公式 <span class="katex">$1$</span> 即可。
--   3. `1` 把 <span class="katex">$1$</span> 代入公式 <span class="katex">$1$</span>。
+-   1. `4` $m = 4$ 即为样本数量。
+-   2. `a` 代入公式 $h_θ(x) = θ_0 + θ_1x$ 即可。
+-   3. `1` 把 $θ_0 = -1, θ_1 = 0.5, x = 4$ 代入公式 $h_θ(4) = -1 + 0.5 * 4 = 1$。
 -   4. `a, d`
--   5. `c` <span class="katex">$1$</span> 代表所有的样本都能与该线性函数上的点完美贴合。
+-   5. `c` $J(θ_0, θ_1) = 0$ 代表所有的样本都能与该线性函数上的点完美贴合。
 
 </details>
 
@@ -786,21 +762,21 @@ Suppose we use gradient descent to try to minimize <span class="katex">$1$</span
 
 | abbreviate     | original                              | description                       |
 | -------------- | ------------------------------------- | --------------------------------- |
-| <span class="katex">$1$</span>            | number of tranining examples          | 训练级数量                        |
-| <span class="katex">$1$</span>            | `input` variable / features           | 输入变量 / 特征                   |
-| <span class="katex">$1$</span>            | `output` variable / `target` variable | 输出变量 / 目标变量               |
-| <span class="katex">$1$</span>       | -                                     | 一个训练集样本                    |
-| <span class="katex">$1$</span> | -                                     | 第 <span class="katex">$1$</span> 个训练集样本，<span class="katex">$1$</span> 为下标 |
+| $m$            | number of tranining examples          | 训练级数量                        |
+| $x$            | `input` variable / features           | 输入变量 / 特征                   |
+| $y$            | `output` variable / `target` variable | 输出变量 / 目标变量               |
+| $(x, y)$       | -                                     | 一个训练集样本                    |
+| $(x(i), y(i))$ | -                                     | 第 $i$ 个训练集样本，$(i)$ 为下标 |
 
 ## 十三、数学补课
 
 ### 10.1 ∑ 的意义
 
-在很多算法的文章书籍中能够见到很多 <span class="katex">$1$</span> 这样的数学表达式，但是我因为数学没好好学各种符号根本不认识。
+在很多算法的文章书籍中能够见到很多 $\displaystyle \sum_{i=0}^{100}(h(i))$ 这样的数学表达式，但是我因为数学没好好学各种符号根本不认识。
 
 `∑` 代表求和的意思，和 `math.Sum` 类似但是不仅限于求和，它的下标代表了变量的起始，上标代表的声明的结束。
 
-例如 <span class="katex">$1$</span> 可以转换为代码:
+例如 $\displaystyle \sum_{i=0}^{100}(h(i))$ 可以转换为代码:
 
 ```c
 int h(i) {
@@ -815,4 +791,4 @@ int sum() {
 }
 ```
 
-自然上面的 <span class="katex">$1$</span> 代表的是样本下标从 `1` 开始到 <span class="katex">$1$</span> 结束，也就是遍历所有样本，注意数学公式的下标 <span class="katex">$1$</span> 与编程的起始定义不同，数学的下标 <span class="katex">$1$</span> 起始为 `1`。
+自然上面的 $\displaystyle \sum _{i=1}^m$ 代表的是样本下标从 `1` 开始到 $m$ 结束，也就是遍历所有样本，注意数学公式的下标 $i$ 与编程的起始定义不同，数学的下标 $i$ 起始为 `1`。

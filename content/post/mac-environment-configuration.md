@@ -134,8 +134,8 @@ $ brew install python2
 # 安装 pyenv
 $ brew install pyenv
 # 使用 sohu 源加速
-v=2.7.16|wget http://mirrors.sohu.com/python/<span class="katex">$1$</span>v.tar.xz -P ~/.pyenv/cache/;pyenv install $v
-v=3.7.4|wget http://mirrors.sohu.com/python/<span class="katex">$1$</span>v.tar.xz -P ~/.pyenv/cache/;pyenv install $v
+v=2.7.16|wget https://npm.taobao.org/mirrors/python/${v}/Python-${v}.tar.xz -P ~/.pyenv/cache/;pyenv install $v
+v=3.7.4|wget https://npm.taobao.org/mirrors/python/${v}/Python-${v}.tar.xz -P ~/.pyenv/cache/;pyenv install $v
 # 安装 python2
 $ pyenv install 2.7.16
 # 安装 python3
@@ -213,8 +213,8 @@ $ brew cask install iterm2
 
 ``` bash
 # 可以选择使用 curl 或 wget 下载脚本。
-<span class="katex">$1$</span>(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-<span class="katex">$1$</span>(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 ```
 
 **oh-my-zsh 插件**
