@@ -39,12 +39,12 @@ We could approach the classification problem ignoring the fact that y is discret
 
 Our new form uses the "Sigmoid Function," also called the "Logistic Function":
 
-$$
+```tex
 h_\theta (x) = g ( \theta^T x ) \newline
 \newline
 z = \theta^T x \newline
 g(z) = \dfrac{1}{1 + e^{-z}}
-$$
+```
 
 The following image shows us what the sigmoid function looks like:
 
@@ -65,12 +65,12 @@ $$
 
 我们的新形式使用 `Sigmoid函数`，也称为 `Logistic函数`：
 
-$$
+<p>$$
 h_\theta (x) = g ( \theta^T x ) \newline
 \newline
 z = \theta^T x \newline
 g(z) = \dfrac{1}{1 + e^{-z}}
-$$
+$$</p>
 
 下图显示了 `Logistic函数` 的外观：
 
@@ -186,7 +186,7 @@ $$
 
 **Example:**
 
-$$
+<p>$$
 \theta = \begin{bmatrix}5 \newline
 -1 \newline
 0\end{bmatrix} \newline
@@ -194,7 +194,7 @@ y = 1 \; if \; 5 + (-1) x_1 + 0 x_2 \geq 0 \newline
 5 - x_1 \geq 0 \newline
 - x_1 \geq -5 \newline
 x_1 \leq 5 \newline
-$$
+$$</p>
 
 在这种情况下，我们的决策边界是放置在图形上的垂直直线，其中 $x1 = 5$，其中左边的所有内容表示 $y = 1$，而右边的所有内容表示 $y = 0$。
 

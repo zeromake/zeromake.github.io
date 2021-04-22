@@ -13,7 +13,7 @@ slug: a-few-bytes-here-a-few-there
 draft: false
 ---
 
-> [原文地址](https://dave.cheney.net/2021/01/05/a-few-bytes-here-a-few-there-pretty-soon-youre-talking-real-memory#easy-footnote-bottom-1-4231)
+> [原文地址](https://dave.cheney.net/2021/01/05/a-few-bytes-here-a-few-there-pretty-soon-youre-talking-real-memory)
 
 
 今天文章来自一个最近流行的测试，思考一下这个基准测试代码片段。<sup id="easy-footnote-ref-1-4231" class="footnote">[1](#easy-footnote-bottom-1-4231)</sup>
@@ -127,7 +127,7 @@ Size classes
 
 例如，假设向 runtime 请求 9 个字节。9 字节大小不常见，因此可能需要为大小为 9 字节设置一个新的 size classes。由于 9 个字节大小并不常见，所以分配的其余部分（ 4kb 或更多） 可能会被浪费。因此，可能 size classes 的集是固定的。如果精确的 size classes 不可用，则分配将向上舍入到下一个 size classes。在我们的示例中，9 字节可能在 12 字节 size classes 中分配。3 个未使用的字节的开销优于大部分未使用的整个 size classes 分配。
 
-现在我们就知道
+现在我们就能够知道
 ----------------
 
 这是谜题的最后一块。Go 1.15 没有 24 字节 size classes，因此在 32 字节大小类中分配了 `ss` 的堆分配。由于 Martin Mührmann Go 1.16 的工作，它有一个 24 字节大小类，非常适合分配给接口的切片值。
@@ -157,7 +157,7 @@ Size classes
 </li>
 </ol>
 
-### Related posts:
+### 参考文章:
 
 1. [I’m talking about Go at DevFest Siberia 2017](https://dave.cheney.net/2017/08/23/im-talking-about-go-at-devfest-siberia-2017)
 2. [If aligned memory writes are atomic, why do we need the sync/atomic package?](https://dave.cheney.net/2018/01/06/if-aligned-memory-writes-are-atomic-why-do-we-need-the-sync-atomic-package)
