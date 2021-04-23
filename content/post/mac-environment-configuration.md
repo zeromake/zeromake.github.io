@@ -249,13 +249,14 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-m
 # zsh 额外的命令行提示
 git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions
 # touchbar 支持没 touchbar 的就别装了
-git clone https://github.com/floor114/zsh-apple-touchbar $ZSH_CUSTOM/plugins/zsh-apple-touchbar
+git clone https://github.com/floor114/zsh-apple-touchbar ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-apple-touchbar
 ```
 
 ~/.zshrc
 
 ```bash
 plugins=(
+    git
     zsh-syntax-highlighting
     zsh-autosuggestions
     zsh-completions
@@ -278,7 +279,18 @@ aria2c https://download.jetbrains.com/go/goland-2021.1.dmg
 
 使用 [jetbrains-eval-reset](https://zhile.io/2020/11/18/jetbrains-eval-reset-da33a93d.html) 无限试用即可。
 
-## 六、参考资料
+## 六、推荐软件
+
+| 名称 | 用途 | 官方地址 | 安装方法 |
+|-----|-------|-------|------------|
+| Another Redis Desktop Manager | redis `GUI` 客户端 | [github](https://github.com/qishibo/AnotherRedisDesktopManager) | brew install another-redis-desktop-manager |
+| DynamoDbGUI | AWS DynamoDb `GUI` 客户端 | [github](https://github.com/Arattian/DynamoDb-GUI-Client) | [dmg](https://github.com/Arattian/DynamoDb-GUI-Client/releases/download/3.3.1/DynamoDbGUI-mac-3.3.1.dmg) |
+| Tunnelblick | openvpn 客户端，比 openvpn connect 好用一些，不会出现导入的配置的证书都丢失了 | [官网](https://www.tunnelblick.net) | brew install tunnelblick |
+| V2rayU | v2ray gui 客户端 | [github](https://github.com/yanue/V2rayU) | brew install v2rayu |
+| Free Download Manager | 下载器 | [官网](https://www.freedownloadmanager.org) | brew install free-download-manager |
+| WPS | 我用的国际版加国内的语言包 | [官网](https://www.wps.com/mac) | brew install wpsoffice |
+
+## 参考资料
 
 - [Does the option "Draw bold text in bright colors" removed?](https://gitlab.com/gnachman/iterm2/issues/7854)
 - [brew](https://brew.sh/index_zh-cn)
