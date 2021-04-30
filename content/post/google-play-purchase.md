@@ -1,10 +1,10 @@
 ---
 title: google play 内购接入
-date: 2021-04-25 15:46:26 +8:00
+date: 2021-04-25 15:46:26 +08:00
 tags:
   - android
   - java
-lastmod: 2021-04-25 15:46:26 +8:00
+lastmod: 2021-04-25 15:46:26 +08:00
 categories:
   - google
   - pay
@@ -16,11 +16,13 @@ draft: true
 
 ## 一、预先准备
 
-### 1.1 Google 开发者账号
+**Google 开发者账号**
 
 进入 [Google Play控制台](https://play.google.com/console) 注册并支付费用，然后创建一个新的应用，用之前的应用也可以但是没有办法发布到各个流水线上。
 
-### 1.2 安卓开发环境
+![](/public/img/purchase/create-app.png)
+
+**安卓开发环境**
 
 安卓开发环境就不用说了，主要说一下创建的项目的包名必须是 google play 上没有的，在 `app/build.gradle` 加入以下依赖：
 
@@ -31,22 +33,24 @@ dependencies {
 }
 ```
 
-然后打包带签名的 release 版本，上传到内部测试，保存并发布，这个时候你才能添加商品。
+然后打包带签名的 release 版本，上传到内部测试，保存并发布。
 
+![](/public/img/purchase/test-upload-app.jpg)
 
-### 1.3 支持 Google Play 内购的安卓系统
+这个时候你才能添加商品。
+![](/public/img/purchase/balance.png)
 
-正常的模拟器会直接显示设备不支持内购，需要下载带 Google APIs 的镜像才能支持，或者找个带 google 框架的实体机器。
-### 1.4 支持 Google Play 内购的账号
+**支持 Google Play 内购系统账号**
+
+正常的模拟器会直接显示设备不支持内购，需要下载带 Google APIs 的镜像才能支持，或者找个带 google 框架的实体机器(记得需要fq)。
 
 所在地区必须是国外，我有一个香港所属地的无法使用内购，可以尝试切换到外国地区（我没成功）。
-
 
 ## 二、流程
 
 1. 客户端通过商品列表中的 sku(商品ID)，向 google play 获取 skuDetail(商品详情)。
-2. 客户端通过商品创建一个自己的订单，并且客户端通过该订单id发起一个支付。
-3. 支付完成需要服务端验证，服务端会判断是否付款且将订单进行确认，验证后客户端需要进行订单消耗。
+1. 客户端通过商品创建一个自己的订单，并且客户端通过该订单id发起一个支付。
+1. 支付完成需要服务端验证，服务端会判断是否付款且将订单进行确认，验证后客户端需要进行订单消耗。
 
 
 ## 注意点
@@ -66,4 +70,4 @@ dependencies {
 3. [In-app billing API version 3 is not supported on this device](https://blog.csdn.net/u013762572/article/details/108478969)
 2. [Google结算服务文档](https://developer.android.com/google/play/billing)
 3. [官方示例](https://github.com/android/play-billing-samples)
-4. [](https://stackoverflow.com/questions/43536904/google-play-developer-api-the-current-user-has-insufficient-permissions-to-pe)
+4. [nopermissions](https://stackoverflow.com/questions/43536904/google-play-developer-api-the-current-user-has-insufficient-permissions-to-pe)
