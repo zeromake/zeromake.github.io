@@ -4,7 +4,7 @@ date: 2019-12-28T05:25:00.000Z
 tags:
   - design
   - patterns
-lastmod: 2019-12-28T05:25:00.000Z
+lastmod: 2021-04-30 17:36:00 +08:00
 categories:
   - patterns
 slug: design-patterns
@@ -297,3 +297,8 @@ func Range(r func(k, v interface{}) bool) {
 
 
 ## 十三、状态模式
+
+
+## 参考
+
+1. [设计模式](https://refactoringguru.cn/design-patterns/catalog)
