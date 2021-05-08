@@ -39,12 +39,12 @@ We could approach the classification problem ignoring the fact that y is discret
 
 Our new form uses the "Sigmoid Function," also called the "Logistic Function":
 
-```tex
+$$
 h_\theta (x) = g ( \theta^T x ) \newline
 \newline
 z = \theta^T x \newline
 g(z) = \dfrac{1}{1 + e^{-z}}
-```
+$$
 
 The following image shows us what the sigmoid function looks like:
 
@@ -65,12 +65,12 @@ $$
 
 我们的新形式使用 `Sigmoid函数`，也称为 `Logistic函数`：
 
-<p>$$
+$$
 h_\theta (x) = g ( \theta^T x ) \newline
 \newline
 z = \theta^T x \newline
 g(z) = \dfrac{1}{1 + e^{-z}}
-$$</p>
+$$
 
 下图显示了 `Logistic函数` 的外观：
 
@@ -130,6 +130,7 @@ The **decision boundary** is the line that separates the area where y = 0 and wh
 
 **Example:**
 
+
 $$
 \theta = \begin{bmatrix}5 \newline
 -1 \newline
@@ -186,7 +187,7 @@ $$
 
 **Example:**
 
-<p>$$
+$$
 \theta = \begin{bmatrix}5 \newline
 -1 \newline
 0\end{bmatrix} \newline
@@ -194,7 +195,7 @@ y = 1 \; if \; 5 + (-1) x_1 + 0 x_2 \geq 0 \newline
 5 - x_1 \geq 0 \newline
 - x_1 \geq -5 \newline
 x_1 \leq 5 \newline
-$$</p>
+$$
 
 在这种情况下，我们的决策边界是放置在图形上的垂直直线，其中 $x1 = 5$，其中左边的所有内容表示 $y = 1$，而右边的所有内容表示 $y = 0$。
 
@@ -563,8 +564,7 @@ Which of the following are true? Check all that apply.
 ---
 
 1. 假设您已经训练了逻辑回归分类器，并且在新示例 $x$ 上输出了预测 $h_θ(x) = 0.2$。 这意味着（多选）
-    >
-
+------
 -   a. 我们对 $P(y=1|x;\theta)$ 的估计为 0.2。
 -   b. 我们对 $P(y=0|x;\theta)$ 的估计为 0.2。
 -   c. 我们对 $P(y=1|x;\theta)$ 的估计为 0.8。
@@ -585,8 +585,7 @@ Which of the following are true? Check all that apply.
 
 以下哪项是正确的？（多选）
 
->
-
+------
 -   a. $J(\theta)$ 将是一个凸函数，因此梯度下降应收敛到全局最小值。
 -   b. 添加多项式特征 (例如，改为使用 $h_\theta(x) = g(\theta_0 + \theta_1x_1 + \theta_2 x_2 + \theta_3 x_1^2 + \theta_4 x_1 x_2 + \theta_5 x_2^2)$) 可能会增加我们拟合训练数据的能力。
 -   c. 正例和负例不能使用直线分开。因此，梯度下降将无法收敛。
@@ -595,7 +594,7 @@ Which of the following are true? Check all that apply.
 ---
 
 3. 对于逻辑回归，梯度为 $\frac{\partial}{\partial \theta_j} J(\theta) =\frac{1}{m}\sum_{i=1}^m{ (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)}}$。 以下哪项是学习速率为 $α$ 的逻辑回归的正确梯度下降更新？（多选）
-    >
+------
 
 -   a. $\theta := \theta - \alpha \frac{1}{m} \sum_{i=1}^m{ \left(\theta^T x - y^{(i)}\right) x^{(i)}}$.
 -   b. $\theta_j := \theta_j - \alpha \frac{1}{m} \sum_{i=1}^m{ (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)}}$ (同时更新所有 $j$).
@@ -605,8 +604,7 @@ Which of the following are true? Check all that apply.
 ---
 
 4. 下列哪个陈述是正确的？（多选）
-    >
-
+------
 -   a. 由于我们在两个类别时训练一个分类器，因此在三个类别时我们训练两个分类器（并且我们进行一对多分类）。
 -   b. **一对多** 技术使您可以将 逻辑回归(logistic regression) 用于问题中，其中每个 $y^{(i)}$ 来自一组固定的离散值。
 -   c. 用 $m \geq 1$ 示例训练的 逻辑回归(logistic regression) 的成本函数 $J(\theta)$ 始终大于或等于零。
@@ -615,8 +613,7 @@ Which of the following are true? Check all that apply.
 ---
 
 5. 假设您训练了逻辑分类器 $h_\theta(x) = g(\theta_0 + \theta_1x_1 + \theta_2 x_2)$。 假设 $\theta_0 = - 6, \theta_1 = 1, \theta_2 = 0$。 以下哪个数字代表您的分类器找到的决策边界？
-    >
-
+------
 -   a. Figure: ![](/public/img/machine-learn/2015-02-27-14.32.48.png)
 -   b. Figure: ![](/public/img/machine-learn/2015-02-27-14.34.53.png)
 -   c. Figure: ![](/public/img/machine-learn/2015-02-27-14.51.03.png)
@@ -720,12 +717,12 @@ Now let's approach regularization using the alternate method of the non-iterativ
 To add in regularization, the equation is the same as our original, except that we add another term inside the parentheses:
 
 $$
-\theta = \left( X^TX + \lambda \cdot L \right)^{-1} X^Ty \\
-\text{where}\ \ L = \begin{bmatrix} 0 & & & & \\
-& 1 & & & \\
-& & 1 & & \\
-& & & \ddots & \\
-& & & & 1 \\
+\theta = \left( X^TX + \lambda \cdot L \right)^{-1} X^Ty \newline
+\text{where}\ \ L = \begin{bmatrix} 0 & & & & \newline
+& 1 & & & \newline
+& & 1 & & \newline
+& & & \ddots & \newline
+& & & & 1 \newline
 \end{bmatrix}
 $$
 
@@ -764,7 +761,7 @@ The second sum, $\sum_{j=1}^n \theta_j^2$​ means to explicitly exclude the bia
 ---
 
 1.  You are training a classification model with logistic regression. Which of the following statements are true? Check all that apply.
->
+------
 - a. Adding a new feature to the model always results in equal or better performance on the training set.
 - b. Introducing regularization to the model always results in equal or better performance on the training set.
 - c. Introducing regularization to the model always results in equal or better performance on examples not in the training set.
@@ -773,16 +770,16 @@ The second sum, $\sum_{j=1}^n \theta_j^2$​ means to explicitly exclude the bia
 ---
 
 2. Suppose you ran logistic regression twice, once with $\lambda = 0$, and once with $\lambda = 1$ .<br/>
-One of the times, you got parameters $\theta = \begin{bmatrix} 81.47 \\ 12.69 \end{bmatrix}$, and the other time you got $\theta = \begin{bmatrix} 13.01 \\ 0.91 \end{bmatrix}$.<br/>
+One of the times, you got parameters $\theta = \begin{bmatrix} 81.47 \newline 12.69 \end{bmatrix}$, and the other time you got $\theta = \begin{bmatrix} 13.01 \newline 0.91 \end{bmatrix}$.<br/>
 However, you forgot which value of $\lambda$ corresponds to which value of $\theta$. Which one do you think corresponds to $\lambda = 1$?
->
-- a. $\theta = \begin{bmatrix}  81.47 \\ 12.69 \end{bmatrix}$
-- b. $\theta = \begin{bmatrix} 13.01 \\ 0.91 \end{bmatrix}$
+------
+- a. $\theta = \begin{bmatrix}  81.47 \newline 12.69 \end{bmatrix}$
+- b. $\theta = \begin{bmatrix} 13.01 \newline 0.91 \end{bmatrix}$
 
 ---
 
 3. Which of the following statements about regularization are true? Check all that apply.
->
+------
 - a. Because logistic regression outputs values $0 \leq h_\theta(x) \leq 1$, its range of output values can only be "shrunk" slightly by regularization anyway, so regularization is generally not helpful for it.
 - b. Using too large a value of $\lambda$ can cause your hypothesis to overfit the data; this can be avoided by reducing $\lambda$.
 - c. Using a very large value of $\lambda$ cannot hurt the performance of your hypothesis; the only reason we do not set $\lambda$ to be too large is to avoid numerical problems.
@@ -791,7 +788,7 @@ However, you forgot which value of $\lambda$ corresponds to which value of $\the
 ---
 
 4. In which one of the following figures do you think the hypothesis has overfit the training set?
->
+------
 - a. Figure: ![](/public/img/machine-learn/2015-02-27-17.24.59.png)
 - b. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.16.png)
 - c. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.39.png)
@@ -800,7 +797,7 @@ However, you forgot which value of $\lambda$ corresponds to which value of $\the
 ---
 
 5. In which one of the following figures do you think the hypothesis has underfit the training set?
->
+------
 - a. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.45.png)
 - b. Figure: ![](/public/img/machine-learn/2015-02-27-17.30.56.png)
 - c. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.16.png)
@@ -811,7 +808,7 @@ However, you forgot which value of $\lambda$ corresponds to which value of $\the
 ---
 
 1.  您正在使用逻辑回归训练分类模型。下列哪个陈述是正确的？选择所有对的选项。
->
+------
 - a. 向模型添加新特征总是可以使训练集具有相同或更好的性能。
 - b. 向模型引入正规化总是会导致训练集具有相同或更好的性能。
 - c. 向模型引入正规化总是会导致训练集中未包含的示例具有相同或更好的性能。
@@ -820,26 +817,28 @@ However, you forgot which value of $\lambda$ corresponds to which value of $\the
 ---
 
 2. 假设您进行了两次逻辑回归，一次使用 $\lambda = 0$，一次使用 $\lambda = 1$。<br/>
-一次，您有参数 $\theta = \begin{bmatrix} 81.47 \\ 12.69 \end{bmatrix}$，而另一次，您有 $\theta = \begin{bmatrix} 13.01 \\ 0.91 \end{bmatrix}$。<br/>
+一次，您有参数 $\theta = \begin{bmatrix} 81.47 \newline 12.69 \end{bmatrix}$，而另一次，您有 $\theta = \begin{bmatrix} 13.01 \newline 0.91 \end{bmatrix}$。<br/>
 但是，您忘记了 $\lambda$ 的哪个值对应于 $\theta$ 的哪个值。您认为哪一个对应于 $\lambda = 1$？
->
-- a. $\theta = \begin{bmatrix} 81.47 \\ 12.69 \end{bmatrix}$
-- b. $\theta = \begin{bmatrix} 13.01 \\ 0.91 \end{bmatrix}$
+------
+- a. $\theta = \begin{bmatrix} 81.47 \newline 12.69 \end{bmatrix}$
+- b. $\theta = \begin{bmatrix} 13.01 \newline 0.91 \end{bmatrix}$
+
 //b
 ---
 
 3. 下列有关正规化的哪些陈述是正确的？ 选中所有适用。
->
+------
 - a. 由于逻辑回归输出值 $0 \leq h_\theta(x) \leq1$，无论如何，通过正则化只能稍微 `缩小` 其输出值范围，因此正规化通常对此无济于事。
 - b. 使用太大的 $\lambda$ 值可能会导致您的假设过度拟合数据。这可以通过减少 $\lambda$ 来避免。
 - c. 使用非常大的 $\lambda$ 值不会损害假设的执行；我们没有将 $\lambda$ 设置得太大的唯一原因是为了避免数值问题。
 - d. 考虑分类问题。 添加正则化可能会导致您的分类器对一些训练示例进行错误分类（当未使用正则化时，即 $\lambda = 0$ 时，它已经正确分类了）。
+
 // d
 
 ---
 
 4. 您认为以下哪个图中的假设与训练集过度拟合？
->
+------
 - a. Figure: ![](/public/img/machine-learn/2015-02-27-17.24.59.png)
 - b. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.16.png)
 - c. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.39.png)
@@ -848,7 +847,7 @@ However, you forgot which value of $\lambda$ corresponds to which value of $\the
 ---
 
 5. 您认为以下哪个图中的假设不适合训练集？
->
+------
 - a. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.45.png)
 - b. Figure: ![](/public/img/machine-learn/2015-02-27-17.30.56.png)
 - c. Figure: ![](/public/img/machine-learn/2015-02-27-17.25.16.png)

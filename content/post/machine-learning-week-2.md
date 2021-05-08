@@ -28,9 +28,9 @@ Linear regression with multiple variables is also known as `multivariate linear 
 We now introduce notation for equations where we can have any number of input variables.
 
 $$
-x_j^{(i)} = \text{value of feature } j \text{ in the }i^{th}\text{ training example} \\
-x^{(i)} = \text{the input (features) of the }i^{th}\text{ training example} \\
-m = \text{the number of training examples} \\
+x_j^{(i)} = \text{value of feature } j \text{ in the }i^{th}\text{ training example} \newline
+x^{(i)} = \text{the input (features) of the }i^{th}\text{ training example} \newline
+m = \text{the number of training examples} \newline
 n = \text{the number of features}
 $$
 
@@ -43,9 +43,9 @@ In order to develop intuition about this function, we can think about $θ_0$ as 
 Using the definition of matrix multiplication, our multivariable hypothesis function can be concisely represented as:
 
 $$
-h_\theta(x) =\begin{bmatrix}\theta_0 \hspace{1em} \theta_1 \hspace{1em} ... \hspace{1em} \theta_n\end{bmatrix}\begin{bmatrix}x_0 \\
-x_1 \\
-\vdots \\
+h_\theta(x) =\begin{bmatrix}\theta_0 \hspace{1em} \theta_1 \hspace{1em} ... \hspace{1em} \theta_n\end{bmatrix}\begin{bmatrix}x_0 \newline
+x_1 \newline
+\vdots \newline
 x_n\end{bmatrix}= \theta^T x
 $$
 
@@ -62,9 +62,9 @@ Remark: Note that for convenience reasons in this course we assume $x_{0}^{(i)} 
 我们现在为方程式引入符号，其中我们可以有任意数量的输入变量。
 
 $$
-x_j^{(i)} = \text{第 } i^{th} \text{ 个训练样例中特征 } j \text{ 的值}\\
-x^{(i)} = \text{第 }i^{th} \text{ 个训练样例的输入（特征）}\\
-m = \text{训练样本数量} \\
+x_j^{(i)} = \text{第 } i^{th} \text{ 个训练样例中特征 } j \text{ 的值}\newline
+x^{(i)} = \text{第 }i^{th} \text{ 个训练样例的输入（特征）}\newline
+m = \text{训练样本数量} \newline
 n = \text{特征变量数量}
 $$
 
@@ -77,9 +77,9 @@ $h_\theta (x) = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + \theta_3 x_3 + \cdots +
 使用矩阵乘法的定义，我们的多变量假设函数可以简洁地表示为：
 
 $$
-h_\theta(x) =\begin{bmatrix}\theta_0 \hspace{1em} \theta_1 \hspace{1em} ... \hspace{1em} \theta_n\end{bmatrix}\begin{bmatrix}x_0 \\
-x_1 \\
-\vdots \\
+h_\theta(x) =\begin{bmatrix}\theta_0 \hspace{1em} \theta_1 \hspace{1em} ... \hspace{1em} \theta_n\end{bmatrix}\begin{bmatrix}x_0 \newline
+x_1 \newline
+\vdots \newline
 x_n\end{bmatrix}= \theta^T x
 $$
 
@@ -95,19 +95,19 @@ Remark: 请注意，为了方便起见，在本课程中我们假设 $x_{0}^{(i)
 The gradient descent equation itself is generally the same form; we just have to repeat it for our `n` features:
 
 $$
-\text{repeat until convergence:} \; \lbrace \\
-\; \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_0^{(i)}\\
-\; \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_1^{(i)} \\
-\; \theta_2 := \theta_2 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_2^{(i)} \\
-\vdots \\
+\text{repeat until convergence:} \; \lbrace \newline
+\; \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_0^{(i)}\newline
+\; \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_1^{(i)} \newline
+\; \theta_2 := \theta_2 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_2^{(i)} \newline
+\vdots \newline
 \rbrace
 $$
 
 In other words:
 
 $$
-\text{repeat until convergence:} \; \lbrace \\
-\; \theta_j := \theta_j - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_j^{(i)} \; \text{for j := 0...n}\\
+\text{repeat until convergence:} \; \lbrace \newline
+\; \theta_j := \theta_j - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_j^{(i)} \; \text{for j := 0...n}\newline
 \rbrace
 $$
 
@@ -120,19 +120,20 @@ The following image compares gradient descent with one variable to gradient desc
 梯度下降方程本身通常是相同的形式。 我们只需要为我们的 `n` 个特征重复一下：
 
 $$
-\text{repeat until convergence:} \; \lbrace \\
-\; \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_0^{(i)}\\
-\; \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_1^{(i)} \\
-\; \theta_2 := \theta_2 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_2^{(i)} \\
-\vdots \\
+\text{repeat until convergence:} \; \lbrace \newline
+\; \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_0^{(i)}\newline
+\; \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_1^{(i)} \newline
+\; \theta_2 := \theta_2 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_2^{(i)} \newline
+\vdots \newline
 \rbrace
 $$
 
 换句话说：
 
 $$
-\text{repeat until convergence:} \; \lbrace \\
-\; \theta_j := \theta_j - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_j^{(i)} \; \text{for j := 0...n}\\
+\text{repeat until convergence:} \; \lbrace \newline
+\; \theta_j := \theta_j - \alpha \frac{1}{m} \sum\limits_{i=1}^{m} (h_\theta(x^{(i)}) - y^{(i)}) \cdot x_j^{(i)} \;\newline
+\text{for j := 0...n}\newline
 \rbrace
 $$
 
@@ -152,8 +153,8 @@ We can speed up gradient descent by having each of our input values in roughly t
 The way to prevent this is to modify the ranges of our input variables so that they are all roughly the same. Ideally:
 
 $$
--1 ≤ x_{(i)} ≤ 1\\
-\text{or}\\
+-1 ≤ x_{(i)} ≤ 1\newline
+\text{or}\newline
 -0.5 ≤ x_{(i)} ≤ 0.5
 $$
 
@@ -180,8 +181,8 @@ Note: 房屋的平均大小为 `1000`，但也可故意写为 `100`
 防止这种情况的方法是修改输入变量的范围，以使它们都大致相同。理想的情况是：
 
 $$
--1 ≤ x_{(i)} ≤ 1\\
-\text{or}\\
+-1 ≤ x_{(i)} ≤ 1\newline
+\text{or}\newline
 -0.5 ≤ x_{(i)} ≤ 0.5
 $$
 

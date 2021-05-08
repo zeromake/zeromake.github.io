@@ -62,7 +62,6 @@ dependencies {
 5. 服务账号的权限就算是新建的账号邀请到 play 后台也需要一段时间生效，最长不会超过 24 小时。
 6. google play 后台的订单更新在内部测试的情况下在 5 分钟更新一次。
 
-
 ## 参考
 
 1. [Google支付接入](https://www.cnblogs.com/alphagl/p/6013625.html)
@@ -70,4 +69,4 @@ dependencies {
 3. [In-app billing API version 3 is not supported on this device](https://blog.csdn.net/u013762572/article/details/108478969)
 2. [Google结算服务文档](https://developer.android.com/google/play/billing)
 3. [官方示例](https://github.com/android/play-billing-samples)
-4. [nopermissions](https://stackoverflow.com/questions/43536904/google-play-developer-api-the-current-user-has-insufficient-permissions-to-pe)
+4. [no permissions](https://stackoverflow.com/questions/43536904/google-play-developer-api-the-current-user-has-insufficient-permissions-to-pe)

@@ -56,9 +56,6 @@ func PurchaseVerify(
 }
 ```
 
-
-
-
 ## 参考
 
 1. [官方内购文档](https://developer.apple.com/documentation/storekit/in-app_purchase)
