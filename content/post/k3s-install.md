@@ -1,6 +1,6 @@
 ---
 title: k3s 安装笔记
-date: 2021-07-30 15:78:00 +08:00
+date: 2021-07-30 15:48:00 +08:00
 tags:
   - k8s
   - k3s
@@ -404,7 +404,7 @@ spec:
 # ➜ kubectl create secret generic kubernetes-dashboard-certs --from-file="$PWD/dashboard.crt,$PWD/dashboard.key" -n kubernetes-dashboard
 # secret/kubernetes-dashboard-certs created
 # 给 ingress 创建 secret
-➜ kubectl create secret tls dashboard-ingress-certs --key dashboard.key --cert dashboard.crt -n kubernetes-dashboard kubectl get secret
+➜ kubectl create secret tls dashboard-ingress-certs --key dashboard.key --cert dashboard.crt -n kubernetes-dashboard
 secret/dashboard-ingress-certs created
 ```
 
