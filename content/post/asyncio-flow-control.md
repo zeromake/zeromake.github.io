@@ -8,7 +8,7 @@ lastmod: 2018-05-23T07:58:00.000Z
 categories:
   - asyncio
 slug: asyncio-flow-control
-draft: false
+draft: true
 ---
 
 ## 前言
