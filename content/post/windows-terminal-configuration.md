@@ -14,7 +14,7 @@ categories:
   - windows
   - terminal
 slug: windows-terminal-configuration
-draft: true
+draft: false
 ---
 
 ## 前言
@@ -115,14 +115,24 @@ $ pacman -Sy
  msys                    374.0 KiB   189 KiB/s 00:02 [###########################] 100%
 ```
 
-先把 `pacman` 写入 pacman 数据库防止后面需要更新 `pacman` 但是又因为 `pacman.exe` 是主进程无法退出，`bash` 也会，听说有办法。
+先把 `pacman` 写入 pacman 数据库防止后面需要更新 `pacman` 但是又因为 `pacman.exe` 是主进程无法退出，`bash` 也会，听说有办法但是没有找到对应的方法都没生效。
+
 ```sh
 $ pacman -S pacman --dbonly
 ```
 
+然后就正常的通过 `pacman` 工具安装 `zsh` 就行了。
 ``` bash
 $ pacman -S zsh --overwrite "*"
 ```
+
+## 四、使用 msys2
+
+[msys2](https://www.msys2.org/) 实际上 `git-windows` 都是基于这个 msys2 的，倒是不用处理上面的那些问题了，就是占用空间有点大，顺便一提 `msys2` 的软件包里的文件连接方式都是硬链接，导致一个 git 包本来不到 10m 的直接变成几百m了。
+
+## 五、使用 wsl
+
+wsl1 和 wsl2 都个有优点，自行选择，由于是直接为 linux 比起上面的模拟方案几乎不存在各种奇怪的问题，像 cygwin 经常各种工具执行不正常，msys2 倒是还算正常但是执行速度比正常的 linux 差上好几个档次（fish 的 git 补全会卡到 7s 以后）。
 
 
 ## 参考
