@@ -370,3 +370,8 @@ unsigned long com = command & 0xffffff00;
 如果 `IPMSG_ENCRYPTOPT` 标记未在 Entry 系统设置，或者 `IPMSG_RSA_2048`/`IPMSG_SIGN_SHA1`未在`IPMSG_GETPUBKEY`/`IPMSG_ANSPUBKEY` 中设置，即使发送带有公匙签名的用户名，也会导致非法数据包，建议丢弃数据包。
 
 #### 3) 消息传输
+
+
+## 参考
+
+- [ipmsg-protocol](https://ipmsg.org/protocol.txt)
