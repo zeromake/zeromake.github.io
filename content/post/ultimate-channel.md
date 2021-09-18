@@ -39,7 +39,7 @@ for !app.IsClosed() {
 }
 ```
 
-整个 GUI 应用程序在无限循环中执行，该循环包含两个部分：绘制调用处理和事件处理。 
+整个 GUI 应用程序在无限循环中执行，该循环包含两个部分：绘制调用处理和事件处理。
 
 通常，所有这些代码都在 CPU 上运行，而实际的渲染计算在 GPU 上执行。这意味着，图形驱动程序（例如 OpenGL, Vulkan, Meta, Direct X）提供的图形 API 只是从 CPU 发送到 GPU 的通信命令，甚至是等待 GPU 的响应。
 由于特殊原因,[polyred](https://poly.red) 仅限在软件中实现，纯 CPU 实现。因此，执行代码应该充分利用 CPU 并行化的能力。所以使用一个单独的 goroutine 上执行渲染更有意义，这样它就不会阻塞事件处理线程。
@@ -371,3 +371,4 @@ func main() {
 - rgooch. proposal: spec: add support for unlimited capacity channels. 13 May 2017. https://golang.org/issue/20352
 - The Go Authors. The Go Programming Language Specification. Feb 10, 2021. https://golang.org/ref/spec
 - The Go Authors. The Go Memory Model. May 31, 2014. https://golang.org/ref/mem
+- [实现无限缓存的channel](https://colobu.com/2021/05/11/unbounded-channel-in-go/)
