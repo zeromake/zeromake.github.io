@@ -16,3 +16,4 @@ database.js
 !/app/config/config.default.ts
 !/app/config/config.unittest.ts
 hugo
+hugo.exe
