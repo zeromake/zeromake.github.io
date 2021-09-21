@@ -24,7 +24,7 @@ draft: false
 
 ## 一、使用 cygwin
 
-[cygwin](https://www.cygwin.com/) 是一个方案，我安装以后使用 `apt-cyg` 安装了 `zsh`，单用 `zsh` 还好，加上 [ohmyzsh](https://github.com/ohmyzsh/ohmyzsh) 就会启动卡上 10~20s，不知道为什么，后面放弃了。
+[cygwin](https://www.cygwin.com/) 是一个方案，~~我安装以后使用 `apt-cyg` 安装了 `zsh`，单用 `zsh` 还好，加上 [ohmyzsh](https://github.com/ohmyzsh/ohmyzsh) 就会启动卡上 10~20s，不知道为什么，后面放弃了。~~ 后面使用官方的安装工具去装倒是比较正常了，和下面的 `msys2` 差不多，但是有文件权限，而且 tmux 的渲染还算正常，`msys2` 的 `tmux` 渲染有些显示上的问题。
 
 ## 二、使用 git-sdk
 
