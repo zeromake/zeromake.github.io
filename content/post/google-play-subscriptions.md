@@ -10,7 +10,7 @@ categories:
   - google
   - pay
 slug: google-play-subscriptions
-draft: true
+draft: false
 ---
 
 ## 一、Google 开发者平台配置回调
