@@ -70,3 +70,4 @@ dependencies {
 2. [Google结算服务文档](https://developer.android.com/google/play/billing)
 3. [官方示例](https://github.com/android/play-billing-samples)
 4. [no permissions](https://stackoverflow.com/questions/43536904/google-play-developer-api-the-current-user-has-insufficient-permissions-to-pe)
+5. [创建和管理内部测试版本](https://blog.csdn.net/shulianghan/article/details/118968099)
