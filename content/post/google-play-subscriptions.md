@@ -13,6 +13,12 @@ slug: google-play-subscriptions
 draft: false
 ---
 
+## 前言
+
+由于 Google Play 的订阅有 13 种状态，在各种状态流转的复杂性超过我的想象，甚至有推送消息内的触发时间更早的消息更晚到的情况。
+
+这里写一篇博文来记录各种坑。
+
 ## 一、Google 开发者平台配置回调
 
 > [使用推送订阅](https://cloud.google.com/pubsub/docs/push) 貌似官方文档说不用网域验证了。
@@ -83,9 +89,132 @@ Body: {
 
 ## 二、Google 后台配置商品
 
+
+
 ## 三、订阅流程
 
-测试的订阅在购买后的 5 分钟内如果没有确认该订阅商品，否则会自动退款并关闭订阅，用户的
+测试的订阅在购买后的 5 分钟内如果没有确认该订阅商品，否则会自动退款并关闭订阅。
+
+订阅发起:
+``` json
+// 2021/10/25 11:49:11 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635133750992","subscriptionNotification":{"version":"1.0","notificationType":4,"purchaseToken":"token","subscriptionId":"sku"}}
+
+// 2021/10/25 11:49:12 purchase
+{"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635134157989","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61","paymentState":1,"priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347"}
+```
+
+续订成功：
+```json
+// 2021/10/25 11:53:29 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635134007674","subscriptionNotification":{"version":"1.0","notificationType":13,"purchaseToken":"token","subscriptionId":"sku"}}
+
+// 2021/10/25 11:53:30 purchase
+{"acknowledgementState":1,"countryCode":"US","expiryTimeMillis":"1635133706342","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296301053176","orderId":"GPA.61..0","priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133124357","userCancellationTimeMillis":"1635133460780"}
+```
+
+续订失败(进入宽待期):
+``` json
+// 2021/10/25 11:59:04 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635134341983","subscriptionNotification":{"version":"1.0","notificationType":6,"purchaseToken":"token","subscriptionId":"sku"}}
+
+// 2021/10/25 11:59:04 purchase
+{"acknowledgementState":1,"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635134464683","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61..1","priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347"}
+```
+
+
+续订失败(进入保留期):
+``` json
+// 2021/10/25 12:04:01 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635134639719","subscriptionNotification":{"version":"1.0","notificationType":5,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 12:04:02 purchase
+{"acknowledgementState":1,"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635134637989","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61..1","priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347"}
+```
+
+恢复订阅(注意这个恢复需要根据业务来处理，如果你在宽带期发过周期性奖励，这里就不能再次发放，只能发放持续奖励)：
+``` json
+// 2021/10/25 12:05:54 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635134752789","subscriptionNotification":{"version":"1.0","notificationType":1,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 12:05:55 purchase
+{"acknowledgementState":1,"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635135172433","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61..1","paymentState":1,"priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347"}
+```
+
+
+用户订阅暂停计划触发通知:
+``` json
+// 2021/10/25 12:11:41 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635135099444","subscriptionNotification":{"version":"1.0","notificationType":11,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 12:11:41 purchase
+{"acknowledgementState":1,"autoRenewing":true,"autoResumeTimeMillis":"1635135772433","countryCode":"US","expiryTimeMillis":"1635135592433","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61..2","paymentState":1,"priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347"}
+```
+
+订阅已经暂停:
+```json
+// 2021/10/25 12:17:55 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635135473787","subscriptionNotification":{"version":"1.0","notificationType":10,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 12:17:56 purchase
+{"acknowledgementState":1,"autoRenewing":true,"autoResumeTimeMillis":"1635135772433","countryCode":"US","expiryTimeMillis":"1635135472433","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61..2","paymentState":1,"priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347"}
+```
+
+从暂停计划恢复
+```json
+// 2021/10/25 12:22:58 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635135776362","subscriptionNotification":{"version":"1.0","notificationType":1,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 12:22:59 purchase
+{"acknowledgementState":1,"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635136195923","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61..3","paymentState":1,"priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347"}
+```
+
+取消订阅:
+```json
+// 2021/10/25 12:24:26 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635135864707","subscriptionNotification":{"version":"1.0","notificationType":3,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 12:24:27 purchase
+{"acknowledgementState":1,"countryCode":"US","expiryTimeMillis":"1635136075923","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61..3","paymentState":1,"priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347","userCancellationTimeMillis":"1635135864171"}
+```
+
+订阅已到期：
+``` json
+// 2021/10/25 15:54:05 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635148443335","subscriptionNotification":{"version":"1.0","notificationType":13,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 15:54:06 purchase
+{"acknowledgementState":1,"countryCode":"US","expiryTimeMillis":"1635147242010","orderId":"GPA.44..3","priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635145747564","userCancellationTimeMillis":"1635146950247"}
+```
+
+取消后未到期的情况在 Play 后台恢复订阅(会把之前的uid复制过来)
+```json
+// 2021/10/25 15:56:21 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635148579496","subscriptionNotification":{"version":"1.0","notificationType":7,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 15:56:21 purchase
+{"acknowledgementState":1,"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635148830612","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57311609629510","orderId":"GPA.30","paymentState":1,"priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635148415972"}
+```
+
+
+到期后通过 Play 重新订阅(没有对应的商品和账号，需要客户端配合做恢复订阅功能)
+```json
+// 2021/10/25 16:03:38 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635149016374","subscriptionNotification":{"version":"1.0","notificationType":4,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 16:03:39 purchase
+{"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635149433007","orderId":"GPA.87","paymentState":1,"priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635149015784"}
+```
+
+取消后在未到期的情况下再一次从 app 里购买(一次性周期奖励这里可不能再发放，不过这里没有明确的说明为已经有一个订阅在过程中，需要自己用过期时间判断)
+```json
+// 2021/10/28 15:40:54 subscription
+{"version":"1.0","packageName":"com.bingo.crown.android","eventTimeMillis":"1635406853999","subscriptionNotification":{"version":"1.0","notificationType":4,"purchaseToken":"token","subscriptionId":"600271.com.bingo.crown.android.elite.499"}}
+
+// 2021/10/28 15:40:55 purchase
+{"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635407160887","kind":"androidpublisher#subscriptionPurchase","linkedPurchaseToken":"token","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57570050407351","orderId":"GPA.04","paymentState":1,"priceAmountMicros":"5015570","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635406853066"}
+```
+
 
 
 ## 四、订阅客户端调起
