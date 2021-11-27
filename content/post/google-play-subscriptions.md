@@ -87,13 +87,16 @@ Body: {
 }
 ```
 
-## 二、Google 后台配置商品
-
-
-
-## 三、订阅流程
+## 二、订阅流程
 
 测试的订阅在购买后的 5 分钟内如果没有确认该订阅商品，否则会自动退款并关闭订阅。
+
+
+![subscription-flow](/public/img/google-play/subscription-flow.svg)
+
+
+<details>
+<summary>数据示例</summary>
 
 订阅发起:
 ``` json
@@ -107,7 +110,7 @@ Body: {
 续订成功：
 ```json
 // 2021/10/25 11:53:29 subscription
-{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635134007674","subscriptionNotification":{"version":"1.0","notificationType":13,"purchaseToken":"token","subscriptionId":"sku"}}
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635134007674","subscriptionNotification":{"version":"1.0","notificationType":2,"purchaseToken":"token","subscriptionId":"sku"}}
 
 // 2021/10/25 11:53:30 purchase
 {"acknowledgementState":1,"countryCode":"US","expiryTimeMillis":"1635133706342","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296301053176","orderId":"GPA.61..0","priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133124357","userCancellationTimeMillis":"1635133460780"}
@@ -214,24 +217,165 @@ Body: {
 // 2021/10/28 15:40:55 purchase
 {"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635407160887","kind":"androidpublisher#subscriptionPurchase","linkedPurchaseToken":"token","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57570050407351","orderId":"GPA.04","paymentState":1,"priceAmountMicros":"5015570","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635406853066"}
 ```
+</details>
+
+## 三、订阅客户端调起
+
+和内购不一样的地方是，查询 sku 时需要设置为订阅类型，购买后的 token 也无法用于服务端确认，订阅也没有客户端消耗的逻辑。
+
+查询 `sku`
+
+```java
+ArrayList<String> list = new ArrayList<String>();
+SkuDetailsParams params = SkuDetailsParams.newBuilder()
+    .setType(com.android.billingclient.api.BillingClient.SkuType.SUBS)
+    .setSkusList(list)
+    .build();
+billingClient.querySkuDetailsAsync(params, this);
+```
+
+发起购买:
+```java
+SkuDetails skuDetail;
+BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
+    .setSkuDetails(skuDetail)
+    .setObfuscatedProfileId("self-order-id")
+    .setObfuscatedAccountId("self-user-id")
+    .build();
+BillingResult result = this.bc.launchBillingFlow(this, billingFlowParams);
+```
+
+## 四、服务端处理订阅发起
+
+最上面设置了主题和订阅的地址，在订阅发生变化时会由 google 向我们设置的地址推送消息。
 
 
+```go
+package main
 
-## 四、订阅客户端调起
-
-## 五、服务端处理订阅发起
-
-## 六、服务端处理订阅状态变化
-
-## 七、Google 回调失败处理
-
-
-## 八、碰到的疑难问题
-
-- 各种情况下的调起支付窗口出现各种错误
+import (
+	"encoding/json"
+	"io"
+	"log"
+	"net/http"
+)
 
 
+// SubscriptionNotification https://developer.android.google.cn/google/play/billing/rtdn-reference#sub
+type SubscriptionNotification struct {
+	Version          string `json:"version,omitempty"`          // 版本
+	NotificationType int    `json:"notificationType,omitempty"` // 变化类型
+	PurchaseToken    string `json:"purchaseToken,omitempty"`    // 支付令牌
+	SubscriptionId   string `json:"subscriptionId,omitempty"`   // 商品 id
+}
 
+type OneTimeProductNotification struct {
+	Version          string `json:"version,omitempty"`          // 版本
+	NotificationType int    `json:"notificationType,omitempty"` // 变化类型
+	PurchaseToken    string `json:"purchaseToken,omitempty"`    // 支付令牌
+	SKU              string `json:"sku,omitempty"`
+}
+
+type TestNotification struct {
+	Version string `json:"version,omitempty"` // 版本
+}
+
+type SubscriptionData struct {
+	Version                    string                      `json:"version,omitempty"`
+	PackageName                string                      `json:"packageName,omitempty"`
+	EventTimeMillis            string                      `json:"eventTimeMillis,omitempty"`
+	SubscriptionNotification   *SubscriptionNotification   `json:"subscriptionNotification,omitempty"`
+	OneTimeProductNotification *OneTimeProductNotification `json:"oneTimeProductNotification,omitempty"`
+	TestNotification           *TestNotification           `json:"testNotification,omitempty"`
+}
+
+
+type pushRequest struct {
+	Message      pubsub.PubsubMessage `json:"message"`
+	Subscription string               `json:"subscription"`
+}
+
+func main() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/sub", func(w http.ResponseWriter, req *http.Request) {
+		defer req.Body.Close()
+		body, _ := io.ReadAll(req.Body)
+
+		var pr pushRequest
+		err = json.Unmarshal(body, &pr)
+		if err != nil {
+			return
+		}
+		dataByte, err := base64.StdEncoding.DecodeString(pr.Message.Data)
+		if err != nil {
+			return
+		}
+		var subscriptionData = &config.SubscriptionData{}
+		err = json.Unmarshal(dataByte, subscriptionData)
+		if err != nil {
+			return
+		}
+		if subscriptionData.SubscriptionNotification == nil {
+			return
+		}
+        switch subscriptionData.SubscriptionNotification.NotificationType {
+            // 自行根据状态来处理
+        }
+		// 返回 200 状态通知 google 这个通知已经接受
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		_, _ = fmt.Fprintln(w, "ok")
+	})
+	http.ListenAndServe(":8000", mux)
+}
+```
+
+## 五、服务端处理订阅状态变化
+
+在订阅中有几个状态需要特别注意，如果你的订阅商品除了类似 buff 的周期性奖励还有每次的一次性奖励，不注意的话会出现被刷。
+
+### 取消后立即订阅
+> 4:开始订阅 -> 3:取消订阅 -> 4:在未到期之前在 app 里又一次订阅(由于类型还是 4 可能会再一次发放奖励)。
+
+取消订阅:
+```json
+// 2021/10/25 12:24:26 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635135864707","subscriptionNotification":{"version":"1.0","notificationType":3,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 12:24:27 purchase
+{"acknowledgementState":1,"countryCode":"US","expiryTimeMillis":"1635136075923","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61..3","paymentState":1,"priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347","userCancellationTimeMillis":"1635135864171"}
+```
+再次从商店订阅需要自己用过期时间判断:
+```json
+// 2021/10/28 15:40:54 subscription
+{"version":"1.0","packageName":"com.bingo.crown.android","eventTimeMillis":"1635406853999","subscriptionNotification":{"version":"1.0","notificationType":4,"purchaseToken":"token","subscriptionId":"600271.com.bingo.crown.android.elite.499"}}
+
+// 2021/10/28 15:40:55 purchase
+{"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635407160887","kind":"androidpublisher#subscriptionPurchase","linkedPurchaseToken":"token","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57570050407351","orderId":"GPA.04","paymentState":1,"priceAmountMicros":"5015570","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635406853066"}
+```
+
+
+### 宽待期
+
+续订失败(进入宽待期):
+``` json
+// 2021/10/25 11:59:04 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635134341983","subscriptionNotification":{"version":"1.0","notificationType":6,"purchaseToken":"token","subscriptionId":"sku"}}
+
+// 2021/10/25 11:59:04 purchase
+{"acknowledgementState":1,"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635134464683","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61..1","priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347"}
+```
+
+### 保留期
+
+续订失败(进入保留期):
+``` json
+// 2021/10/25 12:04:01 subscription
+{"version":"1.0","packageName":"com.google.android","eventTimeMillis":"1635134639719","subscriptionNotification":{"version":"1.0","notificationType":5,"purchaseToken":"token","subscriptionId":"com.android.499"}}
+
+// 2021/10/25 12:04:02 purchase
+{"acknowledgementState":1,"autoRenewing":true,"countryCode":"US","expiryTimeMillis":"1635134637989","obfuscatedExternalAccountId":"1","obfuscatedExternalProfileId":"57296937369853","orderId":"GPA.61..1","priceAmountMicros":"5017006","priceCurrencyCode":"USD","purchaseType":0,"startTimeMillis":"1635133750347"}
+```
 
 ## 参考
 
