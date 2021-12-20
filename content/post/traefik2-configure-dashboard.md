@@ -1,24 +1,22 @@
 ---
-title: 使用 traefik2 暴露 KubernetesDashboard
-date: 2021-12-20 18:59:00 +08:00
+title: 使用traefik2暴露k8s-dashboard
+date: 2021-12-20 12:25:00 +08:00
 tags:
   - k8s
-  - k3s
-  - linux
-  - learn
   - traefik
   - dashboard
-lastmod: 2021-12-20 18:59:00 +08:00
+lastmod: 2021-12-20 12:25:00 +08:00
 categories:
   - cloud
-slug: traefik2-k8s-dashboard
-draft: false
+slug: traefik2-configure-dashboard
 ---
+
 
 ## 前言
 
-在之前的 [k3s 安装笔记](/posts/k3s-install) 里有怎么使用 `traefik1` 去暴露 `k8s-dashboard` 的 `https` 端口。
+在之前的 [k3s 安装笔记](/pages/k3s-install) 里有怎么使用 `traefik1` 去暴露 `k8s-dashboard` 的 `https` 端口。
 
+<!--more-->
 
 ## 一、tls 自签证书
 
