@@ -4,11 +4,11 @@ date: 2021-04-07T11:51:00Z
 tags:
   - redis
   - sort-set
-lastmod: 2021-04-07T11:51:00Z
+lastmod: 2021-12-20T18:51:00Z
 categories:
   - game
 slug: redis-rank
-draft: true
+draft: false
 ---
 
 ## 前言
@@ -86,18 +86,57 @@ draft: true
 
 **3.1 在分数里记录入榜顺序**
 
+在分数里记录顺序，如果是顺序序列的数字，并且不会一个榜太大的话比较推荐放这里
+
+```go
+func generateScore(originScore, number int64) float64 {
+    // 记得序号要是倒序
+    return float64(originScore * 1000 + number)
+}
+```
+不过由于 `redis` 用的 c 语言的 `double` 有上限的 `2^53-1`。
+
+
+**3.2 在key里记录入榜顺序**
+
+这个方案比较通用，不会出现榜单人过多导致分数的范围放不下，不过需要注意一下 key 的排序是按字符串排序的。
+
+```go
+func generateKey(originKey string, number int64) string {
+    // 记得自己补零，记得序号要是倒序
+    return fmt.Sprintf("%d:%s", number, originKey)
+}
+```
+
 
 ## 四、排行榜分榜
 
+因为需求，需要对排行榜做限制，一个排行榜里只有 100 人，然后大家的排名只在榜内生效。
 
+通过一个 `redis` 存放每个子榜的人数，然后使用 `HIncrBy` 就可以知道新加入的用户需要分配到第几个榜单。
+```go
+func JoinRankTypeNumber(ctx context.Context, key, mkey string) (string, error) {
+	count, err := redis.HIncrBy(ctx, key, mkey, 1)
+	if err != nil {
+		return 0, err
+	}
+	rankTypeNumber := int(math.Ceil(float64(count) / float64(100)))
+	return fmt.String(rankTypeNumber), nil
+}
+```
+## 五、排行榜的周期切换
 
-## 五、排行同分如何处理
+实际上这个更简单，只需要在上面使用到的 `key` 里去拼接入周期切换的数字或者字符串 `key`。
 
-## 六、排行榜的周期切换
-
-## 七、用户的排行榜做归档
+```go
+const (
+	RankCount      = "rank_%d" // rank_周期 map存放每个子榜的数量
+	RankSet        = "rank_%d_%d_%d" // rank_周期_子榜单_第几个分榜 zset存放榜单数据
+)
+```
 
 ## 参考
 
 - [redis的命令参考](http://www.redis.cn/commands.html#sorted_set)
 - [使用Redis的有序集合实现排行榜功能](https://juejin.cn/post/6844903795131056135)
+- [REdis zset和double](https://www.cnblogs.com/aquester/p/10769827.html)
