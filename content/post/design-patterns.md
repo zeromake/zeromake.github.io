@@ -1,14 +1,14 @@
 ---
 title: 设计模式笔记
-date: 2019-12-28T05:25:00.000Z
+date: 2021-07-20 12:25:00 +08:00
 tags:
   - design
   - patterns
-lastmod: 2021-04-30 17:36:00 +08:00
+lastmod: 2021-10-20 12:25:00 +08:00
 categories:
   - patterns
 slug: design-patterns
-draft: true
+draft: false
 ---
 
 ## 前言
@@ -292,12 +292,6 @@ func Range(r func(k, v interface{}) bool) {
 }
 
 ```
-
-## 十二、组合模式(Composite Pattern) {#composite_pattern}
-
-
-## 十三、状态模式
-
 
 ## 参考
 
