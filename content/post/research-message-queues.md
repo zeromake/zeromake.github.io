@@ -10,7 +10,7 @@ categories:
   - php
   - mq
 slug: research-message-queues
-draft: true
+draft: false
 ---
 
 ## 前言
@@ -33,13 +33,48 @@ docker run -d --name redis -p 6379:6379 redis
 **Kafka**
 
 ``` bash
-curl -L -o docker-compose.yml https://raw.githubusercontent.com/bitnami/containers/main/bitnami/kafka/docker-compose.yml
+# curl -L -o docker-compose.yml https://raw.githubusercontent.com/bitnami/containers/main/bitnami/kafka/docker-compose.yml
+cat > docker-compose.yml <<EOF
+version: "2"
+
+services:
+  zookeeper:
+    image: docker.io/bitnami/zookeeper:3.8
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_data:/bitnami"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: docker.io/bitnami/kafka:3.3
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+EOF
 
 docker-compose up -d
 ```
 
 
 ## 二、Redis 的 stream 使用
+
+
+下面用 go 调用 redis 描述了一个简单的生产消费逻辑。
 
 ``` go
 package main
@@ -165,8 +200,8 @@ func main() {
 
 ```
 
-上面用 go 调用 redis 描述了一个简单的生产消费逻辑。
 
+`php` 也差不多，只是 `predis` 没有封装 `stream` 的命令方法需要走 `executeRaw` 方法。
 ```php
 <?php
 
@@ -186,8 +221,9 @@ function produce() {
     global $client;
     global $streamKey;
     $id = 1;
+    $err = null;
     while (True) {
-        $client->executeRaw(["XADD", $streamKey, "MAXLEN", "~", "100", "id", "".$id, "name", "vvv"]);
+        $client->executeRaw(["XADD", $streamKey, "MAXLEN", "~", "100", "*", "id", "".$id, "name", "vvv"]);
         echo "produce: ", $id, PHP_EOL;
         sleep(1);
         $id++;
@@ -199,12 +235,14 @@ function consume() {
     global $streamKey;
     $prevId = "0";
     while (True) {
-        $result = $client->executeRaw(["XREAD", "BLOCK", "500000", "STREAMS", $streamKey, $prevId]);
-        foreach ($result as $item) {
-            foreach (array_slice($item, 1) as $arr) {
-                foreach ($arr as $item2) {
-                    $prevId = $item2[0];
-                    echo "consume: ", $item2[0], json_encode($item2[1]), PHP_EOL;
+        $result = $client->executeRaw(["XREAD", "BLOCK", "50000", "STREAMS", $streamKey, $prevId]);
+        if ($result != null && count($result) > 0) {
+            foreach ($result as $item) {
+                foreach (array_slice($item, 1) as $arr) {
+                    foreach ($arr as $item2) {
+                        $prevId = $item2[0];
+                        echo "consume: ", $item2[0], json_encode($item2[1]), PHP_EOL;
+                    }
                 }
             }
         }
@@ -223,10 +261,140 @@ if ($cmd == "produce") {
     consume();
 }
 
-
 ```
 
+刚整 php 脚本示例请自行使用 `php steam.php produce` 和 `php steam.php consume` 启动两个不同的进程。
 
+## 三、`Kafka` 使用
+
+运行以下示例会发现 `kafka` 的消费感觉并没有那么及时，实际上是因为 `kafka` 是以收到字节计数到达 min 才会开始消费模式，毕竟 `kafka` 的主要用途还是日志传递。
+
+``` go
+package main
+
+import (
+	"context"
+	"github.com/segmentio/kafka-go"
+	"log"
+	"os"
+	"os/signal"
+	"strconv"
+	"syscall"
+	"time"
+)
+
+const (
+	broker  = "127.0.0.1:9092"
+	topic   = "local-topic"
+	groupId = "local-group"
+)
+
+func initSignal() {
+	var gracefulStop = make(chan os.Signal, 1)
+	signal.Notify(gracefulStop, syscall.SIGTERM, syscall.SIGINT)
+	<-gracefulStop
+}
+
+func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+	var cmd = "all"
+	if len(os.Args) > 1 {
+		cmd = os.Args[1]
+	}
+	if cmd == "produce" {
+		go produce(ctx)
+	} else if cmd == "consume" {
+		go consume(ctx)
+	} else if cmd == "create" {
+		createTopic(ctx)
+		return
+	} else {
+		go produce(ctx)
+		go consume(ctx)
+	}
+	initSignal()
+	cancel()
+}
+
+func createTopic(ctx context.Context) {
+	conn, err := kafka.Dial("tcp", broker)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer conn.Close()
+	topicConfigs := []kafka.TopicConfig{
+		{
+			Topic:             topic,
+			NumPartitions:     1,
+			ReplicationFactor: 1,
+		},
+	}
+	err = conn.CreateTopics(topicConfigs...)
+	if err != nil {
+		panic(err.Error())
+	}
+}
+
+func produce(ctx context.Context) {
+	var err error
+	defer func() {
+		if err != nil {
+			log.Println("produce err:", err)
+		}
+	}()
+	writer := kafka.Writer{
+		Addr:     kafka.TCP(broker),
+		Topic:    topic,
+		Balancer: &kafka.LeastBytes{},
+	}
+	timer := time.NewTimer(time.Minute)
+	timer.Stop()
+	var id int64
+	for {
+		err = writer.WriteMessages(ctx, kafka.Message{
+			Key:   []byte("id"),
+			Value: []byte(strconv.FormatInt(id, 10)),
+		})
+		if err != nil {
+			return
+		}
+		log.Println("produce:", id)
+		id++
+		timer.Reset(time.Second)
+		select {
+		case <-timer.C:
+		case <-ctx.Done():
+			return
+		}
+	}
+}
+
+func consume(ctx context.Context) {
+	var err error
+	defer func() {
+		if err != nil {
+			log.Println("consume err:", err)
+		}
+	}()
+	reader := kafka.NewReader(kafka.ReaderConfig{
+		Brokers:        []string{broker},
+		GroupID:        groupId,
+		Topic:          topic,
+		MinBytes:       1,    // 10KB
+		MaxBytes:       10e6, // 10MB
+		CommitInterval: time.Second,
+	})
+	var m kafka.Message
+	for {
+		m, err = reader.ReadMessage(ctx)
+		if err != nil {
+			break
+		}
+		log.Printf("message at topic/partition/offset %v/%v/%v: %s = %s\n", m.Topic, m.Partition, m.Offset, string(m.Key), string(m.Value))
+	}
+	err = reader.Close()
+}
+```
 
 ## 参考
 
