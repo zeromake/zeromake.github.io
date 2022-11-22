@@ -167,7 +167,8 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
     repo = "zeromake.github.io"               # The repo to store comments
     clientId = "6f4e103c0af2b0629e01"           # Your client ID
     clientSecret = "22f0c21510acbdda03c9067ee3aa2aee0c805c9f"       # Your client secret
-    proxy = "https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"
+#    proxy = "https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"
+    proxy = "https://ray2.zeromake.com/login/oauth/access_token"
     label = "gitment"
 
   # Valine.
