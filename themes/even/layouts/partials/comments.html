@@ -96,7 +96,7 @@
         admin: ['{{ .Site.Params.gitalk.owner }}'],
         proxy: '{{ .Site.Params.gitalk.proxy }}',
         labels: ['{{ .Site.Params.gitalk.label }}'],
-        body: decodeURI(location.pathname)
+        body: '[{{ .Title }}](' + decodeURI(location.origin+location.pathname) + ')'
       });
       gitalk.render('gitalk-container');
     </script>
