@@ -5,21 +5,160 @@ tags:
   - syntax
   - tree-sitter
   - js
-lastmod: 2023-09-23 12:00:26 +08:00
+lastmod: 2023-10-03 12:29:26 +08:00
 categories:
   - tree-sitter
   - syntax
 slug: tree-sitter-syntax
-draft: true
+draft: false
 ---
 
 ## 前言
 
-## 一、创建一个 tree-sitter 解析器
+最近发现很多终端编辑器 (helix) 都在使用 `tree-sitter` 做语法高亮和代码提示功能，去看了一下感觉语法比起之前的 `bison`, `antlr4` 简单太多了，而且使用 js 来描述可以做出比较复杂的逻辑，这里做一个简单的创建解析器入门，具体的使用可以参考官网文档。
 
-## 二、参考 tree-sitter-json 说明每行的语法效果
+## 一、环境准备
 
-## 三、语法参考表
+**安装 tree-sitter-cil**
+
+可以使用 node, rust 的包管理器去安装，如果都没有可以参考下面的下载预编译二进制放到 bin 目录里。
+
+``` sh
+➜ URL=https://github.com/tree-sitter/tree-sitter/releases
+➜ VERSION=$(curl -w '%{url_effective}' -I -L -s -S ${URL}/latest -o /dev/null | sed -e 's|.*/||')
+➜ curl -L ${URL}/download/${VERSION}/tree-sitter-windows-x64.gz -o tree-sitter.exe.gz
+➜ gzip -d ./tree-sitter.exe.gz
+➜ mv tree-sitter.exe ~/bin
+```
+
+**准备一个 c 编译器环境**
+
+tree-sitter 底层生成的代码是 c，最少需要一个类 gcc 编译器 (msvc 应该也行，但是没有试过)
+
+- windows: mingw64, llvm-mingw, msvc-clang
+- unix: gcc, clang
+
+**node 环境**
+
+tree-sitter 的 grammar 用的 js 描述的，需要 node 来解析生成 tree-sitter 使用的 json。
+
+## 二、创建 tree-sitter-calc 解析器
+> 这里我们先做一个计算器的语法解析器，来试试手，[代码仓库](https://github.com/zeromake/tree-sitter-calc)
+
+
+**创建项目**
+
+``` sh
+➜ mkdir tree-sitter-calc
+➜ cd tree-sitter-calc
+# node 绑定需要的，可以不用整
+➜ npm init
+➜ npm install --save nan
+```
+**grammar.js 编写**
+
+```js
+module.exports = grammar({
+    name: "calc",
+    // 跳过空白符号
+    extras: () => [
+        /\s/
+    ],
+    rules: {
+        // 第一个表达式会作为解析起始
+        // 数字或者表达式
+        expression: $ => choice($.number, $.binary_expression),
+        // 表达式 +,-,*,/ 左右再次引用 expression，然后就自带重复效果
+        // 记得必须要使用 prec.left，或者 prec.right 否则无法生成代码
+        binary_expression: $ => choice(...[
+            ['+'],
+            ['-'],
+            ['*'],
+            ['/']
+        ].map(([operator]) => prec.left(0, (seq(
+            field('left', $.expression),
+            field('op', operator),
+            field('right', $.expression)
+        ))))),
+        // 支持下划线的数字
+        number: $ => seq(/\d(_?\d)*/)
+    }
+});
+```
+
+**测试 parse 效果**
+
+``` sh
+➜ tree-sitter generate
+➜ echo '10 - 10 * 10' > calc.txt
+➜ tree-sitter parse calc.txt
+(expression [0, 0] - [0, 12]
+  (binary_expression [0, 0] - [0, 12]
+    left: (expression [0, 0] - [0, 7]
+      (binary_expression [0, 0] - [0, 7]
+        left: (expression [0, 0] - [0, 2]
+          (number [0, 0] - [0, 2]))
+        right: (expression [0, 5] - [0, 7]
+          (number [0, 5] - [0, 7]))))
+    right: (expression [0, 10] - [0, 12]
+      (number [0, 10] - [0, 12]))))
+```
+
+可以看到正确的解析了一个计算器表达式，不过和我们想要的带运算符优先级的效果不太相同，修改一下 grammar.js 的 prec.left 优先级。
+
+```js
+module.exports = grammar({
+    name: "calc",
+    // 跳过空白符号
+    extras: () => [
+        /\s/
+    ],
+    rules: {
+        // 第一个表达式会作为解析起始
+        // 数字或者表达式
+        expression: $ => choice($.number, $.binary_expression),
+        // 表达式 +,-,*,/ 左右再次引用 expression，然后就自带重复效果
+        // 记得必须要使用 prec.left，或者 prec.right 否则无法生成代码
+        // 给 * / 添加更高的优先级，就能支持符号优先级了
+        binary_expression: $ => choice(...[
+            ['+', 0],
+            ['-', 0],
+            ['*', 1],
+            ['/', 1]
+        ].map(([operator, r]) => prec.left(r, (seq(
+            field('left', $.expression),
+            field('op', operator),
+            field('right', $.expression)
+        ))))),
+        // 支持下划线的数字
+        number: $ => seq(/\d(_?\d)*/)
+    }
+});
+```
+
+
+``` sh
+➜ tree-sitter generate
+➜ echo '10 - 10 * 10' > calc.txt
+➜ tree-sitter parse calc.txt
+(expression [0, 0] - [0, 12]
+  (binary_expression [0, 0] - [0, 12]
+    left: (expression [0, 0] - [0, 2]
+      (number [0, 0] - [0, 2]))
+    right: (expression [0, 5] - [0, 12]
+      (binary_expression [0, 5] - [0, 12]
+        left: (expression [0, 5] - [0, 7]
+          (number [0, 5] - [0, 7]))
+        right: (expression [0, 10] - [0, 12]
+          (number [0, 10] - [0, 12]))))))
+```
+
+这次可以看到后面的两个数字作为了一个表达式，符合了我们的要求。
+
+
+## 三、参考 tree-sitter-json 说明每行的语法效果
+
+## 四、语法参考表
 
 > [官方参考](http://tree-sitter.github.io/tree-sitter/creating-parsers#the-grammar-dsl)
 
