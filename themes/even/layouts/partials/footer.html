@@ -8,7 +8,9 @@
   {{ if .Site.LanguagePrefix -}}
     <a href="{{ .Site.LanguagePrefix | absURL }}/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
   {{- else -}}
-    <a href="{{ .Site.RSSLink }}" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+    {{ with .OutputFormats.Get "rss" -}}
+        {{ printf `<a rel=%q type=%q href=%q title=%q class="iconfont icon-rss"></a>` .Rel .MediaType.Type .Permalink site.Title | safeHTML }}
+    {{ end }}
   {{- end }}
 </div>
 
@@ -18,7 +20,7 @@
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    {{ T "theme" }} - 
+    {{ T "theme" }} -
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
@@ -39,9 +41,9 @@
 
   <span class="copyright-year">
     {{- $current := now.Format "2006" }}
-    &copy; 
+    &copy;
     {{ if ne .Site.Params.since $current -}}
-      {{ .Site.Params.since }} - 
+      {{ .Site.Params.since }} -
     {{ end }}
     {{- $current -}}
     <span class="heart"><i class="iconfont icon-heart"></i></span><!--

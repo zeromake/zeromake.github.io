@@ -17,3 +17,4 @@ database.js
 !/app/config/config.unittest.ts
 hugo
 hugo.exe
+*.lock
