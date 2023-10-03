@@ -5,7 +5,7 @@ tags:
   - syntax
   - tree-sitter
   - js
-lastmod: 2023-10-03 12:29:26 +08:00
+lastmod: 2023-10-03 13:17:26 +08:00
 categories:
   - tree-sitter
   - syntax
@@ -157,6 +157,138 @@ module.exports = grammar({
 
 
 ## 三、参考 tree-sitter-json 说明每行的语法效果
+> [tree-sitter-json](https://github.com/tree-sitter/tree-sitter-json)
+
+```js
+// , 分割的重复效果 [1,2,3], [1]
+function commaSep1(rule) {
+  return seq(rule, repeat(seq(",", rule)))
+}
+
+// , 分割的重复效果，但是不是必须的，可以支持类似 [1,2,3], []
+function commaSep(rule) {
+  return optional(commaSep1(rule))
+}
+module.exports = grammar({
+  name: 'json',
+
+  // 跳过注释和空白符号（注释在 json 标准是不支持的，这个应该是 json5 才支持的）
+  extras: $ => [
+    /\s/,
+    $.comment,
+  ],
+  // 不知道干啥用的
+  supertypes: $ => [
+    $._value
+  ],
+
+  rules: {
+    // 重复 _value 规则，如果是 json 应该改成 $._value, jsonl 应该是 repeat1($._value)
+    document: $ => repeat($._value),
+
+    // 每种 json 的表达式构成了一个 item
+    _value: $ => choice(
+      $.object,
+      $.array,
+      $.number,
+      $.string,
+      $.true,
+      $.false,
+      $.null
+    ),
+
+    // object {}, {"1": 1}
+    object: $ => seq(
+      "{", commaSep($.pair), "}"
+    ),
+
+    // "1": 1
+    pair: $ => seq(
+      field("key", choice($.string, $.number)),
+      ":",
+      field("value", $._value)
+    ),
+
+    // array [], [1]
+    array: $ => seq(
+      "[", commaSep($._value), "]"
+    ),
+
+    // 空白的字符串与有内容的字符串
+    string: $ => choice(
+      seq('"', '"'),
+      seq('"', $.string_content, '"')
+    ),
+
+    // 使用 prec 优先命中除 \,",\n 这些符号
+    string_content: $ => repeat1(choice(
+      token.immediate(prec(1, /[^\\"\n]+/)),
+      $.escape_sequence
+    )),
+
+    // 匹配中 \n 之类的转义效果
+    escape_sequence: $ => token.immediate(seq(
+      '\\',
+      /(\"|\\|\/|b|f|n|r|t|u)/
+    )),
+
+    // 多种数字匹配，这个就不说了，太常见了
+    number: $ => {
+      const hex_literal = seq(
+        choice('0x', '0X'),
+        /[\da-fA-F]+/
+      )
+
+      const decimal_digits = /\d+/
+      const signed_integer = seq(optional(choice('-', '+')), decimal_digits)
+      const exponent_part = seq(choice('e', 'E'), signed_integer)
+
+      const binary_literal = seq(choice('0b', '0B'), /[0-1]+/)
+
+      const octal_literal = seq(choice('0o', '0O'), /[0-7]+/)
+
+      const decimal_integer_literal = seq(
+        optional(choice('-', '+')),
+        choice(
+          '0',
+          seq(/[1-9]/, optional(decimal_digits))
+        )
+      )
+
+      const decimal_literal = choice(
+        seq(decimal_integer_literal, '.', optional(decimal_digits), optional(exponent_part)),
+        seq('.', decimal_digits, optional(exponent_part)),
+        seq(decimal_integer_literal, optional(exponent_part))
+      )
+
+      return token(choice(
+        hex_literal,
+        decimal_literal,
+        binary_literal,
+        octal_literal
+      ))
+    },
+
+    // 三个常量表达式
+    true: $ => "true",
+
+    false: $ => "false",
+
+    null: $ => "null",
+    // json5 的注释支持
+    comment: $ => token(choice(
+      seq('//', /.*/),
+      seq(
+        '/*',
+        /[^*]*\*+([^/*][^*]*\*+)*/,
+        '/'
+      )
+    )),
+  }
+});
+```
+
+由于 json 里 object, array 并没有直接再次引用自己，所以无需使用 prec 处理重复的情况。
 
 ## 四、语法参考表
 
