@@ -173,3 +173,15 @@
 {{ range .Site.Params.customJS -}}
   <script src="{{ "/js/" | relURL }}{{ . }}"></script>
 {{ end }}
+
+{{- if .Site.Params.serviceWorker -}}
+
+{{- $serviceWorker := resources.Get "js/service-worker-template.js" | resources.ExecuteAsTemplate "service-worker.js" . -}}
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').then(function() {
+      console.log('[ServiceWorker] Registered');
+    });
+  }
+</script>
+{{- end }}
