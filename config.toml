@@ -148,8 +148,8 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
 <script src="https://fastly.jsdelivr.net/npm/underscore@1.13.6/underscore-min.min.js" crossorigin="anonymous"></script>
 <script src="https://fastly.jsdelivr.net/npm/js-sequence-diagram@2.0.1/dist/sequence-diagram.min.js"crossorigin="anonymous"></script>
 """
-    gitalkJS = '<script src="https://fastly.jsdelivr.net/gh/zeromake/gitalk@1.7.3/docs/dist/gitalk.js" crossorigin="anonymous"></script>'
-    gitalkCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/zeromake/gitalk@1.7.3/docs/dist/gitalk.css" crossorigin="anonymous">'
+    gitalkJS = '<script src="https://fastly.jsdelivr.net/gh/zeromake/gitalk@1.8.0/docs/dist/gitalk.js" crossorigin="anonymous"></script>'
+    gitalkCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/zeromake/gitalk@1.8.0/docs/dist/gitalk.css" crossorigin="anonymous">'
     katexJS = '<script src="https://fastly.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>'
     katexCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">'
 
