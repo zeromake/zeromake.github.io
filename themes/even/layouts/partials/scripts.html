@@ -174,12 +174,12 @@
   <script src="{{ "/js/" | relURL }}{{ . }}"></script>
 {{ end }}
 
-{{- if .Site.Params.serviceWorker -}}
 
+{{- if .Site.Params.serviceWorker -}}
 {{- $serviceWorker := resources.Get "js/service-worker-template.js" | resources.ExecuteAsTemplate "service-worker.js" . -}}
 <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js').then(function() {
+    navigator.serviceWorker.register('{{ $serviceWorker.Permalink }}').then(function() {
       console.log('[ServiceWorker] Registered');
     });
   }
