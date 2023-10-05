@@ -132,39 +132,58 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
   [params.publicCDN]        # load these files from public cdn                          # 启用公共CDN，需自行定义
     enable = true
     # fastly.jsdelivr.net
-    jquery = '<script src="https://fastly.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" crossorigin="anonymous"></script>'
-    slideout = '<script src="https://fastly.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" crossorigin="anonymous"></script>'
-    fancyboxJS = '<script src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" crossorigin="anonymous"></script>'
-    fancyboxCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"crossorigin="anonymous">'
-    timeagoJS = '<script src="https://fastly.jsdelivr.net/npm/timeago.js@4.0.2/dist/timeago.min.js"crossorigin="anonymous"></script>'
+#     jquery = '<script src="https://fastly.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" crossorigin="anonymous"></script>'
+#     slideout = '<script src="https://fastly.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" crossorigin="anonymous"></script>'
+#     fancyboxJS = '<script src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" crossorigin="anonymous"></script>'
+#     fancyboxCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"crossorigin="anonymous">'
+#     timeagoJS = '<script src="https://fastly.jsdelivr.net/npm/timeago.js@4.0.2/dist/timeago.min.js"crossorigin="anonymous"></script>'
     timeagoLocalesJS = ''
-    flowchartDiagramsJS = """
-<script src="https://fastly.jsdelivr.net/npm/raphael@2.3.0/raphael.min.js"crossorigin="anonymous"></script>
-<script src="https://fastly.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" crossorigin="anonymous"></script>"""
-    sequenceDiagramsCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/js-sequence-diagram@2.0.1/dist/sequence-diagram-min.min.css" crossorigin="anonymous">'
-    sequenceDiagramsJS = """
-<script src="https://fastly.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" crossorigin="anonymous"></script>
-<script src="https://fastly.jsdelivr.net/npm/@aibee/snapsvg@0.5.5/dist/snap.svg.min.js" crossorigin="anonymous"></script>
-<script src="https://fastly.jsdelivr.net/npm/underscore@1.13.6/underscore-min.min.js" crossorigin="anonymous"></script>
-<script src="https://fastly.jsdelivr.net/npm/js-sequence-diagram@2.0.1/dist/sequence-diagram.min.js"crossorigin="anonymous"></script>
-"""
+#     flowchartDiagramsJS = """
+# <script src="https://fastly.jsdelivr.net/npm/raphael@2.3.0/raphael.min.js"crossorigin="anonymous"></script>
+# <script src="https://fastly.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" crossorigin="anonymous"></script>"""
+#     sequenceDiagramsCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/js-sequence-diagram@2.0.1/dist/sequence-diagram-min.min.css" crossorigin="anonymous">'
+#     sequenceDiagramsJS = """
+# <script src="https://fastly.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" crossorigin="anonymous"></script>
+# <script src="https://fastly.jsdelivr.net/npm/@aibee/snapsvg@0.5.5/dist/snap.svg.min.js" crossorigin="anonymous"></script>
+# <script src="https://fastly.jsdelivr.net/npm/underscore@1.13.6/underscore-min.min.js" crossorigin="anonymous"></script>
+# <script src="https://fastly.jsdelivr.net/npm/js-sequence-diagram@2.0.1/dist/sequence-diagram.min.js"crossorigin="anonymous"></script>
+# """
     gitalkJS = '<script src="https://fastly.jsdelivr.net/gh/zeromake/gitalk@1.8.0/docs/dist/gitalk.js" crossorigin="anonymous"></script>'
     gitalkCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/zeromake/gitalk@1.8.0/docs/dist/gitalk.css" crossorigin="anonymous">'
-    katexJS = '<script src="https://fastly.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>'
-    katexCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">'
+    # katexJS = '<script src="https://fastly.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>'
+    # katexCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">'
 
     # cdnjs
 #     jquery = '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>'
 #     slideout = '<script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>'
 #     fancyboxJS = '<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" crossorigin="anonymous"></script>'
-#     fancyboxCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"crossorigin="anonymous">'
-#     timeagoJS = '<script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js"crossorigin="anonymous"></script>'
+#     fancyboxCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" crossorigin="anonymous">'
+#     timeagoJS = '<script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js" crossorigin="anonymous"></script>'
 #     timeagoLocalesJS = ''
 #     flowchartDiagramsJS = """
 # <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"crossorigin="anonymous"></script>
 # <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.17.1/flowchart.min.js" crossorigin="anonymous"></script>"""
 #     katexCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" crossorigin="anonymous">'
 #     katexJS= '<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" crossorigin="anonymous"></script>'
+    # staticfile
+    jquery = '<script src="https://cdn.staticfile.org/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>'
+    slideout = '<script src="https://cdn.staticfile.org/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>'
+    fancyboxJS = '<script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" crossorigin="anonymous"></script>'
+    fancyboxCSS = '<link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" crossorigin="anonymous">'
+    timeagoJS = '<script src="https://cdn.staticfile.org/timeago.js/4.0.2/timeago.min.js" crossorigin="anonymous"></script>'
+
+    flowchartDiagramsJS = """
+<script src="https://cdn.staticfile.org/raphael/2.3.0/raphael.min.js"crossorigin="anonymous"></script>
+<script src="https://cdn.staticfile.org/flowchart/1.17.1/flowchart.min.js" crossorigin="anonymous"></script>"""
+    sequenceDiagramsCSS = '<link rel="stylesheet" href="https://www.unpkg.com/js-sequence-diagram@2.0.1/dist/sequence-diagram-min.css" crossorigin="anonymous">'
+    sequenceDiagramsJS = """
+<script src="https://cdn.staticfile.org/webfont/1.6.28/webfontloader.js" crossorigin="anonymous"></script>
+<script src="https://cdn.staticfile.org/snap.svg/0.5.1/snap.svg-min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.staticfile.org/underscore.js/1.13.6/underscore-min.min.js" crossorigin="anonymous"></script>
+<script src="https://www.unpkg.com/js-sequence-diagram@2.0.1/dist/sequence-diagram-min.js"crossorigin="anonymous"></script>
+"""
+    katexJS = '<script src="https://cdn.staticfile.org/KaTeX/0.16.9/katex.min.js" crossorigin="anonymous"></script>'
+    katexCSS = '<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.9/katex.min.css" crossorigin="anonymous">'
 
 
 
