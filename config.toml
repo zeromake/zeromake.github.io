@@ -148,8 +148,8 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
 # <script src="https://fastly.jsdelivr.net/npm/underscore@1.13.6/underscore-min.min.js" crossorigin="anonymous"></script>
 # <script src="https://fastly.jsdelivr.net/npm/js-sequence-diagram@2.0.1/dist/sequence-diagram.min.js"crossorigin="anonymous"></script>
 # """
-    gitalkJS = '<script src="https://fastly.jsdelivr.net/gh/zeromake/gitalk@1.8.0/docs/dist/gitalk.js" crossorigin="anonymous"></script>'
-    gitalkCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/zeromake/gitalk@1.8.0/docs/dist/gitalk.css" crossorigin="anonymous">'
+    # gitalkJS = '<script src="https://fastly.jsdelivr.net/gh/zeromake/gitalk@1.8.1/docs/dist/gitalk.min.js" crossorigin="anonymous"></script>'
+    # gitalkCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/zeromake/gitalk@1.8.1/docs/dist/gitalk.css" crossorigin="anonymous">'
     # katexJS = '<script src="https://fastly.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>'
     # katexCSS = '<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">'
 
@@ -184,6 +184,9 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
 """
     katexJS = '<script src="https://cdn.staticfile.org/KaTeX/0.16.9/katex.min.js" crossorigin="anonymous"></script>'
     katexCSS = '<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.9/katex.min.css" crossorigin="anonymous">'
+
+    gitalkJS = '<script src="https://www.unpkg.com/@zeromake/gitalk@1.8.1/dist/gitalk.min.js" crossorigin="anonymous"></script>'
+    gitalkCSS = '<link rel="stylesheet" href="https://www.unpkg.com/@zeromake/gitalk@1.8.1/dist/gitalk.css" crossorigin="anonymous">'
 
 
 
