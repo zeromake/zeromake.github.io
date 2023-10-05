@@ -25,7 +25,10 @@
   {{- end }}
   <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
     var languageCode = {{ .Site.LanguageCode }}.replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
-    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    var items = Array.from(document.querySelectorAll('.timeago'));
+    if (items && items.length) {
+        (typeof timeago === 'function' ? timeago : timeago.render)(items, languageCode);
+    }
     timeago.cancel();  // stop update
   </script>
 {{- end -}}
@@ -95,22 +98,37 @@
 <!-- katex -->
 
 {{- if and (or .Params.katex (and .Site.Params.katex (ne .Params.katex false))) (or .IsPage .IsHome) }}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.9/dist/katex.min.css" integrity="sha384-r/BYDnh2ViiCwqZt5VJVWuADDic3NnnTIEOv4hOh05nSfB6tjWpKmn1kUHOVkMXc" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/katex@0.13.9/dist/katex.min.js" integrity="sha384-zDIgORxjImEWftZXZpWLs2l57fMX9B3yWFPN5Ecabe211Hm5ZG/OIz2b07DYPUcH" crossorigin="anonymous"></script>
+{{- if .Site.Params.publicCDN.enable -}}
+    {{ .Site.Params.publicCDN.katexJS | safeHTML }}
+    {{ .Site.Params.publicCDN.katexCSS | safeHTML }}
+{{- else -}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+{{- end }}
 <script type="text/javascript">
-  for (const element of document.querySelectorAll("{{ .Site.Params.katexInlineSelecter }}")) {
+  var items = document.querySelectorAll("{{ .Site.Params.katexInlineSelecter }}");
+  for (const element of items) {
+    if (element.classList.contains("renderd")) {
+        continue;
+    }
     element.innerHTML = katex.renderToString(element.textContent, {
         throwOnError: false,
         displayMode: false,
         maxSize: 5
     });
+    element.classList.add("renderd");
   }
-  for (const element of document.querySelectorAll("{{ .Site.Params.katexBlockSelecter }}")) {
+  items = document.querySelectorAll("{{ .Site.Params.katexBlockSelecter }}");
+  for (const element of items) {
+    if (element.classList.contains("renderd")) {
+        continue;
+    }
     element.innerHTML = katex.renderToString(element.textContent, {
       throwOnError: false,
-      displayMode: true,
+      displayMode: false,
       maxSize: 5
     });
+    element.classList.add("renderd");
   }
 </script>
 {{- end -}}

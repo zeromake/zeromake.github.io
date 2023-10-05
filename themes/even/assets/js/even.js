@@ -197,8 +197,11 @@ Even._refactorToc = function(toc) {
   const oldTocList = toc.children[0];
   let newTocList = oldTocList;
   let temp;
-  while (newTocList.children.length === 1
-      && (temp = newTocList.children[0].children[0]).tagName === 'UL') {
+  while (
+    newTocList &&
+    newTocList.children.length === 1 &&
+    (temp = newTocList.children[0].children[0]).tagName === 'UL'
+  ) {
     newTocList = temp;
   }
 

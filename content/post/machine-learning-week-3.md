@@ -750,7 +750,7 @@ $$
 J(\theta) = - \frac{1}{m} \sum_{i=1}^m \large[ y^{(i)}\ \log (h_\theta (x^{(i)})) + (1 - y^{(i)})\ \log (1 - h_\theta(x^{(i)}))\large] + \frac{\lambda}{2m}\sum_{j=1}^n \theta_j^2
 $$
 
-The second sum, $\sum_{j=1}^n \theta_j^2$​ means to explicitly exclude the bias term, \theta_0$​. I.e. the θ vector is indexed from 0 to n (holding n+1 values, $\theta_0$​ through $\theta_n$​), and this sum explicitly skips $\theta_0$​, by running from 1 to n, skipping 0. Thus, when computing the equation, we should continuously update the two following equations:
+The second sum, $\sum_{j=1}^n \theta_j^2$​ means to explicitly exclude the bias term, $\theta_0$​. I.e. the θ vector is indexed from 0 to n (holding n+1 values, $\theta_0$​ through $\theta_n$​), and this sum explicitly skips $\theta_0$​, by running from 1 to n, skipping 0. Thus, when computing the equation, we should continuously update the two following equations:
 
 ![](/public/img/machine-learn/2016-12-07-22.49.02.png)
 
@@ -813,7 +813,9 @@ However, you forgot which value of $\lambda$ corresponds to which value of $\the
 - b. 向模型引入正规化总是会导致训练集具有相同或更好的性能。
 - c. 向模型引入正规化总是会导致训练集中未包含的示例具有相同或更好的性能。
 - d. 向模型添加许多新特征有助于防止训练集过拟合。
+
 // a, c
+
 ---
 
 2. 假设您进行了两次逻辑回归，一次使用 $\lambda = 0$，一次使用 $\lambda = 1$。<br/>
@@ -824,6 +826,7 @@ However, you forgot which value of $\lambda$ corresponds to which value of $\the
 - b. $\theta = \begin{bmatrix} 13.01 \newline 0.91 \end{bmatrix}$
 
 //b
+
 ---
 
 3. 下列有关正规化的哪些陈述是正确的？ 选中所有适用。

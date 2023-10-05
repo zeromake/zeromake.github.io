@@ -263,7 +263,9 @@ When the target variable that we’re trying to predict is continuous, such as i
 
 ![h(x)](/public/img/machine-learn/2016-10-23-20.14.58.svg)
 
-$$h_θ(x) = θ_0 + θ_1x$$
+$$
+h_θ(x) = θ_0 + θ_1x
+$$
 
 当我们试图预测的目标变量是连续的时，例如在我们的住房示例中，我们将学习问题称为回归问题。当 `y` 只能承受少量离散值时（例如，如果给定生活区域，比如说我们想要预测住宅是房屋还是公寓），我们将其称为分类问题。
 
@@ -274,7 +276,9 @@ $$h_θ(x) = θ_0 + θ_1x$$
 
 We can measure the accuracy of our hypothesis function by using a **cost function**. This takes an average difference (actually a fancier version of an average) of all the results of the hypothesis with inputs from x's and the actual output y's.
 
-$$J(θ_0, θ_1) = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m ( \hat{y}_{i}- y_{i})^2 = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m (h_θ (x_{i}) - y_{i})^2$$
+$$
+J(θ_0, θ_1) = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m ( \hat{y}_{i}- y_{i})^2 = \dfrac {1}{2m} \displaystyle \sum _{i=1}^m (h_θ (x_{i}) - y_{i})^2
+$$
 
 To break it apart, it is $\frac{1}{2}\bar{x}$ where $\bar{x}$ is the mean of the squares of $h_\theta (x_{i}) - y_{i}$, or the difference between the predicted value and the actual value.
 
@@ -286,7 +290,9 @@ This function is otherwise called the `Squared error function`, or `Mean squared
 
 我们可以使用 `代价函数` 来衡量我们的假设函数的准确性。 这需要假设的所有结果与来自 `x's` 和实际输出 `y's` 的输入的平均差异（实际上是平均值的更高版本）。
 
-$$J(θ_0, θ_1) = \newline \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left ( \hat{y}_{i}- y_{i} \right)^2 = \newline \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left (h_θ (x_{i}) - y_{i} \right)^2$$
+$$
+J(θ_0, θ_1) = \newline \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left ( \hat{y}_{i}- y_{i} \right)^2 = \newline \dfrac {1}{2m} \displaystyle \sum _{i=1}^m \left (h_θ (x_{i}) - y_{i} \right)^2
+$$
 
 为了打破它，它是 $\frac{1}{2}\bar{x}$ 其中 $\bar{x}$ 是 $h_\theta (x_{i}) - y_{i}$ 的平方的平均值，或者是预测值之间的差值 和实际价值。
 
@@ -355,7 +361,9 @@ Thus as a goal, we should try to minimize the cost function. In this case, $θ_1
 
 设定 $θ_0 = 0$，$θ_1 = 1$, 函数 `h` 为 $h_θ(x) = 0 + x$ 所以代价函数的公式会简化为：
 
-$$J(θ_1) = \dfrac {1}{6} \displaystyle \sum _{i=1}^6 (h_θ (x_{i}) - y_{i})^2$$
+$$
+J(θ_1) = \dfrac {1}{6} \displaystyle \sum _{i=1}^6 (h_θ (x_{i}) - y_{i})^2
+$$
 
 用代码表述为：
 
@@ -446,7 +454,9 @@ The gradient descent algorithm is:
 
 repeat until convergence:
 
-$$\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta_0, \theta_1)$$
+$$
+\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta_0, \theta_1)
+$$
 
 where
 
@@ -476,7 +486,9 @@ At each iteration `j`, one should simultaneously update the parameters $θ_1$, $
 
 重复直到收敛：
 
-$$θ_j := θ_j - \alpha \frac{\partial}{\partial θ_j} J(θ_0, θ_1)$$
+$$
+θ_j := θ_j - \alpha \frac{\partial}{\partial θ_j} J(θ_0, θ_1)
+$$
 
 在该情况下 `j = 0,1` 表示特征索引号。
 
@@ -492,7 +504,9 @@ In this video we explored the scenario where we used one parameter $θ_1$ and pl
 
 Repeat until convergence:
 
-$$θ_1 := θ_1 - \alpha \frac{d}{dθ_1} J(θ_1)$$
+$$
+θ_1 := θ_1 - \alpha \frac{d}{dθ_1} J(θ_1)
+$$
 
 Regardless of the slope's sign for $\frac{d}{dθ_1} J(θ_1)$, $θ_1$ eventually converges to its minimum value. The following graph shows that when the slope is negative, the value of $θ_1$ increases and when it is positive, the value of $θ_1$ decreases.
 
@@ -506,7 +520,9 @@ How does gradient descent converge with a fixed step size $\alpha$?
 
 The intuition behind the convergence is that $\frac{d}{dθ_1} J(θ_1)$ approaches 0 as we approach the bottom of our convex function. At the minimum, the derivative will always be 0 and thus we get:
 
-$$θ_1 := θ_1-\alpha * 0$$
+$$
+θ_1 := θ_1-\alpha * 0
+$$
 
 ![](/public/img/machine-learn/2016-11-03-00.06.00.png)
 
@@ -516,7 +532,9 @@ $$θ_1 := θ_1-\alpha * 0$$
 
 重复直到收敛：
 
-$$θ_1 := θ_1 - \alpha \frac{d}{dθ_1} J(θ_1)$$
+$$
+θ_1 := θ_1 - \alpha \frac{d}{dθ_1} J(θ_1)
+$$
 
 无论 $\frac{d}{dθ_1} J(θ_1)$ 的斜率符号如何，$θ_1$最终会收敛到其最小值。下图显示当斜率为负时，$θ_1$ 的值增加，当它为正时，$θ_1$ 的值减小。
 
@@ -530,7 +548,9 @@ $$θ_1 := θ_1 - \alpha \frac{d}{dθ_1} J(θ_1)$$
 
 收敛背后的直觉是当我们接近凸函数的底部时，$\frac{d}{dθ_1} J(θ_1)$ 逼近 `0`。至少，导数总是 `0`，因此我们得到：
 
-$$θ_1 := θ_1-\alpha * 0$$
+$$
+θ_1 := θ_1-\alpha * 0
+$$
 
 ![](/public/img/machine-learn/2016-11-03-00.06.00.png)
 
@@ -541,7 +561,9 @@ $$θ_1 := θ_1-\alpha * 0$$
 
 When specifically applied to the case of linear regression, a new form of the gradient descent equation can be derived. We can substitute our actual cost function and our actual hypothesis function and modify the equation to:
 
-$$\text{repeat until convergence: } \lbrace \newline \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \newline \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \newline \rbrace$$
+$$
+\text{repeat until convergence: } \lbrace \newline \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \newline \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \newline \rbrace
+$$
 
 where $m$ is the size of the training set, $θ_0$ a constant that will be changing simultaneously with $θ_1$ and $x_i, y_i$ are values of the given training set (data).
 
@@ -561,7 +583,9 @@ The ellipses shown above are the contours of a quadratic function. Also shown is
 
 当特别应用于线性回归的情况时，可以导出梯度下降方程的新形式。 我们可以用我们的实际成本函数和我们的实际假设函数代替并修改方程式
 
-$$\text{重复直到收敛: } \lbrace \newline \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \newline \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \newline \rbrace$$
+$$
+\text{重复直到收敛: } \lbrace \newline \theta_0 := \theta_0 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}(h_\theta(x_{i}) - y_{i}) \newline \theta_1 := \theta_1 - \alpha \frac{1}{m} \sum\limits_{i=1}^{m}\left((h_\theta(x_{i}) - y_{i}) x_{i}\right) \newline \rbrace
+$$
 
 其中 $m$ 是训练集的大小，$θ_0$ 一个与 $θ_1$ 同时变化的常数， 和 $x_i, y_i$ 是给定训练集（数据）的值。
 
@@ -726,7 +750,7 @@ $$\text{重复直到收敛: } \lbrace \newline \theta_0 := \theta_0 - \alpha \fr
 -   a. 梯度下降可能会陷入局部最小值并且无法找到全局最小值。
 -   b. 为此，我们必须要 $\theta_0 = 0$ 和 $\theta_1 = 0$ 以便 $h_\theta(x) = 0$
 -   c. 我们的训练组可以通过直线完美贴合，即我们所有的训练样例都完美地位于某条直线上。
--   d. 为此，对于 $i = 1, 2, …, $m$ 的每个值，我们必须有 $y^{(i)} = 0$。
+-   d. 为此，对于 $i$ = 1, 2, …, $m$ 的每个值，我们必须有 $y^{(i)} = 0$。
 
 <details>
 <summary>答案</summary>
