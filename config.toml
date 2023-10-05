@@ -131,6 +131,7 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
 
   [params.publicCDN]        # load these files from public cdn                          # 启用公共CDN，需自行定义
     enable = true
+    # https://blog.skk.moe/post/public-cdn-in-diffrent-views/
     # fastly.jsdelivr.net
 #     jquery = '<script src="https://fastly.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" crossorigin="anonymous"></script>'
 #     slideout = '<script src="https://fastly.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" crossorigin="anonymous"></script>'
