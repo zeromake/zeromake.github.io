@@ -11,7 +11,6 @@ categories:
   - electron
   - javascript
 slug: electron-auto-updater-asar
-draft: false
 ---
 
 ## 前言

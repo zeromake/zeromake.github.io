@@ -14,6 +14,12 @@ slug: nixos-install-notes
 draft: false
 ---
 
+## 前言
+
+有段时间用 `archlinux`，每次更新系统都是非常的难受，`aur` 用的倒是很爽，最近看到 `nixos` 打算尝试一下，`fhs` 有些时候还是太容易挂了。
+
+<!--more-->
+
 ## 一、安装后换源
 
 先添加 unstable 的 channel，毕竟有些软件必须追最新版。
