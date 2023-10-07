@@ -1,4 +1,4 @@
-// lastmod: {{ safeHTML ( .Date.Format "2006-01-02T15:04:05-07:00" ) }}
+// lastmod: {{ .Date.Format "2006-01-02T15:04:05Z07:00" }}
 var cacheName = "hugo-even";
 var filesToCache = [
   "404.html",
@@ -25,41 +25,41 @@ self.addEventListener('install', event => {
 // cache-first
 // If you want to use cache first, you should change cacheName manually
 
-// self.addEventListener('fetch', event => {
-//   event.respondWith(
-//     caches
-//       .match(event.request)
-//       .then(response => {
-//         if (response) return response;
-//         return fetch(event.request);
-//       })
-//       .then(response => {
-//         if (response.status === 404) return caches.match('404.html');
-//         return caches.open(cacheName).then(cache => {
-//           cache.put(event.request.url, response.clone());
-//           return response;
-//         });
-//       })
-//       .catch(error => console.log('Error, ', error)),
-//   );
-// });
-
-// network first
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.open(cacheName).then(function (cache) {
-      return fetch(event.request)
-        .then(function (response) {
-          if (response.status === 404) return caches.match('404.html');
-          cache.put(event.request, response.clone());
+    caches
+      .match(event.request)
+      .then(response => {
+        if (response) return response;
+        return fetch(event.request);
+      })
+      .then(response => {
+        if (response.status === 404) return caches.match('404.html');
+        return caches.open(cacheName).then(cache => {
+          cache.put(event.request.url, response.clone());
           return response;
-        })
-        .catch(function () {
-          return caches.match(event.request);
         });
-    }),
+      })
+      .catch(error => console.log('Error, ', error)),
   );
 });
+
+// network first
+// self.addEventListener('fetch', event => {
+//   event.respondWith(
+//     caches.open(cacheName).then(function (cache) {
+//       return fetch(event.request)
+//         .then(function (response) {
+//           if (response.status === 404) return caches.match('404.html');
+//           cache.put(event.request, response.clone());
+//           return response;
+//         })
+//         .catch(function () {
+//           return caches.match(event.request);
+//         });
+//     }),
+//   );
+// });
 
 // Delete outdated caches
 self.addEventListener('activate', event => {
