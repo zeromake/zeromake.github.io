@@ -1,5 +1,5 @@
 // lastmod: {{ .Date.Format "2006-01-02T15:04:05Z07:00" }}
-var cacheName = "hugo-even";
+var cacheName = "hugo-even-{{ now.Unix }}";
 var filesToCache = [
   "404.html",
   "index.html",
