@@ -18,10 +18,8 @@ hasCJKLanguage = true     # has chinese/japanese/korean ? # 自动检测是否�
 paginate = 12                                              # 首页每页显示的文章数
 disqusShortname = ""      # disqus_shortname
 googleAnalytics = ""      # UA-XXXXXXXX-X
-copyright = ""            # default: author.name ↓        # 默认为下面配置的author.name ↓
+copyright = ""            # default: params.author ↓        # 默认为下面配置的params.author ↓
 
-[author]                  # essential                     # 必需
-  name = "zeromake<a390720046@gmail.com>"
 
 [sitemap]                 # essential                     # 必需
   changefreq = "weekly"
@@ -60,6 +58,7 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
   page = "/:slug/"
 
 [params]
+  author = "zeromake(a390720046@gmail.com)"
   version = "4.x"           # Used to give a friendly message when you have an incompatible update
   debug = false             # If true, load `eruda.min.js`. See https://github.com/liriliri/eruda
   serviceWorker = true
@@ -168,43 +167,43 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
 #     katexCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" crossorigin="anonymous">'
 #     katexJS= '<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" crossorigin="anonymous"></script>'
     # staticfile
-    jquery = '<script src="https://cdn.staticfile.org/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>'
-    slideout = '<script src="https://cdn.staticfile.org/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>'
-    fancyboxJS = '<script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" crossorigin="anonymous"></script>'
-    fancyboxCSS = '<link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" crossorigin="anonymous">'
-    timeagoJS = '<script src="https://cdn.staticfile.org/timeago.js/4.0.2/timeago.min.js" crossorigin="anonymous"></script>'
+    jquery = '<script src="https://cdnjs.loli.net/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>'
+    slideout = '<script src="https://cdnjs.loli.net/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>'
+    fancyboxJS = '<script src="https://cdnjs.loli.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" crossorigin="anonymous"></script>'
+    fancyboxCSS = '<link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" crossorigin="anonymous">'
+    timeagoJS = '<script src="https://cdnjs.loli.net/ajax/libs/timeago.js/4.0.2/timeago.min.js" crossorigin="anonymous"></script>'
 
     flowchartDiagramsJS = """
-<script src="https://cdn.staticfile.org/raphael/2.3.0/raphael.min.js"crossorigin="anonymous"></script>
-<script src="https://cdn.staticfile.org/flowchart/1.17.1/flowchart.min.js" crossorigin="anonymous"></script>"""
+<script src="https://cdnjs.loli.net/ajax/libs/raphael/2.3.0/raphael.min.js"crossorigin="anonymous"></script>
+<script src="https://cdnjs.loli.net/ajax/libs/flowchart/1.17.1/flowchart.min.js" crossorigin="anonymous"></script>"""
     sequenceDiagramsCSS = '<link rel="stylesheet" href="https://www.unpkg.com/js-sequence-diagram@2.0.1/dist/sequence-diagram-min.css" crossorigin="anonymous">'
     sequenceDiagramsJS = """
-<script src="https://cdn.staticfile.org/webfont/1.6.28/webfontloader.js" crossorigin="anonymous"></script>
-<script src="https://cdn.staticfile.org/snap.svg/0.5.1/snap.svg-min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.staticfile.org/underscore.js/1.13.6/underscore-min.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.loli.net/ajax/libs/webfont/1.6.28/webfontloader.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.loli.net/ajax/libs/snap.svg/0.5.1/snap.svg-min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.loli.net/ajax/libs/underscore.js/1.13.6/underscore-min.min.js" crossorigin="anonymous"></script>
 <script src="https://www.unpkg.com/js-sequence-diagram@2.0.1/dist/sequence-diagram-min.js"crossorigin="anonymous"></script>
 """
-    katexJS = '<script src="https://cdn.staticfile.org/KaTeX/0.16.9/katex.min.js" crossorigin="anonymous"></script>'
-    katexCSS = '<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.9/katex.min.css" crossorigin="anonymous">'
+    katexJS = '<script src="https://cdnjs.loli.net/ajax/libs/KaTeX/0.16.9/katex.min.js" crossorigin="anonymous"></script>'
+    katexCSS = '<link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/KaTeX/0.16.9/katex.min.css" crossorigin="anonymous">'
 
     gitalkJS = '<script src="https://www.unpkg.com/@zeromake/gitalk@1.8.1/dist/gitalk.min.js" crossorigin="anonymous"></script>'
     gitalkCSS = '<link rel="stylesheet" href="https://www.unpkg.com/@zeromake/gitalk@1.8.1/dist/gitalk.css" crossorigin="anonymous">'
     cache = """
 
-"https://cdn.staticfile.org/jquery/3.7.1/jquery.min.js",
-"https://cdn.staticfile.org/slideout/1.0.1/slideout.min.js",
-"https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js",
-"https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css",
-"https://cdn.staticfile.org/timeago.js/4.0.2/timeago.min.js",
-"https://cdn.staticfile.org/raphael/2.3.0/raphael.min.js",
-"https://cdn.staticfile.org/flowchart/1.17.1/flowchart.min.js",
+"https://cdnjs.loli.net/ajax/libs/jquery/3.7.1/jquery.min.js",
+"https://cdnjs.loli.net/ajax/libs/slideout/1.0.1/slideout.min.js",
+"https://cdnjs.loli.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js",
+"https://cdnjs.loli.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css",
+"https://cdnjs.loli.net/ajax/libs/timeago.js/4.0.2/timeago.min.js",
+"https://cdnjs.loli.net/ajax/libs/raphael/2.3.0/raphael.min.js",
+"https://cdnjs.loli.net/ajax/libs/flowchart/1.17.1/flowchart.min.js",
 "https://www.unpkg.com/js-sequence-diagram@2.0.1/dist/sequence-diagram-min.css",
-"https://cdn.staticfile.org/webfont/1.6.28/webfontloader.js",
-"https://cdn.staticfile.org/snap.svg/0.5.1/snap.svg-min.js",
-"https://cdn.staticfile.org/underscore.js/1.13.6/underscore-min.min.js",
+"https://cdnjs.loli.net/ajax/libs/webfont/1.6.28/webfontloader.js",
+"https://cdnjs.loli.net/ajax/libs/snap.svg/0.5.1/snap.svg-min.js",
+"https://cdnjs.loli.net/ajax/libs/underscore.js/1.13.6/underscore-min.min.js",
 "https://www.unpkg.com/js-sequence-diagram@2.0.1/dist/sequence-diagram-min.js",
-"https://cdn.staticfile.org/KaTeX/0.16.9/katex.min.js",
-"https://cdn.staticfile.org/KaTeX/0.16.9/katex.min.css",
+"https://cdnjs.loli.net/ajax/libs/KaTeX/0.16.9/katex.min.js",
+"https://cdnjs.loli.net/ajax/libs/KaTeX/0.16.9/katex.min.css",
 "https://www.unpkg.com/@zeromake/gitalk@1.8.1/dist/gitalk.min.js",
 "https://www.unpkg.com/@zeromake/gitalk@1.8.1/dist/gitalk.css","""
 

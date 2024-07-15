@@ -1,25 +1,39 @@
-# ssr-blog
+# zeromake-blog
 
-## Install
-``` shell
-$npm i
+my hugo static blog
+
+## my hugo fork download
+
+**MacOSX**
+``` bash
+curl -fLo hugo.tar.gz https://github.com/zeromake/hugo/releases/download/v0.128.2/hugo_extended_0.128.2_darwin-universal.tar.gz
+tar -xf hugo.tar.gz
+rm hugo.tar.gz
 ```
 
-## Run dev
-``` shell
-$npm run dev
-# open browser http://127.0.0.1:8089
+**Linux**
+``` bash
+curl -fLo hugo.tar.gz https://github.com/zeromake/hugo/releases/download/v0.128.2/hugo_extended_0.128.2_linux-amd64.tar.gz
+tar -xf hugo.tar.gz
+rm hugo.tar.gz
 ```
 
-## Run
-``` shell
-$npm run build
-$npm run start
-# open browser http://127.0.0.1:8089
+**Windows**
+``` pwsh
+Invoke-WebRequest -Uri https://github.com/zeromake/hugo/releases/download/v0.128.2/hugo_extended_0.128.2_windows-amd64.zip -OutFile hugo.zip
+Expand-Archive -Path hugo.zip -DestinationPath .
+Remove-Item hugo.zip
 ```
-## Static
-``` shell
-$npm run static
-$hs ./docs
-# open browser hs(http-server)'s url
+
+## dev server
+
+``` bash
+./hugo server -D
 ```
+
+## build static files
+
+``` bash
+./hugo --enableGitInfo --gc --minify
+```
+

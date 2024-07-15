@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>demo2</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "preact": "https://cdn.jsdelivr.net/npm/preact@10.22.1/+esm",
+        "preact/hooks": "https://fastly.jsdelivr.net/npm/preact@10.22.1/hooks/dist/hooks.module.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <script defer type="module">
+    import {h, render} from 'preact';
+    import {useState} from 'preact/hooks';
+    const App = () => {
+        const [count, setCount] = useState(0);
+        return h('div', {children: [
+            h('p', {children: [`count is ${count}`]}),
+            h('button', {children: ['incr'], onClick: () => setCount(count + 1)})
+        ]});
+    };
+    render(h(App), document.body);
+  </script>
+</body>
+</html>
