@@ -5,7 +5,7 @@ tags:
   - syntax
   - tree-sitter
   - js
-lastmod: 2023-10-03 13:17:26 +08:00
+lastmod: 2024-07-19 19:13:26 +08:00
 categories:
   - tree-sitter
   - syntax
@@ -336,3 +336,4 @@ module.exports = grammar({
 - [tree-sitter官方文档](ttps://tree-sitter.github.io)
 - [玩玩-tree-sitter](https://nnnewb.github.io/blog/p/%E7%8E%A9%E7%8E%A9-tree-sitter/)
 - [TreeSitter基本语法](https://kaisawind.gitee.io/2022/07/08/2022-07-08-tree-sitter/)
+- [使用 tree-sitter 生成语法树](https://blog.lolli.tech/tree-sitter/)
