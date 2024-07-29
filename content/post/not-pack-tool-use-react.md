@@ -10,7 +10,7 @@ lastmod: 2024-07-15 15:36:00 +08:00
 categories:
   - js
 slug: not-pack-tool-use-react
-draft: true
+draft: false
 ---
 
 ## 前言
@@ -149,12 +149,175 @@ draft: true
 
 ## 四、preact 的 history 路由支持
 
+找了一下能用的路由，发现 preact 推荐的两个路由:
+
+- [preact-router](https://github.com/developit/preact-router) 已经无人维护
+- [preact-iso](https://github.com/preactjs/preact-iso) 不支持 history
+- [react-router](https://github.com/remix-run/react-router) 库太大了
+- [wouter](https://github.com/molefrog/wouter) 够小
+
+打算使用 [wouter](https://github.com/molefrog/wouter)。
+
+下面是示例：
+```html
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>demo3</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "preact": "https://cdn.jsdelivr.net/npm/preact@10.22.1/+esm",
+        "preact/hooks": "https://fastly.jsdelivr.net/npm/preact@10.22.1/hooks/dist/hooks.module.js",
+        "htm": "https://cdn.jsdelivr.net/npm/htm@3.1.1/+esm",
+        "wouter-preact": "https://fastly.jsdelivr.net/npm/wouter-preact@3.3.1/esm/index.js",
+        "wouter-preact/use-hash-location": "https://fastly.jsdelivr.net/npm/wouter-preact@3.3.1/esm/use-hash-location.js",
+        "regexparam": "https://fastly.jsdelivr.net/npm/regexparam@3.0.0/dist/index.mjs"
+      }
+    }
+  </script>
+</head>
+<body>
+  <script defer type="module">
+    import {h, render} from 'preact';
+    import {useState} from 'preact/hooks';
+    import htm from 'htm';
+    import {Router, Route, Link} from 'wouter-preact';
+    import {useHashLocation} from 'wouter-preact/use-hash-location';
+
+    const html = htm.bind(h);
+    const Counter = () => {
+        const [count, setCount] = useState(0);
+        return html`<div>
+          <p>count is ${count}<//>
+          <button onClick=${() => setCount(count + 1)}>incr<//>
+          <${Link} href="/">go<//>
+        <//>`
+    };
+    const Home = () => {
+        return html`<div>
+          <h1>Home</h1>
+          <${Link} href="/counter">go<//>
+        <//>`
+    };
+
+    const App = () => {
+        return html`<${Router} hook=${useHashLocation}>
+          <${Route} path="/" component=${Home}/>
+          <${Route} path="/counter" component=${Counter}/>
+        <//>`
+    };
+    render(html`<${App}/>`, document.body);
+  </script>
+</body>
+</html>
+```
+使用浏览器打开该 [demo4.html](/public/not-pack-tool-use-react/demo4.html) 可以看到一个简单的 history 路由示例
+
 ## 五、使用 hook 编写一个简单的异步加载组件
 
+**lazy.module.js:**
+```js
+import {h} from 'preact';
+import {useState, useEffect} from 'preact/hooks';
+
+export default function lazy(load) {
+	let component = null;
+	return props => {
+		const [, update] = useState(false);
+        useEffect(() => {
+            if (component !== null) return;
+            load().then((m) => {
+                component = m.default || m;
+                update(true);
+            });
+        }, []);
+        return component !== null ? h(component, props) : null;
+	};
+}
+```
+
+**htm.module.js:**
+```js
+import {h} from 'preact';
+import htm from 'htm';
+
+export default htm.bind(h);
+```
+htm 绑定单独作为一个模块引入
+
+**demo5.html:**
+```html
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>demo3</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "preact": "https://cdn.jsdelivr.net/npm/preact@10.22.1/+esm",
+        "preact/hooks": "https://fastly.jsdelivr.net/npm/preact@10.22.1/hooks/dist/hooks.module.js",
+        "htm": "https://cdn.jsdelivr.net/npm/htm@3.1.1/+esm",
+        "wouter-preact": "https://fastly.jsdelivr.net/npm/wouter-preact@3.3.1/esm/index.js",
+        "wouter-preact/use-hash-location": "https://fastly.jsdelivr.net/npm/wouter-preact@3.3.1/esm/use-hash-location.js",
+        "regexparam": "https://fastly.jsdelivr.net/npm/regexparam@3.0.0/dist/index.mjs"
+      }
+    }
+  </script>
+</head>
+<body>
+  <script defer type="module">
+    import {render} from 'preact';
+    import {useState} from 'preact/hooks';
+    import {Router, Route, Link} from 'wouter-preact';
+    import {useHashLocation} from 'wouter-preact/use-hash-location';
+    import lazy from './lazy.module.js';
+    import html from './htm.module.js';
+    const Counter = lazy(() => import('./counter.module.js'));
+    const Home = () => {
+        return html`<div>
+          <h1>Home</h1>
+          <${Link} href="/counter">go<//>
+        <//>`
+    };
+
+    const App = () => {
+        return html`<${Router} hook=${useHashLocation}>
+          <${Route} path="/" component=${Home}/>
+          <${Route} path="/counter" component=${Counter}/>
+        <//>`
+    };
+    render(html`<${App}/>`, document.body);
+  </script>
+</body>
+</html>
+```
+
+使用浏览器打开该 [demo5.html](/public/not-pack-tool-use-react/demo5.html) 查看真实示例
+
 ## 六、安装 node 包获得对应的 ts 语法提示
+
+没有什么特别的操作，安装 node 包即可获得在 IDEA 和 vscode 的 ts 语法提示。
+
+## 后语
+
+至此就可以不借助任何工具在浏览器里直接开发而且支持 module 的导入导出，动态导入，jsx 语法，ts 提示。
+
+以上的 demo 都是 preact 但是，完全可以等效替代为 `react` 或者 `solidjs`。
+
+还有就是直接使用 jsdelivr 引入是很方便，但是有些情况下依赖比较复杂的时候就比较麻烦了，`ahooks` 就是一个 es 模块下引入了太多模块，手写 importmap 太累人了。
 
 ## 参考
 
 1. [script 的 module](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules)
 2. [script 的 importmap](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/script/type/importmap)
 3. [htm 一种在 js 字符串模版语法里编写 jsx 的方案](https://github.com/developit/htm)
+4. [awesome-preact](https://github.com/preactjs/awesome-preact)

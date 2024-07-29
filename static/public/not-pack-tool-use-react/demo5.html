@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>demo3</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "preact": "https://cdn.jsdelivr.net/npm/preact@10.22.1/+esm",
+        "preact/hooks": "https://fastly.jsdelivr.net/npm/preact@10.22.1/hooks/dist/hooks.module.js",
+        "htm": "https://cdn.jsdelivr.net/npm/htm@3.1.1/+esm",
+        "wouter-preact": "https://fastly.jsdelivr.net/npm/wouter-preact@3.3.1/esm/index.js",
+        "wouter-preact/use-hash-location": "https://fastly.jsdelivr.net/npm/wouter-preact@3.3.1/esm/use-hash-location.js",
+        "regexparam": "https://fastly.jsdelivr.net/npm/regexparam@3.0.0/dist/index.mjs"
+      }
+    }
+  </script>
+</head>
+<body>
+  <script defer type="module">
+    import {render} from 'preact';
+    import {useState} from 'preact/hooks';
+    import {Router, Route, Link} from 'wouter-preact';
+    import {useHashLocation} from 'wouter-preact/use-hash-location';
+    import lazy from './lazy.module.js';
+    import html from './htm.module.js';
+    const Counter = lazy(() => import('./counter.module.js'));
+    const Home = () => {
+        return html`<div>
+          <h1>Home</h1>
+          <${Link} href="/counter">go<//>
+        <//>`
+    };
+
+    const App = () => {
+        return html`<${Router} hook=${useHashLocation}>
+          <${Route} path="/" component=${Home}/>
+          <${Route} path="/counter" component=${Counter}/>
+        <//>`
+    };
+    render(html`<${App}/>`, document.body);
+  </script>
+</body>
+</html>
