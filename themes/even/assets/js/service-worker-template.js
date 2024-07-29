@@ -1,4 +1,4 @@
-{{- if false -}}
+{{- if .Site.Params.serviceWorkerSkip -}}
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
