@@ -179,8 +179,13 @@
 {{- $serviceWorker := resources.Get "js/service-worker-template.js" | resources.ExecuteAsTemplate "service-worker.js" . -}}
 <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('{{ $serviceWorker.Permalink }}').then(function() {
-      console.log('[ServiceWorker] Registered');
+    navigator.serviceWorker.getRegistrations().then(regs=>{
+        for (const reg of regs) {
+            reg.unregister();
+        }
+        navigator.serviceWorker.register('{{ $serviceWorker.Permalink }}').then(function() {
+            console.log('[ServiceWorker] Registered');
+        });
     });
   }
 </script>

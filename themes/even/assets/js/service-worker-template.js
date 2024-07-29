@@ -5,6 +5,8 @@ self.addEventListener('activate', event => {
             return Promise.all(
                 cacheNames.map(cacheName =>  caches.delete(cacheName)),
             );
+        }).then(() => {
+            self.registration.unregister();
         }),
     );
 });
@@ -39,9 +41,9 @@ self.addEventListener('fetch', event => {
         caches
             .match(event.request)
             .then(response => {
-                var skip = false;
+                var skip = event.request.url.startsWith('https://api.github.com');
 {{- if .Site.BuildDrafts -}}
-                skip = filesToCache.filter(name => event.request.url.endsWith(name)).length === 0;
+                skip ||= filesToCache.filter(name => event.request.url.endsWith(name)).length === 0;
 {{- end -}}
                 if (!skip && response) return response;
                 return fetch(event.request);
@@ -76,15 +78,14 @@ self.addEventListener('fetch', event => {
 
 // Delete outdated caches
 self.addEventListener('activate', event => {
-    const cacheWhitelist = [cacheName];
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (!cacheWhitelist.includes(cacheName)) {
-                        return caches.delete(cacheName);
-                    }
-                }),
+                cacheNames.filter(
+                    cacheName => cacheName !== cacheName
+                ).map(
+                    cacheName => caches.delete(cacheName)
+                ),
             );
         }),
     );
