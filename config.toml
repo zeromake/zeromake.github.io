@@ -308,7 +308,7 @@ copyright = ""            # default: params.author ↓        # 默认为下面�
       [[markup.goldmark.extensions.raws]]
         IsBlock = true
         Tag = "div"
-        Classname = "tex-block"
+        ClassName = "tex-block"
         PrefixMark = "$$"
         SuffixMark = "$$"
         Trigger = "$"
