@@ -1,11 +1,11 @@
 ---
 title: 一加 ace5 root 笔记
-date: 2025-01-02 23:04:00 +08:00
+date: 2025-01-03 08:04:00 +08:00
 tags:
   - ace5
   - oneplus
   - root
-lastmod: 2025-01-03 01:08:00 +08:00
+lastmod: 2025-01-03 08:08:00 +08:00
 categories:
   - root
   - android
@@ -139,6 +139,7 @@ Zygisk 检测不到了。
 
 ![momo-3](/public/img/onepus-ace5-root/001.webp)
 
+最后说个 [Shamiko](https://github.com/LSPosed/LSPosed.github.io/releases) 这个在 APatch 上完全没有用要么装不上要么无法启用。
 
 ## 参考
 
